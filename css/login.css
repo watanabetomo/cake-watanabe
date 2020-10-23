@@ -1,0 +1,12 @@
+body {
+    background-image: url("../img/contentback.jpg");
+    text-align: center;
+}
+
+table {
+    margin: 0 auto;
+}
+
+.error {
+    color: red;
+}

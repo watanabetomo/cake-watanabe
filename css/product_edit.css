@@ -1,0 +1,12 @@
+.first-header nav ul li:nth-child(2){
+    border-bottom: 2px solid #FF6633;
+}
+
+.second-header nav ul li:nth-child(2){
+    border-bottom: 2px solid skyblue;
+    background-color: #444;
+}
+
+.done{
+    text-align: center;
+}

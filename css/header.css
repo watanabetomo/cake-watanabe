@@ -1,0 +1,30 @@
+.logout {
+    text-align: right;
+}
+
+.greeting{
+    float: left;
+}
+
+.greeting, .logout{
+    margin-bottom: 5px;
+}
+
+.navbar{
+    padding: 0;
+}
+
+nav ul li{
+    width: 150px;
+    text-align: center;
+    margin-right: 2px;
+    background-color: black;
+}
+
+.second-header nav ul li{
+    background-color: #AAA;
+}
+
+.first-header nav ul li:hover{
+    background-color: gray;
+}
