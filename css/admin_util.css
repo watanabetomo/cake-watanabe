@@ -8,6 +8,37 @@ body {
     min-height: 100vh;
 }
 
+.logout {
+    text-align: right;
+}
+
+.greeting{
+    float: left;
+}
+
+.greeting, .logout{
+    margin-bottom: 5px;
+}
+
+.navbar{
+    padding: 0;
+}
+
+nav ul li{
+    width: 150px;
+    text-align: center;
+    margin-right: 2px;
+    background-color: black;
+}
+
+.second-header nav ul li{
+    background-color: #AAA;
+}
+
+.first-header nav ul li:hover{
+    background-color: gray;
+}
+
 table{
     max-width: 1000px;
     margin: 0 auto;
@@ -17,4 +48,13 @@ footer p {
     margin-top: 20px;
     margin-bottom: 0;
     text-align: right;
+}
+
+.btn{
+    background-color: #BBB;
+    border: none;
+    color: black;
+    border-radius: 5px;
+    box-shadow: 1.5px 1.5px black;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }

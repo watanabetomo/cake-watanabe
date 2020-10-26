@@ -31,7 +31,7 @@ if (isset($_POST['send'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>管理者ログイン</title>
-    <link rel="stylesheet" href="../css/login.css">
+    <link rel="stylesheet" href="../css/admin_login.css">
 </head>
 
 <body>
