@@ -17,11 +17,14 @@ if (!isset($_SESSION['authenticated'])) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="../css/header.css">
     <link rel="stylesheet" href="../css/top.css">
+    <link rel="stylesheet" href="../css/util.css">
 </head>
 
 <body>
-    <?php include('header.html')?>
-    <?php include('footer.html')?>
+    <div class="container">
+        <?php include('header.html') ?>
+        <?php include('footer.html') ?>
+    </div>
 </body>
 
 </html>

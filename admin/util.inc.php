@@ -13,5 +13,5 @@ function h($str)
 
 function getPage($str)
 {
-    echo '<h1><button type="button" class="btn" disabled>' . $str . '</button></h1>';
+    echo '<h1 style="margin-left: 30px;"><button type="button" class="btn" disabled>' . $str . '</button></h1>';
 }

@@ -17,16 +17,12 @@ if (!isset($_SESSION['authenticated'])) {
     <link rel="stylesheet" href="../css/header.css">
     <link rel="stylesheet" href="../css/button.css">
     <link rel="stylesheet" href="../css/product_edit.css">
+    <link rel="stylesheet" href="../css/util.css">
 </head>
 
 <body>
-    <?php include('header.html') ?>
-    <?php include('secondHeader.html'); ?>
-    <main class="container">
-        <?php getPage('登録完了')?>
-        <h2 class="done">登録が完了しました</h2>
-    </main>
-    <?php include('footer.html')?>
+    <div class="container"><?php include('header.html') ?> <?php include('secondHeader.html'); ?> <main> <?php getPage('登録完了') ?> <h2 class="done">登録が完了しました</h2>
+        </main> <?php include('footer.html') ?></div>
 </body>
 
 </html>

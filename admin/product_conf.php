@@ -42,44 +42,30 @@ if (isset($_POST['send'])) {
     <link rel="stylesheet" href="../css/header.css">
     <link rel="stylesheet" href="../css/button.css">
     <link rel="stylesheet" href="../css/product_edit.css">
+    <link rel="stylesheet" href="../css/util.css">
 </head>
 
 <body>
-    <?php include('header.html') ?>
-    <?php include('secondHeader.html'); ?>
-    <main class="container">
-        <?php getPage('商品データ編集') ?>
-        <form action="" method="post">
-            <table class="table table-bordered">
-            <?php if(!isset($_GET['new'])): ?>
-                <tr>
-                    <th>ID</th>
-                    <td><?=h($_SESSION['id'])?></td>
-                </tr>
-            <?php endif; ?>
-                <tr>
-                    <th>商品名</th>
-                    <td><?= h($_SESSION['name']) ?></td>
-                </tr>
-                <tr>
-                    <th>商品カテゴリー</th>
-                    <td><?= h($_SESSION['category']) ?></td>
-                </tr>
-                <?php if(!isset($_GET['new'])): ?>
-                <tr>
-                    <th>画像</th>
-                    <td><img src="../img/<?=h($_SESSION['img'])?>" alt="<?=h($_SESSION['img'])?>"></td>
-                </tr>
-                <?php endif; ?>
-                <tr>
-                    <th>配送情報</th>
-                    <td><?= h($_SESSION['delivery_info']) ?></td>
-                </tr>
-            </table>
-            <p><input type="submit" name="send" class="btn" value="登録"> <input type="submit" name="cancel" class="btn" value="キャンセル"></p>
-        </form>
-    </main>
-    <?php include('footer.html')?>
+    <div class="container"><?php include('header.html') ?> <?php include('secondHeader.html'); ?> <main> <?php getPage('商品データ編集') ?> <form action="" method="post">
+                <table class="table table-bordered"> <?php if (!isset($_GET['new'])) : ?> <tr>
+                            <th>ID</th>
+                            <td><?= h($_SESSION['id']) ?></td>
+                        </tr> <?php endif; ?> <tr>
+                        <th>商品名</th>
+                        <td><?= h($_SESSION['name']) ?></td>
+                    </tr>
+                    <tr>
+                        <th>商品カテゴリー</th>
+                        <td><?= h($_SESSION['category']) ?></td>
+                    </tr>
+                    <tr>
+                        <th>配送情報</th>
+                        <td><?= h($_SESSION['delivery_info']) ?></td>
+                    </tr>
+                </table>
+                <p><input type="submit" name="send" class="btn" value="登録"> <input type="submit" name="cancel" class="btn" value="キャンセル"></p>
+            </form>
+        </main> <?php include('footer.html') ?></div>
 </body>
 
 </html>
