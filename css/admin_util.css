@@ -58,3 +58,16 @@ footer p {
     box-shadow: 1.5px 1.5px black;
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
+
+.error {
+    color: red;
+    margin: 0 auto;
+}
+
+.done{
+    text-align: center;
+}
+
+.submit-button{
+    margin-left: 30px;
+}

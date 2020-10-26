@@ -14,10 +14,10 @@ if (!isset($_SESSION['authenticated'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>登録完了</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-    <link rel="stylesheet" href="../css/admin_header.css">
-    <link rel="stylesheet" href="../css/admin_button.css">
     <link rel="stylesheet" href="../css/admin_product_edit.css">
+    <link rel="stylesheet" href="../css/admin_product_done.css">
     <link rel="stylesheet" href="../css/admin_util.css">
+    <link rel="stylesheet" href="../css/admin_footer_fixbottom.css">
 </head>
 
 <body>

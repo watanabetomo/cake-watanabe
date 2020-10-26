@@ -19,14 +19,20 @@ if (isset($_POST['cancel'])) {
 
 if (isset($_POST['send'])) {
     try {
-        $productCategoryModel = new ProductCategoryModel();
-        $categoryId = $productCategoryModel->getIdByName($_SESSION['category']);
         $productModel = new ProductModel();
-        $productModel->update($_SESSION['id'], $_SESSION['name'], $categoryId['id'], $_SESSION['img'], $_SESSION['delivery_info']);
+        $productCategoryModel = new ProductCategoryModel();
+        $category_id = $productCategoryModel->getIdByName($_SESSION['category']);
+        if (isset($_GET['new'])) {
+            $productModel->register($_SESSION['name'], $category_id['id'], $_SESSION['delivery_info'], $_SESSION['login_id']);
+            header('Location: product_done.php');
+            exit;
+        }
+        $productModel->update($_SESSION['id'], $_SESSION['name'], $category_id['id'], $_SESSION['delivery_info'], $_SESSION['login_id']);
         header('Location: product_done.php');
         exit;
     } catch (PDOException $e) {
-        echo $e->getMessage();
+        $error['databaseError'] = $e->getMessage();
+        //'データベースに接続できませんでした';
     }
 }
 
@@ -39,18 +45,24 @@ if (isset($_POST['send'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>登録確認</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-    <link rel="stylesheet" href="../css/admin_header.css">
-    <link rel="stylesheet" href="../css/admin_button.css">
     <link rel="stylesheet" href="../css/admin_product_edit.css">
     <link rel="stylesheet" href="../css/admin_util.css">
+    <link rel="stylesheet" href="../css/admin_footer_fixbottom.css">
 </head>
 
 <body>
-    <div class="container"><?php include('header.html') ?> <?php include('secondHeader.html'); ?> <main> <?php getPage('商品データ編集') ?> <form action="" method="post">
-                <table class="table table-bordered"> <?php if (!isset($_GET['new'])) : ?> <tr>
+    <div class="container"><?php include('header.html') ?> <?php include('secondHeader.html'); ?>
+        <main>
+            <?php getPage('商品データ編集') ?>
+            <p class="error"><?= isset($error['databaseError']) ? $error['databaseError'] : ''; ?></p>
+            <form action="" method="post">
+                <table class="table table-bordered">
+                    <?php if (!isset($_GET['new'])) : ?>
+                        <tr>
                             <th>ID</th>
                             <td><?= h($_SESSION['id']) ?></td>
-                        </tr> <?php endif; ?> <tr>
+                        </tr>
+                    <?php endif; ?> <tr>
                         <th>商品名</th>
                         <td><?= h($_SESSION['name']) ?></td>
                     </tr>
@@ -63,7 +75,7 @@ if (isset($_POST['send'])) {
                         <td><?= h($_SESSION['delivery_info']) ?></td>
                     </tr>
                 </table>
-                <p><input type="submit" name="send" class="btn" value="登録"> <input type="submit" name="cancel" class="btn" value="キャンセル"></p>
+                <p class="submit-button"><input type="submit" name="send" class="btn" value="登録"> <input type="submit" name="cancel" class="btn" value="キャンセル"></p>
             </form>
         </main> <?php include('footer.html') ?></div>
 </body>

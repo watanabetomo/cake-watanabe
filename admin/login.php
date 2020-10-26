@@ -11,7 +11,8 @@ if (isset($_POST['send'])) {
             if (!empty($adminUser) and password_verify($_POST['pass'], $adminUser['login_pass'])) {
                 session_regenerate_id(true);
                 $_SESSION['authenticated'] = password_hash($_POST['id'] . $_POST['pass'], PASSWORD_DEFAULT);
-                $_SESSION['user_name'] = $adminUser['name'];
+                $_SESSION['userName'] = $adminUser['name'];
+                $_SESSION['login_id'] = $adminUser['id'];
                 header('Location: top.php');
                 exit;
             }
@@ -47,7 +48,7 @@ if (isset($_POST['send'])) {
             </tr>
             <tr>
                 <td>パスワード</td>
-                <td><input type="text" name="pass"></td>
+                <td><input type="password" name="pass"></td>
             </tr>
         </table>
         <p><input type="submit" name="send" value="認証"></p>

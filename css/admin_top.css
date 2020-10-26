@@ -2,12 +2,3 @@ nav ul li:nth-child(1) {
     border-bottom: 2px solid #FF6633;
 }
 
-.container{
-    position: relative;
-}
-
-footer{
-    position: absolute;
-    bottom: 0;
-    right: 0;
-}

@@ -30,22 +30,6 @@ if (isset($_POST['send'])) {
     exit;
 }
 
-if (isset($_POST['upload'])) {
-    if (!empty($_FILES)) {
-        if ($_FILES['img']['error'] == UPLOAD_ERR_OK) {
-            exec('sudo chmod 0777 ../' . IMG_PATH);
-            if (!move_uploaded_file($_FILES['img']['tmp_name'], '../' . IMG_PATH . mb_convert_encoding($_FILES['img']['name'], 'cp932', 'utf8'))) {
-                echo 'ファイルの移動に失敗しました';
-            }
-            exec('sudo chmod 0755 ../' . IMG_PATH);
-        } elseif ($_FILES['img']['error'] == UPLOAD_ERR_NO_FILE) {
-            echo 'ファイルがアップロードされませんでした';
-        } else {
-            echo 'ファイルのアップロードに失敗しました';
-        }
-    }
-    header('Location: product_edit.php');
-}
 
 if (isset($_GET['new'])) {
     unset($_SESSION['name']);
@@ -59,10 +43,32 @@ if (isset($_GET['id'])) {
         $productModel = new ProductModel();
         $productData = $productModel->fetchById($_GET['id']);
     } catch (PDOException $e) {
-        echo 'データベースに接続できませんでした';
+        $error['datebaseError'] = 'データベースに接続できませんでした';
     }
 }
 
+if (isset($_POST['upload'])) {
+    if (!empty($_FILES['img'])) {
+        if ($_FILES['img']['error'] == UPLOAD_ERR_OK) {
+            exec('sudo chmod 0777 ../' . IMG_PATH);
+            if (!move_uploaded_file($_FILES['img']['tmp_name'], '../' . IMG_PATH . mb_convert_encoding($_FILES['img']['name'], 'cp932', 'utf8'))) {
+                $error[$fileUploadError] = 'ファイルの移動に失敗しました';
+            }
+            exec('sudo chmod 0755 ../' . IMG_PATH);
+            try{
+                $productModel = new ProductModel();
+                $productModel->imgUpload($_SESSION[id], $_FILES['img']['name']);
+                header('Location: product_edit.php?id=' . $_SESSION['id']);
+            }catch(PDOException $e){
+                $error['databaseError'] = 'データベースに接続できませんでした';
+            }
+        } elseif ($_FILES['img']['error'] == UPLOAD_ERR_NO_FILE) {
+            $error[$fileUploadError] = 'ファイルがアップロードされませんでした';
+        } else {
+            $error[$fileUploadError] = 'ファイルのアップロードに失敗しました';
+        }
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -72,9 +78,6 @@ if (isset($_GET['id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>商品データ編集</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
-    <link rel="stylesheet" href="../css/admin_header.css">
-    <link rel="stylesheet" href="../css/admin_button.css">
     <link rel="stylesheet" href="../css/admin_product_edit.css">
     <link rel="stylesheet" href="../css/admin_util.css">
 </head>
@@ -84,7 +87,8 @@ if (isset($_GET['id'])) {
         <?php include('header.html') ?>
         <?php include('secondHeader.html'); ?>
         <main>
-            <?php getPage('商品データ編集');?>
+            <?php getPage('商品データ編集'); ?>
+            <p class="error"><?= isset($error['databaseError']) ? $error['databaseError'] : '' ?></p>
             <form action="" method="post">
                 <table class="table table-bordered"> <?php if (!isset($_GET['new'])) : ?> <tr>
                             <th>ID</th>
@@ -103,7 +107,10 @@ if (isset($_GET['id'])) {
                     </tr>
                 </table>
                 <p class=submit-button><input type="submit" name="send" class="btn" value="確認画面へ"> <input type="submit" name="back" class="btn" value="やめる"></p>
-            </form> <?php if (!isset($_GET['new'])) : ?> <form id="upload" action="" method="post" enctype="multipart/form-data" style="margin-top: 70px;">
+            </form>
+            <?php if (!isset($_GET['new'])) : ?>
+                <p class="error"><?= isset($error['fileUploadError']) ? $error['fileUploadError'] : '' ?></p>
+                <form id="upload" action="" method="post" enctype="multipart/form-data" style="margin-top: 70px;" onsubmit="return confirm('本当に画像をアップロードしますか？')">
                     <table class="table table-bordered">
                         <tr>
                             <th>ファイル選択</th>
@@ -111,22 +118,12 @@ if (isset($_GET['id'])) {
                         </tr>
                         <tr>
                             <th>画像</th>
-                            <td> <?php if (!empty($_FILES)) : ?> <img src="../<?= IMG_PATH . $_FILES['img']['name'] ?>" alt="<?= $_FILES['img']['name'] ?>"> <?php endif; ?> </td>
+                            <td> <?= isset($productData) ? '<img src="../' . IMG_PATH . $productData['img'] . '" alt="' . $productData['img'] . '"' : '' ?></td>
                         </tr>
                     </table>
-                    <p class=submit-button><a href="#modal" rel="modal:open" role="button" class="btn">登録</a></p>
-                    <div id="modal" class="modal" style="height: 100px">
-                        <p>本当に画像をアップロードしますか？</p> <input id="submit_button" type="submit" name="upload" class="btn btn-sm" value="OK"> <a href="" rel="modal:close" role="button" class="btn btn-sm">キャンセル</a>
-                    </div>
+                    <p class=submit-button><input id="submit_button" type="submit" class="btn" name="upload" value="登録"></p>
                 </form> <?php endif; ?>
         </main> <?php include('footer.html') ?></div>
-    <script type="text/javascript">
-        $("#submit_button").click(function() {
-            $("#upload").submit();
-        });
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
 </body>
 
 </html>

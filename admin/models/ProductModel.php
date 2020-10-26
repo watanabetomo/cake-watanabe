@@ -32,12 +32,13 @@ class ProductModel extends Model{
      * @param String $name
      * @param int $category_id
      * @param String $delivery_info
+     * @param String $update_user
      * @return void
      */
-    public function update($id, $name, $category_id, $img, $delivery_info){
+    public function update($id, $name, $category_id, $delivery_info, $update_user){
         $this->connect();
-        $stmt = $this->dbh->prepare('UPDATE product SET name = ?, product_category_id = ?, delivery_info = ? ,updated_at = current_timestamp(), img = ? WHERE id = ?');
-        $stmt->execute([$name, $category_id, $delivery_info, $img, $id]);
+        $stmt = $this->dbh->prepare('UPDATE product SET name = ?, product_category_id = ?, delivery_info = ?, update_user = ?, updated_at = current_timestamp() WHERE id = ?');
+        $stmt->execute([$name, $category_id, $delivery_info, $update_user, $id]);
     }
 
     /**
@@ -58,7 +59,7 @@ class ProductModel extends Model{
      * @param int $id
      * @return array product_category_idで取得したレコード一件分
      */
-    public function fetchByCategoryId($id)
+    public function fetchBycategory_id($id)
     {
         $this->connect();
         $stmt = $this->dbh->prepare('SELECT id, name, img FROM product WHERE product_category_id = ? AND delete_flg = false ORDER BY `order` IS NULL ASC');
@@ -74,10 +75,16 @@ class ProductModel extends Model{
      * @param String $delivery_info
      * @return void
      */
-    public function register($name, $category_id, $delivery_info)
+    public function register($name, $category_id, $delivery_info, $create_user)
     {
         $this->connect();
-        $stmt = $this->dbh->prepare('INSERT INTO product VALUES (?, ?, ?)');
-        $stmt->execute([$name, $category_id, $delivery_info]);
+        $stmt = $this->dbh->prepare('INSERT INTO product(name, product_category_id, delivery_info, create_user) VALUES (?, ?, ?, ?)');
+        $stmt->execute([$name, $category_id, $delivery_info, $create_user]);
+    }
+
+    public function imgUpload($id, $img){
+        $this->connect();
+        $stmt = $this->dbh->prepare('UPDATE product SET img = ? WHERE id = ?');
+        $stmt->execute([$img, $id]);
     }
 }
