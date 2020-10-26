@@ -1,6 +1,8 @@
 <?php
 require_once('autoload.php');
 
+$title = '商品データ登録確認';
+
 if (!isset($_SESSION['authenticated'])) {
     header('Location: login.php');
     exit;
@@ -31,8 +33,7 @@ if (isset($_POST['send'])) {
         header('Location: product_done.php');
         exit;
     } catch (PDOException $e) {
-        $error['databaseError'] = $e->getMessage();
-        //'データベースに接続できませんでした';
+        $error['databaseError'] = 'データベースに接続できませんでした';
     }
 }
 
@@ -53,7 +54,7 @@ if (isset($_POST['send'])) {
 <body>
     <div class="container"><?php include('header.html') ?> <?php include('secondHeader.html'); ?>
         <main>
-            <?php getPage('商品データ編集') ?>
+            <?php getPage() ?>
             <p class="error"><?= isset($error['databaseError']) ? $error['databaseError'] : ''; ?></p>
             <form action="" method="post">
                 <table class="table table-bordered">

@@ -6,7 +6,7 @@ CREATE TABLE product (
     name TEXT,
     img TEXT,
     delivery_info TEXT,
-    order INT,
+    `order` INT,
     create_user INT NOT NULL,
     update_user INT NULL DEFAULT NULL,
     created_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
@@ -25,5 +25,5 @@ CREATE TABLE product_detail (
 CREATE TABLE product_category (
     id SERIAL PRIMARY KEY,
     name TEXT,
-    order INT
+    `order` INT
 );

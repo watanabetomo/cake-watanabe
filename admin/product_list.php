@@ -1,6 +1,8 @@
 <?php
 require_once('autoload.php');
 
+$title = '商品リスト';
+
 if (!isset($_SESSION['authenticated'])) {
     header('Location: login.php');
     exit;
@@ -11,7 +13,7 @@ try {
     $productList = $productModel->fetchAllData();
     $productJson = json_encode($productList);
 } catch (PDOException $e) {
-    //エラー文
+    $error['databaseError'] = 'データベースに接続できませんでした';
 }
 
 if (isset($_POST['delete'])) {
@@ -37,8 +39,14 @@ if (isset($_POST['delete'])) {
     <div class="container">
         <?php include('header.html') ?>
         <?php include('secondHeader.html') ?>
-        <main> <?php getPage('商品リスト') ?>
-            <div class="search"><input type="text" id="search"> <input type="button" value="絞り込む" id="button"> <input type="button" value="すべて表示" id="button2"></div>
+        <main>
+            <?php getPage() ?>
+            <?= isset($error['databeseError']) ? $error['databaseError'] : ''; ?>
+            <div class="search">
+                <input type="text" id="search">
+                <input type="button" value="絞り込む" id="button">
+                <input type="button" value="すべて表示" id="button2">
+            </div>
             <table class="table-bordered" id="result" style="margin: 0 auto;">
                 <thead class="thead-right">
                     <tr>
@@ -50,7 +58,9 @@ if (isset($_POST['delete'])) {
                         <th scope="col"><a href="product_edit.php?new=true" role="button" class="btn btn-sm">新規登録</a></th>
                     </tr>
                 </thead>
-                <tbody> <?php foreach ($productList as $product) : ?> <tr>
+                <tbody>
+                    <?php foreach ($productList as $product) : ?>
+                        <tr>
                             <td><?= h($product['id']) ?></td>
                             <td><?= h($product['name']) ?></td>
                             <td><img src="../<?= IMG_PATH . h($product['img']) ?>" alt="<?= h($product['img']) ?>"></td>

@@ -1,6 +1,8 @@
 <?php
 require_once('autoload.php');
 
+$title = '商品データ編集';
+
 if (!isset($_SESSION['authenticated'])) {
     header('Location: login.php');
     exit;
@@ -87,7 +89,7 @@ if (isset($_POST['upload'])) {
         <?php include('header.html') ?>
         <?php include('secondHeader.html'); ?>
         <main>
-            <?php getPage('商品データ編集'); ?>
+            <?php getPage(); ?>
             <p class="error"><?= isset($error['databaseError']) ? $error['databaseError'] : '' ?></p>
             <form action="" method="post">
                 <table class="table table-bordered"> <?php if (!isset($_GET['new'])) : ?> <tr>
