@@ -36,9 +36,17 @@ class ProductModel extends Model{
      * @return void
      */
     public function update($id, $name, $category_id, $delivery_info, $update_user){
-        $this->connect();
-        $stmt = $this->dbh->prepare('UPDATE product SET name = ?, product_category_id = ?, delivery_info = ?, update_user = ?, updated_at = current_timestamp() WHERE id = ?');
-        $stmt->execute([$name, $category_id, $delivery_info, $update_user, $id]);
+        try{
+            $this->connect();
+            $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
+            $stmt = $this->dbh->prepare('UPDATE product SET name = ?, product_category_id = ?, delivery_info = ?, update_user = ?, updated_at = current_timestamp() WHERE id = ?');
+            $this->dbh->beginTransaction();
+            $stmt->execute([$name, $category_id, $delivery_info, $update_user, $id]);
+            $this->dbh->commit();
+        }catch(PDOException $e){
+            throw new PDOException('データの更新に失敗しました');
+            $this->dbh->rollback();
+        }
     }
 
     /**
@@ -48,9 +56,17 @@ class ProductModel extends Model{
      * @return void
      */
     public function delete($id){
-        $this->connect();
-        $stmt = $this->dbh->prepare('UPDATE product SET delete_flg = true WHERE id = ?');
-        $stmt->execute([$id]);
+        try{
+            $this->connect();
+            $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
+            $stmt = $this->dbh->prepare('UPDATE product SET delete_flg = true WHERE id = ?');
+            $this->dbh->beginTransaction();
+            $stmt->execute([$id]);
+            $this->dbh->commit();
+        }catch(PDOException $e){
+            throw new PDOException('削除に失敗しました');
+            $this->dbh->rollback();
+        }
     }
 
     /**
@@ -78,9 +94,17 @@ class ProductModel extends Model{
      */
     public function register($name, $category_id, $delivery_info, $create_user)
     {
-        $this->connect();
-        $stmt = $this->dbh->prepare('INSERT INTO product(name, product_category_id, delivery_info, create_user) VALUES (?, ?, ?, ?)');
-        $stmt->execute([$name, $category_id, $delivery_info, $create_user]);
+        try{
+            $this->connect();
+            $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
+            $stmt = $this->dbh->prepare('INSERT INTO product(name, product_category_id, delivery_info, create_user) VALUES (?, ?, ?, ?)');
+            $this->dbh->beginTransaction();
+            $stmt->execute([$name, $category_id, $delivery_info, $create_user]);
+            $this->dbh->commit();
+        }catch(PDOException $e){
+            throw new PDOException('登録に失敗しました');
+            $this->dbh->rollback();
+        }
     }
 
     /**
@@ -91,8 +115,16 @@ class ProductModel extends Model{
      * @return void
      */
     public function imgUpload($id, $img){
-        $this->connect();
-        $stmt = $this->dbh->prepare('UPDATE product SET img = ? WHERE id = ?');
-        $stmt->execute([$img, $id]);
+        try{
+            $this->connect();
+            $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
+            $stmt = $this->dbh->prepare('UPDATE product SET img = ? WHERE id = ?');
+            $this->dbh->beginTransaction();
+            $stmt->execute([$img, $id]);
+            $this->dbh->commit();
+        }catch(PDOException $e){
+            throw new PDOException('画像の登録に失敗しました');
+            $this->dbh->rollback();
+        }
     }
 }
