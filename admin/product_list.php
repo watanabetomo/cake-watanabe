@@ -11,7 +11,6 @@ if (!isset($_SESSION['authenticated'])) {
 try {
     $productModel = new ProductModel();
     $productList = $productModel->fetchAllData();
-    $productJson = json_encode($productList);
 } catch (PDOException $e) {
     $error['databaseError'] = 'データベースに接続できませんでした';
 }
@@ -41,7 +40,7 @@ if (isset($_POST['delete'])) {
         <?php include('secondHeader.html') ?>
         <main>
             <?php getPage() ?>
-            <?= isset($error['databeseError']) ? $error['databaseError'] : ''; ?>
+            <?=isset($error['databeseError']) ? $error['databaseError'] : '';?>
             <div class="search">
                 <input type="text" id="search">
                 <input type="button" value="絞り込む" id="button">
@@ -50,26 +49,29 @@ if (isset($_POST['delete'])) {
             <table class="table-bordered" id="result" style="margin: 0 auto;">
                 <thead class="thead-right">
                     <tr>
-                        <th scope="col"><span style="font-size: 17px;">ID</span></th>
-                        <th scope="col"><span style="font-size: 17px;">商品名</span></th>
-                        <th scope="col"><span style="font-size: 17px;">画像</span></th>
-                        <th scope="col"><span style="font-size: 17px;">登録日時</span></th>
-                        <th scope="col"><span style="font-size: 17px;">更新日時</span></th>
+                        <th scope="col">ID</th>
+                        <th scope="col">商品名</th>
+                        <th scope="col">画像</th>
+                        <th scope="col">登録日時</th>
+                        <th scope="col">更新日時</th>
                         <th scope="col"><a href="product_edit.php?new=true" role="button" class="btn btn-sm">新規登録</a></th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php foreach ($productList as $product) : ?>
                         <tr>
-                            <td><?= h($product['id']) ?></td>
-                            <td><?= h($product['name']) ?></td>
-                            <td><img src="../<?= IMG_PATH . h($product['img']) ?>" alt="<?= h($product['img']) ?>"></td>
-                            <td><?= h($product['created_at']) ?></td>
-                            <td><?= h($product['updated_at']) ?></td>
+                            <td><?=h($product['id'])?></td>
+                            <td><?=h($product['name'])?></td>
+                            <td><img src="../<?=IMG_PATH . h($product['img'])?>" alt="<?=h($product['img'])?>"></td>
+                            <td><?=h($product['created_at'])?></td>
+                            <td><?=h($product['updated_at'])?></td>
                             <td>
-                                <p><a href="product_edit.php?id=<?= h($product['id']) ?>" class="btn btn-sm">編集</a></p>
+                                <p><a href="product_edit.php?id=<?=h($product['id'])?>" class="btn btn-sm">編集</a></p>
                                 <p>
-                                    <form action="" method="post" onsubmit="return confirm('本当に削除しますか？')"> <input type="hidden" name="id" value="<?= h($product['id']) ?>"> <input type="submit" class="btn btn-sm" name="delete" value="削除"> </form>
+                                    <form action="" method="post" onsubmit="return confirm('本当に削除しますか？')">
+                                        <input type="hidden" name="id" value="<?= h($product['id']) ?>">
+                                        <input type="submit" class="btn btn-sm" name="delete" value="削除">
+                                    </form>
                                 </p>
                             </td>
                         </tr>
@@ -105,18 +107,10 @@ if (isset($_POST['delete'])) {
         $(document).ready(function() {
             $('#result').tablesorter({
                 headers: {
-                    2: {
-                        sorter: false
-                    },
-                    3: {
-                        sorter: false
-                    },
-                    4: {
-                        sorter: 'usLongDate'
-                    },
-                    5: {
-                        sorter: false
-                    }
+                    2: { sorter: false },
+                    3: { sorter: false },
+                    4: { sorter: 'usLongDate' },
+                    5: { sorter: false }
                 },
             });
         });

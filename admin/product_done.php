@@ -22,8 +22,15 @@ if (!isset($_SESSION['authenticated'])) {
 </head>
 
 <body>
-    <div class="container"><?php include('header.html') ?> <?php include('secondHeader.html'); ?> <main> <?php getPage() ?> <h2 class="done">登録が完了しました</h2>
-        </main> <?php include('footer.html') ?></div>
+    <div class="container">
+        <?php include('header.html') ?>
+        <?php include('secondHeader.html'); ?>
+        <main>
+            <?php getPage() ?>
+            <h2 class="done">登録が完了しました</h2>
+        </main>
+        <?php include('footer.html') ?>
+    </div>
 </body>
 
 </html>

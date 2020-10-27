@@ -12,23 +12,15 @@ try {
     $productCategoryModel = new ProductCategoryModel();
     $productCategories = $productCategoryModel->fetchAllName();
 } catch (PDOException $e) {
-    echo $e->getMessage();
-}
-
-if (isset($_POST['back'])) {
-    header('Location: product_list.php');
-    exit;
+    $error['databaseError'] = 'データベースに接続できませんでした';
 }
 
 if (isset($_POST['send'])) {
     $_SESSION['name'] = $_POST['name'];
     $_SESSION['category'] = $_POST['category'];
     $_SESSION['delivery_info'] = $_POST['delivery_info'];
-    if (isset($_GET['new'])) {
-        header('Location: product_conf.php?new=true');
-        exit;
-    }
-    header('Location: product_conf.php');
+    $_SESSION['conf'] = true;
+    header('Location: product_conf.php' . (isset($_GET['new']) ? '?new=true' : ''));
     exit;
 }
 
@@ -55,15 +47,16 @@ if (isset($_POST['upload'])) {
             exec('sudo chmod 0777 ../' . IMG_PATH);
             if (!move_uploaded_file($_FILES['img']['tmp_name'], '../' . IMG_PATH . mb_convert_encoding($_FILES['img']['name'], 'cp932', 'utf8'))) {
                 $error[$fileUploadError] = 'ファイルの移動に失敗しました';
+            }else{
+                try{
+                    $productModel = new ProductModel();
+                    $productModel->imgUpload($_SESSION[id], $_FILES['img']['name']);
+                    header('Location: product_edit.php?id=' . $_SESSION['id']);
+                }catch(PDOException $e){
+                    $error['databaseError'] = 'データベースに接続できませんでした';
+                }
             }
             exec('sudo chmod 0755 ../' . IMG_PATH);
-            try{
-                $productModel = new ProductModel();
-                $productModel->imgUpload($_SESSION[id], $_FILES['img']['name']);
-                header('Location: product_edit.php?id=' . $_SESSION['id']);
-            }catch(PDOException $e){
-                $error['databaseError'] = 'データベースに接続できませんでした';
-            }
         } elseif ($_FILES['img']['error'] == UPLOAD_ERR_NO_FILE) {
             $error[$fileUploadError] = 'ファイルがアップロードされませんでした';
         } else {
@@ -90,42 +83,57 @@ if (isset($_POST['upload'])) {
         <?php include('secondHeader.html'); ?>
         <main>
             <?php getPage(); ?>
-            <p class="error"><?= isset($error['databaseError']) ? $error['databaseError'] : '' ?></p>
+            <p class="error"><?=isset($error['databaseError']) ? $error['databaseError'] : ''?></p>
             <form action="" method="post">
-                <table class="table table-bordered"> <?php if (!isset($_GET['new'])) : ?> <tr>
+                <table class="table table-bordered">
+                    <?php if (!isset($_GET['new'])) : ?>
+                        <tr>
                             <th>ID</th>
-                            <td><?= h($_SESSION['id']) ?></td>
-                        </tr> <?php endif; ?> <tr>
+                            <td><?=h($_SESSION['id'])?></td>
+                        </tr>
+                    <?php endif; ?>
+                    <tr>
                         <th>商品名</th>
-                        <td><input type="text" name="name" <?= isset($productData) ? 'value="' . $productData['name'] . '"' : ''; ?> <?= isset($_SESSION['name']) ? 'value="' . $_SESSION['name'] . '"' : ''; ?>></td>
+                        <td><input type="text" name="name" <?=isset($productData) ? 'value="' . $productData['name'] . '"' : '';?> <?=isset($_SESSION['name']) ? 'value="' . $_SESSION['name'] . '"' : '';?>></td>
                     </tr>
                     <tr>
                         <th>商品カテゴリー</th>
-                        <td> <select name="category"> <?php foreach ($productCategories as $category) : ?> <option <?= (isset($productData) and $productData['category_name'] == $category['name']) ? 'selected' : ''; ?> <?= (isset($_SESSION['category']) and $_SESSION['category'] == $category['name']) ? 'selected' : ''; ?>><?= h($category['name']) ?></option> <?php endforeach; ?> </select> </td>
+                        <td>
+                            <select name="category">
+                                <?php foreach ($productCategories as $category) : ?>
+                                    <option <?=(isset($productData) and $productData['category_name'] == $category['name']) ? 'selected' : '';?> <?=(isset($_SESSION['category']) and $_SESSION['category'] == $category['name']) ? 'selected' : '';?>><?=h($category['name'])?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </td>
                     </tr>
                     <tr>
                         <th>配送情報</th>
-                        <td><input type="text" name="delivery_info" <?= isset($productData) ? 'value="' . $productData['delivery_info'] . '"' : ''; ?> <?= isset($_SESSION['delivery_info']) ? 'value="' . $_SESSION['delivery_info'] . '"' : ''; ?>></td>
+                        <td>
+                            <input type="text" name="delivery_info" <?=isset($productData) ? 'value="' . $productData['delivery_info'] . '"' : '';?> <?=isset($_SESSION['delivery_info']) ? 'value="' . $_SESSION['delivery_info'] . '"' : '';?>>
+                        </td>
                     </tr>
                 </table>
-                <p class=submit-button><input type="submit" name="send" class="btn" value="確認画面へ"> <input type="submit" name="back" class="btn" value="やめる"></p>
+                <p class=submit-button><input type="submit" name="send" class="btn" value="確認画面へ"></p>
             </form>
             <?php if (!isset($_GET['new'])) : ?>
-                <p class="error"><?= isset($error['fileUploadError']) ? $error['fileUploadError'] : '' ?></p>
-                <form id="upload" action="" method="post" enctype="multipart/form-data" style="margin-top: 70px;" onsubmit="return confirm('本当に画像をアップロードしますか？')">
-                    <table class="table table-bordered">
+                <p class="error"><?=isset($error['fileUploadError']) ? $error['fileUploadError'] : ''?></p>
+                <form id="upload" action="" method="post" enctype="multipart/form-data" onsubmit="return confirm('本当に画像をアップロードしますか？')">
+                    <table class="table table-bordered" style="margin-top: 70px;">
                         <tr>
                             <th>ファイル選択</th>
                             <td><input type="file" name="img"></td>
                         </tr>
                         <tr>
                             <th>画像</th>
-                            <td> <?= isset($productData) ? '<img src="../' . IMG_PATH . $productData['img'] . '" alt="' . $productData['img'] . '"' : '' ?></td>
+                            <td> <?=isset($productData) ? '<img src="../' . IMG_PATH . $productData['img'] . '" alt="' . $productData['img'] . '"' : ''?></td>
                         </tr>
                     </table>
                     <p class=submit-button><input id="submit_button" type="submit" class="btn" name="upload" value="登録"></p>
-                </form> <?php endif; ?>
-        </main> <?php include('footer.html') ?></div>
+                </form>
+            <?php endif; ?>
+        </main>
+        <?php include('footer.html') ?>
+    </div>
 </body>
 
 </html>

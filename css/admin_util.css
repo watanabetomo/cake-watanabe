@@ -31,17 +31,23 @@ nav ul li{
     background-color: black;
 }
 
-.second-header nav ul li{
-    background-color: #AAA;
-}
-
 .first-header nav ul li:hover{
     background-color: gray;
+}
+
+/* ここまでが課題1 */
+
+.second-header nav ul li{
+    background-color: #AAA;
 }
 
 table{
     max-width: 1000px;
     margin: 0 auto;
+}
+
+th{
+    font-size: 15px;
 }
 
 footer p {
@@ -62,6 +68,10 @@ footer p {
 .error {
     color: red;
     margin: 0 auto;
+}
+
+#upload{
+    margin-top: 70px;
 }
 
 .done{

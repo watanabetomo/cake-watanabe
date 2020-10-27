@@ -8,7 +8,7 @@ if (!isset($_SESSION['authenticated'])) {
     exit;
 }
 
-if (!isset($_SESSION['name']) and !isset($_SESSION['category']) and !isset($_SESSION['img']) and !isset($_SESSION['delivery_info'])) {
+if (!isset($_SESSION['conf'])) {
     header('Location: product_edit.php');
     exit;
 }
@@ -52,33 +52,38 @@ if (isset($_POST['send'])) {
 </head>
 
 <body>
-    <div class="container"><?php include('header.html') ?> <?php include('secondHeader.html'); ?>
+    <div class="container">
+        <?php include('header.html') ?>
+        <?php include('secondHeader.html'); ?>
         <main>
             <?php getPage() ?>
-            <p class="error"><?= isset($error['databaseError']) ? $error['databaseError'] : ''; ?></p>
+            <p class="error"><?=isset($error['databaseError']) ? $error['databaseError'] : '';?></p>
             <form action="" method="post">
                 <table class="table table-bordered">
                     <?php if (!isset($_GET['new'])) : ?>
                         <tr>
                             <th>ID</th>
-                            <td><?= h($_SESSION['id']) ?></td>
+                            <td><?=h($_SESSION['id'])?></td>
                         </tr>
-                    <?php endif; ?> <tr>
+                    <?php endif; ?>
+                    <tr>
                         <th>商品名</th>
-                        <td><?= h($_SESSION['name']) ?></td>
+                        <td><?=h($_SESSION['name'])?></td>
                     </tr>
                     <tr>
                         <th>商品カテゴリー</th>
-                        <td><?= h($_SESSION['category']) ?></td>
+                        <td><?=h($_SESSION['category'])?></td>
                     </tr>
                     <tr>
                         <th>配送情報</th>
-                        <td><?= h($_SESSION['delivery_info']) ?></td>
+                        <td><?=h($_SESSION['delivery_info'])?></td>
                     </tr>
                 </table>
                 <p class="submit-button"><input type="submit" name="send" class="btn" value="登録"> <input type="submit" name="cancel" class="btn" value="キャンセル"></p>
             </form>
-        </main> <?php include('footer.html') ?></div>
+        </main>
+        <?php include('footer.html') ?>
+    </div>
 </body>
 
 </html>
