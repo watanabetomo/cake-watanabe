@@ -12,6 +12,12 @@ class ProductCategoryModel extends Model
         return $this->dbh->query('SELECT id, name FROM product_category ORDER BY `order` IS NULL ASC')->fetchAll();
     }
 
+    /**
+     * カテゴリー名からidを取得
+     *
+     * @param String $name
+     * @return void
+     */
     public function getIdByName($name)
     {
         $this->connect();

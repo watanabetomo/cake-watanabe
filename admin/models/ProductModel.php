@@ -73,6 +73,7 @@ class ProductModel extends Model{
      * @param String $name
      * @param int $category_id
      * @param String $delivery_info
+     * @param int $create_user
      * @return void
      */
     public function register($name, $category_id, $delivery_info, $create_user)
@@ -82,6 +83,13 @@ class ProductModel extends Model{
         $stmt->execute([$name, $category_id, $delivery_info, $create_user]);
     }
 
+    /**
+     * 画像ファイル名を登録
+     *
+     * @param int $id
+     * @param String $img
+     * @return void
+     */
     public function imgUpload($id, $img){
         $this->connect();
         $stmt = $this->dbh->prepare('UPDATE product SET img = ? WHERE id = ?');
