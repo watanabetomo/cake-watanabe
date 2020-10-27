@@ -40,8 +40,6 @@ nav ul li{
     background-color: gray;
 }
 
-/* ここまでが課題1 */
-
 .second-header nav ul li{
     background-color: #AAA;
 }
@@ -56,7 +54,7 @@ th{
 }
 
 footer p {
-    margin-top: 0;
+    margin-top: 20px;
     margin-bottom: 0;
     text-align: right;
 }

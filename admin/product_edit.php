@@ -15,20 +15,11 @@ try {
     $error['databaseError'] = 'データベースに接続できませんでした';
 }
 
-if (isset($_POST['send'])) {
-    $_SESSION['name'] = $_POST['name'];
-    $_SESSION['category'] = $_POST['category'];
-    $_SESSION['delivery_info'] = $_POST['delivery_info'];
-    $_SESSION['conf'] = true;
-    header('Location: product_conf.php' . (isset($_GET['new']) ? '?new=true' : ''));
-    exit;
-}
-
-
 if (isset($_GET['new'])) {
     unset($_SESSION['name']);
     unset($_SESSION['category']);
     unset($_SESSION['delivery_info']);
+    unset($_SESSION['order']);
 }
 
 if (isset($_GET['id'])) {
@@ -46,21 +37,21 @@ if (isset($_POST['upload'])) {
         if ($_FILES['img']['error'] == UPLOAD_ERR_OK) {
             exec('sudo chmod 0777 ../' . IMG_PATH);
             if (!move_uploaded_file($_FILES['img']['tmp_name'], '../' . IMG_PATH . mb_convert_encoding($_FILES['img']['name'], 'cp932', 'utf8'))) {
-                $error[$fileUploadError] = 'ファイルの移動に失敗しました';
+                $error['fileUploadError'] = 'ファイルの移動に失敗しました';
             }else{
                 try{
                     $productModel = new ProductModel();
                     $productModel->imgUpload($_SESSION[id], $_FILES['img']['name']);
                     header('Location: product_edit.php?id=' . $_SESSION['id']);
                 }catch(PDOException $e){
-                    $error['databaseError'] = 'データベースに接続できませんでした';
+                    $error['databaseError'] = $e;
                 }
             }
             exec('sudo chmod 0755 ../' . IMG_PATH);
         } elseif ($_FILES['img']['error'] == UPLOAD_ERR_NO_FILE) {
-            $error[$fileUploadError] = 'ファイルがアップロードされませんでした';
+            $error['fileUploadError'] = 'ファイルがアップロードされませんでした';
         } else {
-            $error[$fileUploadError] = 'ファイルのアップロードに失敗しました';
+            $error['fileUploadError'] = 'ファイルのアップロードに失敗しました';
         }
     }
 }
@@ -72,7 +63,7 @@ if (isset($_POST['upload'])) {
     <?php require_once('secondHeader.html'); ?>
     <?php getPage(); ?>
     <p class="error"><?=isset($error['databaseError']) ? $error['databaseError'] : ''?></p>
-    <form action="" method="post">
+    <form action="product_conf.php<?=isset($_GET['new']) ? '?new=true' : ''?>" method="post">
         <input type="hidden" name="token" value="<?=getToken()?>">
         <table class="table table-bordered">
             <?php if (!isset($_GET['new'])) : ?>
@@ -99,6 +90,12 @@ if (isset($_POST['upload'])) {
                 <th>配送情報</th>
                 <td>
                     <input type="text" name="delivery_info" <?=isset($productData) ? 'value="' . $productData['delivery_info'] . '"' : '';?> <?=isset($_SESSION['delivery_info']) ? 'value="' . $_SESSION['delivery_info'] . '"' : '';?>>
+                </td>
+            </tr>
+            <tr>
+                <th>表示順</th>
+                <td>
+                    <input type="number" name="order" <?=isset($productData) ? 'value="' . $productData['order'] . '"' : '';?> <?=isset($_SESSION['order']) ? 'value="' . $_SESSION['order'] . '"' : '';?>>
                 </td>
             </tr>
         </table>

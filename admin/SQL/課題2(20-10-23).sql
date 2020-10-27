@@ -25,3 +25,32 @@ CREATE TABLE product_category (
     name TEXT,
     `order` SMALLINT UNSIGNED
 );
+
+INSERT INTO product_detail (product_id, size, price) VALUES
+(1, 90, 800),
+(1, 50, 900),
+(1, 70, 1000),
+(2, 30, 500),
+(2, 90, 800),
+(2, 50, 900),
+(3, 70, 1000),
+(3, 30, 500),
+(3, 90, 800),
+(4, 50, 900),
+(4, 70, 1000),
+(4, 30, 500),
+(4, 90, 800),
+(5, 50, 900),
+(5, 70, 1000),
+(5, 30, 500),
+(5, 20, 9000),
+(6, 50, 900),
+(6, 70, 1000),
+(6, 30, 500),
+(6, 20, 9000);
+
+INSERT INTO product_category (name, `order`) VALUES
+('Chocolate cake', 2),
+('Cheese cake', 1),
+('Shortcake&Tarte', 3),
+('Season cake', 4);
