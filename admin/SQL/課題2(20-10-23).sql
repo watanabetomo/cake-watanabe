@@ -1,5 +1,3 @@
-/**productテーブル作成*/
-
 CREATE TABLE product (
     id SERIAL PRIMARY KEY,
     product_category_id INT NOT NULL,

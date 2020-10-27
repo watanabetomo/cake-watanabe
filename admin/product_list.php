@@ -36,8 +36,8 @@ if (isset($_POST['delete'])) {
 
 <body>
     <div class="container">
-        <?php include('header.html') ?>
-        <?php include('secondHeader.html') ?>
+        <?php require_once('header.html') ?>
+        <?php require_once('secondHeader.html') ?>
         <main>
             <?php getPage() ?>
             <?=isset($error['databeseError']) ? $error['databaseError'] : '';?>
@@ -79,7 +79,7 @@ if (isset($_POST['delete'])) {
                 </tbody>
             </table>
         </main>
-        <?php include('footer.html') ?>
+        <?php require_once('footer.html') ?>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.0/js/jquery.tablesorter.min.js"></script>

@@ -53,8 +53,8 @@ if (isset($_POST['send'])) {
 
 <body>
     <div class="container">
-        <?php include('header.html') ?>
-        <?php include('secondHeader.html'); ?>
+        <?php require_once('header.html') ?>
+        <?php require_once('secondHeader.html'); ?>
         <main>
             <?php getPage() ?>
             <p class="error"><?=isset($error['databaseError']) ? $error['databaseError'] : '';?></p>
@@ -82,7 +82,7 @@ if (isset($_POST['send'])) {
                 <p class="submit-button"><input type="submit" name="send" class="btn" value="登録"> <input type="submit" name="cancel" class="btn" value="キャンセル"></p>
             </form>
         </main>
-        <?php include('footer.html') ?>
+        <?php require_once('footer.html') ?>
     </div>
 </body>
 

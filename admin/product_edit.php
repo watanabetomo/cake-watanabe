@@ -79,8 +79,8 @@ if (isset($_POST['upload'])) {
 
 <body>
     <div class="container">
-        <?php include('header.html') ?>
-        <?php include('secondHeader.html'); ?>
+        <?php require_once('header.html') ?>
+        <?php require_once('secondHeader.html'); ?>
         <main>
             <?php getPage(); ?>
             <p class="error"><?=isset($error['databaseError']) ? $error['databaseError'] : ''?></p>
@@ -132,7 +132,7 @@ if (isset($_POST['upload'])) {
                 </form>
             <?php endif; ?>
         </main>
-        <?php include('footer.html') ?>
+        <?php require_once('footer.html') ?>
     </div>
 </body>
 

@@ -22,8 +22,8 @@ if (!isset($_SESSION['authenticated'])) {
 
 <body>
     <div class="container">
-        <?php include('header.html') ?>
-        <?php include('footer.html') ?>
+        <?php require_once('header.html') ?>
+        <?php require_once('footer.html') ?>
     </div>
 </body>
 
