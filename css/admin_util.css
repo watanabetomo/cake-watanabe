@@ -2,6 +2,10 @@ body {
     background-color: pink;
 }
 
+main{
+    min-height: 84vh;
+}
+
 .container {
     padding: 0 0;
     background-color: #fff;
@@ -51,7 +55,7 @@ th{
 }
 
 footer p {
-    margin-top: 20px;
+    margin-top: 0;
     margin-bottom: 0;
     text-align: right;
 }

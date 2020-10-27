@@ -65,75 +65,60 @@ if (isset($_POST['upload'])) {
     }
 }
 ?>
-<!DOCTYPE html>
-<html lang="ja">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>商品データ編集</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-    <link rel="stylesheet" href="../css/admin_product_edit.css">
-    <link rel="stylesheet" href="../css/admin_util.css">
-</head>
-
-<body>
-    <div class="container">
-        <?php require_once('header.html') ?>
-        <?php require_once('secondHeader.html'); ?>
-        <main>
-            <?php getPage(); ?>
-            <p class="error"><?=isset($error['databaseError']) ? $error['databaseError'] : ''?></p>
-            <form action="" method="post">
-                <table class="table table-bordered">
-                    <?php if (!isset($_GET['new'])) : ?>
-                        <tr>
-                            <th>ID</th>
-                            <td><?=h($_SESSION['id'])?></td>
-                        </tr>
-                    <?php endif; ?>
-                    <tr>
-                        <th>商品名</th>
-                        <td><input type="text" name="name" <?=isset($productData) ? 'value="' . $productData['name'] . '"' : '';?> <?=isset($_SESSION['name']) ? 'value="' . $_SESSION['name'] . '"' : '';?>></td>
-                    </tr>
-                    <tr>
-                        <th>商品カテゴリー</th>
-                        <td>
-                            <select name="category">
-                                <?php foreach ($productCategories as $category) : ?>
-                                    <option <?=(isset($productData) and $productData['category_name'] == $category['name']) ? 'selected' : '';?> <?=(isset($_SESSION['category']) and $_SESSION['category'] == $category['name']) ? 'selected' : '';?>><?=h($category['name'])?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>配送情報</th>
-                        <td>
-                            <input type="text" name="delivery_info" <?=isset($productData) ? 'value="' . $productData['delivery_info'] . '"' : '';?> <?=isset($_SESSION['delivery_info']) ? 'value="' . $_SESSION['delivery_info'] . '"' : '';?>>
-                        </td>
-                    </tr>
-                </table>
-                <p class=submit-button><input type="submit" name="send" class="btn" value="確認画面へ"></p>
-            </form>
+<?php require_once('header.html') ?>
+<title>商品データ編集</title>
+<link rel="stylesheet" href="../css/admin_product_edit.css">
+<main>
+    <?php require_once('secondHeader.html'); ?>
+    <?php getPage(); ?>
+    <p class="error"><?=isset($error['databaseError']) ? $error['databaseError'] : ''?></p>
+    <form action="" method="post">
+        <table class="table table-bordered">
             <?php if (!isset($_GET['new'])) : ?>
-                <p class="error"><?=isset($error['fileUploadError']) ? $error['fileUploadError'] : ''?></p>
-                <form id="upload" action="" method="post" enctype="multipart/form-data" onsubmit="return confirm('本当に画像をアップロードしますか？')">
-                    <table class="table table-bordered" style="margin-top: 70px;">
-                        <tr>
-                            <th>ファイル選択</th>
-                            <td><input type="file" name="img"></td>
-                        </tr>
-                        <tr>
-                            <th>画像</th>
-                            <td> <?=isset($productData) ? '<img src="../' . IMG_PATH . $productData['img'] . '" alt="' . $productData['img'] . '"' : ''?></td>
-                        </tr>
-                    </table>
-                    <p class=submit-button><input id="submit_button" type="submit" class="btn" name="upload" value="登録"></p>
-                </form>
+                <tr>
+                    <th>ID</th>
+                    <td><?=h($_SESSION['id'])?></td>
+                </tr>
             <?php endif; ?>
-        </main>
-        <?php require_once('footer.html') ?>
-    </div>
-</body>
-
-</html>
+            <tr>
+                <th>商品名</th>
+                <td><input type="text" name="name" <?=isset($productData) ? 'value="' . $productData['name'] . '"' : '';?> <?=isset($_SESSION['name']) ? 'value="' . $_SESSION['name'] . '"' : '';?>></td>
+            </tr>
+            <tr>
+                <th>商品カテゴリー</th>
+                <td>
+                    <select name="category">
+                        <?php foreach ($productCategories as $category) : ?>
+                            <option <?=(isset($productData) and $productData['category_name'] == $category['name']) ? 'selected' : '';?> <?=(isset($_SESSION['category']) and $_SESSION['category'] == $category['name']) ? 'selected' : '';?>><?=h($category['name'])?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>配送情報</th>
+                <td>
+                    <input type="text" name="delivery_info" <?=isset($productData) ? 'value="' . $productData['delivery_info'] . '"' : '';?> <?=isset($_SESSION['delivery_info']) ? 'value="' . $_SESSION['delivery_info'] . '"' : '';?>>
+                </td>
+            </tr>
+        </table>
+        <p class=submit-button><input type="submit" name="send" class="btn" value="確認画面へ"></p>
+    </form>
+    <?php if (!isset($_GET['new'])) : ?>
+        <p class="error"><?=isset($error['fileUploadError']) ? $error['fileUploadError'] : ''?></p>
+        <form id="upload" action="" method="post" enctype="multipart/form-data" onsubmit="return confirm('本当に画像をアップロードしますか？')">
+            <table class="table table-bordered" style="margin-top: 70px;">
+                <tr>
+                    <th>ファイル選択</th>
+                    <td><input type="file" name="img"></td>
+                </tr>
+                <tr>
+                    <th>画像</th>
+                    <td> <?=isset($productData) ? '<img src="../' . IMG_PATH . $productData['img'] . '" alt="' . $productData['img'] . '"' : ''?></td>
+                </tr>
+            </table>
+            <p class=submit-button><input id="submit_button" type="submit" class="btn" name="upload" value="登録"></p>
+        </form>
+    <?php endif; ?>
+</main>
+<?php require_once('footer.html') ?>
