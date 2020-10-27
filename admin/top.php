@@ -8,7 +8,6 @@ if (!isset($_SESSION['authenticated'])) {
 ?>
 
 <?php require_once('header.html') ?>
-<title>トップページ</title>
 <link rel="stylesheet" href="../css/admin_top.css">
 <main></main>
 <?php require_once('footer.html') ?>

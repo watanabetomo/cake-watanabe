@@ -1,15 +1,16 @@
 body {
     background-color: pink;
+    padding-bottom: 20px;
 }
 
 main{
-    min-height: 84vh;
+    min-height: 75vh;
 }
 
 .container {
     padding: 0 0;
     background-color: #fff;
-    min-height: 100vh;
+    min-height: 85vh;
 }
 
 .logout {

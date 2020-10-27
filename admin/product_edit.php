@@ -67,13 +67,13 @@ if (isset($_POST['upload'])) {
 ?>
 
 <?php require_once('header.html') ?>
-<title>商品データ編集</title>
 <link rel="stylesheet" href="../css/admin_product_edit.css">
 <main>
     <?php require_once('secondHeader.html'); ?>
     <?php getPage(); ?>
     <p class="error"><?=isset($error['databaseError']) ? $error['databaseError'] : ''?></p>
     <form action="" method="post">
+        <input type="hidden" name="token" value="<?=getToken()?>">
         <table class="table table-bordered">
             <?php if (!isset($_GET['new'])) : ?>
                 <tr>

@@ -40,7 +40,6 @@ if (isset($_POST['send'])) {
 ?>
 
 <?php require_once('header.html') ?>
-<title>登録確認</title>
 <link rel="stylesheet" href="../css/admin_product_edit.css">
 <main>
     <?php require_once('secondHeader.html'); ?>

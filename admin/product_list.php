@@ -22,7 +22,6 @@ if (isset($_POST['delete'])) {
 ?>
 
 <?php require_once('header.html') ?>
-<title>商品リスト</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.0/css/theme.default.min.css">
 <link rel="stylesheet" href="../css/admin_product_list.css">
 <main>

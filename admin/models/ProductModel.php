@@ -118,8 +118,8 @@ class ProductModel extends Model{
         try{
             $this->connect();
             $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
-            $stmt = $this->dbh->prepare('UPDATE product SET img = ? WHERE id = ?');
             $this->dbh->beginTransaction();
+            $stmt = $this->dbh->prepare('UPDATE product SET img = ? WHERE id = ?');
             $stmt->execute([$img, $id]);
             $this->dbh->commit();
         }catch(PDOException $e){

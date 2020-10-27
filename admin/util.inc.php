@@ -16,3 +16,8 @@ function getPage()
     global $title;
     echo '<h1 style="margin-left: 30px;"><button type="button" class="btn" disabled>' . $title . '</button></h1>';
 }
+
+function getToken()
+{
+    return hash('sha256', session_id());
+}

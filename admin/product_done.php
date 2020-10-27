@@ -10,7 +10,6 @@ if (!isset($_SESSION['authenticated'])) {
 ?>
 
 <?php require_once('header.html') ?>
-<title>登録完了</title>
 <link rel="stylesheet" href="../css/admin_product_edit.css">
 <main>
     <?php require_once('secondHeader.html'); ?>
