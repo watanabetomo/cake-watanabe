@@ -45,7 +45,7 @@ nav ul li{
 }
 
 table{
-    max-width: 1000px;
+    width: 1000px;
     margin: 0 auto;
 }
 
@@ -84,4 +84,13 @@ footer p {
 
 .submit-button{
     margin-left: 30px;
+}
+
+.icon{
+    margin: 0;
+    cursor: pointer;
+}
+
+.sorted{
+    margin: 5px 0;
 }

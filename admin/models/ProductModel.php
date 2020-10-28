@@ -20,7 +20,7 @@ class ProductModel extends Model{
      */
     public function fetchById($id){
         $this->connect();
-        $stmt = $this->dbh->prepare('SELECT product.id, product.name, product_category.name AS category_name, product.img, product.delivery_info, product.turn, product_detail.size, product_detail.price product_detail.turn as detail_turn FROM product JOIN product_category ON product.product_category_id = product_category.id JOIN product_detail ON product.id = product_detail.product_id WHERE product.id = ? ORDER BY turn');
+        $stmt = $this->dbh->prepare('SELECT product.id, product.name, product_category.name AS category_name, product.img, product.delivery_info, product.turn, product_detail.size, product_detail.price, product_detail.turn as detail_turn FROM product JOIN product_category ON product.product_category_id = product_category.id JOIN product_detail ON product.id = product_detail.product_id WHERE product.id = ? ORDER BY turn');
         $stmt->execute([$id]);
         return $stmt->fetchAll();
     }
@@ -130,9 +130,28 @@ class ProductModel extends Model{
         }
     }
 
+    /**
+     * idの最大値を取得
+     *
+     * @return MAX(id)
+     */
     public function getMaxId()
     {
         $this->connect();
         return $this->dbh->query('SELECT MAX(id) FROM product')->fetch();
+    }
+
+    /**
+     * 検索ワードをnameに含むデータを取得
+     *
+     * @param String $keyword
+     * @return array 検索結果
+     */
+    public function search($keyword)
+    {
+        $this->connect();
+        $stmt = $this->dbh->prepare('SELECT product.id, product.name, product.img, product.created_at, product.updated_at FROM product JOIN product_category ON product.product_category_id = product_category.id WHERE product.name LIKE ? AND delete_flg = false');
+        $stmt->execute(['%' . $keyword . '%']);
+        return $stmt->fetchAll();
     }
 }

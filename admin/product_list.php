@@ -10,9 +10,14 @@ if (!isset($_SESSION['authenticated'])) {
 
 try {
     $productModel = new ProductModel();
-    $productList = $productModel->fetchAllData();
 } catch (PDOException $e) {
     $error['databaseError'] = 'データベースに接続できませんでした';
+}
+
+if(!isset($_GET['searched'])){
+    $productList = $productModel->fetchAllData();
+}else{
+    $productList = $productModel->search($_GET['searched']);
 }
 
 if (isset($_POST['delete'])) {
@@ -23,85 +28,56 @@ if (isset($_POST['delete'])) {
         $error['databaseError'] = $e;
     }
 }
+
+if(isset($_POST['search'])){
+    if($_POST['search'] !== ''){
+        header('Location: product_list.php?searched=' . $_POST['keyword']);
+        exit;
+    }
+}
+
+if(isset($_POST['all'])){
+    header('Location: product_list.php');
+    exit;
+}
 ?>
 
 <?php require_once('header.html') ?>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.0/css/theme.default.min.css">
 <link rel="stylesheet" href="../css/admin_product_list.css">
 <main>
     <?php require_once('secondHeader.html') ?>
     <?php getPage() ?>
     <?=isset($error['databeseError']) ? $error['databaseError'] : '';?>
-    <div class="search">
-        <input type="text" id="search">
-        <input type="button" value="絞り込む" id="button">
-        <input type="button" value="すべて表示" id="button2">
-    </div>
-    <table class="table-bordered" id="result" style="margin: 0 auto;">
-        <thead class="thead-right">
+    <form action="" method="post">
+        <p class="search"><input type="text" name="keyword"> <input type="submit" name="search" value="絞り込む"> <input type="submit" name="all" value="すべて表示"></p>
+    </form>
+    <table class="table-bordered" style="margin: 0 auto;">
+        <tr>
+            <th><p class="icon">▲</p><p class="sorted">ID</p><p class="icon">▼</p></th>
+            <th><p class="icon">▲</p><p class="sorted">商品名</p><p class="icon">▼</p></th>
+            <th>画像</th>
+            <th>登録日時</th>
+            <th><p class="icon">▲</p><p class="sorted">更新日時</p><p class="icon">▼</p></th>
+            <th><a href="product_edit.php?new=true" role="button" class="btn btn-sm">新規登録</a></th>
+        </tr>
+        <?php foreach ($productList as $product) : ?>
             <tr>
-                <th scope="col">ID</th>
-                <th scope="col">商品名</th>
-                <th scope="col">画像</th>
-                <th scope="col">登録日時</th>
-                <th scope="col">更新日時</th>
-                <th scope="col"><a href="product_edit.php?new=true" role="button" class="btn btn-sm">新規登録</a></th>
+                <td><?=h($product['id'])?></td>
+                <td><?=h($product['name'])?></td>
+                <td><img src="../<?=IMG_PATH . h($product['img'])?>" alt="<?=h($product['img'])?>"></td>
+                <td><?=h($product['created_at'])?></td>
+                <td><?=h($product['updated_at'])?></td>
+                <td>
+                    <p><a href="product_edit.php?id=<?=h($product['id'])?>" class="btn btn-sm">編集</a></p>
+                    <p>
+                        <form action="" method="post" onsubmit="return confirm('本当に削除しますか？')">
+                            <input type="hidden" name="id" value="<?= h($product['id']) ?>">
+                            <input type="submit" class="btn btn-sm" name="delete" value="削除">
+                        </form>
+                    </p>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($productList as $product) : ?>
-                <tr>
-                    <td><?=h($product['id'])?></td>
-                    <td><?=h($product['name'])?></td>
-                    <td><img src="../<?=IMG_PATH . h($product['img'])?>" alt="<?=h($product['img'])?>"></td>
-                    <td><?=h($product['created_at'])?></td>
-                    <td><?=h($product['updated_at'])?></td>
-                    <td>
-                        <p><a href="product_edit.php?id=<?=h($product['id'])?>" class="btn btn-sm">編集</a></p>
-                        <p>
-                            <form action="" method="post" onsubmit="return confirm('本当に削除しますか？')">
-                                <input type="hidden" name="id" value="<?= h($product['id']) ?>">
-                                <input type="submit" class="btn btn-sm" name="delete" value="削除">
-                            </form>
-                        </p>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
+        <?php endforeach; ?>
     </table>
 </main>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.0/js/jquery.tablesorter.min.js"></script>
-<script type="text/javascript">
-    //検索機能
-    $(function() {
-        $('#button').bind("click", function() {
-            let re = new RegExp($('#search').val());
-            $('#result tbody tr').each(function() {
-                let txt = $(this).find("td:eq(1)").html();
-                if (txt.match(re) != null) {
-                    $(this).show();
-                } else {
-                    $(this).hide();
-                }
-            });
-        });
-        $('#button2').bind("click", function() {
-            $('#search').val('');
-            $('#result tr').show();
-        });
-    });
-
-    //ソート機能
-    $(document).ready(function() {
-        $('#result').tablesorter({
-            headers: {
-                2: { sorter: false },
-                3: { sorter: false },
-                4: { sorter: 'usLongDate' },
-                5: { sorter: false }
-            },
-        });
-    });
-</script>
 <?php require_once('footer.html') ?>

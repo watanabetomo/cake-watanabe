@@ -9,7 +9,8 @@ class ProductCategoryModel extends Model
     public function fetchAllName()
     {
         $this->connect();
-        return $this->dbh->query('SELECT id, name FROM product_category ORDER BY turn IS NULL ASC')->fetchAll();
+        $stmt = $this->dbh->query('SELECT id, name FROM product_category ORDER BY turn ASC');
+        return $stmt->fetchAll();
     }
 
     /**
