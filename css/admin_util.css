@@ -47,10 +47,12 @@ nav ul li{
 table{
     width: 1000px;
     margin: 0 auto;
+    border: 2px solid black;
 }
 
 th{
-    font-size: 15px;
+    font-size: 17px;
+    text-align: center;
 }
 
 footer p {

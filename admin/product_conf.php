@@ -24,12 +24,6 @@ if (isset($_POST['send'])) {
     }
 }
 
-if (isset($_POST['cancel'])) {
-    $new = isset($_GET['new']) ? '?new=true' : '';
-    header('Location: product_edit.php' .  $new);
-    exit;
-}
-
 if (isset($_POST['register'])) {
     try {
         $productModel = new ProductModel();
@@ -119,7 +113,7 @@ if (isset($_POST['register'])) {
                 </tr>
             <?php endfor;?>
         </table>
-        <p class="submit-button"><input type="submit" name="register" class="btn" value="登録"> <input type="submit" name="cancel" class="btn" value="キャンセル"></p>
+        <p class="submit-button"><input type="submit" name="register" class="btn" value="登録完了する"></p>
     </form>
 </main>
 <?php require_once('footer.html') ?>

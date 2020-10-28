@@ -91,7 +91,7 @@ if(isset($_POST['updated_at_desc'])){
                 <td><?=h($product['created_at'])?></td>
                 <td><?=h($product['updated_at'])?></td>
                 <td>
-                    <p><a href="product_edit.php?id=<?=h($product['id'])?>" class="btn btn-sm">編集</a></p>
+                    <p><a href="product_edit.php?id=<?=h($product['id'])?>" class="btn btn-sm" style="margin-top:20px;">編集</a></p>
                     <p>
                         <form action="" method="post" onsubmit="return confirm('本当に削除しますか？')">
                             <input type="hidden" name="id" value="<?= h($product['id']) ?>">
