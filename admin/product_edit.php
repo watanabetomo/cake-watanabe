@@ -16,10 +16,15 @@ try {
 }
 
 if (isset($_GET['new'])) {
+    unset($_SESSION['id']);
     unset($_SESSION['name']);
     unset($_SESSION['category']);
     unset($_SESSION['delivery_info']);
-    unset($_SESSION['order']);
+    unset($_SESSION['turn']);
+    for($i=1; $i<=5; $i++){
+        unset($_SESSION['size_' . $i]);
+        unset($_SESSION['price_' . $i]);
+    }
 }
 
 if (isset($_GET['id'])) {
@@ -69,35 +74,48 @@ if (isset($_POST['upload'])) {
             <?php if (!isset($_GET['new'])) : ?>
                 <tr>
                     <th>ID</th>
-                    <td><?=h($_SESSION['id'])?></td>
+                    <td colspan="3"><?=h($_SESSION['id'])?></td>
                 </tr>
             <?php endif; ?>
             <tr>
                 <th>商品名</th>
-                <td><input type="text" name="name" <?=isset($productData) ? 'value="' . $productData['name'] . '"' : '';?> <?=isset($_SESSION['name']) ? 'value="' . $_SESSION['name'] . '"' : '';?>></td>
+                <td colspan="3"><input type="text" name="name" <?=isset($productData) ? 'value="' . $productData[0]['name'] . '"' : '';?> <?=isset($_SESSION['name']) ? 'value="' . $_SESSION['name'] . '"' : '';?>></td>
             </tr>
             <tr>
                 <th>商品カテゴリー</th>
-                <td>
+                <td colspan="3">
                     <select name="category">
                         <?php foreach ($productCategories as $category) : ?>
-                            <option <?=(isset($productData) and $productData['category_name'] == $category['name']) ? 'selected' : '';?> <?=(isset($_SESSION['category']) and $_SESSION['category'] == $category['name']) ? 'selected' : '';?>><?=h($category['name'])?></option>
+                            <option <?=(isset($productData) and $productData[0]['category_name'] == $category['name']) ? 'selected' : '';?> <?=(isset($_SESSION['category']) and $_SESSION['category'] == $category['name']) ? 'selected' : '';?>><?=h($category['name'])?></option>
                         <?php endforeach; ?>
                     </select>
                 </td>
             </tr>
             <tr>
                 <th>配送情報</th>
-                <td>
-                    <input type="text" name="delivery_info" <?=isset($productData) ? 'value="' . $productData['delivery_info'] . '"' : '';?> <?=isset($_SESSION['delivery_info']) ? 'value="' . $_SESSION['delivery_info'] . '"' : '';?>>
+                <td colspan="3">
+                    <input type="text" name="delivery_info" <?=isset($productData) ? 'value="' . $productData[0]['delivery_info'] . '"' : '';?> <?=isset($_SESSION['delivery_info']) ? 'value="' . $_SESSION['delivery_info'] . '"' : '';?>>
                 </td>
             </tr>
             <tr>
-                <th>表示順</th>
-                <td>
-                    <input type="number" name="order" <?=isset($productData) ? 'value="' . $productData['order'] . '"' : '';?> <?=isset($_SESSION['order']) ? 'value="' . $_SESSION['order'] . '"' : '';?>>
+                <th>表示順(商品)</th>
+                <td colspan="3">
+                    <input type="number" name="turn" <?=isset($productData) ? 'value="' . $productData[0]['turn'] . '"' : '';?> <?=isset($_SESSION['turn']) ? 'value="' . $_SESSION['turn'] . '"' : '';?>>
                 </td>
             </tr>
+            <tr>
+                <th rowspan="6">商品詳細</th>
+                <th>表示順(商品詳細)</th>
+                <th>サイズ (cm)</th>
+                <th>価格 (円)</th>
+            </tr>
+            <?php for($i=1; $i<=5; $i++):?>
+                <tr>
+                    <td><?=$i?></td>
+                    <td><input type="number" name="size_<?=$i?>" <?=isset($productData) ? 'value="' . $productData[$i - 1]['size'] . '"' : '';?> <?=isset($_SESSION['size_' . $i]) ? 'value="' . $_SESSION['size_' . $i] . '"' : '';?>></td>
+                    <td><input type="number" name="price_<?=$i?>" <?=isset($productData) ? 'value="' . $productData[$i - 1]['price'] . '"' : '';?> <?=isset($_SESSION['price_' . $i]) ? 'value="' . $_SESSION['price_' . $i] . '"' : '';?>></td>
+                </tr>
+            <?php endfor;?>
         </table>
         <p class=submit-button><input type="submit" name="send" class="btn" value="確認画面へ"></p>
     </form>
@@ -111,7 +129,7 @@ if (isset($_POST['upload'])) {
                 </tr>
                 <tr>
                     <th>画像</th>
-                    <td> <?=isset($productData) ? '<img src="../' . IMG_PATH . $productData['img'] . '" alt="' . $productData['img'] . '"' : ''?></td>
+                    <td> <?=isset($productData) ? '<img src="../' . IMG_PATH . $productData[0]['img'] . '" alt="' . $productData[0]['img'] . '"' : ''?></td>
                 </tr>
             </table>
             <p class=submit-button><input id="submit_button" type="submit" class="btn" name="upload" value="登録"></p>
