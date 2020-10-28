@@ -14,51 +14,38 @@ try {
     $error['databaseError'] = 'データベースに接続できませんでした';
 }
 
-if(!isset($_GET['searched'])){
+if (!isset($_GET['searched'])) {
     $productList = $productModel->fetchAllData();
-}else{
+} else {
     $productList = $productModel->search($_GET['searched']);
 }
 
 if (isset($_POST['delete'])) {
-    try{
+    try {
         $productModel->delete($_POST['id']);
         header('Location: product_list.php');
-    }catch(PDOException $e){
+    } catch (PDOException $e) {
         $error['databaseError'] = $e;
     }
-}
-
-if(isset($_POST['search'])){
-    if($_POST['search'] !== ''){
+} elseif (isset($_POST['search'])) {
+    if ($_POST['search'] !== '') {
         header('Location: product_list.php?searched=' . $_POST['keyword']);
         exit;
     }
-}
-
-if(isset($_POST['all'])){
+} elseif (isset($_POST['all'])) {
     header('Location: product_list.php');
     exit;
-}
-
-if(isset($_POST['id_asc'])){
+} elseif (isset($_POST['id_asc'])) {
     $productList = $productModel->sortIdAsc();
-}
-if(isset($_POST['id_desc'])){
+} elseif (isset($_POST['id_desc'])) {
     $productList = $productModel->sortIdDesc();
-}
-
-if(isset($_POST['name_asc'])){
+} elseif (isset($_POST['name_asc'])) {
     $productList = $productModel->sortNameAsc();
-}
-if(isset($_POST['name_desc'])){
+} elseif (isset($_POST['name_desc'])) {
     $productList = $productModel->sortNameDesc();
-}
-
-if(isset($_POST['updated_at_asc'])){
+} elseif (isset($_POST['updated_at_asc'])) {
     $productList = $productModel->sortUpdatedAsc();
-}
-if(isset($_POST['updated_at_desc'])){
+} elseif (isset($_POST['updated_at_desc'])) {
     $productList = $productModel->sortUpdatedDesc();
 }
 ?>
@@ -94,7 +81,7 @@ if(isset($_POST['updated_at_desc'])){
                     <p><a href="product_edit.php?id=<?=h($product['id'])?>" class="btn btn-sm" style="margin-top:20px;">編集</a></p>
                     <p>
                         <form action="" method="post" onsubmit="return confirm('本当に削除しますか？')">
-                            <input type="hidden" name="id" value="<?= h($product['id']) ?>">
+                            <input type="hidden" name="id" value="<?=h($product['id'])?>">
                             <input type="submit" class="btn btn-sm" name="delete" value="削除">
                         </form>
                     </p>

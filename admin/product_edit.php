@@ -21,7 +21,7 @@ if (isset($_GET['new'])) {
     unset($_SESSION['category']);
     unset($_SESSION['delivery_info']);
     unset($_SESSION['turn']);
-    for($i=1; $i<=5; $i++){
+    for ($i=1; $i<=5; $i++) {
         unset($_SESSION['size_' . $i]);
         unset($_SESSION['price_' . $i]);
     }
@@ -43,12 +43,12 @@ if (isset($_POST['upload'])) {
             exec('sudo chmod 0777 ../' . IMG_PATH);
             if (!move_uploaded_file($_FILES['img']['tmp_name'], '../' . IMG_PATH . mb_convert_encoding($_FILES['img']['name'], 'cp932', 'utf8'))) {
                 $error['fileUploadError'] = 'ファイルの移動に失敗しました';
-            }else{
-                try{
+            } else {
+                try {
                     $productModel = new ProductModel();
                     $productModel->imgUpload($_SESSION[id], $_FILES['img']['name']);
                     header('Location: product_edit.php?id=' . $_SESSION['id']);
-                }catch(PDOException $e){
+                } catch (PDOException $e) {
                     $error['databaseError'] = $e;
                 }
             }

@@ -1,10 +1,10 @@
 <?php
 require_once('admin/autoload.php');
 
-try{
+try {
     $productCategoryModel = new ProductCategoryModel();
     $productCategories = $productCategoryModel->fetchAllName();
-}catch(PDOException $e){
+} catch (PDOException $e) {
     echo 'データベースとの接続に失敗しました';
 }
 
@@ -301,19 +301,19 @@ try{
                     </div><!--/#modal-->
                 </div><!--/#contents-->
             </div><!--/#select-->
-            <?php foreach($productCategories as $category):?>
+            <?php foreach ($productCategories as $category) :?>
                 <div id="cheesecake">
                     <h1><a href=""><?=$category['name']?></a></h1>
                     <div class="contents02">
                         <?php
-                        try{
+                        try {
                             $productModel = new ProductModel();
                             $products = $productModel->fetchByCategoryId($category['id']);
-                        }catch(PDOException $e){
+                        } catch (PDOException $e) {
                             echo 'データベースとの接続に失敗しました';
                         }
                         ?>
-                        <?php for($j=0; $j<count($products); $j++):?>
+                        <?php for ($j=0; $j<count($products); $j++) :?>
                             <div class="contents02_<?=$j + 1?>">
                                 <h2><a href=""><img src="img/<?=$products[$j]['img']?>"></a></h2>
                                 <p><strong><?=$products[$j]['name']?><br></strong><br></p>
@@ -323,14 +323,14 @@ try{
                                         <p>ご注文</p>
                                         <ul>
                                             <?php
-                                            try{
+                                            try {
                                                 $productDetailModel = new ProductDetailModel();
                                                 $productDetails = $productDetailModel->fetchByProductId($products[$j]['id']);
-                                            }catch(PDOException $e){
+                                            } catch (PDOException $e) {
                                                 echo 'データベースとの接続に失敗しました';
                                             }
                                             ?>
-                                            <?php foreach($productDetails as $detail):?>
+                                            <?php foreach ($productDetails as $detail) :?>
                                                 <li>
                                                     <form method="post" action="http://cart.ec-sites.jp/cart_step2/pc/pk00/">
                                                         <input name="es_item_qty" value="1" type="hidden">
