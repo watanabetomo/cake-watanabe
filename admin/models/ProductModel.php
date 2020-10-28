@@ -154,4 +154,50 @@ class ProductModel extends Model{
         $stmt->execute(['%' . $keyword . '%']);
         return $stmt->fetchAll();
     }
+
+    public function sortIdAsc()
+    {
+        $this->connect();
+        $stmt = $this->dbh->query('SELECT product.id, product.name, product.img, product.created_at, product.updated_at FROM product JOIN product_category ON product.product_category_id = product_category.id WHERE delete_flg = false ORDER BY product.id ASC');
+        return $stmt->fetchAll();
+    }
+
+    public function sortIdDesc()
+    {
+        $this->connect();
+        $stmt = $this->dbh->query('SELECT product.id, product.name, product.img, product.created_at, product.updated_at FROM product JOIN product_category ON product.product_category_id = product_category.id WHERE delete_flg = false ORDER BY product.id DESC');
+        return $stmt->fetchAll();
+    }
+
+    public function sortNameAsc()
+    {
+        $this->connect();
+        $stmt = $this->dbh->query('SELECT product.id, product.name, product.img, product.created_at, product.updated_at, CASE WHEN product.name = "" THEN 1 ELSE 0 END AS dummy FROM product JOIN product_category ON product.product_category_id = product_category.id WHERE delete_flg = false ORDER BY dummy ASC, product.name DESC');
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
+    public function sortNameDesc()
+    {
+        $this->connect();
+        $stmt = $this->dbh->query('SELECT product.id, product.name, product.img, product.created_at, product.updated_at, CASE WHEN product.name = "" THEN 1 ELSE 0 END AS dummy FROM product JOIN product_category ON product.product_category_id = product_category.id WHERE delete_flg = false ORDER BY dummy ASC, product.name ASC');
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
+    public function sortUpdatedAsc()
+    {
+        $this->connect();
+        $stmt = $this->dbh->query('SELECT product.id, product.name, product.img, product.created_at, product.updated_at FROM product JOIN product_category ON product.product_category_id = product_category.id WHERE delete_flg = false ORDER BY product.updated_at IS NULL ASC, product.updated_at DESC');
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
+    public function sortUpdatedDesc()
+    {
+        $this->connect();
+        $stmt = $this->dbh->query('SELECT product.id, product.name, product.img, product.created_at, product.updated_at FROM product JOIN product_category ON product.product_category_id = product_category.id WHERE delete_flg = false ORDER BY product.updated_at IS NULL ASC, product.updated_at ASC');
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
 }

@@ -40,6 +40,27 @@ if(isset($_POST['all'])){
     header('Location: product_list.php');
     exit;
 }
+
+if(isset($_POST['id_asc'])){
+    $productList = $productModel->sortIdAsc();
+}
+if(isset($_POST['id_desc'])){
+    $productList = $productModel->sortIdDesc();
+}
+
+if(isset($_POST['name_asc'])){
+    $productList = $productModel->sortNameAsc();
+}
+if(isset($_POST['name_desc'])){
+    $productList = $productModel->sortNameDesc();
+}
+
+if(isset($_POST['updated_at_asc'])){
+    $productList = $productModel->sortUpdatedAsc();
+}
+if(isset($_POST['updated_at_desc'])){
+    $productList = $productModel->sortUpdatedDesc();
+}
 ?>
 
 <?php require_once('header.html') ?>
@@ -52,14 +73,16 @@ if(isset($_POST['all'])){
         <p class="search"><input type="text" name="keyword"> <input type="submit" name="search" value="絞り込む"> <input type="submit" name="all" value="すべて表示"></p>
     </form>
     <table class="table-bordered" style="margin: 0 auto;">
-        <tr>
-            <th><p class="icon">▲</p><p class="sorted">ID</p><p class="icon">▼</p></th>
-            <th><p class="icon">▲</p><p class="sorted">商品名</p><p class="icon">▼</p></th>
-            <th>画像</th>
-            <th>登録日時</th>
-            <th><p class="icon">▲</p><p class="sorted">更新日時</p><p class="icon">▼</p></th>
-            <th><a href="product_edit.php?new=true" role="button" class="btn btn-sm">新規登録</a></th>
-        </tr>
+        <form action="" method="post">
+            <tr>
+                <th><input type="submit" name="id_desc" class="icon" value="▲"><p class="sorted">ID</p><input type="submit" name="id_asc" class="icon" value="▼"></th>
+                <th><input type="submit" name="name_desc" class="icon" value="▲"><p class="sorted">商品名</p><input type="submit" name="name_asc" class="icon" value="▼"></th>
+                <th>画像</th>
+                <th>登録日時</th>
+                <th><input type="submit" name="updated_at_desc" class="icon" value="▲"><p class="sorted">更新日時</p><input type="submit" name="updated_at_asc" class="icon" value="▼"></th>
+                <th><a href="product_edit.php?new=true" role="button" class="btn btn-sm">新規登録</a></th>
+            </tr>
+        </form>
         <?php foreach ($productList as $product) : ?>
             <tr>
                 <td><?=h($product['id'])?></td>

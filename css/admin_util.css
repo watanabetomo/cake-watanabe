@@ -88,7 +88,9 @@ footer p {
 
 .icon{
     margin: 0;
-    cursor: pointer;
+    border: none;
+    outline: none;
+    background: transparent;
 }
 
 .sorted{
