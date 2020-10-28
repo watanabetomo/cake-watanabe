@@ -301,63 +301,63 @@ try{
                     </div><!--/#modal-->
                 </div><!--/#contents-->
             </div><!--/#select-->
-            <?php for($i=0; $i<count($productCategories); $i++):?>
-            <div id="cheesecake">
-                <h1><a href=""><?=$productCategories[$i]['name']?></a></h1>
-                <div class="contents02">
-            <?php
-            try{
-                $productModel = new ProductModel();
-                $products = $productModel->fetchByCategoryId($productCategories[$i]['id']);
-            }catch(PDOException $e){
-                echo $e->getMessage();
-            }
-            ?>
-            <?php for($j=0; $j<count($products); $j++):?>
-                    <div class="contents02_<?=$j + 1?>">
-                        <h2><a href=""><img src="img/<?=$products[$j]['img']?>"></a></h2>
-                        <p><strong><?=$products[$j]['name']?><br></strong><br></p>
-                        <p><span>通常1～4日以内に発送。</span></p>
-                        <ul class="accordion">
-                            <li>
-                                <p>ご注文</p>
-                                <ul>
-                                    <?php
-                                    try{
-                                        $productDetailModel = new ProductDetailModel();
-                                        $productDetails = $productDetailModel->fetchByProductId($products[$j]['id']);
-                                    }catch(PDOException $e){
-                                        echo $e->getMessage();
-                                    }
-                                    ?>
-                                    <?php for($k=0; $k<count($productDetails); $k++):?>
+            <?php foreach($productCategories as $category):?>
+                <div id="cheesecake">
+                    <h1><a href=""><?=$category['name']?></a></h1>
+                    <div class="contents02">
+                        <?php
+                        try{
+                            $productModel = new ProductModel();
+                            $products = $productModel->fetchByCategoryId($category['id']);
+                        }catch(PDOException $e){
+                            echo 'データベースとの接続に失敗しました';
+                        }
+                        ?>
+                        <?php for($j=0; $j<count($products); $j++):?>
+                            <div class="contents02_<?=$j + 1?>">
+                                <h2><a href=""><img src="img/<?=$products[$j]['img']?>"></a></h2>
+                                <p><strong><?=$products[$j]['name']?><br></strong><br></p>
+                                <p><span>通常1～4日以内に発送。</span></p>
+                                <ul class="accordion">
                                     <li>
-                                        <form method="post" action="http://cart.ec-sites.jp/cart_step2/pc/pk00/">
-                                            <input name="es_item_qty" value="1" type="hidden">
-                                            <input name="es_charset" value="sjis" type="hidden">
-                                            <input name="es_item_id" value="<?=$productDetails[$k]['product_id']?>" type="hidden">
-                                            <input name="es_shop_id" value="1482" type="hidden">
-                                            <input name="es_stock_attr_flag" value="0" type="hidden">
-                                            <input name="es_submit" value="<?=$productDetails[$k]['size']?>cm ￥<?=number_format($productDetails[$k]['price'])?>" type="submit">
-                                        </form>
+                                        <p>ご注文</p>
+                                        <ul>
+                                            <?php
+                                            try{
+                                                $productDetailModel = new ProductDetailModel();
+                                                $productDetails = $productDetailModel->fetchByProductId($products[$j]['id']);
+                                            }catch(PDOException $e){
+                                                echo 'データベースとの接続に失敗しました';
+                                            }
+                                            ?>
+                                            <?php foreach($productDetails as $detail):?>
+                                                <li>
+                                                    <form method="post" action="http://cart.ec-sites.jp/cart_step2/pc/pk00/">
+                                                        <input name="es_item_qty" value="1" type="hidden">
+                                                        <input name="es_charset" value="sjis" type="hidden">
+                                                        <input name="es_item_id" value="<?=$detail['product_id']?>" type="hidden">
+                                                        <input name="es_shop_id" value="1482" type="hidden">
+                                                        <input name="es_stock_attr_flag" value="0" type="hidden">
+                                                        <input name="es_submit" value="<?=$detail['size']?>cm ￥<?=number_format($detail['price'])?>" type="submit">
+                                                    </form>
+                                                </li>
+                                            <?php endforeach;?>
+                                        </ul>
                                     </li>
-                                    <?php endfor;?>
-                                </ul>
-                            </li>
-                        </ul><!--/.accordion-->
-                        <div class="qa">
-                            <form action="https://cart.ec-sites.jp/cart_step2/item-question/top/shid/1482/item_id/54/" target="_blank">
-                                <input value="お問い合わせ" type="submit">
-                            </form>
-                        </div><!--/.qa-->
-                    </div><!--/.contents02_4-->
-                            <?php endfor; ?>
-                </div><!--/.contents02-->
-                <div class="info">
-                    <p>大きなサイズは多少お時間を頂戴しております。</p>
-                </div>
-            </div><!--/#cheesecake-->
-                            <?php endfor; ?>
+                                </ul><!--/.accordion-->
+                                <div class="qa">
+                                    <form action="https://cart.ec-sites.jp/cart_step2/item-question/top/shid/1482/item_id/54/" target="_blank">
+                                        <input value="お問い合わせ" type="submit">
+                                    </form>
+                                </div><!--/.qa-->
+                            </div><!--/.contents02_4-->
+                        <?php endfor; ?>
+                    </div><!--/.contents02-->
+                    <div class="info">
+                        <p>大きなサイズは多少お時間を頂戴しております。</p>
+                    </div>
+                </div><!--/#cheesecake-->
+            <?php endforeach; ?>
                     <div class="info">
                         <p>数量限定につき完売の際はご容赦ください。</p>
                     </div>
