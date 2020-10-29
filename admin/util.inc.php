@@ -14,7 +14,7 @@ function h($str)
 function getPage()
 {
     global $title;
-    echo '<h1 style="margin-left: 30px;"><button type="button" class="btn" disabled>' . $title . '</button></h1>';
+    echo '<h1><button type="button" class="btn title-button" disabled>' . $title . '</button></h1>';
 }
 
 function getToken()
