@@ -100,8 +100,8 @@ if (isset($_POST['send'])) {
             <tr>
                 <th rowspan="6">商品詳細</th>
                 <th>表示順(商品詳細)</th>
-                <th>サイズ (cm)</th>
-                <th>価格 (円)</th>
+                <th>サイズ(cm)</th>
+                <th>価格(円)</th>
             </tr>
             <?php for ($i=1; $i<=5; $i++) :?>
                 <tr>

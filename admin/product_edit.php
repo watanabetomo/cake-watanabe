@@ -115,7 +115,7 @@ if (isset($_POST['upload'])) {
                 </tr>
             <?php endfor;?>
         </table>
-        <p class=submit-button><input type="submit" name="send" class="btn" value="確認画面へ"></p>
+        <p class="submit-button"><input type="submit" name="send" class="btn" value="確認画面へ"></p>
     </form>
     <?php if (!isset($_GET['new'])) : ?>
         <p class="error"><?=isset($error['fileUploadError']) ? $error['fileUploadError'] : ''?></p>
@@ -130,7 +130,7 @@ if (isset($_POST['upload'])) {
                     <td> <?=isset($productData) ? '<img src="../' . IMG_PATH . $productData[0]['img'] . '" alt="' . $productData[0]['img'] . '"' : ''?></td>
                 </tr>
             </table>
-            <p class=submit-button><input id="submit_button" type="submit" class="btn" name="upload" value="登録"></p>
+            <p class="submit-button"><input type="submit" class="btn" name="upload" value="登録"></p>
         </form>
     <?php endif; ?>
 </main>
