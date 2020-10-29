@@ -27,14 +27,14 @@ $_SESSION['userName'] = 'watanabe';
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <h4>ようこそ<?= $_SESSION['userName'] ?>さん</h4>
+                        <p class="greeting">ようこそ<?= $_SESSION['userName'] ?>さん</p>
                     </li>
                     <li class="nav-item icon">
-                        <a href="cart.php"><i class="fas fa-shopping-cart fa-3x"></i>
+                        <a href="cart.php"><i class="fas fa-shopping-cart fa-2x"></i>
                         <p>cart</p></a>
                     </li>
                     <li class="nav-item icon">
-                        <a href="admin/login.php"><i class="fas fa-user-lock fa-3x"></i>
+                        <a href="admin/login.php"><i class="fas fa-user-lock fa-2x"></i>
                         <p>admin</p></a>
                     </li>
                 </ul>
