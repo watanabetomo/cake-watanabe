@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 if (isset($_POST['login'])) {
     if ($_POST['id'] === '' or $_POST['pass'] === '') {
@@ -10,6 +11,7 @@ if (isset($_POST['login'])) {
             if (!emrty($user) and password_verify($_POST['pass'], $user['login_pass'])) {
                 session_regenerate_id(true);
                 $_SESSION['authenticated'] = password_hash($_POST['id'] . $_POST['pass'], PASSWORD_DEFAULT);
+                $_SESSION['userName'] = $user['name'];
                 header('Location: cart.php');
                 exit;
             }
@@ -28,6 +30,7 @@ if (isset($_POST['login'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="css/login.css">
 </head>
 
 <body>
