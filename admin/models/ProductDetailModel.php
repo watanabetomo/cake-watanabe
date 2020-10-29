@@ -10,7 +10,7 @@ class ProductDetailModel extends Model
     public function fetchByProductId($id)
     {
         $this->connect();
-        $stmt = $this->dbh->prepare('SELECT size, price, product_id, turn FROM product_detail WHERE product_id = ? ORDER BY turn ASC');
+        $stmt = $this->dbh->prepare('SELECT size, price, product_id, turn FROM product_detail WHERE product_id = ? ORDER BY size ASC');
         $stmt->execute([$id]);
         return $stmt->fetchAll();
     }

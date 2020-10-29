@@ -25,9 +25,7 @@ if (isset($_GET['new'])) {
         unset($_SESSION['size_' . $i]);
         unset($_SESSION['price_' . $i]);
     }
-}
-
-if (isset($_GET['id'])) {
+} elseif (isset($_GET['id'])) {
     $_SESSION['id'] = $_GET['id'];
     try {
         $productModel = new ProductModel();
@@ -49,7 +47,7 @@ if (isset($_POST['upload'])) {
                     $productModel->imgUpload($_SESSION[id], $_FILES['img']['name']);
                     header('Location: product_edit.php?id=' . $_SESSION['id']);
                 } catch (PDOException $e) {
-                    $error['databaseError'] = $e;
+                    $error['databaseError'] = '画像のアップロードに失敗しました';
                 }
             }
             exec('sudo chmod 0755 ../' . IMG_PATH);
@@ -79,14 +77,14 @@ if (isset($_POST['upload'])) {
             <?php endif; ?>
             <tr>
                 <th>商品名</th>
-                <td colspan="3"><input type="text" name="name" <?=isset($productData) ? 'value="' . $productData[0]['name'] . '"' : '';?> <?=isset($_SESSION['name']) ? 'value="' . $_SESSION['name'] . '"' : '';?>></td>
+                <td colspan="3"><input type="text" name="name" <?=isset($productData) ? 'value="' . $productData[0]['name'] . '"' : '';?><?=isset($_SESSION['name']) ? 'value="' . $_SESSION['name'] . '"': '';?>></td>
             </tr>
             <tr>
                 <th>商品カテゴリー</th>
                 <td colspan="3">
                     <select name="category">
                         <?php foreach ($productCategories as $category) : ?>
-                            <option <?=(isset($productData) and $productData[0]['category_name'] == $category['name']) ? 'selected' : '';?> <?=(isset($_SESSION['category']) and $_SESSION['category'] == $category['name']) ? 'selected' : '';?>><?=h($category['name'])?></option>
+                            <option <?=(isset($productData) and $productData[0]['category_name'] == $category['name']) ? 'selected' : '';?><?=(isset($_SESSION['category']) and $_SESSION['category'] == $category['name']) ? 'selected' : '';?>><?=h($category['name'])?></option>
                         <?php endforeach; ?>
                     </select>
                 </td>
@@ -94,13 +92,13 @@ if (isset($_POST['upload'])) {
             <tr>
                 <th>配送情報</th>
                 <td colspan="3">
-                    <input type="text" name="delivery_info" <?=isset($productData) ? 'value="' . $productData[0]['delivery_info'] . '"' : '';?> <?=isset($_SESSION['delivery_info']) ? 'value="' . $_SESSION['delivery_info'] . '"' : '';?>>
+                    <input type="text" name="delivery_info" <?=isset($productData) ? 'value="' . $productData[0]['delivery_info'] . '"' : '';?><?=isset($_SESSION['delivery_info']) ? 'value="' . $_SESSION['delivery_info'] . '"' : '';?>>
                 </td>
             </tr>
             <tr>
                 <th>表示順(商品)</th>
                 <td colspan="3">
-                    <input type="number" name="turn" <?=isset($productData) ? 'value="' . $productData[0]['turn'] . '"' : '';?> <?=isset($_SESSION['turn']) ? 'value="' . $_SESSION['turn'] . '"' : '';?>>
+                    <input type="number" name="turn" <?=isset($productData) ? 'value="' . $productData[0]['turn'] . '"' : '';?><?=isset($_SESSION['turn']) ? 'value="' . $_SESSION['turn'] . '"' : '';?>>
                 </td>
             </tr>
             <tr>
@@ -112,8 +110,8 @@ if (isset($_POST['upload'])) {
             <?php for($i=1; $i<=5; $i++):?>
                 <tr>
                     <td><?=$i?></td>
-                    <td><input type="number" name="size_<?=$i?>" <?=isset($productData) ? 'value="' . $productData[$i - 1]['size'] . '"' : '';?> <?=isset($_SESSION['size_' . $i]) ? 'value="' . $_SESSION['size_' . $i] . '"' : '';?>></td>
-                    <td><input type="number" name="price_<?=$i?>" <?=isset($productData) ? 'value="' . $productData[$i - 1]['price'] . '"' : '';?> <?=isset($_SESSION['price_' . $i]) ? 'value="' . $_SESSION['price_' . $i] . '"' : '';?>></td>
+                    <td><input type="number" name="size_<?=$i?>" <?=isset($productData) ? 'value="' . $productData[$i - 1]['size'] . '"' : '';?><?=isset($_SESSION['size_' . $i]) ? 'value="' . $_SESSION['size_' . $i] . '"' : '';?>></td>
+                    <td><input type="number" name="price_<?=$i?>" <?=isset($productData) ? 'value="' . $productData[$i - 1]['price'] . '"' : '';?><?=isset($_SESSION['price_' . $i]) ? 'value="' . $_SESSION['price_' . $i] . '"' : '';?>></td>
                 </tr>
             <?php endfor;?>
         </table>

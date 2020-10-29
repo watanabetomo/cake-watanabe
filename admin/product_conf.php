@@ -38,10 +38,10 @@ if (isset($_POST['send'])) {
                     header('Location: product_done.php');
                     exit;
                 } catch (PDOException $e) {
-                    $error['databaseError'] = $e;
+                    $error['databaseError'] = '商品詳細の登録に失敗しました';
                 }
             } catch (PDOException $e) {
-                $error['databaseError'] = $e;
+                $error['databaseError'] = '商品情報の登録に失敗しました';
             }
         } else {
             try {
@@ -53,10 +53,10 @@ if (isset($_POST['send'])) {
                     header('Location: product_done.php');
                     exit;
                 } catch (PDOException $e) {
-                    $error['databaseError'] = $e;
+                    $error['databaseError'] = '商品詳細の更新に失敗しました';
                 }
             } catch (PDOException $e) {
-                $error['databaseError'] = $e;
+                $error['databaseError'] = '商品情報の更新に失敗しました';
             }
         }
     } catch (PDOException $e) {

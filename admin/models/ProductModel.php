@@ -45,7 +45,7 @@ class ProductModel extends Model{
             $stmt->execute([$name, $category_id, $delivery_info, $turn, $update_user, $id]);
             $this->dbh->commit();
         }catch(PDOException $e){
-            throw new PDOException('データの更新に失敗しました');
+            throw new PDOException($e);
             $this->dbh->rollback();
         }
     }
@@ -65,7 +65,7 @@ class ProductModel extends Model{
             $stmt->execute([$id]);
             $this->dbh->commit();
         }catch(PDOException $e){
-            throw new PDOException('削除に失敗しました');
+            throw new PDOException($e);
             $this->dbh->rollback();
         }
     }
@@ -104,7 +104,7 @@ class ProductModel extends Model{
             $stmt->execute([$name, $category_id, $delivery_info, $turn, $create_user]);
             $this->dbh->commit();
         }catch(PDOException $e){
-            throw new PDOException('登録に失敗しました');
+            throw new PDOException($e);
             $this->dbh->rollback();
         }
     }
@@ -125,7 +125,7 @@ class ProductModel extends Model{
             $stmt->execute([$img, $id]);
             $this->dbh->commit();
         }catch(PDOException $e){
-            throw new PDOException('画像の登録に失敗しました');
+            throw new PDOException($e);
             $this->dbh->rollback();
         }
     }
@@ -155,6 +155,11 @@ class ProductModel extends Model{
         return $stmt->fetchAll();
     }
 
+    /**
+     * idの昇順でproductテーブルの中身を取得を取得
+     *
+     * @return array idの昇順で並んだproductテーブルのレコード
+     */
     public function sortIdAsc()
     {
         $this->connect();
@@ -162,6 +167,11 @@ class ProductModel extends Model{
         return $stmt->fetchAll();
     }
 
+    /**
+     * idの降順でproductテーブルの中身を取得を取得
+     *
+     * @return array idの降順で並んだproductテーブルのレコード
+     */
     public function sortIdDesc()
     {
         $this->connect();
@@ -169,6 +179,11 @@ class ProductModel extends Model{
         return $stmt->fetchAll();
     }
 
+    /**
+     * nameの昇順でproductテーブルの中身を取得を取得
+     *
+     * @return array nameの昇順で並んだproductテーブルのレコード
+     */
     public function sortNameAsc()
     {
         $this->connect();
@@ -177,6 +192,11 @@ class ProductModel extends Model{
         return $stmt->fetchAll();
     }
 
+    /**
+     * nameの降順でproductテーブルの中身を取得を取得
+     *
+     * @return array nameの降順で並んだproductテーブルのレコード
+     */
     public function sortNameDesc()
     {
         $this->connect();
@@ -185,6 +205,11 @@ class ProductModel extends Model{
         return $stmt->fetchAll();
     }
 
+    /**
+     *updated_atの昇順でproductテーブルの中身を取得を取得
+     *
+     * @return arrayupdated_atの昇順で並んだproductテーブルのレコード
+     */
     public function sortUpdatedAsc()
     {
         $this->connect();
@@ -193,6 +218,11 @@ class ProductModel extends Model{
         return $stmt->fetchAll();
     }
 
+    /**
+     * updated_atの降順でproductテーブルの中身を取得を取得
+     *
+     * @return array updated_atの降順で並んだproductテーブルのレコード
+     */
     public function sortUpdatedDesc()
     {
         $this->connect();

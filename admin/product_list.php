@@ -25,7 +25,7 @@ if (isset($_POST['delete'])) {
         $productModel->delete($_POST['id']);
         header('Location: product_list.php');
     } catch (PDOException $e) {
-        $error['databaseError'] = $e;
+        $error['databaseError'] = '商品情報の削除に失敗しました';
     }
 } elseif (isset($_POST['search'])) {
     if ($_POST['search'] != '') {
