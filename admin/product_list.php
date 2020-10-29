@@ -28,7 +28,7 @@ if (isset($_POST['delete'])) {
         $error['databaseError'] = $e;
     }
 } elseif (isset($_POST['search'])) {
-    if ($_POST['search'] !== '') {
+    if ($_POST['search'] != '') {
         header('Location: product_list.php?searched=' . $_POST['keyword']);
         exit;
     }
@@ -59,7 +59,7 @@ if (isset($_POST['delete'])) {
     <form action="" method="post">
         <p class="search"><input type="text" name="keyword"> <input type="submit" name="search" value="絞り込む"> <input type="submit" name="all" value="すべて表示"></p>
     </form>
-    <table class="table-bordered" style="margin: 0 auto;">
+    <table border="1">
         <form action="" method="post">
             <tr>
                 <th><input type="submit" name="id_desc" class="icon" value="▲"><p class="sorted">ID</p><input type="submit" name="id_asc" class="icon" value="▼"></th>
@@ -75,11 +75,11 @@ if (isset($_POST['delete'])) {
                 <td><?=h($product['id'])?></td>
                 <td><?=h($product['name'])?></td>
                 <td><img src="../<?=IMG_PATH . h($product['img'])?>" alt="<?=h($product['img'])?>"></td>
-                <td><?=h($product['created_at'])?></td>
-                <td><?=h($product['updated_at'])?></td>
+                <td><?=(new DateTime(h($product['created_at'])))->format('Y-m-d H:i:s')?></td>
+                <td><?=(new DateTime(h($product['updated_at'])))->format('Y-m-d H:i:s')?></td>
                 <td>
-                    <p><a href="product_edit.php?id=<?=h($product['id'])?>" class="btn btn-sm" style="margin-top:20px;">編集</a></p>
                     <p>
+                        <a href="product_edit.php?id=<?=h($product['id'])?>" class="btn btn-sm" style="margin-top:20px;">編集</a>
                         <form action="" method="post" onsubmit="return confirm('本当に削除しますか？')">
                             <input type="hidden" name="id" value="<?=h($product['id'])?>">
                             <input type="submit" class="btn btn-sm" name="delete" value="削除">

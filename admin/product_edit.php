@@ -70,7 +70,7 @@ if (isset($_POST['upload'])) {
     <p class="error"><?=isset($error['databaseError']) ? $error['databaseError'] : ''?></p>
     <form action="product_conf.php<?=isset($_GET['new']) ? '?new=true' : ''?>" method="post">
         <input type="hidden" name="token" value="<?=getToken()?>">
-        <table class="table table-bordered">
+        <table border="1">
             <?php if (!isset($_GET['new'])) : ?>
                 <tr>
                     <th>ID</th>
@@ -122,7 +122,7 @@ if (isset($_POST['upload'])) {
     <?php if (!isset($_GET['new'])) : ?>
         <p class="error"><?=isset($error['fileUploadError']) ? $error['fileUploadError'] : ''?></p>
         <form id="upload" action="" method="post" enctype="multipart/form-data" onsubmit="return confirm('本当に画像をアップロードしますか？')">
-            <table class="table table-bordered" style="margin-top: 70px;">
+            <table border="1" style="margin-top: 70px;">
                 <tr>
                     <th>ファイル選択</th>
                     <td><input type="file" name="img"></td>

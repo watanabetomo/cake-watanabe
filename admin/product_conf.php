@@ -3,7 +3,7 @@ require_once('autoload.php');
 
 $title = '商品データ登録確認';
 
-if ((isset($_POST['token']) ? $_POST['token'] : '') !== getToken()) {
+if ((isset($_POST['token']) ? $_POST['token'] : '') != getToken()) {
     header('Location: product_edit.php');
     exit;
 }
@@ -74,7 +74,7 @@ if (isset($_POST['send'])) {
     <p class="error"><?=isset($error['databaseError']) ? $error['databaseError'] : '';?></p>
     <form action="" method="post">
         <input type="hidden" name="token" value="<?=getToken()?>">
-        <table class="table table-bordered">
+        <table border="1">
             <?php if (!isset($_GET['new'])) : ?>
                 <tr>
                     <th>ID</th>

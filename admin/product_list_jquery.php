@@ -37,7 +37,7 @@ if (isset($_POST['delete'])) {
         <input type="button" value="絞り込む" id="button">
         <input type="button" value="すべて表示" id="button2">
     </div>
-    <table class="table-bordered" id="result" style="margin: 0 auto;">
+    <table border="1" id="result" style="margin: 0 auto;">
         <thead class="thead-right">
             <tr>
                 <th scope="col">ID</th>
