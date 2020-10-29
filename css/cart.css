@@ -8,6 +8,27 @@
     margin-right: 30px;
 }
 
+.nav-item h4{
+    margin-bottom: 0;
+    padding-top: 20px;
+    height: 100%;
+    vertical-align: middle;
+}
+
+.nav-item p{
+    margin-bottom: 0;
+    text-align: center;
+    color: black;
+}
+
+.fas{
+    color:black;
+}
+
+.icon{
+    margin-left: 40px;
+}
+
 .page-title{
     margin-top: 30px;
     padding-left: 30px;
@@ -53,4 +74,17 @@ table{
 
 .parchase{
     text-align: center;
+}
+
+footer{
+    background: black;
+    margin-top: 30px;
+    height: 100px;
+}
+
+.footer{
+    text-align: center;
+    color: white;
+    margin-bottom: 0;
+    padding-top: 20px;
 }

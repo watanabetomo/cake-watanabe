@@ -14,6 +14,7 @@ $_SESSION['userName'] = 'watanabe';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>カート</title>
+    <script src="https://kit.fontawesome.com/98508d537e.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <link rel="stylesheet" href="css/cart.css">
 </head>
@@ -22,11 +23,19 @@ $_SESSION['userName'] = 'watanabe';
     <header>
         <p class="logout"><a href="logout.php">ログアウト</a></p>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#">洋菓子店カサミンゴー</a>
+            <a class="navbar-brand" href="index.php">洋菓子店カサミンゴー</a>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        ようこそ<?= $_SESSION['userName'] ?>さん
+                        <h4>ようこそ<?= $_SESSION['userName'] ?>さん</h4>
+                    </li>
+                    <li class="nav-item icon">
+                        <a href="cart.php"><i class="fas fa-shopping-cart fa-3x"></i>
+                        <p>cart</p></a>
+                    </li>
+                    <li class="nav-item icon">
+                        <a href="admin/login.php"><i class="fas fa-user-lock fa-3x"></i>
+                        <p>admin</p></a>
                     </li>
                 </ul>
             </div>
@@ -84,6 +93,9 @@ $_SESSION['userName'] = 'watanabe';
             </div>
         </div>
     </main>
+    <footer>
+        <p class="footer">2020 © 洋菓子店カサミンゴー All Rights Reserved</p>
+    </footer>
 </body>
 
 </html>
