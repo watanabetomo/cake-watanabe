@@ -88,6 +88,7 @@ try {
 <body>
     <div id="wrapper">
         <header>
+            <p class="nav"><a href="login.php">ログイン</a>　<a href="cart.php">カート</a></p>
             <div id="slider">
                 <ul class="bxslider">
                     <li><img src="img/slide01.jpg"></li>

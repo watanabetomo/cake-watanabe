@@ -4,7 +4,7 @@ require_once('autoload.php');
 if (isset($_POST['send'])) {
     if ($_POST['id'] === '' or $_POST['pass'] === '') {
         $error = 'IDかパスワードが入力されていません';
-    }else{
+    } else {
         try {
             $adminUserModel = new AdminUserModel();
             $adminUser = $adminUserModel->fetchAdminUser($_POST['id']);
@@ -13,11 +13,11 @@ if (isset($_POST['send'])) {
                 $_SESSION['authenticated'] = password_hash($_POST['id'] . $_POST['pass'], PASSWORD_DEFAULT);
                 $_SESSION['userName'] = $adminUser['name'];
                 $_SESSION['login_id'] = $adminUser['id'];
-                if((new DateTime())->format('H') + 8 > 4 and (new DateTime())->format('H') + 8 <= 11){
+                if ((new DateTime())->format('H') + 8 > 4 and (new DateTime())->format('H') + 8 <= 11) {
                     $_SESSION['now'] = 'おはようございます。';
-                }elseif((new DateTime())->format('H') + 8 > 11 and (new DateTime())->format('H') + 8 <= 17){
+                } elseif ((new DateTime())->format('H') + 8 > 11 and (new DateTime())->format('H') + 8 <= 17) {
                     $_SESSION['now'] = 'こんにちは。';
-                }else{
+                } else {
                     $_SESSION['now'] = 'こんばんわ。';
                 }
                 header('Location: top.php');
