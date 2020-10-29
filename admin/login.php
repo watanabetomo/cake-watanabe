@@ -13,6 +13,13 @@ if (isset($_POST['send'])) {
                 $_SESSION['authenticated'] = password_hash($_POST['id'] . $_POST['pass'], PASSWORD_DEFAULT);
                 $_SESSION['userName'] = $adminUser['name'];
                 $_SESSION['login_id'] = $adminUser['id'];
+                if((new DateTime())->format('H') + 8 > 4 and (new DateTime())->format('H') + 8 <= 11){
+                    $_SESSION['now'] = 'おはようございます。';
+                }elseif((new DateTime())->format('H') + 8 > 11 and (new DateTime())->format('H') + 8 <= 17){
+                    $_SESSION['now'] = 'こんにちは。';
+                }else{
+                    $_SESSION['now'] = 'こんばんわ。';
+                }
                 header('Location: top.php');
                 exit;
             }
@@ -38,7 +45,7 @@ if (isset($_POST['send'])) {
 <body>
     <h1>洋菓子店カサミンゴー商品管理システム 管理者ログイン</h1>
     <?php if (isset($error)): ?>
-        <p class="error"><?=$error?></p>
+        <p style="color: red;"><?=$error?></p>
     <?php endif; ?>
     <form action="" method="post">
         <table>
