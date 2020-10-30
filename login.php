@@ -1,6 +1,11 @@
 <?php
 session_start();
 
+if (isset($_SESSION['authenticated'])) {
+    header('Location: cart.php');
+    exit;
+}
+
 if (isset($_POST['login'])) {
     if ($_POST['id'] === '' or $_POST['pass'] === '') {
         $error = 'IDかパスワードが入力されていません';
@@ -11,6 +16,7 @@ if (isset($_POST['login'])) {
             if (!emrty($user) and password_verify($_POST['pass'], $user['login_pass'])) {
                 session_regenerate_id(true);
                 $_SESSION['authenticated'] = password_hash($_POST['id'] . $_POST['pass'], PASSWORD_DEFAULT);
+                $userModel->updateLoginDate($user['id']);
                 $_SESSION['userName'] = $user['name'];
                 header('Location: cart.php');
                 exit;

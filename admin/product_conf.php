@@ -13,27 +13,18 @@ if (!isset($_SESSION['authenticated'])) {
     exit;
 }
 
-if (isset($_POST['send'])) {
-    $_SESSION['name'] = $_POST['name'];
-    $_SESSION['category'] = $_POST['category'];
-    $_SESSION['delivery_info'] = $_POST['delivery_info'];
-    $_SESSION['turn'] = $_POST['turn'];
-    for ($i=1; $i<=5; $i++) {
-        $_SESSION['size_' . $i] = $_POST['size_' . $i];
-        $_SESSION['price_' . $i] = $_POST['price_' . $i];
-    }
-} elseif (isset($_POST['register'])) {
+if (isset($_POST['register'])) {
     try {
         $productModel = new ProductModel();
         $productCategoryModel = new ProductCategoryModel();
         $productDetailModel = new ProductDetailModel();
-        $category_id = $productCategoryModel->getIdByName($_SESSION['category']);
+        $category_id = $productCategoryModel->getIdByName($_POST['category']);
         if (isset($_GET['new'])) {
             try {
-                $productModel->register($_SESSION['name'], $category_id['id'], $_SESSION['delivery_info'], $_SESSION['turn'], $_SESSION['login_id']);
+                $productModel->register($_POST['name'], $category_id['id'], $_POST['delivery_info'], $_POST['turn'], $_POST['login_id']);
                 try {
                     for ($i=1; $i<=5; $i++) {
-                        $productDetailModel->register(($productModel->getMaxId()['MAX(id)'] + 1), $_SESSION['size_' . $i], $_SESSION['price_' . $i], $i);
+                        $productDetailModel->register(($productModel->getMaxId()['MAX(id)'] + 1), $_POST['size_' . $i], $_POST['price_' . $i], $i);
                     }
                     header('Location: product_done.php');
                     exit;
@@ -45,10 +36,10 @@ if (isset($_POST['send'])) {
             }
         } else {
             try {
-                $productModel->update($_SESSION['id'], $_SESSION['name'], $category_id['id'], $_SESSION['delivery_info'], $_SESSION['turn'], $_SESSION['login_id']);
+                $productModel->update($_POST['id'], $_POST['name'], $category_id['id'], $_POST['delivery_info'], $_POST['turn'], $_POST['login_id']);
                 try {
                     for ($i=1; $i<=5; $i++) {
-                        $productDetailModel->update($_SESSION['id'], $_SESSION['size_' . $i], $_SESSION['price_' . $i], $i);
+                        $productDetailModel->update($_POST['id'], $_POST['size_' . $i], $_POST['price_' . $i], $i);
                     }
                     header('Location: product_done.php');
                     exit;
@@ -78,24 +69,24 @@ if (isset($_POST['send'])) {
             <?php if (!isset($_GET['new'])) : ?>
                 <tr>
                     <th>ID</th>
-                    <td colspan="3"><?=h($_SESSION['id'])?></td>
+                    <td colspan="3"><?=h($_GET['id'])?></td>
                 </tr>
             <?php endif; ?>
             <tr>
                 <th>商品名</th>
-                <td colspan="3"><?=h($_SESSION['name'])?></td>
+                <td colspan="3"><?=h($_POST['name'])?></td>
             </tr>
             <tr>
                 <th>商品カテゴリー</th>
-                <td colspan="3"><?=h($_SESSION['category'])?></td>
+                <td colspan="3"><?=h($_POST['category'])?></td>
             </tr>
             <tr>
                 <th>配送情報</th>
-                <td colspan="3"><?=h($_SESSION['delivery_info'])?></td>
+                <td colspan="3"><?=h($_POST['delivery_info'])?></td>
             </tr>
             <tr>
                 <th>表示順(商品)</th>
-                <td colspan="3"><?=h($_SESSION['turn'])?></td>
+                <td colspan="3"><?=h($_POST['turn'])?></td>
             </tr>
             <tr>
                 <th rowspan="6">商品詳細</th>
@@ -106,8 +97,8 @@ if (isset($_POST['send'])) {
             <?php for ($i=1; $i<=5; $i++) :?>
                 <tr>
                     <td><?=$i?></td>
-                    <td><?=h($_SESSION['size_' . $i . ''])?></td>
-                    <td><?=h($_SESSION['price_' . $i . ''])?></td>
+                    <td><?=h($_POST['size_' . $i . ''])?></td>
+                    <td><?=h($_POST['price_' . $i . ''])?></td>
                 </tr>
             <?php endfor;?>
         </table>

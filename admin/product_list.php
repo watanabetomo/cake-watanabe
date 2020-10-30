@@ -53,7 +53,7 @@ if (isset($_POST['delete'])) {
 <?php require_once('admin_header.html') ?>
 <link rel="stylesheet" href="../css/admin_product_list.css">
 <main>
-    <?php require_once('secondadmin_header.html') ?>
+    <?php require_once('secondHeader.html') ?>
     <?php getPage() ?>
     <?=isset($error['databeseError']) ? $error['databaseError'] : '';?>
     <form action="" method="post">
@@ -76,7 +76,7 @@ if (isset($_POST['delete'])) {
                 <td><?=h($product['name'])?></td>
                 <td><img src="../<?=IMG_PATH . h($product['img'])?>" alt="<?=h($product['img'])?>"></td>
                 <td><?=(new DateTime(h($product['created_at'])))->format('Y-m-d H:i:s')?></td>
-                <td><?=(new DateTime(h($product['updated_at'])))->format('Y-m-d H:i:s')?></td>
+                <td><?=!is_null($product['updated_at']) ? (new DateTime(h($product['updated_at'])))->format('Y-m-d H:i:s') : ''?></td>
                 <td>
                     <p>
                         <a href="product_edit.php?id=<?=h($product['id'])?>" class="btn btn-sm" style="margin-top:20px;">編集</a>
