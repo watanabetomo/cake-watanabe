@@ -50,10 +50,10 @@ if (isset($_POST['delete'])) {
 }
 ?>
 
-<?php require_once('header.html') ?>
+<?php require_once('admin_header.html') ?>
 <link rel="stylesheet" href="../css/admin_product_list.css">
 <main>
-    <?php require_once('secondHeader.html') ?>
+    <?php require_once('secondadmin_header.html') ?>
     <?php getPage() ?>
     <?=isset($error['databeseError']) ? $error['databaseError'] : '';?>
     <form action="" method="post">
@@ -90,4 +90,4 @@ if (isset($_POST['delete'])) {
         <?php endforeach; ?>
     </table>
 </main>
-<?php require_once('footer.html') ?>
+<?php require_once('admin_footer.html') ?>

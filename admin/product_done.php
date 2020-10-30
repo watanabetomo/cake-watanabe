@@ -9,11 +9,11 @@ if (!isset($_SESSION['authenticated'])) {
 }
 ?>
 
-<?php require_once('header.html') ?>
+<?php require_once('admin_header.html') ?>
 <link rel="stylesheet" href="../css/admin_product_edit.css">
 <main>
-    <?php require_once('secondHeader.html'); ?>
+    <?php require_once('secondadmin_header.html'); ?>
     <?php getPage() ?>
     <h2 class="done">登録が完了しました</h2>
 </main>
-<?php require_once('footer.html') ?>
+<?php require_once('admin_footer.html') ?>

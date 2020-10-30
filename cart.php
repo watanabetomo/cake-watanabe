@@ -6,45 +6,41 @@ $_SESSION['userName'] = 'watanabe';
 //     header('Location: login.php');
 //     exit;
 // }
+
+if (isset($_POST['purchase'])){
+    header('Location: purchase_edit.php');
+    exit;
+}
 ?>
-<!DOCTYPE html>
-<html lang="ja">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>カート</title>
-    <script src="https://kit.fontawesome.com/98508d537e.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/cart.css">
-</head>
-
-<body>
-    <header>
-        <p class="logout"><a href="logout.php">ログアウト</a></p>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="index.php">洋菓子店カサミンゴー</a>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <p class="greeting">ようこそ<?= $_SESSION['userName'] ?>さん</p>
-                    </li>
-                    <li class="nav-item icon">
-                        <a href="cart.php"><i class="fas fa-shopping-cart fa-2x"></i>
-                        <p>cart</p></a>
-                    </li>
-                    <li class="nav-item icon">
-                        <a href="admin/login.php"><i class="fas fa-user-lock fa-2x"></i>
-                        <p>admin</p></a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </header>
-    <main>
-        <h2 class="page-title">カート</h2>
-        <div class="wrapper">
+<?php require_once('header.html')?>
+<main>
+    <div class="wrapper">
             <div class="box1">
+                <div class="card">
+                    <div class="card-body">
+                        <form action="" method="post">
+                            <p class="purchase"><input type="submit" name="purchase" value="レジに進む" class="btn btn-success"></p>
+                        </form>
+                        <h3 class="sub-title">合計金額（税込）</h3>
+                        <table class="table">
+                            <tr>
+                                <th>小計</th>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th>商品点数</th>
+                                <td>100</td>
+                            </tr>
+                            <tr>
+                                <th>送料</th>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="box2">
+                <p class="contents-title">カート</p>
                 <table class="table-bordered">
                     <tr>
                         <th>削除</th>
@@ -67,35 +63,6 @@ $_SESSION['userName'] = 'watanabe';
                     <p class="submit-button"><input type="submit" class="btn btn-primary" name="continue" value="買い物を続ける">　<input type="submit" class="btn btn-danger" name="clear" value="カートを空にする"></p>
                 </form>
             </div>
-            <div class="box2">
-                <div class="card">
-                    <div class="card-body">
-                        <h3 class="sub-title">合計金額（税込）</h3>
-                        <table class="table">
-                            <tr>
-                                <th>小計</th>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <th>商品点数</th>
-                                <td>100</td>
-                            </tr>
-                            <tr>
-                                <th>送料</th>
-                                <td></td>
-                            </tr>
-                        </table>
-                        <form action="" method="post">
-                            <p class="parchase"><input type="submit" name="parchase" value="レジに進む" class="btn btn-success"></p>
-                        </form>
-                    </div>
-                </div>
-            </div>
         </div>
     </main>
-    <footer>
-        <p class="footer">2020 © 洋菓子店カサミンゴー All Rights Reserved</p>
-    </footer>
-</body>
-
-</html>
+<?php require_once('footer.html')?>

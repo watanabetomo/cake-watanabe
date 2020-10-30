@@ -60,10 +60,10 @@ if (isset($_POST['upload'])) {
 }
 ?>
 
-<?php require_once('header.html') ?>
+<?php require_once('admin_header.html') ?>
 <link rel="stylesheet" href="../css/admin_product_edit.css">
 <main>
-    <?php require_once('secondHeader.html'); ?>
+    <?php require_once('secondadmin_header.html'); ?>
     <?php getPage(); ?>
     <p class="error"><?=isset($error['databaseError']) ? $error['databaseError'] : ''?></p>
     <form action="product_conf.php<?=isset($_GET['new']) ? '?new=true' : ''?>" method="post">
@@ -134,4 +134,4 @@ if (isset($_POST['upload'])) {
         </form>
     <?php endif; ?>
 </main>
-<?php require_once('footer.html') ?>
+<?php require_once('admin_footer.html') ?>

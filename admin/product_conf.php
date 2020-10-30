@@ -66,7 +66,7 @@ if (isset($_POST['send'])) {
 
 ?>
 
-<?php require_once('header.html') ?>
+<?php require_once('admin_header.html') ?>
 <link rel="stylesheet" href="../css/admin_product_edit.css">
 <main>
     <?php require_once('secondHeader.html'); ?>
@@ -114,4 +114,4 @@ if (isset($_POST['send'])) {
         <p class="submit-button"><input type="submit" name="register" class="btn" value="登録完了する"></p>
     </form>
 </main>
-<?php require_once('footer.html') ?>
+<?php require_once('admin_footer.html') ?>
