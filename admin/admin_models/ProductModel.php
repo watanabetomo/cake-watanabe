@@ -1,12 +1,14 @@
 <?php
-class ProductModel extends Model{
+class ProductModel extends Model
+{
 
     /**
      * product_listとproduct_categoryを結合し、全件を取得する
      *
      * @return array product_listとproduct_categoryを結合した全件分のデータ
      */
-    public function fetchAllData(){
+    public function fetchAllData()
+    {
         $this->connect();
         $stmt = $this->dbh->query('SELECT product.id, product.name, product.img, product.created_at, product.updated_at FROM product JOIN product_category ON product.product_category_id = product_category.id WHERE delete_flg = false');
         return $stmt->fetchAll();
@@ -18,7 +20,8 @@ class ProductModel extends Model{
      * @param int $id
      * @return array idが一致したレコード一件分
      */
-    public function fetchById($id){
+    public function fetchById($id)
+    {
         $this->connect();
         $stmt = $this->dbh->prepare('SELECT product.id, product.name, product_category.name AS category_name, product.img, product.delivery_info, product.turn, product_detail.size, product_detail.price, product_detail.turn as detail_turn FROM product JOIN product_category ON product.product_category_id = product_category.id JOIN product_detail ON product.id = product_detail.product_id WHERE product.id = ? ORDER BY turn');
         $stmt->execute([$id]);
@@ -36,18 +39,11 @@ class ProductModel extends Model{
      * @param String $update_user
      * @return void
      */
-    public function update($id, $name, $category_id, $delivery_info, $turn, $update_user){
-        try{
-            $this->connect();
-            $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
-            $stmt = $this->dbh->prepare('UPDATE product SET name = ?, product_category_id = ?, delivery_info = ?, turn = ?, update_user = ?, updated_at = current_timestamp() WHERE id = ?');
-            $this->dbh->beginTransaction();
-            $stmt->execute([$name, $category_id, $delivery_info, $turn, $update_user, $id]);
-            $this->dbh->commit();
-        }catch(PDOException $e){
-            throw new PDOException($e);
-            $this->dbh->rollback();
-        }
+    public function update($id, $name, $category_id, $delivery_info, $turn, $update_user)
+    {
+        $this->connect();
+        $stmt = $this->dbh->prepare('UPDATE product SET name = ?, product_category_id = ?, delivery_info = ?, turn = ?, update_user = ?, updated_at = current_timestamp() WHERE id = ?');
+        $stmt->execute([$name, $category_id, $delivery_info, $turn, $update_user, $id]);
     }
 
     /**
@@ -56,18 +52,11 @@ class ProductModel extends Model{
      * @param int $id
      * @return void
      */
-    public function delete($id){
-        try{
-            $this->connect();
-            $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
-            $stmt = $this->dbh->prepare('UPDATE product SET delete_flg = true WHERE id = ?');
-            $this->dbh->beginTransaction();
-            $stmt->execute([$id]);
-            $this->dbh->commit();
-        }catch(PDOException $e){
-            throw new PDOException($e);
-            $this->dbh->rollback();
-        }
+    public function delete($id)
+    {
+        $this->connect();
+        $stmt = $this->dbh->prepare('UPDATE product SET delete_flg = true WHERE id = ?');
+        $stmt->execute([$id]);
     }
 
     /**
@@ -96,17 +85,9 @@ class ProductModel extends Model{
      */
     public function register($name, $category_id, $delivery_info, $turn, $create_user)
     {
-        try{
-            $this->connect();
-            $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
-            $stmt = $this->dbh->prepare('INSERT INTO product(name, product_category_id, delivery_info, turn, create_user) VALUES (?, ?, ?, ?, ?)');
-            $this->dbh->beginTransaction();
-            $stmt->execute([$name, $category_id, $delivery_info, $turn, $create_user]);
-            $this->dbh->commit();
-        }catch(PDOException $e){
-            throw new PDOException($e);
-            $this->dbh->rollback();
-        }
+        $this->connect();
+        $stmt = $this->dbh->prepare('INSERT INTO product(name, product_category_id, delivery_info, turn, create_user) VALUES (?, ?, ?, ?, ?)');
+        $stmt->execute([$name, $category_id, $delivery_info, $turn, $create_user]);
     }
 
     /**
@@ -116,18 +97,12 @@ class ProductModel extends Model{
      * @param String $img
      * @return void
      */
-    public function imgUpload($id, $img){
-        try{
-            $this->connect();
-            $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
-            $stmt = $this->dbh->prepare('UPDATE product SET img = ? WHERE id = ?');
-            $this->dbh->beginTransaction();
-            $stmt->execute([$img, $id]);
-            $this->dbh->commit();
-        }catch(PDOException $e){
-            throw new PDOException($e);
-            $this->dbh->rollback();
-        }
+    public function imgUpload($id, $img)
+    {
+        $this->connect();
+        $stmt = $this->dbh->prepare('UPDATE product SET img = ? WHERE id = ?');
+        $stmt->execute([$img, $id]);
+        $this->dbh->commit();
     }
 
     /**

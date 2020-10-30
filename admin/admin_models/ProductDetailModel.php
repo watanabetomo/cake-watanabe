@@ -26,17 +26,9 @@ class ProductDetailModel extends Model
      */
     public function register($id, $size, $price, $turn)
     {
-        try{
-            $this->connect();
-            $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
-            $stmt = $this->dbh->prepare('INSERT INTO product_detail(product_id, size, price, turn) VALUES(?, ?, ?, ?)');
-            $this->dbh->beginTransaction();
-            $stmt->execute([$id, $size, $price, $turn]);
-            $this->dbh->commit();
-        }catch(PDOException $e){
-            throw new PDOException('商品詳細の登録に失敗しました');
-            $this->dbh->rollback();
-        }
+        $this->connect();
+        $stmt = $this->dbh->prepare('INSERT INTO product_detail(product_id, size, price, turn) VALUES(?, ?, ?, ?)');
+        $stmt->execute([$id, $size, $price, $turn]);
     }
 
     /**
@@ -50,16 +42,8 @@ class ProductDetailModel extends Model
      */
     public function update($id, $size, $price, $turn)
     {
-        try{
-            $this->connect();
-            $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
-            $stmt = $this->dbh->prepare('UPDATE product_detail SET size = ?, price = ? WHERE product_id = ? AND turn = ?');
-            $this->dbh->beginTransaction();
-            $stmt->execute([$size, $price, $id, $turn]);
-            $this->dbh->commit();
-        }catch(PDOException $e){
-            throw new PDOException('商品詳細の更新に失敗しました');
-            $this->dbh->rollback();
-        }
+        $this->connect();
+        $stmt = $this->dbh->prepare('UPDATE product_detail SET size = ?, price = ? WHERE product_id = ? AND turn = ?');
+        $stmt->execute([$size, $price, $id, $turn]);
     }
 }
