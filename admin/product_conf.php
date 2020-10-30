@@ -21,10 +21,10 @@ if (isset($_POST['register'])) {
         $category_id = $productCategoryModel->getIdByName($_POST['category']);
         if (isset($_GET['new'])) {
             try {
-                $productModel->register($_POST['name'], $category_id['id'], $_POST['delivery_info'], $_POST['turn'], $_POST['login_id']);
+                $productModel->register($_POST['name'], $category_id['id'], $_POST['delivery_info'], $_POST['turn'], $_SESSION['login_id']);
                 try {
                     for ($i=1; $i<=5; $i++) {
-                        $productDetailModel->register(($productModel->getMaxId()['MAX(id)'] + 1), $_POST['size_' . $i], $_POST['price_' . $i], $i);
+                        $productDetailModel->register(($productModel->getMaxId()['MAX(id)']), $_POST['size_' . $i], $_POST['price_' . $i], $i);
                     }
                     header('Location: product_done.php');
                     exit;
@@ -36,10 +36,10 @@ if (isset($_POST['register'])) {
             }
         } else {
             try {
-                $productModel->update($_POST['id'], $_POST['name'], $category_id['id'], $_POST['delivery_info'], $_POST['turn'], $_POST['login_id']);
+                $productModel->update($_GET['id'], $_POST['name'], $category_id['id'], $_POST['delivery_info'], $_POST['turn'], $_SESSION['login_id']);
                 try {
                     for ($i=1; $i<=5; $i++) {
-                        $productDetailModel->update($_POST['id'], $_POST['size_' . $i], $_POST['price_' . $i], $i);
+                        $productDetailModel->update($_GET['id'], $_POST['size_' . $i], $_POST['price_' . $i], $i);
                     }
                     header('Location: product_done.php');
                     exit;
@@ -63,13 +63,21 @@ if (isset($_POST['register'])) {
     <?php require_once('secondHeader.html'); ?>
     <?php getPage() ?>
     <p class="error"><?=isset($error['databaseError']) ? $error['databaseError'] : '';?></p>
-    <form action="" method="post">
+    <form action="product_conf.php<?=isset($_GET['new']) ? '?new=true' : ''?><?=isset($_GET['id']) ? '?id=' . $_GET['id'] : ''?>" method="post">
         <input type="hidden" name="token" value="<?=getToken()?>">
+        <input type="hidden" name="name" value="<?=$_POST['name']?>">
+        <input type="hidden" name="category" value="<?=$_POST['category']?>">
+        <input type="hidden" name="delivery_info" value="<?=$_POST['delivery_info']?>">
+        <input type="hidden" name="turn" value="<?=$_POST['turn']?>">
+        <?php for($i=1; $i<=5; $i++):?>
+            <input type="hidden" name="size_<?=$i?>" value="<?=$_POST['size_' . $i]?>">
+            <input type="hidden" name="price_<?=$i?>" value="<?=$_POST['price_' . $i]?>">
+        <?php endfor;?>
         <table border="1">
             <?php if (!isset($_GET['new'])) : ?>
                 <tr>
                     <th>ID</th>
-                    <td colspan="3"><?=h($_GET['id'])?></td>
+                    <td colspan="3"><?=$_GET['id']?></td>
                 </tr>
             <?php endif; ?>
             <tr>

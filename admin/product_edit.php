@@ -60,7 +60,7 @@ if (isset($_POST['upload'])) {
             <?php if (isset($_GET['id'])) : ?>
                 <tr>
                     <th>ID</th>
-                    <td colspan="3"><?=h($_GET['id'])?></td>
+                    <td colspan="3"><?=$_GET['id']?></td>
                 </tr>
             <?php endif; ?>
             <tr>
