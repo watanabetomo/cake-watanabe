@@ -114,3 +114,7 @@ footer{
 .radio{
     margin-left: 10px;
 }
+
+.send-for{
+    display: none;
+}

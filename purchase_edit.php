@@ -16,22 +16,22 @@ try {
 }
 
 if (isset($_POST['send'])) {
-    if ($_POST['postal_code1'] == ''){
+    if ($_POST['postal_code1'] == '') {
         $error['postal_code1'] = '郵便番号上3桁が入力されていません。';
     } elseif (!preg_match('/^[0-9]{3}$/', $_POST['postal_code1'])) {
         $error['postal_code1'] = '郵便番号上3桁が間違っています。';
     }
-    if ($_POST['postal_code2'] == ''){
+    if ($_POST['postal_code2'] == '') {
         $error['postal_code2'] = '郵便番号下4桁が入力されていません。';
     } elseif (!preg_match('/^[0-9]{4}$/', $_POST['postal_code2'])) {
         $error['postal_code2'] = '郵便番号下4桁が間違っています。';
     }
-    if ($_POST['city'] == ''){
+    if ($_POST['city'] == '') {
         $error['city'] = '市区町村が入力されていません。';
     } elseif (!preg_match('/^\w{1,15}$/', $_POST['city'])) {
         $error['city'] = '市区町村が間違っています。';
     }
-    if ($_POST['address'] == ''){
+    if ($_POST['address'] == '') {
         $error['address'] = '番地が入力されていません。';
     } elseif (!preg_match('/^\w{1,100}$/', $_POST['address'])) {
         $error['address'] = '番地が間違っています。';
@@ -39,27 +39,27 @@ if (isset($_POST['send'])) {
     if (!preg_match('/^\w{1,100}$/', $_POST['other'])) {
         $error['other'] = '建物名等が間違っています。';
     }
-    if ($_POST['tel1'] == ''){
+    if ($_POST['tel1'] == '') {
         $error['tel1'] = '市外局番が入力されていません。';
     } elseif (!preg_match('/^[0-9]{1,5}$/', $_POST['tel1'])) {
         $error['tel1'] = '市外局番が間違っています。';
     }
-    if ($_POST['tel2'] == ''){
+    if ($_POST['tel2'] == '') {
         $error['tel2'] = '電話番号（入力欄2）が入力されていません。';
     } elseif (!preg_match('/^[0-9]{1,5}$/', $_POST['tel2'])) {
         $error['tel2'] = '電話番号（入力欄2）が間違っています。';
     }
-    if ($_POST['tel3'] == ''){
+    if ($_POST['tel3'] == '') {
         $error['tel3'] = '電話番号（入力欄3）が入力されていません。';
     } elseif (!preg_match('/^[0-9]{1,5}$/', $_POST['tel3'])) {
         $error['tel3'] = '電話番号（入力欄3）が間違っています。';
     }
-    if ($_POST['name_kana'] == ''){
+    if ($_POST['name_kana'] == '') {
         $error['name_kana'] = 'フリガナが入力されていません。';
     } elseif (!preg_match('/^\w{1,20}$/', $_POST['name_kana'])) {
         $error['name_kana'] = 'フリガナが間違っています。';
     }
-    if ($_POST['name'] == ''){
+    if ($_POST['name'] == '') {
         $error['name'] = '名前が入力されていません。';
     } elseif (!preg_match('/^\w{1,15}$/', $_POST['name'])) {
         $error['name'] = '名前が間違っています。';
@@ -111,9 +111,9 @@ if (isset($_POST['send'])) {
     </table>
     <form action="" method="post">
         <p class="contents-title">送付先情報<span style="font-size: 20px; margin-left: 10px;">※登録住所以外へ送る場合は変更してください</span></p>
-        <input type="radio" name="sendFor" value="1" checked>変更しない
-        <input type="radio" name="sendFor" value="2">変更する
-        <table class="table">
+        <input type="radio" name="sendFor" id="sendFor1" value="1" checked>変更しない
+        <input type="radio" name="sendFor" id="sendFor2" value="2">変更する
+        <table class="table send-for">
             <tr>
                 <th>郵便番号</th>
                 <td><input type="text" name="postal_code1"> - <input type="text" name="postal_code2"></td>
@@ -129,7 +129,9 @@ if (isset($_POST['send'])) {
             </tr>
             <tr>
                 <th>電話番号</th>
-                <td><p><input type="text" name="tel1"> - <input type="text" name="tel2"> - <input type="text" name="tel3"></p></td>
+                <td>
+                    <p><input type="text" name="tel1"> - <input type="text" name="tel2"> - <input type="text" name="tel3"></p>
+                </td>
             </tr>
             <tr>
                 <th>お名前</th>
@@ -163,13 +165,22 @@ if (isset($_POST['send'])) {
             </tr>
         </table>
         <p class="contents-title">お支払方法</p>
-        <?php if(isset($error['databaseError'])):?>
-            <p class="error"><?=$error['databaseError']?></p>
-        <?php endif;?>
-        <?php foreach($payments as $payment):?>
-            <input type="radio" name="payment" class="radio" value="<?=$payment['id']?>"><?=$payment['name']?>
-        <?php endforeach;?>
+        <?php if (isset($error['databaseError'])) : ?>
+            <p class="error"><?= $error['databaseError'] ?></p>
+        <?php endif; ?>
+        <?php foreach ($payments as $payment) : ?>
+            <input type="radio" name="payment" class="radio" value="<?= $payment['id'] ?>"><?= $payment['name'] ?>
+        <?php endforeach; ?>
         <p class="purchase-button"><input type="submit" name="send" value="確認画面へ"></p>
     </form>
 </main>
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script type="text/javascript">
+    $('#sendFor1').click( function(){
+        $('.send-for').hide();
+    });
+    $('#sendFor2').click( function(){
+        $('.send-for').show();
+    });
+</script>
 <?php require_once('footer.html') ?>
