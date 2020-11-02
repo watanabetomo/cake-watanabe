@@ -1,5 +1,5 @@
 <?php
-class ProductCategoryModel extends Model
+class ProductCategoryModel extends AdminModel
 {
     /**
      * nameをすべて取得する

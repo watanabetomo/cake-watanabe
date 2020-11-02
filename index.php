@@ -333,7 +333,8 @@ try {
                                             ?>
                                             <?php foreach ($productDetails as $detail) :?>
                                                 <li>
-                                                    <form method="post" action="http://cart.ec-sites.jp/cart_step2/pc/pk00/">
+                                                    <form method="post" action="cart.php">
+                                                        <input type="hidden" name="detail_id" value="<?=$detail['id']?>">
                                                         <input name="es_item_qty" value="1" type="hidden">
                                                         <input name="es_charset" value="sjis" type="hidden">
                                                         <input name="es_item_id" value="<?=$detail['product_id']?>" type="hidden">

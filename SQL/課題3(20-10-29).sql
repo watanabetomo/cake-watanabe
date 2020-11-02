@@ -30,7 +30,7 @@ CREATE TABLE user(
 CREATE TABLE cart(
     id SERIAL PRIMARY KEY,
     user_id BIGINT(20) UNSIGNED NOT NULL,
-    product_id BIGINT(20) UNSIGNED NOT NULL,
+    product_detail_id BIGINT(20) UNSIGNED NOT NULL,
     num INT UNSIGNED NOT NULL
 );
 

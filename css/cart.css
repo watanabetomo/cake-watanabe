@@ -107,6 +107,10 @@ table{
     text-align: right;
 }
 
+.cart{
+    width: 90%;
+}
+
 .purchase{
     text-align: center;
 }

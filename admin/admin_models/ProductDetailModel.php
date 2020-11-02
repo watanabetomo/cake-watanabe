@@ -1,5 +1,5 @@
 <?php
-class ProductDetailModel extends Model
+class ProductDetailModel extends AdminModel
 {
     /**
      * product_idでsizeとpriceを取ってくる
@@ -10,7 +10,7 @@ class ProductDetailModel extends Model
     public function fetchByProductId($id)
     {
         $this->connect();
-        $stmt = $this->dbh->prepare('SELECT size, price, product_id, turn FROM product_detail WHERE product_id = ? ORDER BY size ASC');
+        $stmt = $this->dbh->prepare('SELECT * FROM product_detail WHERE product_id = ? ORDER BY size ASC');
         $stmt->execute([$id]);
         return $stmt->fetchAll();
     }
@@ -45,5 +45,13 @@ class ProductDetailModel extends Model
         $this->connect();
         $stmt = $this->dbh->prepare('UPDATE product_detail SET size = ?, price = ? WHERE product_id = ? AND turn = ?');
         $stmt->execute([$size, $price, $id, $turn]);
+    }
+
+    public function fetchById($id)
+    {
+        $this->connect();
+        $stmt = $this->dbh->prepare('SELECT * FROM product_detail WHERE id = ?');
+        $stmt->execute([$id]);
+        return $stmt->fetch();
     }
 }

@@ -4,7 +4,7 @@ require_once('ProductModel.php');
 require_once('ProductCategoryModel.php');
 require_once('ProductDetailModel.php');
 
-class Model
+class AdminModel
 {
     protected $dbh;
 

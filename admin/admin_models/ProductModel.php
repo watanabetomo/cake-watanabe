@@ -1,5 +1,5 @@
 <?php
-class ProductModel extends Model
+class ProductModel extends AdminModel
 {
 
     /**
@@ -204,5 +204,13 @@ class ProductModel extends Model
         $stmt = $this->dbh->query('SELECT product.id, product.name, product.img, product.created_at, product.updated_at FROM product JOIN product_category ON product.product_category_id = product_category.id WHERE delete_flg = false ORDER BY product.updated_at IS NULL ASC, product.updated_at ASC');
         $stmt->execute();
         return $stmt->fetchAll();
+    }
+
+    public function fetchSingleDetail($id)
+    {
+        $this->connect();
+        $stmt = $this->dbh->prepare('SELECT name, img FROM product WHERE id = ?');
+        $stmt->execute([$id]);
+        return $stmt->fetch();
     }
 }
