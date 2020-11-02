@@ -1,5 +1,11 @@
 @media screen and (min-width:768px){
 
+.top-nav{
+    height: 30px;
+    text-align: right;
+    padding-top: 7px;
+}
+
 body{
 	font-family:"ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
 	background-image: url(../img/back.jpg);

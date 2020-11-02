@@ -65,6 +65,17 @@ if (isset($_POST['send'])) {
         $error['name'] = '名前が間違っています。';
     }
     if (!isset($error)) {
+        $_SESSION['postal_code1'] = $_POST['postal_code1'];
+        $_SESSION['postal_code2'] = $_POST['postal_code2'];
+        $_SESSION['city'] = $_POST['city'];
+        $_SESSION['address'] = $_POST['address'];
+        $_SESSION['other'] = $_POST['other'];
+        $_SESSION['tel1'] = $_POST['tel1'];
+        $_SESSION['tel2'] = $_POST['tel2'];
+        $_SESSION['tel3'] = $_POST['tel3'];
+        $_SESSION['name_kana'] = $_POST['name_kana'];
+        $_SESSION['name'] = $_POST['name'];
+        $_SESSION['payment'] = $_POST['payment'];
         header('Location: purchase_conf.php');
         exit;
     }
@@ -75,7 +86,7 @@ if (isset($_POST['send'])) {
 <?php require_once('header.html') ?>
 <main>
     <p class="contents-title">確認</p>
-    <table class="table">
+    <table class="table table-center">
         <tr>
             <th>商品画像</th>
             <th>商品名</th>
@@ -142,7 +153,7 @@ if (isset($_POST['send'])) {
             </tr>
         </table>
         <p class="contents-title">請求先情報</p>
-        <table class="table">
+        <table class="table table-left">
             <tr>
                 <th>郵便番号</th>
                 <td></td>
@@ -168,18 +179,21 @@ if (isset($_POST['send'])) {
         <?php if (isset($error['databaseError'])) : ?>
             <p class="error"><?= $error['databaseError'] ?></p>
         <?php endif; ?>
-        <?php foreach ($payments as $payment) : ?>
-            <input type="radio" name="payment" class="radio" value="<?= $payment['id'] ?>"><?= $payment['name'] ?>
-        <?php endforeach; ?>
+        <table class="table">
+            <tr>
+                <th>支払方法</th>
+                <td><?php foreach ($payments as $payment) : ?> <input type="radio" name="payment" class="radio" value="<?= $payment['id'] ?>"><?= $payment['name'] ?> <?php endforeach; ?></td>
+            </tr>
+        </table>
         <p class="purchase-button"><input type="submit" name="send" value="確認画面へ"></p>
     </form>
 </main>
 <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 <script type="text/javascript">
-    $('#sendFor1').click( function(){
+    $('#sendFor1').click(function() {
         $('.send-for').hide();
     });
-    $('#sendFor2').click( function(){
+    $('#sendFor2').click(function() {
         $('.send-for').show();
     });
 </script>
