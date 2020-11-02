@@ -23,4 +23,9 @@ class Model
             throw new Exception($e);
         }
     }
+
+    public function getDbh()
+    {
+        return $this->dbh;
+    }
 }

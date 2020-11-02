@@ -28,10 +28,10 @@ if (isset($_POST['register'])) {
                     }
                     header('Location: product_done.php');
                     exit;
-                } catch (PDOException $e) {
+                } catch (Exception $e) {
                     $error['databaseError'] = '商品詳細の登録に失敗しました';
                 }
-            } catch (PDOException $e) {
+            } catch (Exception $e) {
                 $error['databaseError'] = '商品情報の登録に失敗しました';
             }
         } else {
@@ -43,10 +43,10 @@ if (isset($_POST['register'])) {
                     }
                     header('Location: product_done.php');
                     exit;
-                } catch (PDOException $e) {
+                } catch (Exception $e) {
                     $error['databaseError'] = '商品詳細の更新に失敗しました';
                 }
-            } catch (PDOException $e) {
+            } catch (Exception $e) {
                 $error['databaseError'] = '商品情報の更新に失敗しました';
             }
         }
@@ -54,7 +54,6 @@ if (isset($_POST['register'])) {
         $error['databaseError'] = 'データベースに接続できませんでした';
     }
 }
-
 ?>
 
 <?php require_once('admin_header.html') ?>

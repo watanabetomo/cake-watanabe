@@ -111,7 +111,7 @@ if (isset($_POST['send'])) {
     </table>
     <form action="" method="post">
         <p class="contents-title">送付先情報<span style="font-size: 20px; margin-left: 10px;">※登録住所以外へ送る場合は変更してください</span></p>
-        <input type="radio" name="sendFor" value="1" checked onclick="formSwitch()">変更しない
+        <input type="radio" name="sendFor" value="1" checked>変更しない
         <input type="radio" name="sendFor" value="2">変更する
         <table class="table">
             <tr>
@@ -172,9 +172,4 @@ if (isset($_POST['send'])) {
         <p class="purchase-button"><input type="submit" name="send" value="確認画面へ"></p>
     </form>
 </main>
-<script>
-    function formSwitch(){
-        document.getElementsById('address-form').style.display='none';
-    }
-</script>
 <?php require_once('footer.html') ?>
