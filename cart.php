@@ -79,7 +79,7 @@ foreach($cart as $onCart){
                             </tr>
                             <tr>
                                 <th>送料</th>
-                                <td><?=($totalPrice > 10000) ? 0 : number_format(1000) ;?></td>
+                                <td><?=($totalPrice * (1 + TAX) > 10000) ? 0 : number_format(1000) ;?></td>
                             </tr>
                         </table>
                     </form>

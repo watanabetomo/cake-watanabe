@@ -76,8 +76,13 @@ if (isset($_POST['send'])) {
         $_SESSION['tel3'] = $_POST['tel3'];
         $_SESSION['name_kana'] = $_POST['name_kana'];
         $_SESSION['name'] = $_POST['name'];
+        $_SESSION['mail'] = $user['mail'];
         $_SESSION['payment'] = $_POST['payment'];
         $_SESSION['token'] = $_POST['token'];
+        $_SESSION['sub_price'] = $_POST['sub_price'];
+        $_SESSION['shipping'] = $_POST['shipping'];
+        $_SESSION['total_price'] = $_POST['total_price'];
+        $_SESSION['tax'] = $_POST['tax'];
         header('Location: purchase_conf.php');
         exit;
     }
@@ -115,6 +120,7 @@ if (isset($_POST['send'])) {
                 $totalCount += $onCart['num'];
             ?>
         <?php endforeach;?>
+        <?php $total = ($totalPrice * (1 + TAX) > 10000) ? 0 : 1000?>
         <tr>
             <td colspan="2">小計</td>
             <td><?=$totalCount?></td>
@@ -128,19 +134,23 @@ if (isset($_POST['send'])) {
         </tr>
         <tr>
             <td colspan="5">送料（税込み）</td>
-            <td><?=($totalPrice * TAX > 10000) ? 0 : number_format(1000) ;?></td>
+            <td><?=number_format($total)?></td>
         </tr>
         <tr>
             <td colspan="5">総合計</td>
-            <td><?=number_format($totalPrice * (1 + TAX))?></td>
+            <td><?=number_format($totalPrice * (1 + TAX) + $total)?></td>
         </tr>
     </table>
     <form action="" method="post">
         <input type="hidden" name="token" value="<?=getToken()?>">
+        <input type="hidden" name="sub_price" value="<?=$totalPrice?>">
+        <input type="hidden" name="shipping" value="<?=($totalPrice * (1 + TAX) > 10000) ? 0 : 1000?>">
+        <input type="hidden" name="total_price" value="<?=$totalPrice * (1 + TAX) + $total?>">
+        <input type="hidden" name="tax" value="<?=TAX?>">
         <p class="contents-title">送付先情報<span style="font-size: 20px; margin-left: 10px;">※登録住所以外へ送る場合は変更してください</span></p>
         <input type="radio" name="sendFor" id="sendFor2" value="2" checked>変更する
         <input type="radio" name="sendFor" id="sendFor1" value="1">変更しない
-        <table class="table send-for">
+        <table class="table send-for table-left">
             <tr>
                 <th>郵便番号</th>
                 <td><input type="text" name="postal_code1" value="<?=$user['postal_code1']?>"> - <input type="text" name="postal_code2" value="<?=$user['postal_code2']?>"><span class="error"><?=isset($error['postal_code1']) ? $error['postal_code1'] : '';?><?=isset($error['postal_code2']) ? $error['postal_code2'] : '';?></span></td>
@@ -201,7 +211,7 @@ if (isset($_POST['send'])) {
         <table class="table table-left">
             <tr>
                 <th>支払方法</th>
-                <td><?php foreach ($payments as $payment) : ?> <input type="radio" name="payment" class="radio" value="<?= $payment['id'] ?>"><?= $payment['name'] ?> <?php endforeach; ?></td>
+                <td><?php foreach ($payments as $payment) : ?> <input type="radio" name="payment" class="radio" value="<?= $payment['id'] ?>" <?=($payment['name'] == '各種クレジットカード決済') ? 'checked' : ''?>><?= $payment['name'] ?> <?php endforeach; ?></td>
             </tr>
         </table>
         <p class="purchase-button"><input type="submit" name="send" value="確認画面へ"></p>

@@ -8,18 +8,29 @@ if ((isset($_SESSION['token']) ? $_SESSION['token'] : '') != getToken()) {
 
 try {
     $cartModel = new CartModel();
+    $cart = $cartModel->fetchAll();
+    $orderModel = new OrderModel();
+    $productDetailModel = new ProductDetailModel();
+    $productModel = new ProductModel();
+    $orderModel->commitOrder($_SESSION['userId'], $_SESSION['name'], $_SESSION['name_kana'], $_SESSION['mail'], $_SESSION['tel1'], $_SESSION['tel2'], $_SESSION['tel3'], $_SESSION['postal_code1'], $_SESSION['postal_code2'], array_search($_SESSION['pref'], $prefectures), $_SESSION['city'], $_SESSION['address'], $_SESSION['other'], $_SESSION['payment'], $_SESSION['sub_price'], $_SESSION['shipping'], ($_SESSION['tax'] * 100), $_SESSION['total_price']);
+    $oederDetailModel = new OrderDetailModel();
+    foreach ($cart as $onCart) {
+        $productDetail = $productDetailModel->fetchById($onCart['product_detail_id']);
+        $product = $productModel->fetchById($productDetail['product_id']);
+        $oederDetailModel->registOrderDetail($orderModel->getMaxId()[0], $onCart['product_detail_id'], $product[0]['name'], $productDetail['size'], $productDetail['price'], $onCart['num']);
+    }
     $cartModel->truncateCart();
-    $oderModel = new OrderModel();
     try {
+        $name = $_SESSION['userName'];
         mb_language("Japanese");
         mb_internal_encoding("UTF-8");
 $mailBody = <<<EOT
-$name様
+$name 様
 EOT;
         $mail = mb_send_mail('t.watanabe@ebacorp.jp', '【洋菓子店カサミンゴー】ご購入商品確認メール', $mailBody, 'From: chelseano55@gmail.com');
-
         unset($_SESSION['postal_code1']);
         unset($_SESSION['postal_code2']);
+        unset($_SESSION['pref']);
         unset($_SESSION['city']);
         unset($_SESSION['address']);
         unset($_SESSION['other']);
@@ -30,6 +41,10 @@ EOT;
         unset($_SESSION['name']);
         unset($_SESSION['payment']);
         unset($_SESSION['token']);
+        unset($_SESSION['sub_price']);
+        unset($_SESSION['shipping']);
+        unset($_SESSION['total_price']);
+        unset($_SESSION['tax']);
     } catch (Exception $e) {
         $error = "メールの送信に失敗しました";
     }

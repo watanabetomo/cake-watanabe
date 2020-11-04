@@ -144,3 +144,8 @@ footer{
 .error{
     color: red;
 }
+
+.done-message{
+    text-align: center;
+    font-size: 20px;
+}

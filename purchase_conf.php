@@ -60,6 +60,7 @@ if (isset($_POST['send'])) {
                 $totalCount += $onCart['num'];
             ?>
         <?php endforeach;?>
+        <?php $total = ($totalPrice * (1 + TAX) > 10000) ? 0 : 1000?>
         <tr>
             <td colspan="2">小計</td>
             <td><?=$totalCount?></td>
@@ -73,11 +74,11 @@ if (isset($_POST['send'])) {
         </tr>
         <tr>
             <td colspan="5">送料（税込み）</td>
-            <td><?=($totalPrice * TAX > 10000) ? 0 : number_format(1000) ;?></td>
+            <td><?=number_format($total)?></td>
         </tr>
         <tr>
             <td colspan="5">総合計</td>
-            <td><?=number_format($totalPrice * (1 + TAX))?></td>
+            <td><?=number_format($totalPrice * (1 + TAX) + $total)?></td>
         </tr>
     </table>
     <form action="" method="post">
