@@ -8,43 +8,32 @@ if (!isset($_SESSION['authenticated'])) {
 
 try {
     $productModel = new ProductModel();
+    if (isset($_POST['search'])) {
+        if ($_POST['keyword'] != '') {
+            $productList = $productModel->search($_POST['keyword']);
+        }
+    } elseif (isset($_POST['id_asc'])) {
+        $productList = $productModel->sortIdAsc();
+    } elseif (isset($_POST['id_desc'])) {
+        $productList = $productModel->sortIdDesc();
+    } elseif (isset($_POST['name_asc'])) {
+        $productList = $productModel->sortNameAsc();
+    } elseif (isset($_POST['name_desc'])) {
+        $productList = $productModel->sortNameDesc();
+    } elseif (isset($_POST['updated_at_asc'])) {
+        $productList = $productModel->sortUpdatedAsc();
+    } elseif (isset($_POST['updated_at_desc'])) {
+        $productList = $productModel->sortUpdatedDesc();
+    } else {
+        if (isset($_POST['delete'])) {
+            $productModel->delete($_POST['id']);
+        }
+        $productList = $productModel->fetchAllData();
+    }
 } catch (PDOException $e) {
     $error['databaseError'] = 'データベースに接続できませんでした';
 }
 
-if (!isset($_GET['searched'])) {
-    $productList = $productModel->fetchAllData();
-} else {
-    $productList = $productModel->search($_GET['searched']);
-}
-
-if (isset($_POST['delete'])) {
-    try {
-        $productModel->delete($_POST['id']);
-        header('Location: product_list.php');
-    } catch (PDOException $e) {
-        $error['databaseError'] = '商品情報の削除に失敗しました';
-    }
-} elseif (isset($_POST['search'])) {
-    if ($_POST['keyword'] != '') {
-        $productList = $productModel->search($_POST['keyword']);
-    }
-} elseif (isset($_POST['all'])) {
-    header('Location: product_list.php');
-    exit;
-} elseif (isset($_POST['id_asc'])) {
-    $productList = $productModel->sortIdAsc();
-} elseif (isset($_POST['id_desc'])) {
-    $productList = $productModel->sortIdDesc();
-} elseif (isset($_POST['name_asc'])) {
-    $productList = $productModel->sortNameAsc();
-} elseif (isset($_POST['name_desc'])) {
-    $productList = $productModel->sortNameDesc();
-} elseif (isset($_POST['updated_at_asc'])) {
-    $productList = $productModel->sortUpdatedAsc();
-} elseif (isset($_POST['updated_at_desc'])) {
-    $productList = $productModel->sortUpdatedDesc();
-}
 ?>
 
 <?php require_once('admin_header.html') ?>
