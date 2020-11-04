@@ -18,7 +18,15 @@ function h($str)
  */
 function getPage()
 {
-    global $title;
+    if (preg_match('/^product_list.php/', explode('/', $_SERVER['REQUEST_URI'])[3])) {
+        $title = '商品一覧';
+    } elseif (preg_match('/^product_edit.php/', explode('/', $_SERVER['REQUEST_URI'])[3])) {
+        $title = '商品データ編集';
+    } elseif (preg_match('/^product_conf.php/', explode('/', $_SERVER['REQUEST_URI'])[3])) {
+        $title = '商品データ登録確認';
+    } elseif (preg_match('/^product_done.php/', explode('/', $_SERVER['REQUEST_URI'])[3])) {
+        $title = '登録完了';
+    }
     echo '<h1><button type="button" class="btn title-button" disabled>' . $title . '</button></h1>';
 }
 

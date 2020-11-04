@@ -1,8 +1,6 @@
 <?php
 require_once('autoload.php');
 
-$title = '商品リスト';
-
 if (!isset($_SESSION['authenticated'])) {
     header('Location: login.php');
     exit;
@@ -28,9 +26,8 @@ if (isset($_POST['delete'])) {
         $error['databaseError'] = '商品情報の削除に失敗しました';
     }
 } elseif (isset($_POST['search'])) {
-    if ($_POST['search'] != '') {
-        header('Location: product_list.php?searched=' . $_POST['keyword']);
-        exit;
+    if ($_POST['keyword'] != '') {
+        $productList = $productModel->search($_POST['keyword']);
     }
 } elseif (isset($_POST['all'])) {
     header('Location: product_list.php');
@@ -53,13 +50,12 @@ if (isset($_POST['delete'])) {
 <?php require_once('admin_header.html') ?>
 <link rel="stylesheet" href="../css/admin_product_list.css">
 <main>
-    <?php require_once('secondHeader.html') ?>
     <?php getPage() ?>
     <?=isset($error['databeseError']) ? $error['databaseError'] : '';?>
     <form action="" method="post">
         <p class="search"><input type="text" name="keyword"> <input type="submit" name="search" value="絞り込む"> <input type="submit" name="all" value="すべて表示"></p>
     </form>
-    <table border="1">
+    <table border="1" class="main-table">
         <form action="" method="post">
             <tr>
                 <th><input type="submit" name="id_desc" class="icon" value="▲"><p class="sorted">ID</p><input type="submit" name="id_asc" class="icon" value="▼"></th>

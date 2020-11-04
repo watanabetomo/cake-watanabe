@@ -55,7 +55,7 @@ $cart = $cartModel->fetchAll();
 foreach($cart as $onCart){
     $productDetail = $productDetailModel->fetchById($onCart['product_detail_id']);
     $countProduct += $onCart['num'];
-    $totalPrice += $onCart['num'] * $productDetail['price'];
+    $totalPrice += $onCart['num'] * $productDetail['price'] * (TAX + 1);
 }
 
 ?>

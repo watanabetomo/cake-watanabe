@@ -1,6 +1,14 @@
 <?php
-require_once('autoload.php');
+require_once('admin/autoload.php');
 require_once('vendor/autoload.php');
+
+try {
+    $cartModel = new CartModel();
+    $cartModel->truncateCart();
+    $oderModel = new OrderModel();
+} catch (PDOException $e) {
+    $error['databaseError'] = 'データベースに接続できませんでした';
+}
 
 try {
     $transport = new Swift_SmtpTransport(

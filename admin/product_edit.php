@@ -1,8 +1,6 @@
 <?php
 require_once('autoload.php');
 
-$title = '商品データ編集';
-
 if (!isset($_SESSION['authenticated'])) {
     header('Location: login.php');
     exit;
@@ -50,9 +48,9 @@ if (isset($_POST['upload'])) {
 ?>
 
 <?php require_once('admin_header.html') ?>
-<link rel="stylesheet" href="../css/admin_product_edit.css">
+<link rel="stylesheet" href="../css/admin_product_list.css">
 <main>
-    <?php require_once('secondHeader.html'); ?>
+    <?php getPage()?>
     <p class="error"><?=isset($error['databaseError']) ? $error['databaseError'] : ''?></p>
     <form action="product_conf.php<?=isset($_GET['new']) ? '?new=true' : ''?><?=isset($_GET['id']) ? '?id=' . $_GET['id'] : ''?>" method="post">
         <input type="hidden" name="token" value="<?=getToken()?>">

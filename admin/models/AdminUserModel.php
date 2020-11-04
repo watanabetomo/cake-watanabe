@@ -1,5 +1,5 @@
 <?php
-class AdminUserModel extends AdminModel
+class AdminUserModel extends Model
 {
     /**
      * ログインidをもとにadmin_userテーブルからデータを取得し、fetchしたものを返す

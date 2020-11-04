@@ -1,5 +1,5 @@
 <?php
-class ProductModel extends AdminModel
+class ProductModel extends Model
 {
 
     /**

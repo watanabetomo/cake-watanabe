@@ -1,5 +1,5 @@
 <?php
-require_once('autoload.php');
+require_once('admin/autoload.php');
 
 $prefectures = ['北海道', '青森県', '岩手県', '宮城県', '秋田県', '山形県', '福島県', '茨城県', '栃木県', '群馬県', '埼玉県', '千葉県', '東京都', '神奈川県', '新潟県', '富山県', '石川県', '福井県', '山梨県', '長野県', '岐阜県', '静岡県', '愛知県', '三重県', '滋賀県', '京都府', '大阪府', '兵庫県', '奈良県', '和歌山県', '鳥取県', '島根県', '岡山県', '広島県', '山口県', '徳島県', '香川県', '愛媛県', '高知県', '福岡県', '佐賀県', '長崎県', '熊本県', '大分県', '宮崎県', '鹿児島県', '沖縄県'];
 
@@ -127,28 +127,28 @@ if (isset($_POST['send'])) {
         <table class="table send-for">
             <tr>
                 <th>郵便番号</th>
-                <td><input type="text" name="postal_code1"> - <input type="text" name="postal_code2"></td>
+                <td><input type="text" name="postal_code1"> - <input type="text" name="postal_code2"><?=isset($error['postal_code1']) ? $error['postal_code1'] : '';?><?=isset($error['postal_code2']) ? $error['postal_code2'] : '';?></td>
             </tr>
             <tr>
                 <th>住所</th>
                 <td>
                     <p><select name="pref"> <?php foreach ($prefectures as $prefecture) : ?> <option value="<?= $prefecture ?>"><?= $prefecture ?></option> <?php endforeach; ?> </select></p>
-                    <p><input type="text" name="city"></p>
-                    <p><input type="text" name="address"></p>
-                    <p><input type="text" name="other"></p>
+                    <p><input type="text" name="city"><?=isset($error['city']) ? $error['city'] : '';?></p>
+                    <p><input type="text" name="address"><?=isset($error['address']) ? $error['address'] : '';?></p>
+                    <p><input type="text" name="other"><?=isset($error['other']) ? $error['other'] : '';?></p>
                 </td>
             </tr>
             <tr>
                 <th>電話番号</th>
                 <td>
-                    <p><input type="text" name="tel1"> - <input type="text" name="tel2"> - <input type="text" name="tel3"></p>
+                    <p><input type="text" name="tel1"> - <input type="text" name="tel2"> - <input type="text" name="tel3"><?=isset($error['tel1']) ? $error['tel1'] : '';?><?=isset($error['tel2']) ? $error['tel2'] : '';?><?=isset($error['tel3']) ? $error['tel3'] : '';?></p>
                 </td>
             </tr>
             <tr>
                 <th>お名前</th>
                 <td>
-                    <p><input type="text" name="name_kana"></p>
-                    <p><input type="text" name="name"></p>
+                    <p><input type="text" name="name_kana"><?=isset($error['name_kana']) ? $error['name_kana'] : '';?></p>
+                    <p><input type="text" name="name"><?=isset($error['name']) ? $error['name'] : '';?></p>
                 </td>
             </tr>
         </table>

@@ -1,10 +1,15 @@
 <?php
-require_once('AdminUserModel.php');
+require_once('UserModel.php');
+require_once('OrderModel.php');
+require_once('OrderDetailModel.php');
+require_once('CartModel.php');
+require_once('MPaymentModel.php');
 require_once('ProductModel.php');
 require_once('ProductCategoryModel.php');
 require_once('ProductDetailModel.php');
+require_once('AdminUserModel.php');
 
-class AdminModel
+class Model
 {
     protected $dbh;
 

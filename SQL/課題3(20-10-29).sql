@@ -1,5 +1,5 @@
 
-CREATE TABLE user(
+CREATE TABLE user (
     id SERIAL PRIMARY KEY,
     login_id TEXT NOT NULL,
     login_pass TEXT NOT NULL,
@@ -10,9 +10,9 @@ CREATE TABLE user(
     birth_day CHAR(2),
     gender TINYINT NOT NULL,
     mail TEXT Not NULL,
-    tel1 VARCHAR(5), NOT NULL,
-    tel2 VARCHAR(5), NOT NULL,
-    tel3 VARCHAR(5), NOT NULL,
+    tel1 VARCHAR(5) NOT NULL,
+    tel2 VARCHAR(5) NOT NULL,
+    tel3 VARCHAR(5) NOT NULL,
     postal_code1 CHAR(3) NOT NULL,
     postal_code2 CHAR(4) NOT NULL,
     pref TINYINT NOT NULL,
@@ -27,14 +27,14 @@ CREATE TABLE user(
     delete_flg BOOLEAN DEFAULT FALSE
 );
 
-CREATE TABLE cart(
+CREATE TABLE cart (
     id SERIAL PRIMARY KEY,
     user_id BIGINT(20) UNSIGNED NOT NULL,
     product_detail_id BIGINT(20) UNSIGNED NOT NULL,
     num INT UNSIGNED NOT NULL
 );
 
-CERATE TABLE order(
+CREATE TABLE `order` (
     id SERIAL PRIMARY KEY,
     user_id BIGINT(20) UNSIGNED NOT NULL,
     name TEXT NOT NULL,

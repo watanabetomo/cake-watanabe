@@ -2,16 +2,16 @@
     border-bottom: 2px solid #FF6633;
 }
 
-.second-header nav ul li:nth-child(1){
-    border-bottom: 2px solid skyblue;
-    background-color: #444;
-}
-
-table{
+#result{
     border: 2px solid black;
 }
 
-th, td{
+.main-table th{
+    text-align: center;
+    font-size: 15px;
+}
+
+.main-table td{
     text-align: center;
     font-size: 15px;
 }

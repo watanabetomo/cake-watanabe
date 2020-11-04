@@ -1,5 +1,5 @@
 <?php
-class ProductDetailModel extends AdminModel
+class ProductDetailModel extends Model
 {
     /**
      * product_idでsizeとpriceを取ってくる
