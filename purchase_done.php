@@ -1,6 +1,5 @@
 <?php
 require_once('admin/autoload.php');
-require_once('vendor/autoload.php');
 
 try {
     $cartModel = new CartModel();
@@ -9,36 +8,25 @@ try {
 } catch (PDOException $e) {
     $error['databaseError'] = 'データベースに接続できませんでした';
 }
-
+$name = '渡部';
 try {
-    $transport = new Swift_SmtpTransport(
-        SMTP_HOST,
-        SMTP_PORT,
-        SMTP_PROTOCOL
-    );
-    $transport->setUsername(GMAIL_SITE);
-    $transport->setPassword(GMAIL_APPPASS);
-    $mailer = new Swift_Mailer($transport);
-
-    $message = new Swift_Message(MAIL_TITLE);
-    $message->setFrom(MAIL_FROM);
-    $message->setTo(['chelseano55@gmail.com']);
-
+    mb_language("Japanese");
+    mb_internal_encoding("UTF-8");
 $mailBody = <<<EOT
-<h1>テスト</h1>
+$name様
 EOT;
-
-    $message->setBody($mailBody, 'text/html');
-    $result = $mailer->send($message);
+    $mail = mb_send_mail('t.watanabe@ebacorp.jp', '【洋菓子店カサミンゴー】ご購入商品確認メール', $mailBody, 'From: chelseano55@gmail.com');
 } catch (Exception $e) {
-    $error = "メールの送信に失敗しました";
+    $error['mail'] = "メールの送信に失敗しました";
 }
 
 ?>
 <?php require_once('header.html') ?>
 <main>
     <?php if (isset($error)): ?>
-    <p class="error"><?=$error?></p>
+        <?php foreach($error as $errorMessage): ?>
+            <p class="error"><?=$errorMessage?></p>
+        <?php endforeach;?>
     <?php endif; ?>
     <p class="done-message">購入が完了しました。ご利用ありがとうございました。</p>
 </main>
