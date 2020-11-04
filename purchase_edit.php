@@ -1,16 +1,15 @@
 <?php
 require_once('admin/autoload.php');
 
-$prefectures = ['北海道', '青森県', '岩手県', '宮城県', '秋田県', '山形県', '福島県', '茨城県', '栃木県', '群馬県', '埼玉県', '千葉県', '東京都', '神奈川県', '新潟県', '富山県', '石川県', '福井県', '山梨県', '長野県', '岐阜県', '静岡県', '愛知県', '三重県', '滋賀県', '京都府', '大阪府', '兵庫県', '奈良県', '和歌山県', '鳥取県', '島根県', '岡山県', '広島県', '山口県', '徳島県', '香川県', '愛媛県', '高知県', '福岡県', '佐賀県', '長崎県', '熊本県', '大分県', '宮崎県', '鹿児島県', '沖縄県'];
-
-if (isset($_POST['send'])) {
-    header('Location: purchase_conf.php');
-    exit;
-}
-
 try {
     $paymentModel = new MPaymentModel();
     $payments = $paymentModel->fetchAll();
+    $productDetailModel = new ProductDetailmodel();
+    $productModel = new ProductModel();
+    $cartModel = new CartModel();
+    $cart = $cartModel->fetchAll();
+    $userModel = new UserModel();
+    $user = $userModel->fetchById($_SESSION['userId']);
 } catch (PDOException $e) {
     $error['databaseError'] = 'データベースに接続できませんでした。';
 }
@@ -26,17 +25,18 @@ if (isset($_POST['send'])) {
     } elseif (!preg_match('/^[0-9]{4}$/', $_POST['postal_code2'])) {
         $error['postal_code2'] = '郵便番号下4桁が間違っています。';
     }
+    mb_regex_encoding("UTF-8");
     if ($_POST['city'] == '') {
         $error['city'] = '市区町村が入力されていません。';
-    } elseif (!preg_match('/^\w{1,15}$/', $_POST['city'])) {
+    } elseif (!preg_match('/^[0-9A-Za-zぁ-んァ-ヶー一-龠]{1,15}$/u', $_POST['city'])) {
         $error['city'] = '市区町村が間違っています。';
     }
     if ($_POST['address'] == '') {
         $error['address'] = '番地が入力されていません。';
-    } elseif (!preg_match('/^\w{1,100}$/', $_POST['address'])) {
+    } elseif (!preg_match('/^[0-9A-Za-zぁ-んァ-ヶー一-龠\-]{1,100}$/u', $_POST['address'])) {
         $error['address'] = '番地が間違っています。';
     }
-    if (!preg_match('/^\w{1,100}$/', $_POST['other'])) {
+    if (!preg_match('/^[0-9A-Za-zぁ-んァ-ヶー一-龠\-]{0,100}$/u', $_POST['other'])) {
         $error['other'] = '建物名等が間違っています。';
     }
     if ($_POST['tel1'] == '') {
@@ -56,17 +56,18 @@ if (isset($_POST['send'])) {
     }
     if ($_POST['name_kana'] == '') {
         $error['name_kana'] = 'フリガナが入力されていません。';
-    } elseif (!preg_match('/^\w{1,20}$/', $_POST['name_kana'])) {
+    } elseif (!preg_match('/^[A-Za-zぁ-んァ-ヶー一-龠]{1,20}$/u', $_POST['name_kana'])) {
         $error['name_kana'] = 'フリガナが間違っています。';
     }
     if ($_POST['name'] == '') {
         $error['name'] = '名前が入力されていません。';
-    } elseif (!preg_match('/^\w{1,15}$/', $_POST['name'])) {
+    } elseif (!preg_match('/^[A-Za-zぁ-んァ-ヶー一-龠]{1,15}$/u', $_POST['name'])) {
         $error['name'] = '名前が間違っています。';
     }
     if (!isset($error)) {
         $_SESSION['postal_code1'] = $_POST['postal_code1'];
         $_SESSION['postal_code2'] = $_POST['postal_code2'];
+        $_SESSION['pref'] = $_POST['pref'];
         $_SESSION['city'] = $_POST['city'];
         $_SESSION['address'] = $_POST['address'];
         $_SESSION['other'] = $_POST['other'];
@@ -76,6 +77,7 @@ if (isset($_POST['send'])) {
         $_SESSION['name_kana'] = $_POST['name_kana'];
         $_SESSION['name'] = $_POST['name'];
         $_SESSION['payment'] = $_POST['payment'];
+        $_SESSION['token'] = $_POST['token'];
         header('Location: purchase_conf.php');
         exit;
     }
@@ -86,69 +88,83 @@ if (isset($_POST['send'])) {
 <?php require_once('header.html') ?>
 <main>
     <p class="contents-title">確認</p>
-    <table class="table table-center">
+    <table class="table table-bordered table-center">
         <tr>
             <th>商品画像</th>
             <th>商品名</th>
             <th>個数</th>
+            <th>サイズ</th>
             <th>単価</th>
             <th>税抜価格</th>
         </tr>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
+        <?php foreach($cart as $onCart):?>
+            <?php
+                    $productDetail = $productDetailModel->fetchById($onCart['product_detail_id']);
+                    $product = $productModel->fetchSingleDetail($productDetail['product_id']);
+            ?>
+            <tr>
+                <td><img src="<?=IMG_PATH . $product['img']?>" alt="<?=$product['img']?>"></td>
+                <td><?=$product['name']?></td>
+                <td><?=$onCart['num']?></td>
+                <td><?=$productDetail['size']?></td>
+                <td><?=number_format($productDetail['price'])?></td>
+                <td><?=number_format($onCart['num'] * $productDetail['price'])?></td>
+            </tr>
+            <?php
+                $totalPrice += $productDetail['price'];
+                $totalCount += $onCart['num'];
+            ?>
+        <?php endforeach;?>
         <tr>
             <td colspan="2">小計</td>
+            <td><?=$totalCount?></td>
             <td></td>
             <td></td>
-            <td></td>
+            <td><?=number_format($totalPrice)?></td>
         </tr>
         <tr>
-            <td colspan="4">消費税</td>
-            <td></td>
+            <td colspan="5">消費税</td>
+            <td><?=number_format($totalPrice * TAX)?></td>
         </tr>
         <tr>
-            <td colspan="4">送料（税込み）</td>
-            <td></td>
+            <td colspan="5">送料（税込み）</td>
+            <td><?=($totalPrice * TAX > 10000) ? 0 : number_format(1000) ;?></td>
         </tr>
         <tr>
-            <td colspan="4">総合計</td>
-            <td></td>
+            <td colspan="5">総合計</td>
+            <td><?=number_format($totalPrice * (1 + TAX))?></td>
         </tr>
     </table>
     <form action="" method="post">
+        <input type="hidden" name="token" value="<?=getToken()?>">
         <p class="contents-title">送付先情報<span style="font-size: 20px; margin-left: 10px;">※登録住所以外へ送る場合は変更してください</span></p>
-        <input type="radio" name="sendFor" id="sendFor1" value="1" checked>変更しない
-        <input type="radio" name="sendFor" id="sendFor2" value="2">変更する
+        <input type="radio" name="sendFor" id="sendFor2" value="2" checked>変更する
+        <input type="radio" name="sendFor" id="sendFor1" value="1">変更しない
         <table class="table send-for">
             <tr>
                 <th>郵便番号</th>
-                <td><input type="text" name="postal_code1"> - <input type="text" name="postal_code2"><?=isset($error['postal_code1']) ? $error['postal_code1'] : '';?><?=isset($error['postal_code2']) ? $error['postal_code2'] : '';?></td>
+                <td><input type="text" name="postal_code1" value="<?=$user['postal_code1']?>"> - <input type="text" name="postal_code2" value="<?=$user['postal_code2']?>"><span class="error"><?=isset($error['postal_code1']) ? $error['postal_code1'] : '';?><?=isset($error['postal_code2']) ? $error['postal_code2'] : '';?></span></td>
             </tr>
             <tr>
                 <th>住所</th>
                 <td>
-                    <p><select name="pref"> <?php foreach ($prefectures as $prefecture) : ?> <option value="<?= $prefecture ?>"><?= $prefecture ?></option> <?php endforeach; ?> </select></p>
-                    <p><input type="text" name="city"><?=isset($error['city']) ? $error['city'] : '';?></p>
-                    <p><input type="text" name="address"><?=isset($error['address']) ? $error['address'] : '';?></p>
-                    <p><input type="text" name="other"><?=isset($error['other']) ? $error['other'] : '';?></p>
+                    <p><select name="pref"> <?php foreach ($prefectures as $prefecture) : ?> <option value="<?= $prefecture ?>" <?=($prefecture == $prefectures[$user['pref']]) ? 'selected' : ''?>><?= $prefecture ?></option> <?php endforeach; ?> </select></p>
+                    <p><input type="text" name="city" value="<?=$user['city']?>"><span class="error"><?=isset($error['city']) ? $error['city'] : '';?></span></p>
+                    <p><input type="text" name="address" value='<?=$user['address']?>'><span class="error"><?=isset($error['address']) ? $error['address'] : '';?></span></p>
+                    <p><input type="text" name="other" value='<?=$user['other']?>'><span class="error"><?=isset($error['other']) ? $error['other'] : '';?></span></p>
                 </td>
             </tr>
             <tr>
                 <th>電話番号</th>
                 <td>
-                    <p><input type="text" name="tel1"> - <input type="text" name="tel2"> - <input type="text" name="tel3"><?=isset($error['tel1']) ? $error['tel1'] : '';?><?=isset($error['tel2']) ? $error['tel2'] : '';?><?=isset($error['tel3']) ? $error['tel3'] : '';?></p>
+                    <p><input type="text" name="tel1" value="<?=$user['tel1']?>"> - <input type="text" name="tel2" value="<?=$user['tel2']?>"> - <input type="text" name="tel3"  value="<?=$user['tel3']?>"><span class="error"><?=isset($error['tel1']) ? $error['tel1'] : '';?><?=isset($error['tel2']) ? $error['tel2'] : '';?><?=isset($error['tel3']) ? $error['tel3'] : '';?></span></p>
                 </td>
             </tr>
             <tr>
                 <th>お名前</th>
                 <td>
-                    <p><input type="text" name="name_kana"><?=isset($error['name_kana']) ? $error['name_kana'] : '';?></p>
-                    <p><input type="text" name="name"><?=isset($error['name']) ? $error['name'] : '';?></p>
+                    <p><input type="text" name="name_kana" value="<?=$user['name_kana']?>"><span class="error"><?=isset($error['name_kana']) ? $error['name_kana'] : '';?></span></p>
+                    <p><input type="text" name="name" value="<?=$user['name']?>"><span class="error"><?=isset($error['name']) ? $error['name'] : '';?></span></p>
                 </td>
             </tr>
         </table>
@@ -156,30 +172,33 @@ if (isset($_POST['send'])) {
         <table class="table table-left">
             <tr>
                 <th>郵便番号</th>
-                <td></td>
+                <td><?=$user['postal_code1']?> - <?=$user['postal_code2']?></td>
             </tr>
             <tr>
                 <th>住所</th>
-                <td></td>
+                <td><?=$prefectures[$user['pref']] . $user['city'] . $user['address'] . $user['other']?></td>
             </tr>
             <tr>
                 <th>電話番号</th>
-                <td></td>
+                <td><?=$user['tel1']?> - <?=$user['tel2']?> - <?=$user['tel3']?></td>
             </tr>
             <tr>
                 <th>メールアドレス</th>
-                <td></td>
+                <td><?=$user['mail']?></td>
             </tr>
             <tr>
                 <th>お名前</th>
-                <td></td>
+                <td>
+                    <p><?=$user['name_kana']?></p>
+                    <p><?=$user['name']?></p>
+                </td>
             </tr>
         </table>
         <p class="contents-title">お支払方法</p>
         <?php if (isset($error['databaseError'])) : ?>
             <p class="error"><?= $error['databaseError'] ?></p>
         <?php endif; ?>
-        <table class="table">
+        <table class="table table-left">
             <tr>
                 <th>支払方法</th>
                 <td><?php foreach ($payments as $payment) : ?> <input type="radio" name="payment" class="radio" value="<?= $payment['id'] ?>"><?= $payment['name'] ?> <?php endforeach; ?></td>

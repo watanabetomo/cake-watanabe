@@ -10,7 +10,7 @@ if (isset($_POST['send'])) {
             $adminUser = $adminUserModel->fetchAdminUser($_POST['id']);
             if (!empty($adminUser) and password_verify($_POST['pass'], $adminUser['login_pass'])) {
                 session_regenerate_id(true);
-                $_SESSION['authenticated'] = password_hash($_POST['id'] . $_POST['pass'], PASSWORD_DEFAULT);
+                $_SESSION['admin_authenticated'] = password_hash($_POST['id'] . $_POST['pass'], PASSWORD_DEFAULT);
                 $_SESSION['userName'] = $adminUser['name'];
                 $_SESSION['login_id'] = $adminUser['id'];
                 date_default_timezone_set(' Asia/Tokyo ');

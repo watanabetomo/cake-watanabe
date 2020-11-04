@@ -74,3 +74,7 @@ CREATE TABLE m_payment(
 );
 
 INSERT INTO m_payment VALUES('各種クレジットカード決済'),('銀行振込'),('代金引換');
+
+
+INSERT INTO user (login_id, login_pass, name, name_kana, birth_year, birth_month, birth_day, gender, mail, tel1, tel2, tel3, postal_code1, postal_code2, pref, city, address, other, memo, status) VALUES
+('watanabe', 'tomoya1226', '渡部智哉', 'ワタナベトモヤ', '1995', '12', '26', 1, 't.watanabe@ebacorp.jp', '090', '7813', '5525', '277', '0088', 7, '柏市', 'ひばりが丘5-14', NULL, NULL, 1);

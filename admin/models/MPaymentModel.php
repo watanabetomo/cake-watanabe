@@ -12,4 +12,12 @@ class MPaymentModel extends Model
         $stmt = $this->dbh->query('SELECT * FROM m_payment');
         return $stmt->fetchAll();
     }
+
+    public function fetchByid($id)
+    {
+        $this->connect();
+        $stmt = $this->dbh->prepare('SELECT * FROM m_payment WHERE id = ?');
+        $stmt->execute([$id]);
+        return $stmt->fetch();
+    }
 }

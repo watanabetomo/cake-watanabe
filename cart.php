@@ -3,10 +3,10 @@ require_once('admin/autoload.php');
 
 $_SESSION['userName'] = 'watanabe';
 $_SESSION['userId'] = 1;
-// if (!isset($_SESSION['authenticated'])) {
-//     header('Location: login.php');
-//     exit;
-// }
+if (!isset($_SESSION['authenticated'])) {
+    header('Location: login.php');
+    exit;
+}
 
 $totalPrice=0;
 $countProduct=0;
@@ -31,9 +31,6 @@ if (isset($_POST['es_submit'])) {
     } catch (PDOException $e){
         $error = 'データベースに接続できませんでした。';
     }
-} elseif (isset($_POST['purchase'])){
-    header('Location: purchase_edit.php');
-    exit;
 } elseif (isset($_POST['continue'])) {
     header('Location: index.php');
     exit;
@@ -68,24 +65,24 @@ foreach($cart as $onCart){
         <div class="box1">
             <div class="card">
                 <div class="card-body">
-                    <form action="" method="post">
+                    <form action="purchase_edit.php" method="post">
                         <p class="purchase"><input type="submit" name="purchase" value="レジに進む" class="btn btn-success"></p>
+                        <h3 class="sub-title">合計金額（税込）</h3>
+                        <table class="table table-right">
+                            <tr>
+                                <th>小計</th>
+                                <td><?=number_format($totalPrice)?></td>
+                            </tr>
+                            <tr>
+                                <th>商品点数</th>
+                                <td><?=$countProduct?></td>
+                            </tr>
+                            <tr>
+                                <th>送料</th>
+                                <td><?=($totalPrice > 10000) ? 0 : number_format(1000) ;?></td>
+                            </tr>
+                        </table>
                     </form>
-                    <h3 class="sub-title">合計金額（税込）</h3>
-                    <table class="table table-right">
-                        <tr>
-                            <th>小計</th>
-                            <td><?=number_format($totalPrice)?></td>
-                        </tr>
-                        <tr>
-                            <th>商品点数</th>
-                            <td><?=$countProduct?></td>
-                        </tr>
-                        <tr>
-                            <th>送料</th>
-                            <td><?=($totalPrice > 10000) ? 0 : number_format(1000) ;?></td>
-                        </tr>
-                    </table>
                 </div>
             </div>
         </div>
