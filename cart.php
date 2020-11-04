@@ -66,7 +66,9 @@ foreach($cart as $onCart){
             <div class="card">
                 <div class="card-body">
                     <form action="purchase_edit.php" method="post">
+                        <?php if(!empty($cart)):?>
                         <p class="purchase"><input type="submit" name="purchase" value="レジに進む" class="btn btn-success"></p>
+                        <?php endif;?>
                         <h3 class="sub-title">合計金額（税込）</h3>
                         <table class="table table-right">
                             <tr>
