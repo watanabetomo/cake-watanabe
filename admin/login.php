@@ -13,8 +13,7 @@ if (isset($_POST['send'])) {
                 $_SESSION['admin_authenticated'] = password_hash($_POST['id'] . $_POST['pass'], PASSWORD_DEFAULT);
                 $_SESSION['userName'] = $adminUser['name'];
                 $_SESSION['login_id'] = $adminUser['id'];
-                date_default_timezone_set(' Asia/Tokyo ');
-                $now = (new DateTime())->format('H');
+                $now = intval(date('H'));
                 if ($now > 4 and $now <= 11) {
                     $_SESSION['now'] = 'おはようございます。';
                 } elseif ($now > 11 and $now <= 17) {
