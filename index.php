@@ -1,5 +1,5 @@
 <?php
-require_once('admin/autoload.php');
+require_once('autoload.php');
 
 try {
     $productCategoryModel = new ProductCategoryModel();
