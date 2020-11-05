@@ -113,7 +113,7 @@ $mailBody .= <<<EOT
 --------------------------------------
 商品ご到着まで。今しばらくお待ちください。
 EOT;
-        $mail = mb_send_mail('t.watanabe@ebacorp.jp', '【洋菓子店カサミンゴー】ご購入商品確認メール', $mailBody, 'From: chelseano55@gmail.com');
+        $mail = mb_send_mail('t.watanabe@ebacorp.jp', '【洋菓子店カサミンゴー】ご購入商品確認メール', $mailBody, 'From: 洋菓子店カサミンゴー');
         unset($_SESSION['postal_code1']);
         unset($_SESSION['postal_code2']);
         unset($_SESSION['pref']);
