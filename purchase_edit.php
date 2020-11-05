@@ -120,7 +120,7 @@ if (isset($_POST['send'])) {
                 $totalCount += $onCart['num'];
             ?>
         <?php endforeach;?>
-        <?php $total = ($totalPrice * (1 + TAX) > 10000) ? 0 : 1000?>
+        <?php $shipping = ($totalPrice * (1 + TAX) > 10000) ? 0 : 1000?>
         <tr>
             <td colspan="2">小計</td>
             <td><?=$totalCount?></td>
@@ -130,22 +130,22 @@ if (isset($_POST['send'])) {
         </tr>
         <tr>
             <td colspan="5">消費税</td>
-            <td><?=number_format($totalPrice * TAX)?></td>
+            <td><?=number_format(floor($totalPrice * TAX))?></td>
         </tr>
         <tr>
             <td colspan="5">送料（税込み）</td>
-            <td><?=number_format($total)?></td>
+            <td><?=number_format($shipping)?></td>
         </tr>
         <tr>
             <td colspan="5">総合計</td>
-            <td><?=number_format($totalPrice * (1 + TAX) + $total)?></td>
+            <td><?=number_format(floor($totalPrice * (1 + TAX) + $shipping))?></td>
         </tr>
     </table>
     <form action="" method="post">
         <input type="hidden" name="token" value="<?=getToken()?>">
-        <input type="hidden" name="sub_price" value="<?=$totalPrice?>">
+        <input type="hidden" name="sub_price" value="<?=floor($totalPrice)?>">
         <input type="hidden" name="shipping" value="<?=($totalPrice * (1 + TAX) > 10000) ? 0 : 1000?>">
-        <input type="hidden" name="total_price" value="<?=$totalPrice * (1 + TAX) + $total?>">
+        <input type="hidden" name="total_price" value="<?=floor($totalPrice * (1 + TAX) + $shipping)?>">
         <input type="hidden" name="tax" value="<?=TAX?>">
         <p class="contents-title">送付先情報<span style="font-size: 20px; margin-left: 10px;">※登録住所以外へ送る場合は変更してください</span></p>
         <input type="radio" name="sendFor" id="sendFor2" value="2" checked>変更する

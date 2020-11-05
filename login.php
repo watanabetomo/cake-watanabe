@@ -1,6 +1,11 @@
 <?php
 require_once('admin/autoload.php');
 
+if (isset($_SESSION['authenticated'])) {
+    header('Location: cart.php');
+    exit;
+}
+
 if (isset($_POST['login'])) {
     if ($_POST['id'] === '' or $_POST['pass'] === '') {
         $error = 'IDかパスワードが入力されていません';

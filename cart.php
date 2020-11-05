@@ -1,8 +1,6 @@
 <?php
 require_once('admin/autoload.php');
 
-$_SESSION['userName'] = 'watanabe';
-$_SESSION['userId'] = 1;
 if (!isset($_SESSION['authenticated'])) {
     header('Location: login.php');
     exit;
@@ -15,51 +13,40 @@ try {
     $cartModel = new CartModel();
     $productModel = new ProductModel();
     $productDetailModel = new ProductDetailModel();
-} catch (PDOException $e) {
-    $error = 'データベースに接続できませんでした。';
-}
-
-if (isset($_POST['es_submit'])) {
-    try {
+    if (isset($_POST['es_submit'])) {
         $productDetail = $productDetailModel->fetchById($_POST['detail_id']);
-        try {
-            $product = $productModel->fetchById($productDetail['product_id']);
-            $cartModel->addToCart($_SESSION['userId'], $_POST['detail_id']);
-        } catch (PDOException $e){
-            $error = 'データベースに接続できませんでした。';
+        $product = $productModel->fetchById($productDetail['product_id']);
+        $cartModel->addToCart($_SESSION['userId'], $_POST['detail_id']);
+    } elseif (isset($_POST['continue'])) {
+        header('Location: index.php');
+        exit;
+    } elseif (isset($_POST['delete'])) {
+        $cartModel->delete($_POST['deleteId']);
+    } elseif (isset($_POST['change'])) {
+        if ($_POST['num'] > 0) {
+            $cartModel->changeNum($_POST['num'], $_POST['id']);
+        } else {
+            $error['num'] = "商品点数は1以上の数値を入力してください";
         }
-    } catch (PDOException $e){
-        $error = 'データベースに接続できませんでした。';
+    } elseif (isset($_POST['clear'])) {
+        $cartModel->truncateCart();
     }
-} elseif (isset($_POST['continue'])) {
-    header('Location: index.php');
-    exit;
-} elseif (isset($_POST['delete'])) {
-    $cartModel->delete($_POST['deleteId']);
-    header('Location: cart.php');
-    exit;
-} elseif (isset($_POST['change'])) {
-    $cartModel->changeNum($_POST['num'], $_POST['id']);
-    header('Location: cart.php');
-    exit;
-} elseif (isset($_POST['clear'])) {
-    $cartModel->truncateCart();
-    header('Location: cart.php');
-    exit;
+    $cart = $cartModel->fetchAll();
+    foreach($cart as $onCart){
+        $productDetail = $productDetailModel->fetchById($onCart['product_detail_id']);
+        $countProduct += $onCart['num'];
+        $totalPrice += $onCart['num'] * $productDetail['price'] * (TAX + 1);
+    }
+} catch (PDOException $e) {
+    $error['database'] = 'データベースに接続できませんでした。';
 }
 
-$cart = $cartModel->fetchAll();
-foreach($cart as $onCart){
-    $productDetail = $productDetailModel->fetchById($onCart['product_detail_id']);
-    $countProduct += $onCart['num'];
-    $totalPrice += $onCart['num'] * $productDetail['price'] * (TAX + 1);
-}
 
 ?>
 <?php require_once('header.html')?>
 <main>
-    <?php if (isset($error)): ?>
-        <p class="error"><?=$error?></p>
+    <?php if (isset($error['database'])): ?>
+        <p class="error"><?=$error['database']?></p>
     <?php endif; ?>
     <div class="wrapper">
         <div class="box1">
@@ -73,15 +60,15 @@ foreach($cart as $onCart){
                         <table class="table table-right">
                             <tr>
                                 <th>小計</th>
-                                <td><?=number_format($totalPrice)?></td>
+                                <td><?=!empty($cart) ? number_format(floor($totalPrice)) : ''?></td>
                             </tr>
                             <tr>
                                 <th>商品点数</th>
-                                <td><?=$countProduct?></td>
+                                <td><?=!empty($cart) ? $countProduct : ''?></td>
                             </tr>
                             <tr>
                                 <th>送料</th>
-                                <td><?=($totalPrice * (1 + TAX) > 10000) ? 0 : number_format(1000) ;?></td>
+                                <td><?=!empty($cart) ? (($totalPrice > 10000) ? 0 : number_format(1000)) : ''?></td>
                             </tr>
                         </table>
                     </form>
@@ -90,6 +77,9 @@ foreach($cart as $onCart){
         </div>
         <div class="box2">
             <p class="contents-title">カート</p>
+            <?php if (isset($error['num'])):?>
+                <p class="error"><?=$error['num']?></p>
+            <?php endif;?>
             <?php if (!empty($cart)) :?>
             <table class="table-bordered table-center cart">
                 <tr>
