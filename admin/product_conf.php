@@ -1,13 +1,13 @@
 <?php
 require_once('autoload.php');
 
-if ((isset($_POST['token']) ? $_POST['token'] : '') != getToken()) {
-    header('Location: product_edit.php');
+if (!isset($_SESSION['admin_authenticated'])) {
+    header('Location: login.php');
     exit;
 }
 
-if (!isset($_SESSION['admin_authenticated'])) {
-    header('Location: login.php');
+if ((isset($_POST['token']) ? $_POST['token'] : '') != getToken()) {
+    header('Location: product_edit.php');
     exit;
 }
 
