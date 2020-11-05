@@ -1,6 +1,11 @@
 <?php
 require_once('admin/autoload.php');
 
+if (!isset($_SESSION['authenticated'])) {
+    header('Location: login.php');
+    exit;
+}
+
 if ((isset($_SESSION['token']) ? $_SESSION['token'] : '') != getToken()) {
     header('Location: purchase_edit.php');
     exit;
@@ -18,7 +23,7 @@ try {
     $mPaymentModel = new MPaymentModel();
     $payment = $mPaymentModel->fetchByid($_SESSION['payment']);
 } catch (PDOException $e) {
-    $error['databaseError'] = 'データベースに接続できませんでした。';
+    $error['database'] = 'データベースに接続できませんでした。';
 }
 
 if (isset($_POST['send'])) {
@@ -33,6 +38,9 @@ if (isset($_POST['send'])) {
 <?php require_once('header.html') ?>
 <main>
     <p class="contents-title">確認</p>
+    <?php if (isset($error['database'])) : ?>
+        <p class="error"><?= $error['database'] ?></p>
+    <?php endif; ?>
     <table class="table table-bordered table-center">
         <tr>
             <th>商品画像</th>

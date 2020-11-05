@@ -1,6 +1,11 @@
 <?php
 require_once('admin/autoload.php');
 
+if (!isset($_SESSION['authenticated'])) {
+    header('Location: login.php');
+    exit;
+}
+
 try {
     $paymentModel = new MPaymentModel();
     $payments = $paymentModel->fetchAll();
@@ -11,7 +16,7 @@ try {
     $userModel = new UserModel();
     $user = $userModel->fetchById($_SESSION['userId']);
 } catch (PDOException $e) {
-    $error['databaseError'] = 'データベースに接続できませんでした。';
+    $error['database'] = 'データベースに接続できませんでした。';
 }
 
 if (isset($_POST['send'])) {
@@ -93,6 +98,9 @@ if (isset($_POST['send'])) {
 <?php require_once('header.html') ?>
 <main>
     <p class="contents-title">確認</p>
+    <?php if (isset($error['database'])) : ?>
+        <p class="error"><?= $error['database'] ?></p>
+    <?php endif; ?>
     <table class="table table-bordered table-center">
         <tr>
             <th>商品画像</th>
@@ -205,9 +213,6 @@ if (isset($_POST['send'])) {
             </tr>
         </table>
         <p class="contents-title">お支払方法</p>
-        <?php if (isset($error['databaseError'])) : ?>
-            <p class="error"><?= $error['databaseError'] ?></p>
-        <?php endif; ?>
         <table class="table table-left">
             <tr>
                 <th>支払方法</th>

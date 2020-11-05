@@ -10,7 +10,7 @@ try {
     $productCategoryModel = new ProductCategoryModel();
     $productCategories = $productCategoryModel->fetchAllName();
 } catch (PDOException $e) {
-    $error['databaseError'] = 'データベースに接続できませんでした';
+    $error['database'] = 'データベースに接続できませんでした';
 }
 
 if (isset($_GET['id'])) {
@@ -34,7 +34,7 @@ if (isset($_POST['upload'])) {
                     $productModel->imgUpload($_GET[id], $_FILES['img']['name']);
                     header('Location: product_edit.php?id=' . $_GET['id']);
                 } catch (PDOException $e) {
-                    $error['databaseError'] = '画像のアップロードに失敗しました';
+                    $error['database'] = '画像のアップロードに失敗しました';
                 }
             }
             exec('sudo chmod 0755 ../' . IMG_PATH);
@@ -51,7 +51,7 @@ if (isset($_POST['upload'])) {
 <link rel="stylesheet" href="../css/admin_product_list.css">
 <main>
     <?php getPage()?>
-    <p class="error"><?=isset($error['databaseError']) ? $error['databaseError'] : ''?></p>
+    <p class="error"><?=isset($error['database']) ? $error['database'] : ''?></p>
     <form action="product_conf.php<?=isset($_GET['new']) ? '?new=true' : ''?><?=isset($_GET['id']) ? '?id=' . $_GET['id'] : ''?>" method="post">
         <input type="hidden" name="token" value="<?=getToken()?>">
         <table border="1">

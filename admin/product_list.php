@@ -31,7 +31,7 @@ try {
         $productList = $productModel->fetchAllData();
     }
 } catch (PDOException $e) {
-    $error['databaseError'] = 'データベースに接続できませんでした';
+    $error['database'] = 'データベースに接続できませんでした';
 }
 
 ?>
@@ -40,7 +40,7 @@ try {
 <link rel="stylesheet" href="../css/admin_product_list.css">
 <main>
     <?php getPage() ?>
-    <?=isset($error['databeseError']) ? $error['databaseError'] : '';?>
+    <?=isset($error['databeseError']) ? $error['database'] : '';?>
     <form action="" method="post">
         <p class="search"><input type="text" name="keyword"> <input type="submit" name="search" value="絞り込む"> <input type="submit" name="all" value="すべて表示"></p>
     </form>

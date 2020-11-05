@@ -12,7 +12,7 @@ try {
     $productModel = new ProductModel();
     $productList = $productModel->fetchAllData();
 } catch (PDOException $e) {
-    $error['databaseError'] = 'データベースに接続できませんでした';
+    $error['database'] = 'データベースに接続できませんでした';
 }
 
 if (isset($_POST['delete'])) {
@@ -20,7 +20,7 @@ if (isset($_POST['delete'])) {
         $productModel->delete($_POST['id']);
         header('Location: product_list.php');
     }catch(PDOException $e){
-        $error['databaseError'] = $e;
+        $error['database'] = $e;
     }
 }
 ?>
@@ -31,7 +31,7 @@ if (isset($_POST['delete'])) {
 <main>
     <?php require_once('secondadmin_header.html') ?>
     <?php getPage() ?>
-    <?=isset($error['databeseError']) ? $error['databaseError'] : '';?>
+    <?=isset($error['databeseError']) ? $error['database'] : '';?>
     <div class="search">
         <input type="text" id="search">
         <input type="button" value="絞り込む" id="button">

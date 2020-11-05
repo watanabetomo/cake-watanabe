@@ -27,10 +27,10 @@ if (isset($_POST['register'])) {
                     header('Location: product_done.php');
                     exit;
                 } catch (Exception $e) {
-                    $error['databaseError'] = '商品詳細の登録に失敗しました';
+                    $error['database'] = '商品詳細の登録に失敗しました';
                 }
             } catch (Exception $e) {
-                $error['databaseError'] = '商品情報の登録に失敗しました';
+                $error['database'] = '商品情報の登録に失敗しました';
             }
         } else {
             try {
@@ -42,14 +42,14 @@ if (isset($_POST['register'])) {
                     header('Location: product_done.php');
                     exit;
                 } catch (Exception $e) {
-                    $error['databaseError'] = '商品詳細の更新に失敗しました';
+                    $error['database'] = '商品詳細の更新に失敗しました';
                 }
             } catch (Exception $e) {
-                $error['databaseError'] = '商品情報の更新に失敗しました';
+                $error['database'] = '商品情報の更新に失敗しました';
             }
         }
     } catch (PDOException $e) {
-        $error['databaseError'] = 'データベースに接続できませんでした';
+        $error['database'] = 'データベースに接続できませんでした';
     }
 }
 ?>
@@ -58,7 +58,7 @@ if (isset($_POST['register'])) {
 <link rel="stylesheet" href="../css/admin_product_list.css">
 <main>
     <?php getPage() ?>
-    <p class="error"><?=isset($error['databaseError']) ? $error['databaseError'] : '';?></p>
+    <p class="error"><?=isset($error['database']) ? $error['database'] : '';?></p>
     <form action="product_conf.php<?=isset($_GET['new']) ? '?new=true' : ''?><?=isset($_GET['id']) ? '?id=' . $_GET['id'] : ''?>" method="post">
         <input type="hidden" name="token" value="<?=getToken()?>">
         <input type="hidden" name="name" value="<?=$_POST['name']?>">

@@ -1,6 +1,11 @@
 <?php
 require_once('admin/autoload.php');
 
+if (!isset($_SESSION['authenticated'])) {
+    header('Location: login.php');
+    exit;
+}
+
 if ((isset($_SESSION['token']) ? $_SESSION['token'] : '') != getToken()) {
     header('Location: purchase_edit.php');
     exit;
@@ -121,11 +126,11 @@ EOT;
         unset($_SESSION['name_kana']);
         unset($_SESSION['name']);
         unset($_SESSION['payment']);
-        unset($_SESSION['token']);
         unset($_SESSION['sub_price']);
         unset($_SESSION['shipping']);
         unset($_SESSION['total_price']);
         unset($_SESSION['tax']);
+        unset($_SESSION['token']);
     } catch (Exception $e) {
         $error = "メールの送信に失敗しました";
     }
