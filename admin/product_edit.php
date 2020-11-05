@@ -8,42 +8,35 @@ if (!isset($_SESSION['admin_authenticated'])) {
 
 try {
     $productCategoryModel = new ProductCategoryModel();
+    $productModel = new ProductModel();
     $productCategories = $productCategoryModel->fetchAllName();
-} catch (PDOException $e) {
-    $error['database'] = 'データベースに接続できませんでした';
-}
-
-if (isset($_GET['id'])) {
-    try {
-        $productModel = new ProductModel();
+    if (isset($_GET['id'])) {
         $productData = $productModel->fetchById($_GET['id']);
-    } catch (PDOException $e) {
-        $error['datebaseError'] = 'データベースに接続できませんでした';
     }
-}
-
-if (isset($_POST['upload'])) {
-    if (!empty($_FILES['img'])) {
-        if ($_FILES['img']['error'] == UPLOAD_ERR_OK) {
-            exec('sudo chmod 0777 ../' . IMG_PATH);
-            if (!move_uploaded_file($_FILES['img']['tmp_name'], '../' . IMG_PATH . mb_convert_encoding($_FILES['img']['name'], 'cp932', 'utf8'))) {
-                $error['fileUploadError'] = 'ファイルの移動に失敗しました';
-            } else {
-                try {
-                    $productModel = new ProductModel();
-                    $productModel->imgUpload($_GET[id], $_FILES['img']['name']);
-                    header('Location: product_edit.php?id=' . $_GET['id']);
-                } catch (PDOException $e) {
-                    $error['database'] = '画像のアップロードに失敗しました';
+    if (isset($_POST['upload'])) {
+        if (!empty($_FILES['img'])) {
+            if ($_FILES['img']['error'] == UPLOAD_ERR_OK) {
+                exec('sudo chmod 0777 ../' . IMG_PATH);
+                if (!move_uploaded_file($_FILES['img']['tmp_name'], '../' . IMG_PATH . mb_convert_encoding($_FILES['img']['name'], 'cp932', 'utf8'))) {
+                    $error['fileUploadError'] = 'ファイルの移動に失敗しました';
+                } else {
+                    try {
+                        $productModel->imgUpload($_GET[id], $_FILES['img']['name']);
+                        header('Location: product_edit.php?id=' . $_GET['id']);
+                    } catch (PDOException $e) {
+                        $error['database'] = '画像のアップロードに失敗しました';
+                    }
                 }
+                exec('sudo chmod 0755 ../' . IMG_PATH);
+            } elseif ($_FILES['img']['error'] == UPLOAD_ERR_NO_FILE) {
+                $error['fileUploadError'] = 'ファイルがアップロードされませんでした';
+            } else {
+                $error['fileUploadError'] = 'ファイルのアップロードに失敗しました';
             }
-            exec('sudo chmod 0755 ../' . IMG_PATH);
-        } elseif ($_FILES['img']['error'] == UPLOAD_ERR_NO_FILE) {
-            $error['fileUploadError'] = 'ファイルがアップロードされませんでした';
-        } else {
-            $error['fileUploadError'] = 'ファイルのアップロードに失敗しました';
         }
     }
+} catch (PDOException $e) {
+    $error['database'] = 'データベースに接続できませんでした';
 }
 ?>
 
