@@ -47,6 +47,12 @@ class ProductDetailModel extends Model
         $stmt->execute([$size, $price, $id, $turn]);
     }
 
+    /**
+     * idをもとに商品詳細を取得
+     *
+     * @param int $id
+     * @return array 商品詳細
+     */
     public function fetchById($id)
     {
         $this->connect();

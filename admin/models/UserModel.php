@@ -1,6 +1,12 @@
 <?php
 class UserModel extends Model
 {
+    /**
+     * login_idをもとにユーザデータを取得する
+     *
+     * @param int $id
+     * @return array ユーザデータ
+     */
     public function fetchByLoginId($id)
     {
         $this->connect();
@@ -9,6 +15,12 @@ class UserModel extends Model
         return $stmt->fetch();
     }
 
+    /**
+     * idをもとにユーザデータを取得する
+     *
+     * @param int $id
+     * @return array ユーザデータ
+     */
     public function fetchById($id)
     {
         $this->connect();
@@ -17,6 +29,12 @@ class UserModel extends Model
         return $stmt->fetch();
     }
 
+    /**
+     * last_login_dateを更新する
+     *
+     * @param int $id
+     * @return void
+     */
     public function updateLoginDate($id)
     {
         $this->connect();

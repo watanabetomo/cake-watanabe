@@ -13,6 +13,12 @@ class MPaymentModel extends Model
         return $stmt->fetchAll();
     }
 
+    /**
+     * idをもとに支払方法を取得
+     *
+     * @param int $id
+     * @return void
+     */
     public function fetchByid($id)
     {
         $this->connect();

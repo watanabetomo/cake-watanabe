@@ -13,7 +13,11 @@ class CartModel extends Model{
         $stmt->execute([$userId, $detailId]);
     }
 
-
+    /**
+     * カートの中身を全件取得
+     *
+     * @return array cartの全件
+     */
     public function fetchAll()
     {
         $this->connect();
@@ -21,6 +25,12 @@ class CartModel extends Model{
         return $stmt->fetchAll();
     }
 
+    /**
+     * カートから特定の商品を削除
+     *
+     * @param int $id
+     * @return void
+     */
     public function delete($id)
     {
         $this->connect();
@@ -28,6 +38,13 @@ class CartModel extends Model{
         $stmt->execute([$id]);
     }
 
+    /**
+     * 商品の数を変更
+     *
+     * @param int $num
+     * @param int $id
+     * @return void
+     */
     public function changeNum($num, $id)
     {
         $this->connect();
@@ -35,6 +52,11 @@ class CartModel extends Model{
         $stmt->execute([$num, $id]);
     }
 
+    /**
+     * カートの中を全削除
+     *
+     * @return void
+     */
     public function truncateCart()
     {
         $this->connect();

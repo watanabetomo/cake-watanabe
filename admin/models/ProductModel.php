@@ -15,7 +15,7 @@ class ProductModel extends Model
     }
 
     /**
-     * idをもとにレコードを取得する
+     * idをもとに、productとそれに紐づくproduct_detailのデータすべてを取得する。
      *
      * @param int $id
      * @return array idが一致したレコード一件分
@@ -206,6 +206,12 @@ class ProductModel extends Model
         return $stmt->fetchAll();
     }
 
+    /**
+     * idをもとに一件分の商品情報を取得
+     *
+     * @param int $id
+     * @return array 商品情報
+     */
     public function fetchSingleDetail($id)
     {
         $this->connect();

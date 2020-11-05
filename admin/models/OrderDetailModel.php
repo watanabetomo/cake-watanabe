@@ -1,6 +1,17 @@
 <?php
 class OrderdetailModel extends Model
 {
+    /**
+     * 注文詳細の登録
+     *
+     * @param int $orderId
+     * @param int $detailId
+     * @param String $name
+     * @param int $size
+     * @param int $price
+     * @param int $num
+     * @return void
+     */
     public function registOrderDetail($orderId, $detailId, $name, $size, $price, $num)
     {
         $this->connect();
