@@ -9,7 +9,7 @@ CREATE TABLE user (
     birth_month CHAR(2),
     birth_day CHAR(2),
     gender TINYINT NOT NULL,
-    mail TEXT Not NULL,
+    mail TEXT NOT NULL,
     tel1 VARCHAR(5) NOT NULL,
     tel2 VARCHAR(5) NOT NULL,
     tel3 VARCHAR(5) NOT NULL,
@@ -62,8 +62,9 @@ CREATE TABLE `order` (
 CREATE TABLE order_detail(
     id SERIAL PRIMARY KEY,
     order_id BIGINT(20) UNSIGNED NOT NULL,
-    product_id BIGINT(20) UNSIGNED NOT NULL,
+    product_detail_id BIGINT(20) UNSIGNED NOT NULL,
     name TEXT NOT NULL,
+    size INT UNSIGNED NOT NULL,
     price INT UNSIGNED NOT NULL,
     num INT UNSIGNED NOT NULL
 );
@@ -73,8 +74,8 @@ CREATE TABLE m_payment(
     name TEXT
 );
 
-INSERT INTO m_payment VALUES('各種クレジットカード決済'),('銀行振込'),('代金引換');
+INSERT INTO m_payment(name) VALUES('各種クレジットカード決済'),('銀行振込'),('代金引換');
 
 
-INSERT INTO user (login_id, login_pass, name, name_kana, birth_year, birth_month, birth_day, gender, mail, tel1, tel2, tel3, postal_code1, postal_code2, pref, city, address, other, memo, status) VALUES
-('watanabe', 'tomoya1226', '渡部智哉', 'ワタナベトモヤ', '1995', '12', '26', 1, 't.watanabe@ebacorp.jp', '090', '7813', '5525', '277', '0088', 7, '柏市', 'ひばりが丘5-14', NULL, NULL, 1);
+INSERT INTO user (login_id, login_pass, name, name_kana, birth_year, birth_month, birth_day, gender, mail, tel1, tel2, tel3, postal_code1, postal_code2, pref, city, address, other, memo, status)
+VALUES ('watanabe', 'tomoya1226', '渡部智哉', 'ワタナベトモヤ', '1995', '12', '26', 1, 't.watanabe@ebacorp.jp', '090', '7813', '5525', '277', '0088', 7, '柏市', 'ひばりが丘5-14', NULL, NULL, 1);

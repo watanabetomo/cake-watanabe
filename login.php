@@ -36,7 +36,7 @@ if (isset($_POST['login'])) {
 </head>
 
 <body>
-    <h1>洋菓子店カサミンゴー　会員ログイン</h1>
+    <h1>洋菓子店カサミンゴー 会員ログイン</h1>
     <?php if (isset($error)): ?>
         <p style="color: red;"><?=$error?></p>
     <?php endif; ?>
