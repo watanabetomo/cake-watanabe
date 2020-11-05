@@ -64,7 +64,7 @@ if (isset($_POST['send'])) {
                 <td><?=number_format($onCart['num'] * $productDetail['price'])?></td>
             </tr>
             <?php
-                $totalPrice += $productDetail['price'];
+                $totalPrice += $productDetail['price'] * $onCart['num'];
                 $totalCount += $onCart['num'];
             ?>
         <?php endforeach;?>

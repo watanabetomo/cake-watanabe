@@ -129,7 +129,7 @@ if (isset($_POST['send'])) {
                 <td><?=number_format($onCart['num'] * $productDetail['price'])?></td>
             </tr>
             <?php
-                $totalPrice += $productDetail['price'];
+                $totalPrice += $productDetail['price'] * $onCart['num'];
                 $totalCount += $onCart['num'];
             ?>
         <?php endforeach;?>
@@ -161,8 +161,7 @@ if (isset($_POST['send'])) {
         <input type="hidden" name="total_price" value="<?=floor($totalPrice * (1 + TAX) + $shipping)?>">
         <input type="hidden" name="tax" value="<?=TAX?>">
         <p class="contents-title" id="address">送付先情報<span style="font-size: 20px; margin-left: 10px;">※登録住所以外へ送る場合は変更してください</span></p>
-        <input type="radio" name="sendFor" id="sendFor2" value="2" checked>変更する
-        <input type="radio" name="sendFor" id="sendFor1" value="1">変更しない
+        <p class="toggle-radio"><input type="radio" name="sendFor" id="sendFor2" value="2" checked>変更する <input type="radio" name="sendFor" id="sendFor1" value="1">変更しない</p>
         <table class="table send-for table-left">
             <tr>
                 <th>郵便番号</th>

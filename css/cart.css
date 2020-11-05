@@ -54,6 +54,7 @@ main{
     display: grid;
     grid-template-columns: 1fr 2fr;
     grid-gap: 10px;
+    min-height: 500px;
 }
 
 .box1{
@@ -117,7 +118,6 @@ table{
 
 footer{
     background: black;
-    margin-top: 30px;
     height: 100px;
 }
 
@@ -145,4 +145,8 @@ footer{
 
 .error{
     color: red;
+}
+
+.toggle-radio{
+    margin-left: 20px;
 }
