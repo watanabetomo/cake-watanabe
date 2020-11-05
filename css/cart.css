@@ -134,7 +134,9 @@ footer{
 }
 
 .done-message{
-    margin-top: 100px;
+    padding-top: 100px;
+    text-align: center;
+    font-size: 20px;
 }
 
 .radio{
@@ -143,9 +145,4 @@ footer{
 
 .error{
     color: red;
-}
-
-.done-message{
-    text-align: center;
-    font-size: 20px;
 }
