@@ -52,8 +52,8 @@ if (isset($_POST['send'])) {
         </tr>
         <?php foreach($cart as $onCart):?>
             <?php
-                    $productDetail = $productDetailModel->fetchById($onCart['product_detail_id']);
-                    $product = $productModel->fetchSingleDetail($productDetail['product_id']);
+                $productDetail = $productDetailModel->fetchById($onCart['product_detail_id']);
+                $product = $productModel->fetchSingleDetail($productDetail['product_id']);
             ?>
             <tr>
                 <td><img src="<?=IMG_PATH . $product['img']?>" alt="<?=$product['img']?>"></td>
