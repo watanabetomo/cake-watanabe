@@ -102,7 +102,6 @@ class ProductModel extends Model
         $this->connect();
         $stmt = $this->dbh->prepare('UPDATE product SET img = ? WHERE id = ?');
         $stmt->execute([$img, $id]);
-        $this->dbh->commit();
     }
 
     /**
