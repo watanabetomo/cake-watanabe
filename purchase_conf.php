@@ -39,7 +39,7 @@ if (isset($_POST['send'])) {
 <main>
     <p class="contents-title">確認</p>
     <?php if (isset($error['database'])) : ?>
-        <p class="error"><?= $error['database'] ?></p>
+        <p class="error"><?=$error['database']?></p>
     <?php endif; ?>
     <table class="table table-bordered table-center">
         <tr>
