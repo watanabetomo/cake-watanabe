@@ -13,10 +13,9 @@ if (isset($_POST['send'])) {
                 $_SESSION['admin_authenticated'] = password_hash($_POST['id'] . $_POST['pass'], PASSWORD_DEFAULT);
                 $_SESSION['userName'] = $adminUser['name'];
                 $_SESSION['login_id'] = $adminUser['id'];
-                $now = intval(date('H'));
-                if ($now > 4 and $now <= 11) {
+                if (intval(date('H')) > 4 and intval(date('H')) <= 11) {
                     $_SESSION['now'] = 'おはようございます。';
-                } elseif ($now > 11 and $now <= 17) {
+                } elseif (intval(date('H')) > 11 and intval(date('H')) <= 17) {
                     $_SESSION['now'] = 'こんにちは。';
                 } else {
                     $_SESSION['now'] = 'こんばんわ。';

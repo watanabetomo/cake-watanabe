@@ -148,5 +148,10 @@ footer{
 }
 
 .toggle-radio{
-    margin-left: 20px;
+    margin-left: 40px;
+}
+
+.empty-message{
+    margin-left: 40px;
+    font-size: 20px;
 }

@@ -122,7 +122,7 @@ try {
                 <p class="submit-button"><input type="submit" class="btn btn-primary" name="continue" value="買い物を続ける"> <input type="submit" class="btn btn-danger" name="clear" value="カートを空にする"></p>
             </form>
             <?php else:?>
-            <p>現在、カートの中身は空です。</p>
+                <p class="empty-message">現在、カートの中身は空です。</p>
             <?php endif;?>
         </div>
     </div>

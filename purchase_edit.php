@@ -92,10 +92,22 @@ if (isset($_POST['send'])) {
         exit;
     }
 } elseif (isset($_POST['address-search'])) {
-    $postal_code = $_POST['postal_code1'] . $_POST['postal_code2'];
-    $url = "https://zip-cloud.appspot.com/api/search?zipcode=${postal_code}";
-    $json = json_decode(file_get_contents($url),true);
-    $address = $json["results"];
+    if ($_POST['postal_code1'] == '') {
+        $error['postal_code1'] = '郵便番号上3桁が入力されていません。';
+    } elseif (!preg_match('/^[0-9]{3}$/', $_POST['postal_code1'])) {
+        $error['postal_code1'] = '郵便番号上3桁が間違っています。';
+    }
+    if ($_POST['postal_code2'] == '') {
+        $error['postal_code2'] = '郵便番号下4桁が入力されていません。';
+    } elseif (!preg_match('/^[0-9]{4}$/', $_POST['postal_code2'])) {
+        $error['postal_code2'] = '郵便番号下4桁が間違っています。';
+    }
+    if (!isset($error)) {
+        $postal_code = $_POST['postal_code1'] . $_POST['postal_code2'];
+        $url = "https://zip-cloud.appspot.com/api/search?zipcode=${postal_code}";
+        $json = json_decode(file_get_contents($url),true);
+        $address = $json["results"];
+    }
 }
 
 ?>
