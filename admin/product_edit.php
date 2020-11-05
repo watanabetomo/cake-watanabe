@@ -21,7 +21,7 @@ try {
                     $error['fileUploadError'] = 'ファイルの移動に失敗しました';
                 } else {
                     try {
-                        $productModel->imgUpload($_GET[id], $_FILES['img']['name']);
+                        $productModel->imgUpload($_GET['id'], $_FILES['img']['name']);
                         header('Location: product_edit.php?id=' . $_GET['id']);
                     } catch (PDOException $e) {
                         $error['database'] = '画像のアップロードに失敗しました';

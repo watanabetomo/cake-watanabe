@@ -8,10 +8,8 @@ if (!isset($_SESSION['admin_authenticated'])) {
 
 try {
     $productModel = new ProductModel();
-    if (isset($_POST['search'])) {
-        if ($_POST['keyword'] != '') {
-            $productList = $productModel->search($_POST['keyword']);
-        }
+    if (isset($_POST['search']) and $_POST['keyword'] != '') {
+        $productList = $productModel->search($_POST['keyword']);
     } elseif (isset($_POST['id_asc'])) {
         $productList = $productModel->sortIdAsc();
     } elseif (isset($_POST['id_desc'])) {
