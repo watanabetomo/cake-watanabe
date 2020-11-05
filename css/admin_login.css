@@ -1,8 +1,8 @@
-body {
+.login-body {
     background-image: url("../img/contentback.jpg");
     text-align: center;
 }
 
-table {
+.login-table {
     margin: 0 auto;
 }

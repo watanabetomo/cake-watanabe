@@ -43,13 +43,13 @@ if (isset($_POST['send'])) {
     <link rel="stylesheet" href="../css/admin_login.css">
 </head>
 
-<body>
+<body class="login-body">
     <h1>洋菓子店カサミンゴー商品管理システム 管理者ログイン</h1>
     <?php if (isset($error)): ?>
         <p style="color: red;"><?=$error?></p>
     <?php endif; ?>
     <form action="" method="post">
-        <table>
+        <table class="login-table">
             <tr>
                 <td>ログインID</td>
                 <td><input type="text" name="id" value="<?=isset($_POST['id']) ? h($_POST['id']) : '';?>"></td>
