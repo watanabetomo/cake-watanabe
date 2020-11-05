@@ -91,7 +91,7 @@ if (isset($_POST['send'])) {
         header('Location: purchase_conf.php');
         exit;
     }
-} elseif (isset($_POST['address-search'])) {
+} elseif (isset($_POST['address_search'])) {
     if ($_POST['postal_code1'] == '') {
         $error['postal_code1'] = '郵便番号上3桁が入力されていません。';
     } elseif (!preg_match('/^[0-9]{3}$/', $_POST['postal_code1'])) {
@@ -177,7 +177,7 @@ if (isset($_POST['send'])) {
         <table class="table send-for table-left">
             <tr>
                 <th>郵便番号</th>
-                <td><input type="text" name="postal_code1" value="<?=isset($address) ? $_POST['postal_code1'] : $user['postal_code1']?>"> - <input type="text" name="postal_code2" value="<?=isset($address) ? $_POST['postal_code2'] : $user['postal_code2']?>"> <input type="submit" name="address-search" value="住所検索"><span class="error"><?=isset($error['postal_code1']) ? $error['postal_code1'] : '';?><?=isset($error['postal_code2']) ? $error['postal_code2'] : '';?></span></td>
+                <td><input type="text" name="postal_code1" value="<?=isset($address) ? $_POST['postal_code1'] : $user['postal_code1']?>"> - <input type="text" name="postal_code2" value="<?=isset($address) ? $_POST['postal_code2'] : $user['postal_code2']?>"> <input type="submit" name="address_search" value="住所検索"><span class="error"><?=isset($error['postal_code1']) ? $error['postal_code1'] : '';?><?=isset($error['postal_code2']) ? $error['postal_code2'] : '';?></span></td>
             </tr>
             <tr>
                 <th>住所</th>
