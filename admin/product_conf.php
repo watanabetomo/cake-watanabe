@@ -6,50 +6,29 @@ if (!isset($_SESSION['admin_authenticated'])) {
     exit;
 }
 
-if ((isset($_POST['token']) ? $_POST['token'] : '') != getToken()) {
-    header('Location: product_edit.php');
-    exit;
-}
-
 if (isset($_POST['register'])) {
     try {
         $productModel = new ProductModel();
         $productCategoryModel = new ProductCategoryModel();
         $productDetailModel = new ProductDetailModel();
         $category_id = $productCategoryModel->getIdByName($_POST['category']);
-        if (isset($_GET['new'])) {
-            try {
-                $productModel->register($_POST['name'], $category_id['id'], $_POST['delivery_info'], $_POST['turn'], $_SESSION['login_id']);
-                try {
-                    for ($i=1; $i<=5; $i++) {
-                        $productDetailModel->register(($productModel->getMaxId()['MAX(id)']), $_POST['size_' . $i], $_POST['price_' . $i], $i);
-                    }
-                    header('Location: product_done.php');
-                    exit;
-                } catch (Exception $e) {
-                    $error['database'] = '商品詳細の登録に失敗しました';
-                }
-            } catch (Exception $e) {
-                $error['database'] = '商品情報の登録に失敗しました';
+        if (isset($_GET['action']) and $_GET['action'] == 'new') {
+            $productModel->register($_POST['name'], $category_id['id'], $_POST['delivery_info'], $_POST['turn'], $_SESSION['login_id']);
+            for ($i=1; $i<=5; $i++) {
+                $productDetailModel->register(($productModel->getMaxId()['MAX(id)']), $_POST['size_' . $i], $_POST['price_' . $i], $i);
             }
+            header('Location: product_done.php');
+            exit;
         } else {
-            try {
-                $productModel->update($_GET['id'], $_POST['name'], $category_id['id'], $_POST['delivery_info'], $_POST['turn'], $_SESSION['login_id']);
-                try {
-                    for ($i=1; $i<=5; $i++) {
-                        $productDetailModel->update($_GET['id'], $_POST['size_' . $i], $_POST['price_' . $i], $i);
-                    }
-                    header('Location: product_done.php');
-                    exit;
-                } catch (Exception $e) {
-                    $error['database'] = '商品詳細の更新に失敗しました';
-                }
-            } catch (Exception $e) {
-                $error['database'] = '商品情報の更新に失敗しました';
+            $productModel->update($_GET['id'], $_POST['name'], $category_id['id'], $_POST['delivery_info'], $_POST['turn'], $_SESSION['login_id']);
+            for ($i=1; $i<=5; $i++) {
+                $productDetailModel->update($_GET['id'], $_POST['size_' . $i], $_POST['price_' . $i], $i);
             }
+            header('Location: product_done.php');
+            exit;
         }
     } catch (PDOException $e) {
-        $error['database'] = 'データベースに接続できませんでした';
+        $error = 'データベースに接続できませんでした';
     }
 }
 ?>
@@ -58,9 +37,8 @@ if (isset($_POST['register'])) {
 <link rel="stylesheet" href="../css/admin_product_list.css">
 <main>
     <?php getPage() ?>
-    <p class="error"><?=isset($error['database']) ? $error['database'] : '';?></p>
-    <form action="product_conf.php<?=isset($_GET['new']) ? '?new=true' : ''?><?=isset($_GET['id']) ? '?id=' . $_GET['id'] : ''?>" method="post">
-        <input type="hidden" name="token" value="<?=getToken()?>">
+    <p class="error"><?=isset($error) ? $error : '';?></p>
+    <form action="product_conf.php<?=(isset($_GET['action']) and $_GET['action'] == 'new') ? '?action=new' : ''?><?=isset($_GET['id']) ? '?id=' . $_GET['id'] : ''?>" method="post">
         <input type="hidden" name="name" value="<?=$_POST['name']?>">
         <input type="hidden" name="category" value="<?=$_POST['category']?>">
         <input type="hidden" name="delivery_info" value="<?=$_POST['delivery_info']?>">
@@ -70,7 +48,7 @@ if (isset($_POST['register'])) {
             <input type="hidden" name="price_<?=$i?>" value="<?=$_POST['price_' . $i]?>">
         <?php endfor;?>
         <table border="1">
-            <?php if (!isset($_GET['new'])) : ?>
+            <?php if (isset($_GET['action']) and $_GET['action'] != 'new') : ?>
                 <tr>
                     <th>ID</th>
                     <td colspan="3"><?=$_GET['id']?></td>

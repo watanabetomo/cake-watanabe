@@ -10,28 +10,23 @@ try {
     $productCategoryModel = new ProductCategoryModel();
     $productModel = new ProductModel();
     $productCategories = $productCategoryModel->fetchAllName();
-    if (isset($_GET['id'])) {
+    if (isset($_GET['action']) and $_GET['action'] == "edit") {
         $productData = $productModel->fetchById($_GET['id']);
     }
     if (isset($_POST['upload'])) {
         if (!empty($_FILES['img'])) {
+            $productModel->imgUpload($_GET['id'], $_FILES['img']['name']);
+            header('Location: product_edit.php?id=' . $_GET['id']);
             if ($_FILES['img']['error'] == UPLOAD_ERR_OK) {
                 exec('sudo chmod 0777 ../' . IMG_PATH);
                 if (!move_uploaded_file($_FILES['img']['tmp_name'], '../' . IMG_PATH . mb_convert_encoding($_FILES['img']['name'], 'cp932', 'utf8'))) {
-                    $error['fileUploadError'] = 'ファイルの移動に失敗しました';
-                } else {
-                    try {
-                        $productModel->imgUpload($_GET['id'], $_FILES['img']['name']);
-                        header('Location: product_edit.php?id=' . $_GET['id']);
-                    } catch (PDOException $e) {
-                        $error['database'] = '画像のアップロードに失敗しました';
-                    }
+                    $error['fileUpload'] = 'ファイルの移動に失敗しました';
                 }
                 exec('sudo chmod 0755 ../' . IMG_PATH);
             } elseif ($_FILES['img']['error'] == UPLOAD_ERR_NO_FILE) {
-                $error['fileUploadError'] = 'ファイルがアップロードされませんでした';
+                $error['fileUpload'] = 'ファイルがアップロードされませんでした';
             } else {
-                $error['fileUploadError'] = 'ファイルのアップロードに失敗しました';
+                $error['fileUpload'] = 'ファイルのアップロードに失敗しました';
             }
         }
     }
@@ -45,8 +40,7 @@ try {
 <main>
     <?php getPage()?>
     <p class="error"><?=isset($error['database']) ? $error['database'] : ''?></p>
-    <form action="product_conf.php<?=isset($_GET['new']) ? '?new=true' : ''?><?=isset($_GET['id']) ? '?id=' . $_GET['id'] : ''?>" method="post">
-        <input type="hidden" name="token" value="<?=getToken()?>">
+    <form action="product_conf.php<?=(isset($_GET['action']) and $_GET['action'] == 'new') ? '?action=new' : ''?><?=isset($_GET['id']) ? '?id=' . $_GET['id'] : ''?>" method="post">
         <table border="1">
             <?php if (isset($_GET['id'])) : ?>
                 <tr>
@@ -96,8 +90,8 @@ try {
         </table>
         <p class="submit-button"><input type="submit" name="send" class="btn" value="確認画面へ"></p>
     </form>
-    <?php if (!isset($_GET['new'])) : ?>
-        <p class="error"><?=isset($error['fileUploadError']) ? $error['fileUploadError'] : ''?></p>
+    <?php if (isset($_GET['action']) and $_GET['action'] != 'new') : ?>
+        <p class="error"><?=isset($error['fileUpload']) ? $error['fileUpload'] : ''?></p>
         <form id="upload" action="" method="post" enctype="multipart/form-data" onsubmit="return confirm('本当に画像をアップロードしますか？')">
             <table border="1" style="margin-top: 70px;">
                 <tr>

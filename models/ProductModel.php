@@ -218,4 +218,26 @@ class ProductModel extends Model
         $stmt->execute([$id]);
         return $stmt->fetch();
     }
+
+    public function displayResult($column, $direction, $key)
+    {
+        if ($key != '') {
+            return $this->search($key);
+        } elseif ($column == 'id') {
+            if ($direction == '▼') {
+                return $this->sortIdDesc();
+            }
+            return $this->sortIdAsc();
+        } elseif ($column == 'name') {
+            if ($direction == '▼') {
+                return $this->sortNameDesc();
+            }
+            return $this->sortNameAsc();
+        } elseif ($column == 'updated_at') {
+            if ($direction == '▼') {
+                return $this->sortUpdatedDesc();
+            }
+            return $this->sortUpdatedAsc();
+        }
+    }
 }
