@@ -27,7 +27,7 @@ function getPage()
     ];
     $title = '';
     foreach ($pageTitle as $key => $value) {
-        if(strpos(explode('/', $_SERVER['REQUEST_URI'])[4], $key)) {
+        if(strpos(explode('/', $_SERVER['REQUEST_URI'])[4], $key) !== false) {
             $title .= $value;
         }
     }
