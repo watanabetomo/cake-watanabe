@@ -43,7 +43,7 @@ class ProductModel extends Model
      */
     public function update($id, $name, $category_id, $delivery_info, $turn, $update_user, $size, $price)
     {
-        try{
+        try {
             $productDetailModel = new ProductDetailModel();
             $this->connect();
             $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
@@ -56,7 +56,7 @@ class ProductModel extends Model
             $this->dbh->commit();
         } catch (PDOException $e) {
             throw new PDOException($e);
-            $this->dbh->rollback;
+            $this->dbh->rollback();
         }
     }
 
@@ -101,7 +101,7 @@ class ProductModel extends Model
      */
     public function register($name, $category_id, $delivery_info, $turn, $create_user, $size, $price)
     {
-        try{
+        try {
             $productDetailModel = new ProductDetailModel();
             $this->connect();
             $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
@@ -112,7 +112,7 @@ class ProductModel extends Model
                 $productDetailModel->register($this->getMaxId()[0], $size[$i], $price[$i], $i + 1);
             }
             $this->dbh->commit();
-        } catch (PDOException $e){
+        } catch (PDOException $e) {
             throw new PDOException($e);
             $this->dbh->rollback();
         }
@@ -160,7 +160,6 @@ class ProductModel extends Model
      */
     public function getMaxId()
     {
-        $this->connect();
         return $this->dbh->query('SELECT MAX(id) FROM product')->fetch();
     }
 

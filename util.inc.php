@@ -21,13 +21,14 @@ function getPage()
     $pageTitle = [
         'product' => '商品',
         'list' => '一覧',
-        'edit' => '編集',
-        'conf' => '登録確認',
+        'action=edit' => '編集',
+        'action=new' => '登録',
+        'conf' => '確認',
         'done' => '登録完了'
     ];
     $title = '';
     foreach ($pageTitle as $key => $value) {
-        if(strpos(explode('/', $_SERVER['REQUEST_URI'])[4], $key) !== false) {
+        if(strpos(explode('/', $_SERVER['REQUEST_URI'])[3], $key) !== false) {
             $title .= $value;
         }
     }

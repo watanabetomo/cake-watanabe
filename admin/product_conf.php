@@ -6,7 +6,7 @@ if (!isset($_SESSION['admin_authenticated'])) {
     exit;
 }
 
-if (!isset($_POST['send'])) {
+if (!isset($_POST['send']) and !isset($_POST['register'])) {
     header('Location: product_edit.php?action=' . $_GET['action'] . (isset($_GET['id']) ? '&id=' . $_GET['id'] : ''));
     exit;
 }
@@ -21,13 +21,14 @@ if (isset($_POST['register'])) {
             $productModel->register($_POST['name'], $category_id['id'], $_POST['delivery_info'], $_POST['turn'], $_SESSION['login_id'], $_POST['size'], $_POST['price']);
             header('Location: product_done.php');
             exit;
-        } elseif(isset($_GET['action']) and $_GET['action'] == 'edit') {
-            $productModel->update($_GET['id'], $_POST['name'], $category_id['id'], $_POST['delivery_info'], $_POST['turn'], $_SESSION['login_id'], $_GET['id'], $_POST['size'], $_POST['price']);
+        } elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
+            $productModel->update($_GET['id'], $_POST['name'], $category_id['id'], $_POST['delivery_info'], $_POST['turn'], $_SESSION['login_id'], $_POST['size'], $_POST['price']);
             header('Location: product_done.php');
             exit;
         }
     } catch (PDOException $e) {
         $error = 'データベースに接続できませんでした';
+        $error = $e->getMessage();
     }
 }
 ?>
@@ -37,7 +38,7 @@ if (isset($_POST['register'])) {
 <main>
     <?php getPage() ?>
     <p class="error"><?=isset($error) ? $error : '';?></p>
-    <form action="product_conf.php<?=(isset($_GET['action']) and $_GET['action'] == 'new') ? '?action=new' : ''?><?=isset($_GET['id']) ? '?id=' . $_GET['id'] : ''?>" method="post">
+    <form action="product_conf.php<?=(isset($_GET['action'])) ? '?action=' . $_GET['action'] : ''?><?=isset($_GET['id']) ? '&id=' . $_GET['id'] : ''?>" method="post">
         <input type="hidden" name="name" value="<?=$_POST['name']?>">
         <input type="hidden" name="category" value="<?=$_POST['category']?>">
         <input type="hidden" name="delivery_info" value="<?=$_POST['delivery_info']?>">

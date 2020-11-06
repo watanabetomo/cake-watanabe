@@ -30,7 +30,7 @@ try {
 <main>
     <?php getPage()?>
     <p class="error"><?=isset($error['database']) ? $error['database'] : ''?></p>
-    <form action="product_conf.php<?=(isset($_GET['action']) and $_GET['action'] == 'new') ? '?action=new' : ''?><?=isset($_GET['id']) ? '?id=' . $_GET['id'] : ''?>" method="post">
+    <form action="product_conf.php<?=(isset($_GET['action'])) ? '?action=' . $_GET['action'] : ''?><?=isset($_GET['id']) ? '&id=' . $_GET['id'] : ''?>" method="post">
         <table border="1">
             <?php if (isset($_GET['id'])) : ?>
                 <tr>
