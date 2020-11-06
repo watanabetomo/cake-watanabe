@@ -19,7 +19,9 @@ try {
     } elseif (isset($_POST['delete'])) {
         $productModel->delete($_POST['id']);
     }
-    $productList = $productModel->fetchAllData();
+    if (!isset($productList)) {
+        $productList = $productModel->fetchAllData();
+    }
 } catch (PDOException $e) {
     $error = 'データベースに接続できませんでした';
 }
