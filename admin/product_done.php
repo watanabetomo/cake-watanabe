@@ -8,7 +8,7 @@ if (!isset($_SESSION['admin_authenticated'])) {
 ?>
 
 <?php require_once('admin_header.html') ?>
-<link rel="stylesheet" href="../css/admin_product_list.css">
+<link rel="stylesheet" href="../css/admin_product.css">
 <main>
     <?php getPage() ?>
     <h2 class="done">登録が完了しました</h2>

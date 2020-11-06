@@ -10,33 +10,23 @@ try {
     $productCategoryModel = new ProductCategoryModel();
     $productModel = new ProductModel();
     $productCategories = $productCategoryModel->fetchAllName();
+    if (isset($_POST['upload'])) {
+        if (!empty($_FILES['img'])) {
+            $productModel->imgUpload($_GET['id'], $_FILES['img']['name'], $_FILES['img']['tmp_name'], $_FILES['img']['error']);
+        }
+    }
     if (isset($_GET['action']) and $_GET['action'] == "edit") {
         $productData = $productModel->fetchById($_GET['id']);
     }
-    if (isset($_POST['upload'])) {
-        if (!empty($_FILES['img'])) {
-            $productModel->imgUpload($_GET['id'], $_FILES['img']['name']);
-            header('Location: product_edit.php?id=' . $_GET['id']);
-            if ($_FILES['img']['error'] == UPLOAD_ERR_OK) {
-                exec('sudo chmod 0777 ../' . IMG_PATH);
-                if (!move_uploaded_file($_FILES['img']['tmp_name'], '../' . IMG_PATH . mb_convert_encoding($_FILES['img']['name'], 'cp932', 'utf8'))) {
-                    $error['fileUpload'] = 'ファイルの移動に失敗しました';
-                }
-                exec('sudo chmod 0755 ../' . IMG_PATH);
-            } elseif ($_FILES['img']['error'] == UPLOAD_ERR_NO_FILE) {
-                $error['fileUpload'] = 'ファイルがアップロードされませんでした';
-            } else {
-                $error['fileUpload'] = 'ファイルのアップロードに失敗しました';
-            }
-        }
-    }
 } catch (PDOException $e) {
     $error['database'] = 'データベースに接続できませんでした';
+} catch (Exception $e) {
+    $error['fileUpload'] = 'ファイルのアップロードに失敗しました';
 }
 ?>
 
 <?php require_once('admin_header.html') ?>
-<link rel="stylesheet" href="../css/admin_product_list.css">
+<link rel="stylesheet" href="../css/admin_product.css">
 <main>
     <?php getPage()?>
     <p class="error"><?=isset($error['database']) ? $error['database'] : ''?></p>
@@ -50,14 +40,14 @@ try {
             <?php endif; ?>
             <tr>
                 <th>商品名</th>
-                <td colspan="3"><input type="text" name="name" <?=isset($productData) ? 'value="' . $productData[0]['name'] . '"' : '';?><?=isset($_POST['name']) ? 'value="' . $_POST['name'] . '"': '';?>></td>
+                <td colspan="3"><input type="text" name="name" <?=isset($productData) ? 'value="' . $productData[0]['name'] . '"' : '';?>></td>
             </tr>
             <tr>
                 <th>商品カテゴリー</th>
                 <td colspan="3">
                     <select name="category">
                         <?php foreach ($productCategories as $category) : ?>
-                            <option <?=(isset($productData) and $productData[0]['category_name'] == $category['name']) ? 'selected' : '';?><?=(isset($_POST['category']) and $_POST['category'] == $category['name']) ? 'selected' : '';?>><?=h($category['name'])?></option>
+                            <option <?=(isset($productData) and $productData[0]['category_name'] == $category['name']) ? 'selected' : '';?>><?=h($category['name'])?></option>
                         <?php endforeach; ?>
                     </select>
                 </td>
@@ -65,13 +55,13 @@ try {
             <tr>
                 <th>配送情報</th>
                 <td colspan="3">
-                    <input type="text" name="delivery_info" <?=isset($productData) ? 'value="' . $productData[0]['delivery_info'] . '"' : '';?><?=isset($_POST['delivery_info']) ? 'value="' . $_POST['delivery_info'] . '"' : '';?>>
+                    <input type="text" name="delivery_info" <?=isset($productData) ? 'value="' . $productData[0]['delivery_info'] . '"' : '';?>>
                 </td>
             </tr>
             <tr>
                 <th>表示順(商品)</th>
                 <td colspan="3">
-                    <input type="number" name="turn" <?=isset($productData) ? 'value="' . $productData[0]['turn'] . '"' : '';?><?=isset($_POST['turn']) ? 'value="' . $_POST['turn'] . '"' : '';?>>
+                    <input type="number" name="turn" <?=isset($productData) ? 'value="' . $productData[0]['turn'] . '"' : '';?>>
                 </td>
             </tr>
             <tr>
@@ -80,11 +70,11 @@ try {
                 <th>サイズ (cm)</th>
                 <th>価格 (円)</th>
             </tr>
-            <?php for($i=1; $i<=5; $i++):?>
+            <?php for($i=0; $i<5; $i++):?>
                 <tr>
                     <td><?=$i?></td>
-                    <td><input type="number" name="size_<?=$i?>" <?=isset($productData) ? 'value="' . $productData[$i - 1]['size'] . '"' : '';?><?=isset($_POST['size_' . $i]) ? 'value="' . $_POST['size_' . $i] . '"' : '';?>></td>
-                    <td><input type="number" name="price_<?=$i?>" <?=isset($productData) ? 'value="' . $productData[$i - 1]['price'] . '"' : '';?><?=isset($_POST['price_' . $i]) ? 'value="' . $_POST['price_' . $i] . '"' : '';?>></td>
+                    <td><input type="number" name="size[]" <?=isset($productData) ? 'value="' . $productData[$i]['size'] . '"' : '';?>></td>
+                    <td><input type="number" name="price[]" <?=isset($productData) ? 'value="' . $productData[$i]['price'] . '"' : '';?>></td>
                 </tr>
             <?php endfor;?>
         </table>

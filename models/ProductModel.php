@@ -29,21 +29,35 @@ class ProductModel extends Model
     }
 
     /**
-     * データの更新
+     * 商品情報及び商品詳細の更新
      *
      * @param int $id
      * @param String $name
      * @param int $category_id
      * @param String $delivery_info
      * @param int $turn
-     * @param String $update_user
+     * @param int $update_user
+     * @param array $size
+     * @param array $price
      * @return void
      */
-    public function update($id, $name, $category_id, $delivery_info, $turn, $update_user)
+    public function update($id, $name, $category_id, $delivery_info, $turn, $update_user, $size, $price)
     {
-        $this->connect();
-        $stmt = $this->dbh->prepare('UPDATE product SET name = ?, product_category_id = ?, delivery_info = ?, turn = ?, update_user = ?, updated_at = current_timestamp() WHERE id = ?');
-        $stmt->execute([$name, $category_id, $delivery_info, $turn, $update_user, $id]);
+        try{
+            $productDetailModel = new ProductDetailModel();
+            $this->connect();
+            $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
+            $stmt = $this->dbh->prepare('UPDATE product SET name = ?, product_category_id = ?, delivery_info = ?, turn = ?, update_user = ?, updated_at = current_timestamp() WHERE id = ?');
+            $this->dbh->beginTransaction();
+            $stmt->execute([$name, $category_id, $delivery_info, $turn, $update_user, $id]);
+            for ($i=0; $i<5; $i++) {
+                $productDetailModel->update($id, $size[$i], $price[$i], $i + 1);
+            }
+            $this->dbh->commit();
+        } catch (PDOException $e) {
+            throw new PDOException($e);
+            $this->dbh->rollback;
+        }
     }
 
     /**
@@ -74,34 +88,69 @@ class ProductModel extends Model
     }
 
     /**
-     * データの登録
+     * 商品情報及び商品詳細の登録
      *
      * @param String $name
      * @param int $category_id
      * @param String $delivery_info
      * @param int $turn
      * @param int $create_user
+     * @param array $size
+     * @param array $price
      * @return void
      */
-    public function register($name, $category_id, $delivery_info, $turn, $create_user)
+    public function register($name, $category_id, $delivery_info, $turn, $create_user, $size, $price)
     {
-        $this->connect();
-        $stmt = $this->dbh->prepare('INSERT INTO product(name, product_category_id, delivery_info, turn, create_user) VALUES (?, ?, ?, ?, ?)');
-        $stmt->execute([$name, $category_id, $delivery_info, $turn, $create_user]);
+        try{
+            $productDetailModel = new ProductDetailModel();
+            $this->connect();
+            $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
+            $stmt = $this->dbh->prepare('INSERT INTO product(name, product_category_id, delivery_info, turn, create_user) VALUES (?, ?, ?, ?, ?)');
+            $this->dbh->beginTransaction();
+            $stmt->execute([$name, $category_id, $delivery_info, $turn, $create_user]);
+            for ($i=0; $i<5; $i++) {
+                $productDetailModel->register($this->getMaxId()[0], $size[$i], $price[$i], $i + 1);
+            }
+            $this->dbh->commit();
+        } catch (PDOException $e){
+            throw new PDOException($e);
+            $this->dbh->rollback();
+        }
     }
 
     /**
-     * 画像ファイル名を登録
+     * 画像アップロード及びDBの画像情報更新
      *
      * @param int $id
      * @param String $img
+     * @param String $tempName
+     * @param String $error
      * @return void
      */
-    public function imgUpload($id, $img)
+    public function imgUpload($id, $img, $tempName, $error)
     {
-        $this->connect();
-        $stmt = $this->dbh->prepare('UPDATE product SET img = ? WHERE id = ?');
-        $stmt->execute([$img, $id]);
+        try{
+            $this->connect();
+            $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
+            $stmt = $this->dbh->prepare('UPDATE product SET img = ? WHERE id = ?');
+            $this->dbh->beginTransaction();
+            $stmt->execute([$img, $id]);
+            if ($error == UPLOAD_ERR_OK) {
+                exec('sudo chmod 0777 ../' . IMG_PATH);
+                if (!move_uploaded_file($tempName, '../' . IMG_PATH . mb_convert_encoding($img, 'cp932', 'utf8'))) {
+                    throw new Exception;
+                }
+                exec('sudo chmod 0755 ../' . IMG_PATH);
+            } elseif ($error == UPLOAD_ERR_NO_FILE) {
+                throw new Exception;
+            } else {
+                throw new Exception;
+            }
+            $this->dbh->commit();
+        } catch (Exception $e) {
+            throw new Exception($e);
+            $this->dbh->rollback();
+        }
     }
 
     /**
@@ -219,6 +268,14 @@ class ProductModel extends Model
         return $stmt->fetch();
     }
 
+    /**
+     * 検索及びソート結果を返す
+     *
+     * @param String $column
+     * @param String $direction
+     * @param String $key
+     * @return void
+     */
     public function displayResult($column, $direction, $key)
     {
         if ($key != '') {

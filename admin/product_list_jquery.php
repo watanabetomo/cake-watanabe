@@ -27,7 +27,7 @@ if (isset($_POST['delete'])) {
 
 <?php require_once('admin_header.html') ?>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.0/css/theme.default.min.css">
-<link rel="stylesheet" href="../css/admin_product_list.css">
+<link rel="stylesheet" href="../css/admin_product.css">
 <main>
     <?php require_once('secondadmin_header.html') ?>
     <?php getPage() ?>

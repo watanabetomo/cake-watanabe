@@ -19,7 +19,7 @@ try {
     } elseif (isset($_POST['delete'])) {
         $productModel->delete($_POST['id']);
     }
-$productList = $productModel->fetchAllData();
+    $productList = $productModel->fetchAllData();
 } catch (PDOException $e) {
     $error = 'データベースに接続できませんでした';
 }
@@ -27,7 +27,7 @@ $productList = $productModel->fetchAllData();
 ?>
 
 <?php require_once('admin_header.html') ?>
-<link rel="stylesheet" href="../css/admin_product_list.css">
+<link rel="stylesheet" href="../css/admin_product.css">
 <main>
     <?php getPage() ?>
     <?=isset($error) ? $error : '';?>

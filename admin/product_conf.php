@@ -6,6 +6,11 @@ if (!isset($_SESSION['admin_authenticated'])) {
     exit;
 }
 
+if (!isset($_POST['send'])) {
+    header('Location: product_edit.php?action=' . $_GET['action'] . (isset($_GET['id']) ? '&id=' . $_GET['id'] : ''));
+    exit;
+}
+
 if (isset($_POST['register'])) {
     try {
         $productModel = new ProductModel();
@@ -13,17 +18,11 @@ if (isset($_POST['register'])) {
         $productDetailModel = new ProductDetailModel();
         $category_id = $productCategoryModel->getIdByName($_POST['category']);
         if (isset($_GET['action']) and $_GET['action'] == 'new') {
-            $productModel->register($_POST['name'], $category_id['id'], $_POST['delivery_info'], $_POST['turn'], $_SESSION['login_id']);
-            for ($i=1; $i<=5; $i++) {
-                $productDetailModel->register(($productModel->getMaxId()['MAX(id)']), $_POST['size_' . $i], $_POST['price_' . $i], $i);
-            }
+            $productModel->register($_POST['name'], $category_id['id'], $_POST['delivery_info'], $_POST['turn'], $_SESSION['login_id'], $_POST['size'], $_POST['price']);
             header('Location: product_done.php');
             exit;
-        } else {
-            $productModel->update($_GET['id'], $_POST['name'], $category_id['id'], $_POST['delivery_info'], $_POST['turn'], $_SESSION['login_id']);
-            for ($i=1; $i<=5; $i++) {
-                $productDetailModel->update($_GET['id'], $_POST['size_' . $i], $_POST['price_' . $i], $i);
-            }
+        } elseif(isset($_GET['action']) and $_GET['action'] == 'edit') {
+            $productModel->update($_GET['id'], $_POST['name'], $category_id['id'], $_POST['delivery_info'], $_POST['turn'], $_SESSION['login_id'], $_GET['id'], $_POST['size'], $_POST['price']);
             header('Location: product_done.php');
             exit;
         }
@@ -34,7 +33,7 @@ if (isset($_POST['register'])) {
 ?>
 
 <?php require_once('admin_header.html') ?>
-<link rel="stylesheet" href="../css/admin_product_list.css">
+<link rel="stylesheet" href="../css/admin_product.css">
 <main>
     <?php getPage() ?>
     <p class="error"><?=isset($error) ? $error : '';?></p>
@@ -43,9 +42,9 @@ if (isset($_POST['register'])) {
         <input type="hidden" name="category" value="<?=$_POST['category']?>">
         <input type="hidden" name="delivery_info" value="<?=$_POST['delivery_info']?>">
         <input type="hidden" name="turn" value="<?=$_POST['turn']?>">
-        <?php for($i=1; $i<=5; $i++):?>
-            <input type="hidden" name="size_<?=$i?>" value="<?=$_POST['size_' . $i]?>">
-            <input type="hidden" name="price_<?=$i?>" value="<?=$_POST['price_' . $i]?>">
+        <?php for($i=0; $i<5; $i++):?>
+            <input type="hidden" name="size[]" value="<?=$_POST['size'][$i]?>">
+            <input type="hidden" name="price[]" value="<?=$_POST['price'][$i]?>">
         <?php endfor;?>
         <table border="1">
             <?php if (isset($_GET['action']) and $_GET['action'] != 'new') : ?>
@@ -76,11 +75,11 @@ if (isset($_POST['register'])) {
                 <th>サイズ(cm)</th>
                 <th>価格(円)</th>
             </tr>
-            <?php for ($i=1; $i<=5; $i++) :?>
+            <?php for ($i=0; $i<5; $i++) :?>
                 <tr>
                     <td><?=$i?></td>
-                    <td><?=h($_POST['size_' . $i . ''])?></td>
-                    <td><?=h($_POST['price_' . $i . ''])?></td>
+                    <td><?=h($_POST['size'][$i])?></td>
+                    <td><?=h($_POST['price'][$i])?></td>
                 </tr>
             <?php endfor;?>
         </table>

@@ -15,7 +15,6 @@ try {
     $productDetailModel = new ProductDetailModel();
     if (isset($_POST['es_submit'])) {
         $productDetail = $productDetailModel->fetchById($_POST['detail_id']);
-        $product = $productModel->fetchById($productDetail['product_id']);
         $cartModel->addToCart($_SESSION['userId'], $_POST['detail_id']);
     } elseif (isset($_POST['continue'])) {
         header('Location: index.php');
