@@ -1,5 +1,6 @@
 <?php
-class CartModel extends Model{
+class CartModel extends Model
+{
     /**
      * カートに商品を追加
      *
@@ -7,10 +8,22 @@ class CartModel extends Model{
      * @param int $detailId
      * @return void
      */
-    public function addToCart($userId, $detailId){
+    public function addToCart($userId, $detailId)
+    {
         $this->connect();
-        $stmt = $this->dbh->prepare('INSERT INTO cart(user_id, product_detail_id, num) VALUES(?, ?, 1)');
-        $stmt->execute([$userId, $detailId]);
+        $cart = $this->fetchAll();
+        foreach($cart as $onCart)
+        {
+            if($onCart['product_detail_id'] == $detailId)
+            {
+                $idExist = true;
+            }
+        }
+        if (!isset($idExist))
+        {
+            $stmt = $this->dbh->prepare('INSERT INTO cart(user_id, product_detail_id, num) VALUES(?, ?, 1)');
+            $stmt->execute([$userId, $detailId]);
+        }
     }
 
     /**
