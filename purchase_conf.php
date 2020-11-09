@@ -23,7 +23,7 @@ try {
     $mPaymentModel = new MPaymentModel();
     $payment = $mPaymentModel->fetchByid($_SESSION['payment']);
 } catch (PDOException $e) {
-    $error['database'] = 'データベースに接続できませんでした。';
+    $error = 'データベースに接続できませんでした。';
 }
 
 if (isset($_POST['send'])) {
@@ -38,15 +38,13 @@ if (isset($_POST['send'])) {
 <?php require_once('header.html') ?>
 <main>
     <p class="contents-title">確認</p>
-    <?php if (isset($error['database'])) : ?>
-        <p class="error"><?=$error['database']?></p>
-    <?php endif; ?>
+    <p class="error"><?=isset($error) ? $error : ''?></p>
     <table class="table table-bordered table-center">
         <tr>
             <th>商品画像</th>
             <th>商品名</th>
             <th>個数</th>
-            <th>サイズ</th>
+        <th>サイズ</th>qaa
             <th>単価</th>
             <th>税抜価格</th>
         </tr>

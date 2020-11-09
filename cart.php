@@ -37,16 +37,14 @@ try {
         $totalPrice += $onCart['num'] * $productDetail['price'] * (TAX + 1);
     }
 } catch (PDOException $e) {
-    $error['database'] = 'データベースに接続できませんでした。';
+    $error = 'データベースに接続できませんでした。';
 }
 
 
 ?>
 <?php require_once('header.html')?>
 <main>
-    <?php if (isset($error['database'])): ?>
-        <p class="error"><?=$error['database']?></p>
-    <?php endif; ?>
+    <p class="error"><?=isset($error) ? $error : ''?></p>
     <div class="wrapper">
         <div class="box1">
             <div class="card">

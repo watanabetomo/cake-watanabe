@@ -70,24 +70,9 @@ if (isset($_POST['send'])) {
         $error['name'] = '名前が間違っています。';
     }
     if (!isset($error)) {
-        $_SESSION['postal_code1'] = $_POST['postal_code1'];
-        $_SESSION['postal_code2'] = $_POST['postal_code2'];
-        $_SESSION['pref'] = $_POST['pref'];
-        $_SESSION['city'] = $_POST['city'];
-        $_SESSION['address'] = $_POST['address'];
-        $_SESSION['other'] = $_POST['other'];
-        $_SESSION['tel1'] = $_POST['tel1'];
-        $_SESSION['tel2'] = $_POST['tel2'];
-        $_SESSION['tel3'] = $_POST['tel3'];
-        $_SESSION['name_kana'] = $_POST['name_kana'];
-        $_SESSION['name'] = $_POST['name'];
-        $_SESSION['mail'] = $user['mail'];
-        $_SESSION['payment'] = $_POST['payment'];
-        $_SESSION['token'] = $_POST['token'];
-        $_SESSION['sub_price'] = $_POST['sub_price'];
-        $_SESSION['shipping'] = $_POST['shipping'];
-        $_SESSION['total_price'] = $_POST['total_price'];
-        $_SESSION['tax'] = $_POST['tax'];
+        foreach($_POST as $key => $value) {
+            $_SESSION['purchase_info'][$key] = $value;
+        }
         header('Location: purchase_conf.php');
         exit;
     }
@@ -115,9 +100,7 @@ if (isset($_POST['send'])) {
 <?php require_once('header.html') ?>
 <main>
     <p class="contents-title">確認</p>
-    <?php if (isset($error['database'])) : ?>
-        <p class="error"><?= $error['database'] ?></p>
-    <?php endif; ?>
+    <p class="error"><?=isset($error['database']) ? $error['database'] : ''?></p>
     <table class="table table-bordered table-center">
         <tr>
             <th>商品画像</th>
