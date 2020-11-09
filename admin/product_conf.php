@@ -28,7 +28,6 @@ if (isset($_POST['register'])) {
         }
     } catch (PDOException $e) {
         $error = 'データベースに接続できませんでした';
-        $error = $e->getMessage();
     }
 }
 ?>

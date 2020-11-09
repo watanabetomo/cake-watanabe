@@ -132,7 +132,7 @@ class ProductModel extends Model
         try{
             $this->connect();
             $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
-            $stmt = $this->dbh->prepare('UPDATE product SET img = ? WHERE id = ?');
+            $stmt = $this->dbh->prepare('UPDATE product SET img = ?, updated_at = CURRENT_TIMESTAMP() WHERE id = ?');
             $this->dbh->beginTransaction();
             $stmt->execute([$img, $id]);
             if ($error == UPLOAD_ERR_OK) {

@@ -32,7 +32,7 @@ try {
 <link rel="stylesheet" href="../css/admin_product.css">
 <main>
     <?php getPage() ?>
-    <?=isset($error) ? $error : '';?>
+    <p class="error"><?=isset($error) ? $error : '';?></p>
     <form action="" method="post">
         <p class="search"><input type="text" name="keyword"> <input type="submit" name="search" value="絞り込む"> <input type="submit" name="all" value="すべて表示"></p>
     </form>
