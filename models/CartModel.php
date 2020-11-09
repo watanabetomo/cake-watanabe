@@ -91,15 +91,13 @@ class CartModel extends Model
             mb_language("Japanese");
             mb_internal_encoding("UTF-8");
 $mailBody = <<<EOT
-$name 様
-お世話になっております。
-洋菓子店カサミンゴーカスタマーサポートです。
+<p>$name 様</p>
+<p>お世話になっております。<br>洋菓子店カサミンゴーカスタマーサポートです。</p>
 
-$name 様が購入手続きをされました商品について
-お間違えのないようメールをお送りいたしました。
-今一度ご購入商品等にお間違えなどないよう、ご確認いただけましたら幸いでございます。
---------------------------------------
-【購入情報】
+
+<p>$name 様が購入手続きをされました商品について<br>お間違えのないようメールをお送りいたしました。<br>今一度ご購入商品等にお間違えなどないよう、ご確認いただけましたら幸いでございます。</p>
+<p>--------------------------------------</p>
+<h2>【購入情報】</h2>
 EOT;
             foreach($cart as $onCart) {
                 $productDetail = $productDetailModel->fetchById($onCart['product_detail_id']);
@@ -109,11 +107,10 @@ EOT;
                 $price = $productDetail['price'];
                 $count = $onCart['num'];
 $mailBody .= <<<EOT
-$productName
-$size cm
-$price 円
-$count 枚
------------------------
+<p>$productName $size cm<br>
+$price 円<br>
+$count 枚</p>
+<p>-----------------------</p>
 EOT;
             }
             $postal_code1 = $_SESSION['purchase_info']['postal_code1'];
@@ -132,20 +129,20 @@ EOT;
             $total_price = $_SESSION['purchase_info']['total_price'];
             $tax_price = $sub_price * (1 + TAX);
 $mailBody .= <<<EOT
-小計： $sub_price
-消費税： $tax_price
-送料： $shipping
-合計： $total_price
---------------------------------------
-【送付先情報】
-お名前： $name
-フリガナ： $name_kana
-電話番号： $tel1 - $tel2 - $tel3
-郵便番号： $postal_code1 - $postal_code2
-都道府県： $pref
-市区町村： $city
-番地： $address
-マンション名等： $other
+<p>小計： $sub_price<br>
+消費税： $tax_price<br>
+送料： $shipping<br>
+合計： $total_price</p>
+<p>--------------------------------------</p>
+<h2>【送付先情報】</h2>
+<p>お名前： $name<br>
+フリガナ： $name_kana<br>
+電話番号： $tel1 - $tel2 - $tel3<br>
+郵便番号： $postal_code1 - $postal_code2<br>
+都道府県： $pref<br>
+市区町村： $city<br>
+番地： $address<br>
+マンション名等： $other</p>
 --------------------------------------
 EOT;
             $postal_code1 = $user['postal_code1'];
@@ -160,22 +157,21 @@ EOT;
             $name_kana = $user['name_kana'];
             $name = $user['name'];
 $mailBody .= <<<EOT
-【請求先情報】
-お名前： $name
-フリガナ： $name_kana
-電話番号： $tel1 - $tel2 - $tel3
-郵便番号： $postal_code1 - $postal_code2
-都道府県： $pref
-市区町村： $city
-番地： $address
-マンション名等： $other
---------------------------------------
-商品ご到着まで。今しばらくお待ちください。
+<h2>【請求先情報】</h2>
+<>お名前： $name<br>
+フリガナ： $name_kana<br>
+電話番号： $tel1 - $tel2 - $tel3<br>
+郵便番号： $postal_code1 - $postal_code2<br>
+都道府県： $pref<br>
+市区町村： $city<br>
+番地： $address<br>
+マンション名等： $other</p>
+<p>--------------------------------------</p>
+<p>商品ご到着まで。今しばらくお待ちください。</p>
 
-※このメールは自動送信メールです。
-※返信をされてもご回答しかねますのでご了承ください。
+<p>※このメールは自動送信メールです。<br>※返信をされてもご回答しかねますのでご了承ください。</p>
 EOT;
-            mb_send_mail('t.watanabe@ebacorp.jp', '【洋菓子店カサミンゴー】ご購入商品確認メール', $mailBody, 'From: 洋菓子店カサミンゴー');
+            mb_send_mail('t.watanabe@ebacorp.jp', '【洋菓子店カサミンゴー】ご購入商品確認メール', $mailBody, "From: 洋菓子店カサミンゴー\r\nContent-type: text/html; charset=UTF-8");
             $this->dbh->commit();
         } catch (PDOException $e) {
             throw new PDOException($e);
