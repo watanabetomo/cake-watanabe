@@ -7,3 +7,17 @@ body {
 table {
     margin: 0 auto;
 }
+
+.card {
+    width: 50%;
+    margin: 0 auto;
+    background-color: #ffe;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+p {
+    margin-top: 20px;
+}
