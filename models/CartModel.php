@@ -171,7 +171,7 @@ $mailBody .= <<<EOT
 
 <p>※このメールは自動送信メールです。<br>※返信をされてもご回答しかねますのでご了承ください。</p>
 EOT;
-            mb_send_mail('t.watanabe@ebacorp.jp', '【洋菓子店カサミンゴー】ご購入商品確認メール', $mailBody, "From: 洋菓子店カサミンゴー\r\nContent-type: text/html; charset=UTF-8");
+            mb_send_mail(MAIL_TO, '【洋菓子店カサミンゴー】ご購入商品確認メール', $mailBody, "From: 洋菓子店カサミンゴー\r\nContent-type: text/html; charset=UTF-8");
             $this->dbh->commit();
         } catch (PDOException $e) {
             throw new PDOException($e);
