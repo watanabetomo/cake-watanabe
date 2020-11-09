@@ -19,11 +19,11 @@ if (isset($_POST['register'])) {
         $category_id = $productCategoryModel->getIdByName($_POST['category']);
         if (isset($_GET['action']) and $_GET['action'] == 'new') {
             $productModel->register($_POST['name'], $category_id['id'], $_POST['delivery_info'], $_POST['turn'], $_SESSION['login_id'], $_POST['size'], $_POST['price']);
-            header('Location: product_done.php');
+            header('Location: product_done.php?action=' . $_GET['action']);
             exit;
         } elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
             $productModel->update($_GET['id'], $_POST['name'], $category_id['id'], $_POST['delivery_info'], $_POST['turn'], $_SESSION['login_id'], $_POST['size'], $_POST['price']);
-            header('Location: product_done.php');
+            header('Location: product_done.php?action=' . $_GET['action']);
             exit;
         }
     } catch (PDOException $e) {

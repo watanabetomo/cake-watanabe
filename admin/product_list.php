@@ -49,7 +49,7 @@ try {
             <tr>
                 <td><?=h($product['id'])?></td>
                 <td><?=h($product['name'])?></td>
-                <td><img src="../<?=IMG_PATH . h($product['img'])?>" alt="<?=h($product['img'])?>"></td>
+                <td><?=isset($product['img']) ? '<img src="../' . IMG_PATH . h($product['img']) . '" alt="' . h($product['img']) . '">' : ''?></td>
                 <td><?=(new DateTime(h($product['created_at'])))->format('Y-m-d H:i:s')?></td>
                 <td><?=!is_null($product['updated_at']) ? (new DateTime(h($product['updated_at'])))->format('Y-m-d H:i:s') : ''?></td>
                 <td>

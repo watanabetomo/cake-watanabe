@@ -12,15 +12,12 @@ class CartModel extends Model
     {
         $this->connect();
         $cart = $this->fetchAll();
-        foreach($cart as $onCart)
-        {
-            if($onCart['product_detail_id'] == $detailId)
-            {
+        foreach($cart as $onCart) {
+            if($onCart['product_detail_id'] == $detailId) {
                 $idExist = true;
             }
         }
-        if (!isset($idExist))
-        {
+        if (!isset($idExist)) {
             $stmt = $this->dbh->prepare('INSERT INTO cart(user_id, product_detail_id, num) VALUES(?, ?, 1)');
             $stmt->execute([$userId, $detailId]);
         }
@@ -31,8 +28,7 @@ class CartModel extends Model
      *
      * @return array cartの全件
      */
-    public function fetchAll()
-    {
+    public function fetchAll() {
         $this->connect();
         $stmt = $this->dbh->query('SELECT * FROM cart');
         return $stmt->fetchAll();
@@ -44,8 +40,7 @@ class CartModel extends Model
      * @param int $id
      * @return void
      */
-    public function delete($id)
-    {
+    public function delete($id) {
         $this->connect();
         $stmt = $this->dbh->prepare('DELETE FROM cart WHERE id = ?');
         $stmt->execute([$id]);
@@ -58,8 +53,7 @@ class CartModel extends Model
      * @param int $id
      * @return void
      */
-    public function changeNum($num, $id)
-    {
+    public function changeNum($num, $id) {
         $this->connect();
         $stmt = $this->dbh->prepare('UPDATE cart SET num = ? WHERE id = ?');
         $stmt->execute([$num, $id]);
@@ -70,14 +64,12 @@ class CartModel extends Model
      *
      * @return void
      */
-    public function truncateCart()
-    {
+    public function truncateCart() {
         $this->connect();
         $this->dbh->query('TRUNCATE TABLE cart');
     }
 
-    public function purchaseComplete($prefectures)
-    {
+    public function purchaseComplete($prefectures) {
         try {
             $orderModel = new OrderModel();
             $productDetailModel = new ProductDetailModel();
@@ -109,7 +101,7 @@ $name 様が購入手続きをされました商品について
 --------------------------------------
 【購入情報】
 EOT;
-            foreach($cart as $onCart){
+            foreach($cart as $onCart) {
                 $productDetail = $productDetailModel->fetchById($onCart['product_detail_id']);
                 $product = $productModel->fetchById($productDetail['product_id']);
                 $productName = $product[0]['name'];
