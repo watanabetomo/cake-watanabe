@@ -6,9 +6,6 @@ if (!isset($_SESSION['authenticated'])) {
     exit;
 }
 
-$totalPrice=0;
-$countProduct=0;
-
 try {
     $cartModel = new CartModel();
     $productModel = new ProductModel();
@@ -33,7 +30,7 @@ try {
     $cart = $cartModel->fetchAll();
     foreach($cart as $onCart){
         $productDetail = $productDetailModel->fetchById($onCart['product_detail_id']);
-        $countProduct += $onCart['num'];
+        $totalCount += $onCart['num'];
         $totalPrice += $onCart['num'] * $productDetail['price'] * (TAX + 1);
     }
 } catch (PDOException $e) {
@@ -51,7 +48,7 @@ try {
                 <div class="card-body">
                     <form action="purchase_edit.php" method="post">
                         <?php if(!empty($cart)):?>
-                        <p class="purchase"><input type="submit" name="purchase" value="レジに進む" class="btn btn-success"></p>
+                            <p class="purchase"><input type="submit" name="purchase" value="レジに進む" class="btn btn-success"></p>
                         <?php endif;?>
                         <h3 class="sub-title">合計金額（税込）</h3>
                         <table class="table table-right">
@@ -61,7 +58,7 @@ try {
                             </tr>
                             <tr>
                                 <th>商品点数</th>
-                                <td><?=!empty($cart) ? $countProduct : ''?></td>
+                                <td><?=!empty($cart) ? $totalCount : ''?></td>
                             </tr>
                             <tr>
                                 <th>送料</th>
@@ -76,46 +73,46 @@ try {
             <p class="contents-title">カート</p>
             <p class="error"><?=isset($error['num']) ? $error['num'] : ''?></p>
             <?php if (!empty($cart)) :?>
-            <table class="table-bordered table-center cart">
-                <tr>
-                    <th>削除</th>
-                    <th>商品画像</th>
-                    <th>商品名</th>
-                    <th>個数</th>
-                    <th>サイズ</th>
-                    <th>単価</th>
-                    <th>税抜価格</th>
-                </tr>
-                <?php foreach($cart as $onCart): ?>
-                <?php
-                    $productDetail = $productDetailModel->fetchById($onCart['product_detail_id']);
-                    $product = $productModel->fetchSingleDetail($productDetail['product_id']);
-                ?>
-                <tr>
-                    <td>
-                        <form action="cart.php" method="post">
-                            <input type="hidden" name="deleteId" value="<?=$onCart['id']?>">
-                            <p style="margin: 10px;"><input type="submit" name="delete" value="削除"></p>
-                        </form>
-                    </td>
-                    <td><img src="<?=IMG_PATH . $product['img']?>" alt="<?=$product['img']?>"></td>
-                    <td><?=$product['name']?></td>
-                    <td>
-                        <form action="cart.php" method="post">
-                            <input type="hidden" name="id" value="<?=$onCart['id']?>">
-                            <input type="number" name="num" value="<?=$onCart['num']?>" style="width: 70px; margin: 10px 10px;">
-                            <p><input type="submit" name="change" value="変更"></p>
-                        </form>
-                    </td>
-                    <td><?=$productDetail['size']?>cm</td>
-                    <td><?=number_format($productDetail['price'])?>円</td>
-                    <td><?=number_format($onCart['num'] * $productDetail['price'])?>円</td>
-                </tr>
-                <?php endforeach; ?>
-            </table>
-            <form action="" method="post">
-                <p class="submit-button"><input type="submit" class="btn btn-primary" name="continue" value="買い物を続ける"> <input type="submit" class="btn btn-danger" name="clear" value="カートを空にする"></p>
-            </form>
+                <table class="table-bordered table-center cart">
+                    <tr>
+                        <th>削除</th>
+                        <th>商品画像</th>
+                        <th>商品名</th>
+                        <th>個数</th>
+                        <th>サイズ</th>
+                        <th>単価</th>
+                        <th>税抜価格</th>
+                    </tr>
+                    <?php foreach($cart as $onCart): ?>
+                        <?php
+                            $productDetail = $productDetailModel->fetchById($onCart['product_detail_id']);
+                            $product = $productModel->fetchSingleDetail($productDetail['product_id']);
+                        ?>
+                        <tr>
+                            <td>
+                                <form action="cart.php" method="post">
+                                    <input type="hidden" name="deleteId" value="<?=$onCart['id']?>">
+                                    <p style="margin: 10px;"><input type="submit" name="delete" value="削除"></p>
+                                </form>
+                            </td>
+                            <td><?=isset($product['img']) ? '<img src="' . IMG_PATH . $product['img'] . '" alt="' . $product['img'] . '">' : ''?></td>
+                            <td><?=$product['name']?></td>
+                            <td>
+                                <form action="cart.php" method="post">
+                                    <input type="hidden" name="id" value="<?=$onCart['id']?>">
+                                    <input type="number" name="num" value="<?=$onCart['num']?>" style="width: 70px; margin: 10px 10px;">
+                                    <p><input type="submit" name="change" value="変更"></p>
+                                </form>
+                            </td>
+                            <td><?=$productDetail['size']?>cm</td>
+                            <td><?=number_format($productDetail['price'])?>円</td>
+                            <td><?=number_format($onCart['num'] * $productDetail['price'])?>円</td>
+                        </tr>
+                    <?php endforeach; ?>
+                </table>
+                <form action="" method="post">
+                    <p class="submit-button"><input type="submit" class="btn btn-primary" name="continue" value="買い物を続ける"> <input type="submit" class="btn btn-danger" name="clear" value="カートを空にする"></p>
+                </form>
             <?php else:?>
                 <p class="empty-message">現在、カートの中身は空です。</p>
             <?php endif;?>

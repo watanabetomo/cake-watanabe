@@ -116,7 +116,7 @@ if (isset($_POST['send'])) {
                     $product = $productModel->fetchSingleDetail($productDetail['product_id']);
             ?>
             <tr>
-                <td><img src="<?=IMG_PATH . $product['img']?>" alt="<?=$product['img']?>"></td>
+                <td><?=isset($product['img']) ? '<img src="' . IMG_PATH . $product['img'] . '" alt="' . $product['img'] . '">' : ''?></td>
                 <td><?=$product['name']?></td>
                 <td><?=$onCart['num']?></td>
                 <td><?=$productDetail['size']?></td>

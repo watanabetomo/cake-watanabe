@@ -37,14 +37,14 @@ try {
         <p class="search"><input type="text" name="keyword"> <input type="submit" name="search" value="絞り込む"> <input type="submit" name="all" value="すべて表示"></p>
     </form>
     <table border="1" class="main-table">
-            <tr>
-                <th><form action="" method="post"><input type="submit" name="id" class="icon" value="▲"><p class="sorted">ID</p><input type="submit" name="id" class="icon" value="▼"></form></th>
-                <th><form action="" method="post"><input type="submit" name="name" class="icon" value="▲"><p class="sorted">商品名</p><input type="submit" name="name" class="icon" value="▼"></form></th>
-                <th>画像</th>
-                <th>登録日時</th>
-                <th><form action="" method="post"><input type="submit" name="updated_at" class="icon" value="▲"><p class="sorted">更新日時</p><input type="submit" name="updated_at" class="icon" value="▼"></form></th>
-                <th><a href="product_edit.php?action=new" role="button" class="btn btn-sm">新規登録</a></th>
-            </tr>
+        <tr>
+            <th><form action="" method="post"><input type="submit" name="id" class="icon" value="▲"><p class="sorted">ID</p><input type="submit" name="id" class="icon" value="▼"></form></th>
+            <th><form action="" method="post"><input type="submit" name="name" class="icon" value="▲"><p class="sorted">商品名</p><input type="submit" name="name" class="icon" value="▼"></form></th>
+            <th>画像</th>
+            <th>登録日時</th>
+            <th><form action="" method="post"><input type="submit" name="updated_at" class="icon" value="▲"><p class="sorted">更新日時</p><input type="submit" name="updated_at" class="icon" value="▼"></form></th>
+            <th><a href="product_edit.php?action=new" role="button" class="btn btn-sm">新規登録</a></th>
+        </tr>
         <?php foreach ($productList as $product) : ?>
             <tr>
                 <td><?=h($product['id'])?></td>
