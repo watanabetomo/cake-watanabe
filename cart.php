@@ -31,7 +31,7 @@ try {
     foreach($cart as $onCart){
         $productDetail = $productDetailModel->fetchById($onCart['product_detail_id']);
         $totalCount += $onCart['num'];
-        $totalPrice += $onCart['num'] * $productDetail['price'] * (TAX + 1);
+        $totalPrice += $onCart['num'] * $productDetail['price'];
     }
 } catch (PDOException $e) {
     $error['database'] = 'データベースに接続できませんでした。';
@@ -62,7 +62,7 @@ try {
                             </tr>
                             <tr>
                                 <th>送料</th>
-                                <td><?=!empty($cart) ? (($totalPrice > 10000) ? 0 : number_format(1000)) : ''?></td>
+                                <td><?=!empty($cart) ? ((($totalPrice * (TAX + 1)) > 10000) ? 0 : number_format(1000)) : ''?></td>
                             </tr>
                         </table>
                     </form>
