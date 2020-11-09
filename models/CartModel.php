@@ -74,7 +74,7 @@ class CartModel extends Model{
             $cart = $this->fetchAll();
             $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
             $this->dbh->beginTrunsaction();
-            $orderModel->commitOrder($_SESSION['userId'], $_SESSION['name'], $_SESSION['name_kana'], $_SESSION['mail'], $_SESSION['tel1'], $_SESSION['tel2'], $_SESSION['tel3'], $_SESSION['postal_code1'], $_SESSION['postal_code2'], array_search($_SESSION['pref'], $prefectures), $_SESSION['city'], $_SESSION['address'], $_SESSION['other'], $_SESSION['payment'], $_SESSION['sub_price'], $_SESSION['shipping'], ($_SESSION['tax'] * 100), $_SESSION['total_price']);
+            $orderModel->commitOrder($_SESSION['userId'], $_SESSION['purchase_info']['name'], $_SESSION['purchase_info']['name_kana'], $_SESSION['purchase_info']['mail'], $_SESSION['purchase_info']['tel1'], $_SESSION['purchase_info']['tel2'], $_SESSION['purchase_info']['tel3'], $_SESSION['purchase_info']['postal_code1'], $_SESSION['purchase_info']['postal_code2'], array_search($_SESSION['purchase_info']['pref'], $prefectures), $_SESSION['purchase_info']['city'], $_SESSION['purchase_info']['address'], $_SESSION['purchase_info']['other'], $_SESSION['purchase_info']['payment'], $_SESSION['purchase_info']['sub_price'], $_SESSION['purchase_info']['shipping'], ($_SESSION['purchase_info']['tax'] * 100), $_SESSION['purchase_info']['total_price']);
             $user = $userModel->fetchById($_SESSION['userId']);
             foreach ($cart as $onCart) {
                 $productDetail = $productDetailModel->fetchById($onCart['product_detail_id']);
@@ -111,20 +111,20 @@ $count 枚
 -----------------------
 EOT;
             }
-            $postal_code1 = $_SESSION['postal_code1'];
-            $postal_code2 = $_SESSION['postal_code2'];
-            $pref = $_SESSION['pref'];
-            $city = $_SESSION['city'];
-            $address = $_SESSION['address'];
-            $other = $_SESSION['other'];
-            $tel1 = $_SESSION['tel1'];
-            $tel2 = $_SESSION['tel2'];
-            $tel3 = $_SESSION['tel3'];
-            $name_kana = $_SESSION['name_kana'];
-            $name = $_SESSION['name'];
-            $sub_price = $_SESSION['sub_price'];
-            $shipping = $_SESSION['shipping'];
-            $total_price = $_SESSION['total_price'];
+            $postal_code1 = $_SESSION['purchase_info']['postal_code1'];
+            $postal_code2 = $_SESSION['purchase_info']['postal_code2'];
+            $pref = $_SESSION['purchase_info']['pref'];
+            $city = $_SESSION['purchase_info']['city'];
+            $address = $_SESSION['purchase_info']['address'];
+            $other = $_SESSION['purchase_info']['other'];
+            $tel1 = $_SESSION['purchase_info']['tel1'];
+            $tel2 = $_SESSION['purchase_info']['tel2'];
+            $tel3 = $_SESSION['purchase_info']['tel3'];
+            $name_kana = $_SESSION['purchase_info']['name_kana'];
+            $name = $_SESSION['purchase_info']['name'];
+            $sub_price = $_SESSION['purchase_info']['sub_price'];
+            $shipping = $_SESSION['purchase_info']['shipping'];
+            $total_price = $_SESSION['purchase_info']['total_price'];
             $tax_price = $sub_price * (1 + TAX);
 $mailBody .= <<<EOT
 小計： $sub_price

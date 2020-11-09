@@ -5,7 +5,7 @@ try {
     $productCategoryModel = new ProductCategoryModel();
     $productCategories = $productCategoryModel->fetchAllName();
 } catch (PDOException $e) {
-    echo 'データベースとの接続に失敗しました';
+    $error = 'データベースとの接続に失敗しました';
 }
 
 ?>
@@ -88,6 +88,7 @@ try {
 <body>
     <div id="wrapper">
         <header>
+            <p class="error"><?=isset($error) ? $error : ''?></p>
             <p class="top-nav"><a href="login.php">ログイン</a>　<a href="cart.php">カート</a></p>
             <div id="slider">
                 <ul class="bxslider">
@@ -311,7 +312,7 @@ try {
                             $productModel = new ProductModel();
                             $products = $productModel->fetchByCategoryId($category['id']);
                         } catch (PDOException $e) {
-                            echo 'データベースとの接続に失敗しました';
+                            $error = 'データベースとの接続に失敗しました';
                         }
                         ?>
                         <?php for ($j=0; $j<count($products); $j++) :?>
@@ -328,7 +329,7 @@ try {
                                                 $productDetailModel = new ProductDetailModel();
                                                 $productDetails = $productDetailModel->fetchByProductId($products[$j]['id']);
                                             } catch (PDOException $e) {
-                                                echo 'データベースとの接続に失敗しました';
+                                                $error = 'データベースとの接続に失敗しました';
                                             }
                                             ?>
                                             <?php foreach ($productDetails as $detail) :?>

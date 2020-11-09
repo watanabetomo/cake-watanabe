@@ -6,7 +6,7 @@ if (!isset($_SESSION['authenticated'])) {
     exit;
 }
 
-if ((isset($_SESSION['token']) ? $_SESSION['token'] : '') != getToken()) {
+if ((isset($_SESSION['purchase_info']['token']) ? $_SESSION['purchase_info']['token'] : '') != getToken()) {
     header('Location: purchase_edit.php');
     exit;
 }
@@ -21,7 +21,7 @@ try {
     $userModel = new UserModel();
     $user = $userModel->fetchById($_SESSION['userId']);
     $mPaymentModel = new MPaymentModel();
-    $payment = $mPaymentModel->fetchByid($_SESSION['payment']);
+    $payment = $mPaymentModel->fetchByid($_SESSION['purchase_info']['payment']);
 } catch (PDOException $e) {
     $error = 'データベースに接続できませんでした。';
 }
@@ -44,7 +44,7 @@ if (isset($_POST['send'])) {
             <th>商品画像</th>
             <th>商品名</th>
             <th>個数</th>
-        <th>サイズ</th>qaa
+            <th>サイズ</th>
             <th>単価</th>
             <th>税抜価格</th>
         </tr>
@@ -92,21 +92,21 @@ if (isset($_POST['send'])) {
         <table class="table table-left">
             <tr>
                 <th>郵便番号</th>
-                <td><?=$_SESSION['postal_code1']?> - <?=$_SESSION['postal_code2']?></td>
+                <td><?=$_SESSION['purchase_info']['postal_code1']?> - <?=$_SESSION['purchase_info']['postal_code2']?></td>
             </tr>
             <tr>
                 <th>住所</th>
-                <td><?=$_SESSION['pref'] . $_SESSION['city'] . $_SESSION['address'] . $_SESSION['other']?></td>
+                <td><?=$_SESSION['purchase_info']['pref'] . $_SESSION['purchase_info']['city'] . $_SESSION['purchase_info']['address'] . $_SESSION['purchase_info']['other']?></td>
             </tr>
             <tr>
                 <th>電話番号</th>
-                <td><?=$_SESSION['tel1']?> - <?=$_SESSION['tel2']?> - <?=$_SESSION['tel3']?></td>
+                <td><?=$_SESSION['purchase_info']['tel1']?> - <?=$_SESSION['purchase_info']['tel2']?> - <?=$_SESSION['purchase_info']['tel3']?></td>
             </tr>
             <tr>
                 <th>お名前</th>
                 <td>
-                    <p><?=$_SESSION['name_kana']?></p>
-                    <p><?=$_SESSION['name']?></p>
+                    <p><?=$_SESSION['purchase_info']['name_kana']?></p>
+                    <p><?=$_SESSION['purchase_info']['name']?></p>
                 </td>
             </tr>
         </table>

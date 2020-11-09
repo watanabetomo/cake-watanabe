@@ -160,28 +160,28 @@ if (isset($_POST['send'])) {
         <table class="table send-for table-left">
             <tr>
                 <th>郵便番号</th>
-                <td><input type="text" name="postal_code1" value="<?=isset($address) ? $_POST['postal_code1'] : $user['postal_code1']?>"> - <input type="text" name="postal_code2" value="<?=isset($address) ? $_POST['postal_code2'] : $user['postal_code2']?>"> <input type="submit" name="address_search" value="住所検索"><span class="error"><?=isset($error['postal_code1']) ? $error['postal_code1'] : '';?><?=isset($error['postal_code2']) ? $error['postal_code2'] : '';?></span></td>
+                <td><input type="text" name="postal_code1" value="<?=isset($_POST['postal_code1']) ? $_POST['postal_code1'] : $user['postal_code1']?>"> - <input type="text" name="postal_code2" value="<?=isset($_POST['postal_code2']) ? $_POST['postal_code2'] : $user['postal_code2']?>"> <input type="submit" name="address_search" value="住所検索"><span class="error"><?=isset($error['postal_code1']) ? $error['postal_code1'] : '';?><?=isset($error['postal_code2']) ? $error['postal_code2'] : '';?></span></td>
             </tr>
             <tr>
                 <th>住所</th>
                 <td>
-                    <p><select name="pref"> <?php foreach ($prefectures as $prefecture) : ?> <option value="<?= $prefecture ?>" <?=(isset($address[0]['address1']) and $address[0]['address1'] == $prefecture) ? 'selected' : (($prefecture == $prefectures[$user['pref']]) ? 'selected' : '')?>><?= $prefecture ?></option> <?php endforeach; ?> </select></p>
-                    <p><input type="text" name="city" value="<?=isset($address[0]['address2']) ? $address[0]['address2'] : $user['city']?>"><span class="error"><?=isset($error['city']) ? $error['city'] : '';?></span></p>
-                    <p><input type="text" name="address" value='<?=isset($address[0]['address3']) ? $address[0]['address3'] : $user['address']?>'><span class="error"><?=isset($error['address']) ? $error['address'] : '';?></span></p>
-                    <p><input type="text" name="other" value='<?=$user['other']?>'><span class="error"><?=isset($error['other']) ? $error['other'] : '';?></span></p>
+                    <p><select name="pref"> <?php foreach ($prefectures as $prefecture) : ?> <option value="<?=$prefecture?>" <?=(isset($address[0]['address1']) and $address[0]['address1'] == $prefecture) ? 'selected' : (($prefecture == $prefectures[$user['pref']]) ? 'selected' : '')?>><?=$prefecture?></option> <?php endforeach; ?> </select></p>
+                    <p><input type="text" name="city" value="<?=isset($_POST['city']) ? $_POST['city'] : (isset($address[0]['address2']) ? $address[0]['address2'] : $user['city'])?>"><span class="error"><?=isset($error['city']) ? $error['city'] : '';?></span></p>
+                    <p><input type="text" name="address" value='<?=isset($_POST['address']) ? $_POST['address'] : (isset($address[0]['address3']) ? $address[0]['address3'] : $user['address'])?>'><span class="error"><?=isset($error['address']) ? $error['address'] : '';?></span></p>
+                    <p><input type="text" name="other" value='<?=isset($_POST['other']) ? $_POST['other'] : $user['other']?>'><span class="error"><?=isset($error['other']) ? $error['other'] : '';?></span></p>
                 </td>
             </tr>
             <tr>
                 <th>電話番号</th>
                 <td>
-                    <p><input type="text" name="tel1" value="<?=$user['tel1']?>"> - <input type="text" name="tel2" value="<?=$user['tel2']?>"> - <input type="text" name="tel3"  value="<?=$user['tel3']?>"><span class="error"><?=isset($error['tel1']) ? $error['tel1'] : '';?><?=isset($error['tel2']) ? $error['tel2'] : '';?><?=isset($error['tel3']) ? $error['tel3'] : '';?></span></p>
+                    <p><input type="text" name="tel1" value="<?=isset($_POST['tel1']) ? $_POST['tel1'] : $user['tel1']?>"> - <input type="text" name="tel2" value="<?=isset($_POST['tel2']) ? $_POST['tel2'] : $user['tel2']?>"> - <input type="text" name="tel3"  value="<?=isset($_POST['tel3']) ? $_POST['tel3'] : $user['tel3']?>"><span class="error"><?=isset($error['tel1']) ? $error['tel1'] : '';?><?=isset($error['tel2']) ? $error['tel2'] : '';?><?=isset($error['tel3']) ? $error['tel3'] : '';?></span></p>
                 </td>
             </tr>
             <tr>
                 <th>お名前</th>
                 <td>
-                    <p><input type="text" name="name_kana" value="<?=$user['name_kana']?>"><span class="error"><?=isset($error['name_kana']) ? $error['name_kana'] : '';?></span></p>
-                    <p><input type="text" name="name" value="<?=$user['name']?>"><span class="error"><?=isset($error['name']) ? $error['name'] : '';?></span></p>
+                    <p><input type="text" name="name_kana" value="<?=isset($_POST['name_kana']) ? $_POST['name_kana'] : $user['name_kana']?>"><span class="error"><?=isset($error['name_kana']) ? $error['name_kana'] : '';?></span></p>
+                    <p><input type="text" name="name" value="<?=isset($_POST['name']) ? $_POST['name'] : $user['name']?>"><span class="error"><?=isset($error['name']) ? $error['name'] : '';?></span></p>
                 </td>
             </tr>
         </table>
@@ -215,7 +215,7 @@ if (isset($_POST['send'])) {
         <table class="table table-left">
             <tr>
                 <th>支払方法</th>
-                <td><?php foreach ($payments as $payment) : ?> <input type="radio" name="payment" class="radio" value="<?= $payment['id'] ?>" <?=($payment['name'] == '各種クレジットカード決済') ? 'checked' : ''?>><?= $payment['name'] ?> <?php endforeach; ?></td>
+                <td><?php foreach ($payments as $payment) : ?> <input type="radio" name="payment" class="radio" value="<?=$payment['id']?>" <?=($payment['name'] == '各種クレジットカード決済') ? 'checked' : ''?>><?=$payment['name']?> <?php endforeach; ?></td>
             </tr>
         </table>
         <p class="purchase-button"><input type="submit" name="send" value="確認画面へ"></p>
