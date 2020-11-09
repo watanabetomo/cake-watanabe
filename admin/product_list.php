@@ -17,7 +17,7 @@ try {
     } elseif (isset($_POST['updated_at'])) {
         $productList = $productModel->displayResult('updated_at', $_POST['updated_at'], '');
     } elseif (isset($_POST['delete'])) {
-        $productModel->delete($_POST['id']);
+        $productModel->delete($_POST['delete_id']);
     }
     if (!isset($productList)) {
         $productList = $productModel->fetchAllData();
@@ -56,7 +56,7 @@ try {
                     <p>
                         <a href="product_edit.php?action=edit&id=<?=h($product['id'])?>" class="btn btn-sm" style="margin-top:20px;">編集</a>
                         <form action="" method="post" onsubmit="return confirm('本当に削除しますか？')">
-                            <input type="hidden" name="id" value="<?=h($product['id'])?>">
+                            <input type="hidden" name="delete_id" value="<?=h($product['id'])?>">
                             <input type="submit" class="btn btn-sm" name="delete" value="削除">
                         </form>
                     </p>
