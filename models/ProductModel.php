@@ -296,4 +296,18 @@ class ProductModel extends Model
             return $this->sortUpdatedAsc();
         }
     }
+
+    /**
+     * imgを取得
+     *
+     * @param int $id
+     * @return array img
+     */
+    public function getImg($id)
+    {
+        $this->connect();
+        $stmt = $this->dbh->prepare('SELECT img FROM product WHERE id = ?');
+        $stmt->execute([$id]);
+        return $stmt->fetch();
+    }
 }

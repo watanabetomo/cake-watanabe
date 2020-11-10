@@ -87,62 +87,62 @@ if (isset($_POST['send'])) {
             <td><?=number_format(floor($totalPrice * (1 + TAX) + $shipping))?></td>
         </tr>
     </table>
+    <p class="contents-title">送付先情報</p>
+    <table class="table table-left">
+        <tr>
+            <th>郵便番号</th>
+            <td><?=$_SESSION['purchase_info']['postal_code1']?> - <?=$_SESSION['purchase_info']['postal_code2']?></td>
+        </tr>
+        <tr>
+            <th>住所</th>
+            <td><?=$_SESSION['purchase_info']['pref'] . $_SESSION['purchase_info']['city'] . $_SESSION['purchase_info']['address'] . $_SESSION['purchase_info']['other']?></td>
+        </tr>
+        <tr>
+            <th>電話番号</th>
+            <td><?=$_SESSION['purchase_info']['tel1']?> - <?=$_SESSION['purchase_info']['tel2']?> - <?=$_SESSION['purchase_info']['tel3']?></td>
+        </tr>
+        <tr>
+            <th>お名前</th>
+            <td>
+                <p><?=$_SESSION['purchase_info']['name_kana']?></p>
+                <p><?=$_SESSION['purchase_info']['name']?></p>
+            </td>
+        </tr>
+    </table>
+    <p class="contents-title">請求先情報</p>
+    <table class="table table-left">
+        <tr>
+            <th>郵便番号</th>
+            <td><?=$user['postal_code1']?> - <?=$user['postal_code2']?></td>
+        </tr>
+        <tr>
+            <th>住所</th>
+            <td><?=$prefectures[$user['pref']] . $user['city'] . $user['address'] . $user['other']?></td>
+        </tr>
+        <tr>
+            <th>電話番号</th>
+            <td><?=$user['tel1']?> - <?=$user['tel2']?> - <?=$user['tel3']?></td>
+        </tr>
+        <tr>
+            <th>メールアドレス</th>
+            <td><?=$user['mail']?></td>
+        </tr>
+        <tr>
+            <th>お名前</th>
+            <td>
+                <p><?=$user['name_kana']?></p>
+                <p><?=$user['name']?></p>
+            </td>
+        </tr>
+    </table>
+    <p class="contents-title">お支払方法</p>
+    <table class="table table-left">
+        <tr>
+            <th>支払方法</th>
+            <td><?=$payment['name']?></td>
+        </tr>
+    </table>
     <form action="" method="post">
-        <p class="contents-title">送付先情報</p>
-        <table class="table table-left">
-            <tr>
-                <th>郵便番号</th>
-                <td><?=$_SESSION['purchase_info']['postal_code1']?> - <?=$_SESSION['purchase_info']['postal_code2']?></td>
-            </tr>
-            <tr>
-                <th>住所</th>
-                <td><?=$_SESSION['purchase_info']['pref'] . $_SESSION['purchase_info']['city'] . $_SESSION['purchase_info']['address'] . $_SESSION['purchase_info']['other']?></td>
-            </tr>
-            <tr>
-                <th>電話番号</th>
-                <td><?=$_SESSION['purchase_info']['tel1']?> - <?=$_SESSION['purchase_info']['tel2']?> - <?=$_SESSION['purchase_info']['tel3']?></td>
-            </tr>
-            <tr>
-                <th>お名前</th>
-                <td>
-                    <p><?=$_SESSION['purchase_info']['name_kana']?></p>
-                    <p><?=$_SESSION['purchase_info']['name']?></p>
-                </td>
-            </tr>
-        </table>
-        <p class="contents-title">請求先情報</p>
-        <table class="table table-left">
-            <tr>
-                <th>郵便番号</th>
-                <td><?=$user['postal_code1']?> - <?=$user['postal_code2']?></td>
-            </tr>
-            <tr>
-                <th>住所</th>
-                <td><?=$prefectures[$user['pref']] . $user['city'] . $user['address'] . $user['other']?></td>
-            </tr>
-            <tr>
-                <th>電話番号</th>
-                <td><?=$user['tel1']?> - <?=$user['tel2']?> - <?=$user['tel3']?></td>
-            </tr>
-            <tr>
-                <th>メールアドレス</th>
-                <td><?=$user['mail']?></td>
-            </tr>
-            <tr>
-                <th>お名前</th>
-                <td>
-                    <p><?=$user['name_kana']?></p>
-                    <p><?=$user['name']?></p>
-                </td>
-            </tr>
-        </table>
-        <p class="contents-title">お支払方法</p>
-        <table class="table table-left">
-            <tr>
-                <th>支払方法</th>
-                <td><?=$payment['name']?></td>
-            </tr>
-        </table>
         <p class="purchase-button"><input type="submit" name="send" value="購入する"> <input type="submit" name="cancel" value="修正する"></p>
     </form>
 </main>

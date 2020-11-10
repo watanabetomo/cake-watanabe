@@ -17,7 +17,7 @@ try {
 <main>
     <p class="contents-title">購入履歴一覧</p>
     <p class="error"><?=isset($error) ? $error : ''?></p>
-    <?php if(empty($order)):?>
+    <?php if(empty($orders)):?>
         <p class="done-message">購入履歴はありません。</p>
     <?php else:?>
         <table class="table">
