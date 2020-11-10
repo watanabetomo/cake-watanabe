@@ -14,6 +14,7 @@ class CartModel extends Model
         $cart = $this->fetchAll();
         foreach($cart as $onCart) {
             if($onCart['product_detail_id'] == $detailId) {
+                $this->addNum($onCart['product_detail_id']);
                 $idExist = true;
             }
         }
@@ -28,7 +29,8 @@ class CartModel extends Model
      *
      * @return array cartの全件
      */
-    public function fetchAll() {
+    public function fetchAll()
+    {
         $this->connect();
         $stmt = $this->dbh->query('SELECT * FROM cart');
         return $stmt->fetchAll();
@@ -40,7 +42,8 @@ class CartModel extends Model
      * @param int $id
      * @return void
      */
-    public function delete($id) {
+    public function delete($id)
+    {
         $this->connect();
         $stmt = $this->dbh->prepare('DELETE FROM cart WHERE id = ?');
         $stmt->execute([$id]);
@@ -53,10 +56,27 @@ class CartModel extends Model
      * @param int $id
      * @return void
      */
-    public function changeNum($num, $id) {
+    public function changeNum($num, $id)
+    {
         $this->connect();
         $stmt = $this->dbh->prepare('UPDATE cart SET num = ? WHERE id = ?');
         $stmt->execute([$num, $id]);
+    }
+
+    /**
+     * numに1を加算する
+     *
+     * @param int $id
+     * @return void
+     */
+    public function addNum($id)
+    {
+        $this->connect();
+        $stmt = $this->dbh->prepare('SELECT num FROM cart WHERE product_detail_id = ?');
+        $stmt->execute([$id]);
+        $num = $stmt->fetch();
+        $stmt = $this->dbh->prepare('UPDATE cart SET num = ? WHERE product_detail_id = ?');
+        $stmt->execute([$num['num'] + 1, $id]);
     }
 
     /**
@@ -69,7 +89,8 @@ class CartModel extends Model
         $this->dbh->query('TRUNCATE TABLE cart');
     }
 
-    public function purchaseComplete($prefectures) {
+    public function purchaseComplete($prefectures)
+    {
         try {
             $orderModel = new OrderModel();
             $productDetailModel = new ProductDetailModel();
