@@ -42,16 +42,4 @@ class OrderModel extends Model
         $stmt = $this->dbh->query('SELECT MAX(id) FROM `order`');
         return $stmt->fetch();
     }
-
-    /**
-     * orderの情報を取得
-     *
-     * @return array order
-     */
-    public function fetchAll()
-    {
-        $this->connect();
-        $stmt = $this->dbh->query('SELECT * FROM `order` JOIN order_detail ON order.id = order_detail.order_id');
-        return $stmt->fetchAll();
-    }
 }
