@@ -46,7 +46,7 @@ if (isset($_POST['login'])) {
         <div class="card-body">
             <h1>洋菓子店カサミンゴー 会員ログイン</h1>
             <?php if (isset($error)): ?>
-                <p style="color: red;"><?=$error?></p>
+                <p class="error"><?=$error?></p>
             <?php endif; ?>
             <form action="" method="post">
                 <table>
