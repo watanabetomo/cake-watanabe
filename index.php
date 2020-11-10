@@ -105,10 +105,10 @@ try {
                     <ul class="menu__second-level">
                         <li><a href="#birthday">バースデーケーキ</a></li>
                         <li><a href="#select">限定セット</a></li>
-                        <li><a href="#cheesecake">チーズケーキ</a></li>
-                        <li><a href="#chocolatecake">チョコレートケーキ</a></li>
-                        <li><a href="#shortcake">ショートケーキ/タルト</a></li>
-                        <li><a href="#seasoncake">期間限定ケーキ</a></li>
+                        <li><a href="#Cheesecake">チーズケーキ</a></li>
+                        <li><a href="#Chocolatecake">チョコレートケーキ</a></li>
+                        <li><a href="#Shortcake&Tarte">ショートケーキ/タルト</a></li>
+                        <li><a href="#Seasoncake">期間限定ケーキ</a></li>
                         <li><a href="http://casamingo.gift/index_ichiran.htm">サイズ別</a></li>
                     </ul>
                 </li>
@@ -304,7 +304,7 @@ try {
                 </div><!--/#contents-->
             </div><!--/#select-->
             <?php foreach ($productCategories as $category) :?>
-                <div id="cheesecake">
+                <div id="<?=str_replace(' ', '', $category['name'])?>">
                     <h1><a href=""><?=$category['name']?></a></h1>
                     <div class="contents02">
                         <?php

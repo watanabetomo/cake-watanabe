@@ -602,63 +602,81 @@ div#modal02 div:target .modal_window {
 	display: block;
 }
 
-#cheesecake{
+#Cheesecake{
 	width: 100%;
 	margin: 0 auto 10%;
 }
 
-#cheesecake:before,
-#cheesecake:after {
+#Cheesecake:before,
+#Cheesecake:after {
     content:"";
     display:table;
 }
 
-#cheesecake:after {
+#Cheesecake:after {
     clear:both;
 }
 
 /* For IE 6/7 (trigger hasLayout) */
-#cheesecake {
+#Cheesecake {
     zoom:1;
 }
 
-#chocolatecake{
+#Chocolatecake{
 	width: 100%;
 	margin: 0 auto 10%;
 }
 
-#chocolatecake:before,
-#chocolatecake:after {
+#Chocolatecake:before,
+#Chocolatecake:after {
     content:"";
     display:table;
 }
 
-#chocolatecake:after {
+#Chocolatecake:after {
     clear:both;
 }
 
 /* For IE 6/7 (trigger hasLayout) */
-#chocolatecake {
+#Chocolatecake {
     zoom:1;
 }
 
-#shortcake{
-	width: 100%;
+#Shortcake\&Tarte{
 	margin: 0 auto 10%;
 }
 
-#shortcake:before,
-#shortcake:after {
+#Shortcake\&Tarte:before,
+#Shortcake\&Tarte:after {
     content:"";
     display:table;
 }
 
-#shortcake:after {
+#Shortcake\&Tarte:after {
     clear:both;
 }
 
 /* For IE 6/7 (trigger hasLayout) */
-#shortcake {
+#Shortcake\&Tarte {
+    zoom:1;
+}
+
+#Seasoncake{
+	margin: 0 auto 10%;
+}
+
+#Seasoncake:before,
+#Seasoncake:after {
+    content:"";
+    display:table;
+}
+
+#Seasoncake:after {
+    clear:both;
+}
+
+/* For IE 6/7 (trigger hasLayout) */
+#Seasoncake {
     zoom:1;
 }
 
