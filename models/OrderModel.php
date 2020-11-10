@@ -51,7 +51,7 @@ class OrderModel extends Model
     public function fetchAll()
     {
         $this->connect();
-        $stmt = $this->dbh->query('SELECT * FROM `order` JOIN order_detail ON order.id = order_detail.order_id');
+        $stmt = $this->dbh->query('SELECT * FROM `order`');
         return $stmt->fetchAll();
     }
 }
