@@ -99,7 +99,7 @@ class CartModel extends Model
             $userModel = new UserModel();
             $cart = $this->fetchAll();
             $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
-            $this->dbh->beginTrunsaction();
+            $this->dbh->beginTransaction();
             $orderModel->commitOrder($_SESSION['userId'], $_SESSION['purchase_info']['name'], $_SESSION['purchase_info']['name_kana'], $_SESSION['purchase_info']['mail'], $_SESSION['purchase_info']['tel1'], $_SESSION['purchase_info']['tel2'], $_SESSION['purchase_info']['tel3'], $_SESSION['purchase_info']['postal_code1'], $_SESSION['purchase_info']['postal_code2'], array_search($_SESSION['purchase_info']['pref'], $prefectures), $_SESSION['purchase_info']['city'], $_SESSION['purchase_info']['address'], $_SESSION['purchase_info']['other'], $_SESSION['purchase_info']['payment'], $_SESSION['purchase_info']['sub_price'], $_SESSION['purchase_info']['shipping'], ($_SESSION['purchase_info']['tax'] * 100), $_SESSION['purchase_info']['total_price']);
             $user = $userModel->fetchById($_SESSION['userId']);
             foreach ($cart as $onCart) {
