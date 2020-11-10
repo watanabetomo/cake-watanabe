@@ -28,7 +28,7 @@ try {
         $cartModel->truncateCart();
     }
     $cart = $cartModel->fetchAll();
-    foreach($cart as $onCart){
+    foreach ($cart as $onCart) {
         $productDetail = $productDetailModel->fetchById($onCart['product_detail_id']);
         $totalCount += $onCart['num'];
         $totalPrice += $onCart['num'] * $productDetail['price'];

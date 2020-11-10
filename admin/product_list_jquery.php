@@ -19,7 +19,7 @@ if (isset($_POST['delete'])) {
     try{
         $productModel->delete($_POST['id']);
         header('Location: product_list.php');
-    }catch(PDOException $e){
+    }catch(PDOException $e) {
         $error['database'] = $e;
     }
 }
