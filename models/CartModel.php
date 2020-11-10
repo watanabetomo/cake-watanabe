@@ -89,6 +89,12 @@ class CartModel extends Model
         $this->dbh->query('TRUNCATE TABLE cart');
     }
 
+    /**
+     * cartを空にし、order, order_detailに注文情報を登録する。メールの送信をする。
+     *
+     * @param array $prefectures
+     * @return void
+     */
     public function purchaseComplete($prefectures)
     {
         try {
