@@ -39,6 +39,7 @@ main{
 
 .icon{
     margin-right: 40px;
+    text-align: center;
 }
 
 .contents-title{
@@ -159,9 +160,18 @@ footer{
 .product-name {
     font-weight: bold;
     font-size: 20px;
+    margin-bottom: 10px;
 }
 
 .logo {
     width: 685.6px;
     height: 98.4px;
+}
+
+.fa-history {
+    width: 36px;
+}
+
+.page {
+    text-align: center;
 }

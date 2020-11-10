@@ -54,4 +54,23 @@ class OrderModel extends Model
         $stmt = $this->dbh->query('SELECT * FROM `order`');
         return $stmt->fetchAll();
     }
+
+    /**
+     * ページネーション
+     *
+     * @param int $offset
+     * @return array order
+     */
+    public function pagination($offset)
+    {
+        $this->connect();
+        $stmt = $this->dbh->query('SELECT * FROM `order` LIMIT ' . ($offset - 1) * 5 . ', 5');
+        return $stmt->fetchAll();
+    }
+
+    public function countPage()
+    {
+        $this->connect();
+        return $this->dbh->query('SELECT COUNT(*) FROM `order`')->fetch();
+    }
 }
