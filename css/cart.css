@@ -155,3 +155,8 @@ footer{
     margin-left: 40px;
     font-size: 20px;
 }
+
+.product-name {
+    font-weight: bold;
+    font-size: 20px;
+}
