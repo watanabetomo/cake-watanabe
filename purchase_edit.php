@@ -30,7 +30,6 @@ if (isset($_POST['send'])) {
     } elseif (!preg_match('/^[0-9]{4}$/', $_POST['postal_code2'])) {
         $error['postal_code2'] = '郵便番号下4桁が間違っています。';
     }
-    mb_regex_encoding("UTF-8");
     if ($_POST['city'] == '') {
         $error['city'] = '市区町村が入力されていません。';
     } elseif (!preg_match('/^[0-9A-Za-zぁ-んァ-ヶー一-龠]{1,15}$/u', $_POST['city'])) {
@@ -90,7 +89,7 @@ if (isset($_POST['send'])) {
     if (!isset($error)) {
         $postal_code = $_POST['postal_code1'] . $_POST['postal_code2'];
         $url = "https://zip-cloud.appspot.com/api/search?zipcode=${postal_code}";
-        $json = json_decode(file_get_contents($url),true);
+        $json = json_decode(file_get_contents($url), true);
         $address = $json["results"];
     }
 }
