@@ -4,7 +4,7 @@ require_once('admin/autoload.php');
 try{
     $productCategoryModel = new ProductCategoryModel();
     $productCategories = $productCategoryModel->fetchAllName();
-}catch(PDOException $e){
+}catch(PDOException $e) {
     echo 'データベースとの接続に失敗しました';
     exit;
 }
@@ -310,7 +310,7 @@ try{
             try{
                 $productModel = new ProductModel();
                 $products = $productModel->fetchByCategoryId($productCategories[$i]['id']);
-            }catch(PDOException $e){
+            }catch(PDOException $e) {
                 echo $e->getMessage();
             }
             ?>
@@ -327,7 +327,7 @@ try{
                                     try{
                                         $productDetailModel = new ProductDetailModel();
                                         $productDetails = $productDetailModel->fetchByProductId($products[$j]['id']);
-                                    }catch(PDOException $e){
+                                    }catch(PDOException $e) {
                                         echo $e->getMessage();
                                     }
                                     ?>

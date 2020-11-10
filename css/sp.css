@@ -1,5 +1,5 @@
-@media screen and (max-width:767px){
-	
+@media screen and (max-width:767px) {
+
 body{
 	font-family:"ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
 	background-image: url(../img/backsp.jpg);
@@ -828,11 +828,11 @@ div#modal02 div:target .modal_window {
     content:"";
     display:table;
 }
- 
+
 #contents05:after {
     clear:both;
 }
- 
+
 /* For IE 6/7 (trigger hasLayout) */
 #contents05 {
     zoom:1;
@@ -1026,11 +1026,11 @@ div#modal02 div:target .modal_window {
     content:"";
     display:table;
 }
- 
+
 #contents10:after {
     clear:both;
 }
- 
+
 /* For IE 6/7 (trigger hasLayout) */
 #contents10 {
     zoom:1;
