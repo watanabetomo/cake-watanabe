@@ -10,7 +10,6 @@ class CartModel extends Model
      */
     public function addToCart($userId, $detailId)
     {
-        $this->connect();
         $cart = $this->fetchAll();
         foreach ($cart as $onCart) {
             if ($onCart['product_detail_id'] == $detailId) {
@@ -31,7 +30,6 @@ class CartModel extends Model
      */
     public function fetchAll()
     {
-        $this->connect();
         $stmt = $this->dbh->query('SELECT * FROM cart');
         return $stmt->fetchAll();
     }
@@ -44,7 +42,6 @@ class CartModel extends Model
      */
     public function delete($id)
     {
-        $this->connect();
         $stmt = $this->dbh->prepare('DELETE FROM cart WHERE id = ?');
         $stmt->execute([$id]);
     }
@@ -58,7 +55,6 @@ class CartModel extends Model
      */
     public function changeNum($num, $id)
     {
-        $this->connect();
         $stmt = $this->dbh->prepare('UPDATE cart SET num = ? WHERE id = ?');
         $stmt->execute([$num, $id]);
     }
@@ -71,7 +67,6 @@ class CartModel extends Model
      */
     public function addNum($id)
     {
-        $this->connect();
         $stmt = $this->dbh->prepare('SELECT num FROM cart WHERE product_detail_id = ?');
         $stmt->execute([$id]);
         $num = $stmt->fetch();
@@ -86,7 +81,6 @@ class CartModel extends Model
      */
     public function truncateCart()
     {
-        $this->connect();
         $this->dbh->query('TRUNCATE TABLE cart');
     }
 
