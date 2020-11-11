@@ -18,8 +18,8 @@ try {
 
     $userModel = new UserModel();
     $user = $userModel->fetchById($_SESSION['userId']);
-} catch (PDOException $e) {
-    $error['database'] = 'データベースに接続できませんでした。';
+} catch (Exception $e) {
+    $error['database'] = '商品情報の取得に失敗しました。<br>カスタマーサポートにお問い合わせください。';
 }
 
 if (isset($_POST['send'])) {

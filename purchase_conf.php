@@ -26,8 +26,8 @@ try {
 
     $mPaymentModel = new MPaymentModel();
     $payment = $mPaymentModel->fetchByid($_SESSION['purchase_info']['payment']);
-} catch (PDOException $e) {
-    $error = 'データベースに接続できませんでした。';
+} catch (Exception $e) {
+    $error = '商品情報の取得及び登録に失敗しました。<br>カスタマーサポートにお問い合わせください。';
 }
 
 if (isset($_POST['send'])) {

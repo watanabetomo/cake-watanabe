@@ -23,12 +23,12 @@ if (isset($_POST['login'])) {
                 exit;
             }
             $error = 'IDかパスワードが間違っています';
-        } catch (PDOException $e) {
-            $error = 'データベースに接続できませんでした。';
+        } catch (Exception $e) {
+            $error = '会員情報の取得に失敗しました。<br>カスタマーサポートにお問い合わせください。';
         }
     }
 }
- 
+
 ?>
 
 <!DOCTYPE html>

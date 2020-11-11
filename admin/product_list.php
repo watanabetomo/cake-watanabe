@@ -12,8 +12,8 @@ try {
         $productModel->delete($_POST['delete_id']);
     }
     $productList = $productModel->displayResult(isset($_POST['db_connect']) ? $_POST['db_connect'] : '');
-} catch (PDOException $e) {
-    $error = 'データベースに接続できませんでした';
+} catch (Exception $e) {
+    $error = '商品情報の取得に失敗しました。<br>システム管理者にお問い合わせください。';
 }
 
 ?>

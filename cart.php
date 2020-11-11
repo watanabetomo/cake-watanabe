@@ -33,10 +33,10 @@ try {
         $totalCount += $prodOfTheCart['num'];
         $totalPrice += $prodOfTheCart['num'] * $productDetail['price'];
     }
-} catch (PDOException $e) {
-    $error['database'] = 'データベースに接続できませんでした。';
+} catch (Exception $e) {
+    $error['database'] = '商品情報の取得及び登録に失敗しました。<br>カスタマーサポートにお問い合わせください。';
 }
- 
+
 ?>
 <?php require_once('header.html')?>
 <main>

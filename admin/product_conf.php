@@ -26,8 +26,8 @@ if (isset($_POST['register'])) {
             header('Location: product_done.php?action=' . $_GET['action']);
             exit;
         }
-    } catch (PDOException $e) {
-        $error = 'データベースに接続できませんでした';
+    } catch (Exception $e) {
+        $error = '商品情報の取得及び登録に失敗しました。<br>システム管理者にお問い合わせください。';
     }
 }
 ?>

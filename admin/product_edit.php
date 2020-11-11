@@ -19,9 +19,9 @@ try {
         $productData = $productModel->fetchById($_GET['id']);
     }
 } catch (PDOException $e) {
-    $error['database'] = 'データベースに接続できませんでした';
+    $error['database'] = '商品情報の取得及び登録に失敗しました。<br>システム管理者にお問い合わせください。';
 } catch (Exception $e) {
-    $error['fileUpload'] = 'ファイルのアップロードに失敗しました';
+    $error['fileUpload'] = 'ファイルのアップロードに失敗しました。<br>システム管理者にお問い合わせください。';
 }
 
 ?>

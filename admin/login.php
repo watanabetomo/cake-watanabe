@@ -24,8 +24,8 @@ if (isset($_POST['send'])) {
                 exit;
             }
             $error = 'IDかパスワードが間違っています';
-        } catch (PDOException $e) {
-            $error = 'データベースへの接続が失敗しました';
+        } catch (Exception $e) {
+            $error = '管理者情報の取得に失敗しました。<br>システム管理者にお問い合わせください。';
         }
     }
 }
