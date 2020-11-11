@@ -101,7 +101,7 @@ class CartModel extends Model
             $cart = $this->fetchAll();
             $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
             $this->dbh->beginTransaction();
-            $orderModel->commitOrder($_SESSION['userId'], $_SESSION['purchase_info']['name'], $_SESSION['purchase_info']['name_kana'], $_SESSION['purchase_info']['mail'], $_SESSION['purchase_info']['tel1'], $_SESSION['purchase_info']['tel2'], $_SESSION['purchase_info']['tel3'], $_SESSION['purchase_info']['postal_code1'], $_SESSION['purchase_info']['postal_code2'], array_search($_SESSION['purchase_info']['pref'], $prefectures), $_SESSION['purchase_info']['city'], $_SESSION['purchase_info']['address'], $_SESSION['purchase_info']['other'], $_SESSION['purchase_info']['payment'], $_SESSION['purchase_info']['sub_price'], $_SESSION['purchase_info']['shipping'], ($_SESSION['purchase_info']['tax'] * 100), $_SESSION['purchase_info']['total_price']);
+            $orderModel->commitOrder($_SESSION['userId'], $_SESSION['purchase_info']['name'], $_SESSION['purchase_info']['name_kana'], $_SESSION['purchase_info']['mail'], $_SESSION['purchase_info']['tel1'], $_SESSION['purchase_info']['tel2'], $_SESSION['purchase_info']['tel3'], $_SESSION['purchase_info']['postal_code1'], $_SESSION['purchase_info']['postal_code2'], array_search($_SESSION['purchase_info']['pref'], $prefectures), $_SESSION['purchase_info']['city'], $_SESSION['purchase_info']['address'], $_SESSION['purchase_info']['other'], $_SESSION['purchase_info']['payment'], $_SESSION['purchase_info']['sub_price'], $_SESSION['purchase_info']['shipping'], TAX * 100, $_SESSION['purchase_info']['total_price']);
             $user = $userModel->fetchById($_SESSION['userId']);
             foreach ($cart as $onCart) {
                 $productDetail = $productDetailModel->fetchById($onCart['product_detail_id']);
@@ -128,9 +128,9 @@ class CartModel extends Model
             }
             $mailBody .=
                 '<p>小計： ' . $_SESSION['purchase_info']['sub_price'] . '<br>
-                消費税： ' . $_SESSION['purchase_info']['sub_price'] * TAX . '<br>
+                消費税： ' . floor($_SESSION['purchase_info']['sub_price'] * TAX) . '<br>
                 送料： ' . $_SESSION['purchase_info']['shipping'] . '<br>
-                合計： ' . $_SESSION['purchase_info']['sub_price'] * (1 + TAX) . '</p>
+                合計： ' . $_SESSION['purchase_info']['total_price'] . '</p>
                 <p>--------------------------------------</p>
                 <h2>【送付先情報】</h2>
                 <p>お名前： ' . $_SESSION['purchase_info']['name'] . '<br>

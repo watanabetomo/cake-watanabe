@@ -35,7 +35,7 @@ function getPage()
         'done' => '完了',
         'edit' => ''
     ];
-    $uri = explode('_', explode('.', explode('/', $_SERVER['REQUEST_URI'])[3])[0]);
+    $uri = explode('_', explode('.', explode('/', $_SERVER['REQUEST_URI'])[4])[0]);
     $title = $UpperPageTitle[$uri[0]] . (isset($_GET['action']) ? $getParam[$_GET['action']] : '') . $lowerPageTitle[$uri[1]];
     echo '<h1><button type="button" class="btn title-button" disabled>' . $title . '</button></h1>';
 }

@@ -160,3 +160,7 @@ footer{
     width: 685.6px;
     height: 98.4px;
 }
+
+.send-for {
+    display: none;
+}
