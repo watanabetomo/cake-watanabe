@@ -9,7 +9,6 @@ class ProductModel extends Model
      */
     public function fetchAllData()
     {
-        $this->connect();
         $stmt = $this->dbh->query('SELECT product.id, product.name, product.img, product.created_at, product.updated_at FROM product JOIN product_category ON product.product_category_id = product_category.id WHERE delete_flg = false');
         return $stmt->fetchAll();
     }
@@ -22,7 +21,6 @@ class ProductModel extends Model
      */
     public function fetchById($id)
     {
-        $this->connect();
         $stmt = $this->dbh->prepare('SELECT product.id, product.name, product_category.name AS category_name, product.img, product.delivery_info, product.turn, product_detail.size, product_detail.price, product_detail.turn as detail_turn FROM product JOIN product_category ON product.product_category_id = product_category.id JOIN product_detail ON product.id = product_detail.product_id WHERE product.id = ? ORDER BY turn');
         $stmt->execute([$id]);
         return $stmt->fetchAll();
@@ -45,7 +43,6 @@ class ProductModel extends Model
     {
         try {
             $productDetailModel = new ProductDetailModel();
-            $this->connect();
             $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
             $stmt = $this->dbh->prepare('UPDATE product SET name = ?, product_category_id = ?, delivery_info = ?, turn = ?, update_user = ?, updated_at = current_timestamp() WHERE id = ?');
             $this->dbh->beginTransaction();
@@ -68,7 +65,6 @@ class ProductModel extends Model
      */
     public function delete($id)
     {
-        $this->connect();
         $stmt = $this->dbh->prepare('UPDATE product SET delete_flg = true WHERE id = ?');
         $stmt->execute([$id]);
     }
@@ -81,7 +77,6 @@ class ProductModel extends Model
      */
     public function fetchByCategoryId($id)
     {
-        $this->connect();
         $stmt = $this->dbh->prepare('SELECT id, name, img FROM product WHERE product_category_id = ? AND delete_flg = false ORDER BY turn IS NULL ASC');
         $stmt->execute([$id]);
         return $stmt->fetchAll();
@@ -103,7 +98,6 @@ class ProductModel extends Model
     {
         try {
             $productDetailModel = new ProductDetailModel();
-            $this->connect();
             $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
             $stmt = $this->dbh->prepare('INSERT INTO product(name, product_category_id, delivery_info, turn, create_user) VALUES (?, ?, ?, ?, ?)');
             $this->dbh->beginTransaction();
@@ -130,7 +124,6 @@ class ProductModel extends Model
     public function imgUpload($id, $img, $tempName, $error)
     {
         try{
-            $this->connect();
             $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
             $stmt = $this->dbh->prepare('UPDATE product SET img = ?, updated_at = CURRENT_TIMESTAMP() WHERE id = ?');
             $this->dbh->beginTransaction();
@@ -171,7 +164,6 @@ class ProductModel extends Model
      */
     public function search($keyword)
     {
-        $this->connect();
         $stmt = $this->dbh->prepare('SELECT product.id, product.name, product.img, product.created_at, product.updated_at FROM product JOIN product_category ON product.product_category_id = product_category.id WHERE product.name LIKE ? AND delete_flg = false');
         $stmt->execute(['%' . $keyword . '%']);
         return $stmt->fetchAll();
@@ -184,7 +176,6 @@ class ProductModel extends Model
      */
     public function sortIdAsc()
     {
-        $this->connect();
         $stmt = $this->dbh->query('SELECT product.id, product.name, product.img, product.created_at, product.updated_at FROM product JOIN product_category ON product.product_category_id = product_category.id WHERE delete_flg = false ORDER BY product.id ASC');
         return $stmt->fetchAll();
     }
@@ -196,7 +187,6 @@ class ProductModel extends Model
      */
     public function sortIdDesc()
     {
-        $this->connect();
         $stmt = $this->dbh->query('SELECT product.id, product.name, product.img, product.created_at, product.updated_at FROM product JOIN product_category ON product.product_category_id = product_category.id WHERE delete_flg = false ORDER BY product.id DESC');
         return $stmt->fetchAll();
     }
@@ -208,7 +198,6 @@ class ProductModel extends Model
      */
     public function sortNameAsc()
     {
-        $this->connect();
         $stmt = $this->dbh->query('SELECT product.id, product.name, product.img, product.created_at, product.updated_at, CASE WHEN product.name = "" THEN 1 ELSE 0 END AS dummy FROM product JOIN product_category ON product.product_category_id = product_category.id WHERE delete_flg = false ORDER BY dummy ASC, product.name DESC');
         $stmt->execute();
         return $stmt->fetchAll();
@@ -221,7 +210,6 @@ class ProductModel extends Model
      */
     public function sortNameDesc()
     {
-        $this->connect();
         $stmt = $this->dbh->query('SELECT product.id, product.name, product.img, product.created_at, product.updated_at, CASE WHEN product.name = "" THEN 1 ELSE 0 END AS dummy FROM product JOIN product_category ON product.product_category_id = product_category.id WHERE delete_flg = false ORDER BY dummy ASC, product.name ASC');
         $stmt->execute();
         return $stmt->fetchAll();
@@ -234,7 +222,6 @@ class ProductModel extends Model
      */
     public function sortUpdatedAsc()
     {
-        $this->connect();
         $stmt = $this->dbh->query('SELECT product.id, product.name, product.img, product.created_at, product.updated_at FROM product JOIN product_category ON product.product_category_id = product_category.id WHERE delete_flg = false ORDER BY product.updated_at IS NULL ASC, product.updated_at DESC');
         $stmt->execute();
         return $stmt->fetchAll();
@@ -247,7 +234,6 @@ class ProductModel extends Model
      */
     public function sortUpdatedDesc()
     {
-        $this->connect();
         $stmt = $this->dbh->query('SELECT product.id, product.name, product.img, product.created_at, product.updated_at FROM product JOIN product_category ON product.product_category_id = product_category.id WHERE delete_flg = false ORDER BY product.updated_at IS NULL ASC, product.updated_at ASC');
         $stmt->execute();
         return $stmt->fetchAll();
@@ -261,7 +247,6 @@ class ProductModel extends Model
      */
     public function fetchSingleDetail($id)
     {
-        $this->connect();
         $stmt = $this->dbh->prepare('SELECT name, img FROM product WHERE id = ?');
         $stmt->execute([$id]);
         return $stmt->fetch();
@@ -305,7 +290,6 @@ class ProductModel extends Model
      */
     public function getImg($id)
     {
-        $this->connect();
         $stmt = $this->dbh->prepare('SELECT img FROM product WHERE id = ?');
         $stmt->execute([$id]);
         return $stmt->fetch();

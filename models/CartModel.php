@@ -12,8 +12,8 @@ class CartModel extends Model
     {
         $this->connect();
         $cart = $this->fetchAll();
-        foreach($cart as $onCart) {
-            if($onCart['product_detail_id'] == $detailId) {
+        foreach ($cart as $onCart) {
+            if ($onCart['product_detail_id'] == $detailId) {
                 $this->addNum($onCart['product_detail_id']);
                 $idExist = true;
             }
@@ -84,7 +84,8 @@ class CartModel extends Model
      *
      * @return void
      */
-    public function truncateCart() {
+    public function truncateCart()
+    {
         $this->connect();
         $this->dbh->query('TRUNCATE TABLE cart');
     }
@@ -122,7 +123,7 @@ class CartModel extends Model
                 <p> ' . $_SESSION['userName'] . ' 様が購入手続きをされました商品について<br>お間違えのないようメールをお送りいたしました。<br>今一度ご購入商品等にお間違えなどないよう、ご確認いただけましたら幸いでございます。</p>
                 <p>--------------------------------------</p>
                 <h2>【購入情報】</h2>';
-            foreach($cart as $onCart) {
+            foreach ($cart as $onCart) {
                 $productDetail = $productDetailModel->fetchById($onCart['product_detail_id']);
                 $product = $productModel->fetchById($productDetail['product_id']);
                 $mailBody .=
@@ -159,7 +160,7 @@ class CartModel extends Model
                 <p>--------------------------------------</p>
                 <p>商品ご到着まで。今しばらくお待ちください。</p>
                 <p>※このメールは自動送信メールです。<br>※返信をされてもご回答しかねますのでご了承ください。</p>';
-            mb_send_mail(MAIL_TO, '【洋菓子店カサミンゴー】ご購入商品確認メール', $mailBody, "From: 洋菓子店カサミンゴー\r\nContent-type: text/html; charset=UTF-8");
+            mb_send_mail($_SESSION['purchase_info']['mail'], '【洋菓子店カサミンゴー】ご購入商品確認メール', $mailBody, "From: 洋菓子店カサミンゴー\r\nContent-type: text/html; charset=UTF-8");
             $this->dbh->commit();
         } catch (PDOException $e) {
             throw new PDOException($e);

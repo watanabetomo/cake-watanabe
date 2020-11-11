@@ -9,7 +9,6 @@ class ProductDetailModel extends Model
      */
     public function fetchByProductId($id)
     {
-        $this->connect();
         $stmt = $this->dbh->prepare('SELECT * FROM product_detail WHERE product_id = ? ORDER BY size ASC');
         $stmt->execute([$id]);
         return $stmt->fetchAll();
@@ -26,7 +25,6 @@ class ProductDetailModel extends Model
      */
     public function register($id, $size, $price, $turn)
     {
-        $this->connect();
         $stmt = $this->dbh->prepare('INSERT INTO product_detail(product_id, size, price, turn) VALUES(?, ?, ?, ?)');
         $stmt->execute([$id, $size, $price, $turn]);
     }
@@ -42,7 +40,6 @@ class ProductDetailModel extends Model
      */
     public function update($id, $size, $price, $turn)
     {
-        $this->connect();
         $stmt = $this->dbh->prepare('UPDATE product_detail SET size = ?, price = ? WHERE product_id = ? AND turn = ?');
         $stmt->execute([$size, $price, $id, $turn]);
     }
@@ -55,7 +52,6 @@ class ProductDetailModel extends Model
      */
     public function fetchById($id)
     {
-        $this->connect();
         $stmt = $this->dbh->prepare('SELECT * FROM product_detail WHERE id = ?');
         $stmt->execute([$id]);
         return $stmt->fetch();

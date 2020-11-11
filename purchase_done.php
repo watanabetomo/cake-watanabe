@@ -23,8 +23,8 @@ try {
 ?>
 <?php require_once('header.html') ?>
 <main>
-    <?php if(isset($error)):?>
-        <p class="error done-message"><?= $error?></p>
+    <?php if (isset($error)) :?>
+        <p class="error done-message"><?=$error?></p>
     <?php else:?>
         <p class="done-message">購入が完了しました。ご利用ありがとうございました。</p>
     <?php endif;?>

@@ -13,6 +13,11 @@ class Model
 {
     protected $dbh;
 
+    function __construct()
+    {
+        $this->connect();
+    }
+
     /**
      * PDOインスタンスを生成し、dbhプロパティに代入
      *
