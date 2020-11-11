@@ -199,16 +199,19 @@ if (isset($_POST['other'])) {
                         <select name="pref">
                             <?php foreach ($prefectures as $prefecture) :?>
                                 <?php
-                                    if (isset($hitAddress[0]['address1']) and $hitAddress[0]['address1'] == $prefecture) {
-                                        $pref = 'selected';
-                                    } else {
-                                        if (isset($_POST['pref']) and $_POST['pref'] == $prefecture) {
+                                    $pref = '';
+                                    if (isset($hitAddress[0]['address1'])) {
+                                        if ($hitAddress[0]['address1'] == $prefecture) {
                                             $pref = 'selected';
+                                        }
+                                    } else {
+                                        if (isset($_POST['pref'])) {
+                                            if ($_POST['pref'] == $prefecture) {
+                                                $pref = 'selected';
+                                            }
                                         } else {
                                             if ($prefectures[$user['pref']] == $prefecture) {
                                                 $pref = 'selected';
-                                            } else {
-                                                $pref = '';
                                             }
                                         }
                                     }
