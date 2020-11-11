@@ -28,10 +28,10 @@ try {
         $cartModel->truncateCart();
     }
     $cart = $cartModel->fetchAll();
-    foreach ($cart as $onCart) {
-        $productDetail = $productDetailModel->fetchById($onCart['product_detail_id']);
-        $totalCount += $onCart['num'];
-        $totalPrice += $onCart['num'] * $productDetail['price'];
+    foreach ($cart as $prodOfTheCart) {
+        $productDetail = $productDetailModel->fetchById($prodOfTheCart['product_detail_id']);
+        $totalCount += $prodOfTheCart['num'];
+        $totalPrice += $prodOfTheCart['num'] * $productDetail['price'];
     }
 } catch (PDOException $e) {
     $error['database'] = 'データベースに接続できませんでした。';
@@ -83,15 +83,15 @@ try {
                         <th>単価</th>
                         <th>税抜価格</th>
                     </tr>
-                    <?php foreach($cart as $onCart): ?>
+                    <?php foreach($cart as $prodOfTheCart): ?>
                         <?php
-                            $productDetail = $productDetailModel->fetchById($onCart['product_detail_id']);
+                            $productDetail = $productDetailModel->fetchById($prodOfTheCart['product_detail_id']);
                             $product = $productModel->fetchSingleDetail($productDetail['product_id']);
                         ?>
                         <tr>
                             <td>
                                 <form action="cart.php" method="post">
-                                    <input type="hidden" name="deleteId" value="<?=$onCart['id']?>">
+                                    <input type="hidden" name="deleteId" value="<?=$prodOfTheCart['id']?>">
                                     <p style="margin: 10px;"><input type="submit" name="delete" value="削除"></p>
                                 </form>
                             </td>
@@ -99,14 +99,14 @@ try {
                             <td><?=$product['name']?></td>
                             <td>
                                 <form action="cart.php" method="post">
-                                    <input type="hidden" name="id" value="<?=$onCart['id']?>">
-                                    <input type="number" name="num" value="<?=$onCart['num']?>" style="width: 70px; margin: 10px 10px;">
+                                    <input type="hidden" name="id" value="<?=$prodOfTheCart['id']?>">
+                                    <input type="number" name="num" value="<?=$prodOfTheCart['num']?>" style="width: 70px; margin: 10px 10px;">
                                     <p><input type="submit" name="change" value="変更"></p>
                                 </form>
                             </td>
                             <td><?=$productDetail['size']?>cm</td>
                             <td><?=number_format($productDetail['price'])?>円</td>
-                            <td><?=number_format($onCart['num'] * $productDetail['price'])?>円</td>
+                            <td><?=number_format($prodOfTheCart['num'] * $productDetail['price'])?>円</td>
                         </tr>
                     <?php endforeach; ?>
                 </table>

@@ -48,22 +48,22 @@ if (isset($_POST['send'])) {
             <th>単価</th>
             <th>税抜価格</th>
         </tr>
-        <?php foreach($cart as $onCart):?>
+        <?php foreach($cart as $prodOfTheCart):?>
             <?php
-                $productDetail = $productDetailModel->fetchById($onCart['product_detail_id']);
+                $productDetail = $productDetailModel->fetchById($prodOfTheCart['product_detail_id']);
                 $product = $productModel->fetchSingleDetail($productDetail['product_id']);
             ?>
             <tr>
                 <td><img src="<?=IMG_PATH . $product['img']?>" alt="<?=$product['img']?>"></td>
                 <td><?=$product['name']?></td>
-                <td><?=$onCart['num']?></td>
+                <td><?=$prodOfTheCart['num']?></td>
                 <td><?=$productDetail['size']?></td>
                 <td><?=number_format($productDetail['price'])?></td>
-                <td><?=number_format($onCart['num'] * $productDetail['price'])?></td>
+                <td><?=number_format($prodOfTheCart['num'] * $productDetail['price'])?></td>
             </tr>
             <?php
-                $totalPrice += $productDetail['price'] * $onCart['num'];
-                $totalCount += $onCart['num'];
+                $totalPrice += $productDetail['price'] * $prodOfTheCart['num'];
+                $totalCount += $prodOfTheCart['num'];
             ?>
         <?php endforeach;?>
         <?php $shipping = ($totalPrice * (1 + TAX) > 10000) ? 0 : 1000?>
