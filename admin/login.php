@@ -44,14 +44,14 @@ if (isset($_POST['send'])) {
 
 <body class="login-body">
     <h1>洋菓子店カサミンゴー商品管理システム 管理者ログイン</h1>
-    <?php if (isset($error)): ?>
+    <?php if (isset($error)) :?>
         <p style="color: red;"><?=$error?></p>
     <?php endif; ?>
     <form action="" method="post">
         <table class="login-table">
             <tr>
                 <td>ログインID</td>
-                <td><input type="text" name="id" value="<?=isset($_POST['id']) ? h($_POST['id']) : '';?>"></td>
+                <td><input type="text" name="id" value="<?=isset($_POST['id']) ? h($_POST['id']) : ''?>"></td>
             </tr>
             <tr>
                 <td>パスワード</td>

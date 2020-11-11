@@ -116,25 +116,23 @@ class ProductModel extends Model
      * 画像アップロード及びDBの画像情報更新
      *
      * @param int $id
-     * @param String $img
-     * @param String $tempName
-     * @param String $error
+     * @param array $array
      * @return void
      */
-    public function imgUpload($id, $img, $tempName, $error)
+    public function imgUpload($id, $array)
     {
         try{
             $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
             $stmt = $this->dbh->prepare('UPDATE product SET img = ?, updated_at = CURRENT_TIMESTAMP() WHERE id = ?');
             $this->dbh->beginTransaction();
-            $stmt->execute([$img, $id]);
-            if ($error == UPLOAD_ERR_OK) {
+            $stmt->execute([$array['name'], $id]);
+            if ($array['error'] == UPLOAD_ERR_OK) {
                 exec('sudo chmod 0777 ../' . IMG_PATH);
-                if (!move_uploaded_file($tempName, '../' . IMG_PATH . mb_convert_encoding($img, 'cp932', 'utf8'))) {
+                if (!move_uploaded_file($array['tmp_name'], '../' . IMG_PATH . mb_convert_encoding($array['name'], 'cp932', 'utf8'))) {
                     throw new Exception;
                 }
                 exec('sudo chmod 0755 ../' . IMG_PATH);
-            } elseif ($error == UPLOAD_ERR_NO_FILE) {
+            } elseif ($array['error'] == UPLOAD_ERR_NO_FILE) {
                 throw new Exception;
             } else {
                 throw new Exception;

@@ -9,7 +9,7 @@ if (!isset($_SESSION['authenticated'])) {
 try {
     $productDetailModel = new ProductDetailmodel();
     $productModel = new ProductModel();
-    
+
     $paymentModel = new MPaymentModel();
     $payments = $paymentModel->fetchAll();
 
@@ -166,10 +166,10 @@ if (isset($_POST['send'])) {
             <tr>
                 <th>住所</th>
                 <td>
-                    <p><select name="pref"> <?php foreach ($prefectures as $prefecture) : ?> <option value="<?=$prefecture?>" <?=(isset($address[0]['address1']) and $address[0]['address1'] == $prefecture) ? 'selected' : (($prefecture == $prefectures[$user['pref']]) ? 'selected' : '')?>><?=$prefecture?></option> <?php endforeach; ?> </select></p>
-                    <p><input type="text" name="city" value="<?=isset($_POST['city']) ? $_POST['city'] : (isset($address[0]['address2']) ? $address[0]['address2'] : $user['city'])?>"><span class="error"><?=isset($error['city']) ? $error['city'] : '';?></span></p>
-                    <p><input type="text" name="address" value='<?=isset($_POST['address']) ? $_POST['address'] : (isset($address[0]['address3']) ? $address[0]['address3'] : $user['address'])?>'><span class="error"><?=isset($error['address']) ? $error['address'] : '';?></span></p>
-                    <p><input type="text" name="other" value='<?=isset($_POST['other']) ? $_POST['other'] : $user['other']?>'><span class="error"><?=isset($error['other']) ? $error['other'] : '';?></span></p>
+                    <p><select name="pref"> <?php foreach ($prefectures as $prefecture) : ?> <option value="<?=$prefecture?>" <?=(isset($address[0]['address1']) and $address[0]['address1'] == $prefecture) ? 'selected' : (($prefecture == $prefectures[$user['pref']]) ? 'selected' : '')?>><?=$prefecture?></option> <?php endforeach;?> </select></p>
+                    <p><input type="text" name="city" value="<?=isset($_POST['city']) ? $_POST['city'] : (isset($address[0]['address2']) ? $address[0]['address2'] : $user['city'])?>"><span class="error"><?=isset($error['city']) ? $error['city'] : ''?></span></p>
+                    <p><input type="text" name="address" value='<?=isset($_POST['address']) ? $_POST['address'] : (isset($address[0]['address3']) ? $address[0]['address3'] : $user['address'])?>'><span class="error"><?=isset($error['address']) ? $error['address'] : ''?></span></p>
+                    <p><input type="text" name="other" value='<?=isset($_POST['other']) ? $_POST['other'] : $user['other']?>'><span class="error"><?=isset($error['other']) ? $error['other'] : ''?></span></p>
                 </td>
             </tr>
             <tr>
@@ -181,8 +181,8 @@ if (isset($_POST['send'])) {
             <tr>
                 <th>お名前</th>
                 <td>
-                    <p><input type="text" name="name_kana" value="<?=isset($_POST['name_kana']) ? $_POST['name_kana'] : $user['name_kana']?>"><span class="error"><?=isset($error['name_kana']) ? $error['name_kana'] : '';?></span></p>
-                    <p><input type="text" name="name" value="<?=isset($_POST['name']) ? $_POST['name'] : $user['name']?>"><span class="error"><?=isset($error['name']) ? $error['name'] : '';?></span></p>
+                    <p><input type="text" name="name_kana" value="<?=isset($_POST['name_kana']) ? $_POST['name_kana'] : $user['name_kana']?>"><span class="error"><?=isset($error['name_kana']) ? $error['name_kana'] : ''?></span></p>
+                    <p><input type="text" name="name" value="<?=isset($_POST['name']) ? $_POST['name'] : $user['name']?>"><span class="error"><?=isset($error['name']) ? $error['name'] : ''?></span></p>
                 </td>
             </tr>
         </table>

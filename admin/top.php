@@ -7,7 +7,7 @@ if (!isset($_SESSION['admin_authenticated'])) {
 }
 ?>
 
-<?php require_once('admin_header.html') ?>
+<?php require_once('admin_header.html')?>
 <link rel="stylesheet" href="../css/admin_top.css">
 <main></main>
-<?php require_once('admin_footer.html') ?>
+<?php require_once('admin_footer.html')?>

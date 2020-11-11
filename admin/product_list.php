@@ -28,28 +28,46 @@ try {
 
 ?>
 
-<?php require_once('admin_header.html') ?>
+<?php require_once('admin_header.html')?>
 <link rel="stylesheet" href="../css/admin_product.css">
 <main>
-    <?php getPage() ?>
-    <p class="error"><?=isset($error) ? $error : '';?></p>
+    <?php getPage()?>
+    <p class="error"><?=isset($error) ? $error : ''?></p>
     <form action="" method="post">
         <p class="search"><input type="text" name="keyword"> <input type="submit" name="search" value="絞り込む"> <input type="submit" name="all" value="すべて表示"></p>
     </form>
     <table border="1" class="main-table">
         <tr>
-            <th><form action="" method="post"><input type="submit" name="id" class="icon" value="▲"><p class="sorted">ID</p><input type="submit" name="id" class="icon" value="▼"></form></th>
-            <th><form action="" method="post"><input type="submit" name="name" class="icon" value="▲"><p class="sorted">商品名</p><input type="submit" name="name" class="icon" value="▼"></form></th>
+            <th>
+                <form action="" method="post">
+                    <input type="submit" name="id" class="icon" value="▲">
+                    <p class="sorted">ID</p>
+                    <input type="submit" name="id" class="icon" value="▼">
+                </form>
+            </th>
+            <th>
+                <form action="" method="post">
+                    <input type="submit" name="name" class="icon" value="▲">
+                    <p class="sorted">商品名</p>
+                    <input type="submit" name="name" class="icon" value="▼">
+                </form>
+            </th>
             <th>画像</th>
             <th>登録日時</th>
-            <th><form action="" method="post"><input type="submit" name="updated_at" class="icon" value="▲"><p class="sorted">更新日時</p><input type="submit" name="updated_at" class="icon" value="▼"></form></th>
+            <th>
+                <form action="" method="post">
+                    <input type="submit" name="updated_at" class="icon" value="▲">
+                    <p class="sorted">更新日時</p>
+                    <input type="submit" name="updated_at" class="icon" value="▼">
+                </form>
+            </th>
             <th><a href="product_edit.php?action=new" role="button" class="btn btn-sm">新規登録</a></th>
         </tr>
-        <?php foreach ($productList as $product) : ?>
+        <?php foreach ($productList as $product) :?>
             <tr>
                 <td><?=h($product['id'])?></td>
                 <td><?=h($product['name'])?></td>
-                <td><?=isset($product['img']) ? '<img src="../' . IMG_PATH . h($product['img']) . '" alt="' . h($product['img']) . '">' : ''?></td>
+                <td><?=isset($product['img']) ? '<img src="../' . IMG_PATH . h($product['img']) . '" alt="' . h($product['img']) . '">' : '未登録'?></td>
                 <td><?=(new DateTime(h($product['created_at'])))->format('Y-m-d H:i:s')?></td>
                 <td><?=!is_null($product['updated_at']) ? (new DateTime(h($product['updated_at'])))->format('Y-m-d H:i:s') : ''?></td>
                 <td>
@@ -65,4 +83,4 @@ try {
         <?php endforeach; ?>
     </table>
 </main>
-<?php require_once('admin_footer.html') ?>
+<?php require_once('admin_footer.html')?>

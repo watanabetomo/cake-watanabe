@@ -14,12 +14,16 @@ if ((isset($_SESSION['purchase_info']['token']) ? $_SESSION['purchase_info']['to
 try {
     $paymentModel = new MPaymentModel();
     $payments = $paymentModel->fetchAll();
+
     $productDetailModel = new ProductDetailmodel();
     $productModel = new ProductModel();
+
     $cartModel = new CartModel();
     $cart = $cartModel->fetchAll();
+
     $userModel = new UserModel();
     $user = $userModel->fetchById($_SESSION['userId']);
+    
     $mPaymentModel = new MPaymentModel();
     $payment = $mPaymentModel->fetchByid($_SESSION['purchase_info']['payment']);
 } catch (PDOException $e) {
