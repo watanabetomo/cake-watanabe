@@ -28,6 +28,7 @@ if (isset($_POST['login'])) {
         }
     }
 }
+ 
 ?>
 
 <!DOCTYPE html>
@@ -45,9 +46,9 @@ if (isset($_POST['login'])) {
     <div class="card">
         <div class="card-body">
             <h1>洋菓子店カサミンゴー 会員ログイン</h1>
-            <?php if (isset($error)): ?>
+            <?php if (isset($error)) :?>
                 <p class="error"><?=$error?></p>
-            <?php endif; ?>
+            <?php endif;?>
             <form action="" method="post">
                 <table>
                     <tr>

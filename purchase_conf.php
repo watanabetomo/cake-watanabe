@@ -23,7 +23,7 @@ try {
 
     $userModel = new UserModel();
     $user = $userModel->fetchById($_SESSION['userId']);
-    
+
     $mPaymentModel = new MPaymentModel();
     $payment = $mPaymentModel->fetchByid($_SESSION['purchase_info']['payment']);
 } catch (PDOException $e) {
@@ -37,9 +37,10 @@ if (isset($_POST['send'])) {
     header('Location: purchase_edit.php');
     exit;
 }
+
 ?>
 
-<?php require_once('header.html') ?>
+<?php require_once('header.html')?>
 <main>
     <p class="contents-title">確認</p>
     <p class="error"><?=isset($error) ? $error : ''?></p>
@@ -52,7 +53,7 @@ if (isset($_POST['send'])) {
             <th>単価</th>
             <th>税抜価格</th>
         </tr>
-        <?php foreach($cart as $prodOfTheCart):?>
+        <?php foreach ($cart as $prodOfTheCart) :?>
             <?php
                 $productDetail = $productDetailModel->fetchById($prodOfTheCart['product_detail_id']);
                 $product = $productModel->fetchSingleDetail($productDetail['product_id']);
@@ -150,4 +151,4 @@ if (isset($_POST['send'])) {
         <p class="purchase-button"><input type="submit" name="send" value="購入する"> <input type="submit" name="cancel" value="修正する"></p>
     </form>
 </main>
-<?php require_once('footer.html') ?>
+<?php require_once('footer.html')?>

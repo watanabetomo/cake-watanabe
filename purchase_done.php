@@ -20,8 +20,9 @@ try {
 } catch (Exception $e) {
     $error = "メールの送信に失敗しました";
 }
+
 ?>
-<?php require_once('header.html') ?>
+<?php require_once('header.html')?>
 <main>
     <?php if (isset($error)) :?>
         <p class="error done-message"><?=$error?></p>
@@ -29,4 +30,4 @@ try {
         <p class="done-message">購入が完了しました。ご利用ありがとうございました。</p>
     <?php endif;?>
 </main>
-<?php require_once('footer.html') ?>
+<?php require_once('footer.html')?>

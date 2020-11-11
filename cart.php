@@ -36,8 +36,7 @@ try {
 } catch (PDOException $e) {
     $error['database'] = 'データベースに接続できませんでした。';
 }
-
-
+ 
 ?>
 <?php require_once('header.html')?>
 <main>
@@ -83,7 +82,7 @@ try {
                         <th>単価</th>
                         <th>税抜価格</th>
                     </tr>
-                    <?php foreach ($cart as $prodOfTheCart) : ?>
+                    <?php foreach ($cart as $prodOfTheCart) :?>
                         <?php
                             $productDetail = $productDetailModel->fetchById($prodOfTheCart['product_detail_id']);
                             $product = $productModel->fetchSingleDetail($productDetail['product_id']);

@@ -43,8 +43,7 @@ class OrderModel extends Model
         $shipping_price,
         $tax,
         $total_price
-    )
-    {
+    ) {
         $stmt = $this->dbh->prepare(
             'INSERT INTO `order`(
                 user_id,

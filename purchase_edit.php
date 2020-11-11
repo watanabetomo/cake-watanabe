@@ -72,7 +72,7 @@ if (isset($_POST['send'])) {
         $error['name'] = '名前が間違っています。';
     }
     if (!isset($error)) {
-        foreach($_POST as $key => $value) {
+        foreach ($_POST as $key => $value) {
             $_SESSION['purchase_info'][$key] = $value;
         }
         header('Location: purchase_conf.php');
@@ -96,9 +96,10 @@ if (isset($_POST['send'])) {
         $address = $json["results"];
     }
 }
+
 ?>
 
-<?php require_once('header.html') ?>
+<?php require_once('header.html')?>
 <main>
     <p class="contents-title">確認</p>
     <p class="error"><?=isset($error['database']) ? $error['database'] : ''?></p>
@@ -111,7 +112,7 @@ if (isset($_POST['send'])) {
             <th>単価</th>
             <th>税抜価格</th>
         </tr>
-        <?php foreach($cart as $prodOfTheCart):?>
+        <?php foreach ($cart as $prodOfTheCart) :?>
             <?php
                     $productDetail = $productDetailModel->fetchById($prodOfTheCart['product_detail_id']);
                     $product = $productModel->fetchSingleDetail($productDetail['product_id']);
@@ -166,7 +167,13 @@ if (isset($_POST['send'])) {
             <tr>
                 <th>住所</th>
                 <td>
-                    <p><select name="pref"> <?php foreach ($prefectures as $prefecture) : ?> <option value="<?=$prefecture?>" <?=(isset($address[0]['address1']) and $address[0]['address1'] == $prefecture) ? 'selected' : (($prefecture == $prefectures[$user['pref']]) ? 'selected' : '')?>><?=$prefecture?></option> <?php endforeach;?> </select></p>
+                    <p>
+                        <select name="pref">
+                            <?php foreach ($prefectures as $prefecture) :?>
+                                <option value="<?=$prefecture?>" <?=(isset($address[0]['address1']) and $address[0]['address1'] == $prefecture) ? 'selected' : (($prefecture == $prefectures[$user['pref']]) ? 'selected' : '')?>><?=$prefecture?></option>
+                            <?php endforeach;?>
+                        </select>
+                    </p>
                     <p><input type="text" name="city" value="<?=isset($_POST['city']) ? $_POST['city'] : (isset($address[0]['address2']) ? $address[0]['address2'] : $user['city'])?>"><span class="error"><?=isset($error['city']) ? $error['city'] : ''?></span></p>
                     <p><input type="text" name="address" value='<?=isset($_POST['address']) ? $_POST['address'] : (isset($address[0]['address3']) ? $address[0]['address3'] : $user['address'])?>'><span class="error"><?=isset($error['address']) ? $error['address'] : ''?></span></p>
                     <p><input type="text" name="other" value='<?=isset($_POST['other']) ? $_POST['other'] : $user['other']?>'><span class="error"><?=isset($error['other']) ? $error['other'] : ''?></span></p>
@@ -216,7 +223,11 @@ if (isset($_POST['send'])) {
         <table class="table table-left">
             <tr>
                 <th>支払方法</th>
-                <td><?php foreach ($payments as $payment) : ?> <input type="radio" name="payment" class="radio" value="<?=$payment['id']?>" <?=($payment['name'] == '各種クレジットカード決済') ? 'checked' : ''?>><?=$payment['name']?> <?php endforeach; ?></td>
+                <td>
+                    <?php foreach ($payments as $payment) :?>
+                        <input type="radio" name="payment" class="radio" value="<?=$payment['id']?>" <?=($payment['name'] == '各種クレジットカード決済') ? 'checked' : ''?>><?=$payment['name']?>
+                    <?php endforeach;?>
+                </td>
             </tr>
         </table>
         <p class="purchase-button"><input type="submit" name="send" value="確認画面へ"></p>
