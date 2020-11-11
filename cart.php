@@ -47,7 +47,7 @@ try {
             <div class="card">
                 <div class="card-body">
                     <form action="purchase_edit.php" method="post">
-                        <?php if(!empty($cart)):?>
+                        <?php if (!empty($cart)) :?>
                             <p class="purchase"><input type="submit" name="purchase" value="レジに進む" class="btn btn-success"></p>
                         <?php endif;?>
                         <h3 class="sub-title">合計金額（税込）</h3>
@@ -83,7 +83,7 @@ try {
                         <th>単価</th>
                         <th>税抜価格</th>
                     </tr>
-                    <?php foreach($cart as $prodOfTheCart): ?>
+                    <?php foreach ($cart as $prodOfTheCart) : ?>
                         <?php
                             $productDetail = $productDetailModel->fetchById($prodOfTheCart['product_detail_id']);
                             $product = $productModel->fetchSingleDetail($productDetail['product_id']);

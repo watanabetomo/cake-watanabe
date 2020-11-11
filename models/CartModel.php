@@ -101,12 +101,39 @@ class CartModel extends Model
             $cart = $this->fetchAll();
             $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
             $this->dbh->beginTransaction();
-            $orderModel->commitOrder($_SESSION['userId'], $_SESSION['purchase_info']['name'], $_SESSION['purchase_info']['name_kana'], $_SESSION['purchase_info']['mail'], $_SESSION['purchase_info']['tel1'], $_SESSION['purchase_info']['tel2'], $_SESSION['purchase_info']['tel3'], $_SESSION['purchase_info']['postal_code1'], $_SESSION['purchase_info']['postal_code2'], array_search($_SESSION['purchase_info']['pref'], $prefectures), $_SESSION['purchase_info']['city'], $_SESSION['purchase_info']['address'], $_SESSION['purchase_info']['other'], $_SESSION['purchase_info']['payment'], $_SESSION['purchase_info']['sub_price'], $_SESSION['purchase_info']['shipping'], TAX * 100, $_SESSION['purchase_info']['total_price']);
+            $orderModel->commitOrder(
+                $_SESSION['userId'],
+                $_SESSION['purchase_info']['name'],
+                $_SESSION['purchase_info']['name_kana'],
+                $_SESSION['purchase_info']['mail'],
+                $_SESSION['purchase_info']['tel1'],
+                $_SESSION['purchase_info']['tel2'],
+                $_SESSION['purchase_info']['tel3'],
+                $_SESSION['purchase_info']['postal_code1'],
+                $_SESSION['purchase_info']['postal_code2'],
+                array_search($_SESSION['purchase_info']['pref'],
+                $prefectures),
+                $_SESSION['purchase_info']['city'],
+                $_SESSION['purchase_info']['address'],
+                $_SESSION['purchase_info']['other'],
+                $_SESSION['purchase_info']['payment'],
+                $_SESSION['purchase_info']['sub_price'],
+                $_SESSION['purchase_info']['shipping'],
+                TAX * 100,
+                $_SESSION['purchase_info']['total_price']
+            );
             $user = $userModel->fetchById($_SESSION['userId']);
             foreach ($cart as $prodOfTheCart) {
                 $productDetail = $productDetailModel->fetchById($prodOfTheCart['product_detail_id']);
                 $product = $productModel->fetchById($productDetail['product_id']);
-                $oederDetailModel->registOrderDetail($orderModel->getMaxId()[0], $prodOfTheCart['product_detail_id'], $product[0]['name'], $productDetail['size'], $productDetail['price'], $prodOfTheCart['num']);
+                $oederDetailModel->registOrderDetail(
+                    $orderModel->getMaxId()[0],
+                    $prodOfTheCart['product_detail_id'],
+                    $product[0]['name'],
+                    $productDetail['size'],
+                    $productDetail['price'],
+                    $prodOfTheCart['num']
+                );
             }
             $this->truncateCart();
             mb_language('Japanese');
@@ -114,7 +141,10 @@ class CartModel extends Model
             $mailBody =
                 '<p>' . $_SESSION['userName'] . '様</p>
                 <p>お世話になっております。<br>洋菓子店カサミンゴーカスタマーサポートです。</p>
-                <p> ' . $_SESSION['userName'] . ' 様が購入手続きをされました商品について<br>お間違えのないようメールをお送りいたしました。<br>今一度ご購入商品等にお間違えなどないよう、ご確認いただけましたら幸いでございます。</p>
+                <p>
+                    ' . $_SESSION['userName'] . ' 様が購入手続きをされました商品について<br>お間違えのないようメールをお送りいたしました。<br>
+                    今一度ご購入商品等にお間違えなどないよう、ご確認いただけましたら幸いでございます。
+                </p>
                 <p>--------------------------------------</p>
                 <h2>【購入情報】</h2>';
             foreach ($cart as $prodOfTheCart) {
@@ -154,7 +184,12 @@ class CartModel extends Model
                 <p>--------------------------------------</p>
                 <p>商品ご到着まで。今しばらくお待ちください。</p>
                 <p>※このメールは自動送信メールです。<br>※返信をされてもご回答しかねますのでご了承ください。</p>';
-            mb_send_mail($_SESSION['purchase_info']['mail'], '【洋菓子店カサミンゴー】ご購入商品確認メール', $mailBody, "From: 洋菓子店カサミンゴー\r\nContent-type: text/html; charset=UTF-8");
+            mb_send_mail(
+                $_SESSION['purchase_info']['mail'],
+                '【洋菓子店カサミンゴー】ご購入商品確認メール',
+                $mailBody,
+                "From: 洋菓子店カサミンゴー\r\nContent-type: text/html; charset=UTF-8"
+            );
             $this->dbh->commit();
         } catch (PDOException $e) {
             throw new PDOException($e);
