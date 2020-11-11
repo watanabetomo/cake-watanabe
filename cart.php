@@ -94,7 +94,7 @@ try {
                                     <p style="margin: 10px;"><input type="submit" name="delete" value="削除"></p>
                                 </form>
                             </td>
-                            <td><?=isset($product['img']) ? '<img src="' . IMG_PATH . $product['img'] . '" alt="' . $product['img'] . '">' : ''?></td>
+                            <td><?=isset($product['img']) ? '<img src="' . IMG_PATH . $product['img'] . '" alt="' . $product['img'] . '">' : '画像なし'?></td>
                             <td><?=$product['name']?></td>
                             <td>
                                 <form action="cart.php" method="post">
