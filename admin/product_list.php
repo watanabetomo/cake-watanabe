@@ -33,18 +33,18 @@ try {
                 <form action="" method="post">
                     <input type="hidden" name="db_connect" value="sort">
                     <input type="hidden" name="column" value="id">
-                    <input type="submit" name="sort" class="icon" value="▲">
+                    <input type="submit" name="order" class="icon" value="▲">
                     <p class="sorted">ID</p>
-                    <input type="submit" name="sort" class="icon" value="▼">
+                    <input type="submit" name="order" class="icon" value="▼">
                 </form>
             </th>
             <th>
                 <form action="" method="post">
                     <input type="hidden" name="db_connect" value="sort">
                     <input type="hidden" name="column" value="name">
-                    <input type="submit" name="sort" class="icon" value="▲">
+                    <input type="submit" name="order" class="icon" value="▲">
                     <p class="sorted">商品名</p>
-                    <input type="submit" name="sort" class="icon" value="▼">
+                    <input type="submit" name="order" class="icon" value="▼">
                 </form>
             </th>
             <th>画像</th>
@@ -53,9 +53,9 @@ try {
                 <form action="" method="post">
                     <input type="hidden" name="db_connect" value="sort">
                     <input type="hidden" name="column" value="updated_at">
-                    <input type="submit" name="sort" class="icon" value="▲">
+                    <input type="submit" name="order" class="icon" value="▲">
                     <p class="sorted">更新日時</p>
-                    <input type="submit" name="sort" class="icon" value="▼">
+                    <input type="submit" name="order" class="icon" value="▼">
                 </form>
             </th>
             <th><a href="product_edit.php?action=new" role="button" class="btn btn-sm">新規登録</a></th>

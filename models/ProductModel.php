@@ -262,17 +262,17 @@ class ProductModel extends Model
             return $this->search($_POST['keyword']);
         } elseif ($key == 'sort') {
             if ($_POST['column'] == 'id') {
-                if ($_POST['sort'] == '▼') {
+                if ($_POST['order'] == '▼') {
                     return $this->sortIdDesc();
                 }
                 return $this->sortIdAsc();
             } elseif ($_POST['column'] == 'name') {
-                if ($_POST['sort'] == '▼') {
+                if ($_POST['order'] == '▼') {
                     return $this->sortNameDesc();
                 }
                 return $this->sortNameAsc();
             } elseif ($_POST['column'] == 'updated_at') {
-                if ($_POST['sort'] == '▼') {
+                if ($_POST['order'] == '▼') {
                     return $this->sortUpdatedDesc();
                 }
                 return $this->sortUpdatedAsc();
