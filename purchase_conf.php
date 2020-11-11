@@ -33,9 +33,6 @@ try {
 if (isset($_POST['send'])) {
     header('Location: purchase_done.php');
     exit;
-} elseif (isset($_POST['cancel'])) {
-    header('Location: purchase_edit.php');
-    exit;
 }
 
 ?>
@@ -147,8 +144,20 @@ if (isset($_POST['send'])) {
             <td><?=$payment['name']?></td>
         </tr>
     </table>
-    <form action="" method="post">
-        <p class="purchase-button"><input type="submit" name="send" value="購入する"> <input type="submit" name="cancel" value="修正する"></p>
-    </form>
+    <ul class="form">
+        <li>
+            <form action="" method="post">
+                <p><input type="submit" name="send" value="購入する"></p>
+            </form>
+        </li>
+        <li>
+            <form action="purchase_edit.php?action=fix#address" method="post">
+                <?php foreach ($_SESSION['purchase_info'] as $key => $value) :?>
+                    <input type="hidden" name="<?=$key?>" value="<?=$value?>">
+                <?php endforeach;?>
+                <p><input type="submit" name="cancel" value="修正する"></p>
+            </form>
+        </li>
+    </ul>
 </main>
 <?php require_once('footer.html')?>

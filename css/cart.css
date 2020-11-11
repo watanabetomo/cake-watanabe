@@ -161,6 +161,12 @@ footer{
     height: 98.4px;
 }
 
-.send-for {
-    display: none;
+.form {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+}
+
+.form li {
+    margin: 0 10px;
 }

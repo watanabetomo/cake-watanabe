@@ -75,6 +75,7 @@ if (isset($_POST['send'])) {
         foreach ($_POST as $key => $value) {
             $_SESSION['purchase_info'][$key] = $value;
         }
+        unset($_SESSION['purchase_info']['send']);
         header('Location: purchase_conf.php');
         exit;
     }
@@ -93,10 +94,33 @@ if (isset($_POST['send'])) {
         $postal_code = $_POST['postal_code1'] . $_POST['postal_code2'];
         $url = "https://zip-cloud.appspot.com/api/search?zipcode=${postal_code}";
         $json = json_decode(file_get_contents($url), true);
-        $address = $json["results"];
+        $hitAddress = $json["results"];
     }
 }
 
+if (isset($hitAddress[0]['address2'])) {
+    $city = $hitAddress[0]['address2'];
+} else {
+    if (isset($_POST['city'])) {
+        $city = $_POST['city'];
+    } else {
+        $city = $user['city'];
+    }
+}
+if (isset($hitAddress[0]['address3'])) {
+    $address = $hitAddress[0]['address3'];
+} else {
+    if (isset($_POST['address'])) {
+        $address = $_POST['address'];
+    } else {
+        $address = $user['address'];
+    }
+}
+if (isset($_POST['other'])) {
+    $other = $_POST['other'];
+} else {
+    $other = $user['other'];
+}
 ?>
 
 <?php require_once('header.html')?>
@@ -151,18 +175,22 @@ if (isset($_POST['send'])) {
             <td><?=number_format(floor($totalPrice * (1 + TAX) + $shipping))?></td>
         </tr>
     </table>
-    <form action="#address" method="post">
+    <form action="purchase_edit.php?action=fix#address" method="post">
         <input type="hidden" name="token" value="<?=getToken()?>">
         <input type="hidden" name="sub_price" value="<?=floor($totalPrice)?>">
         <input type="hidden" name="shipping" value="<?=($totalPrice * (1 + TAX) > 10000) ? 0 : 1000?>">
         <input type="hidden" name="total_price" value="<?=floor($totalPrice * (1 + TAX) + $shipping)?>">
         <input type="hidden" name="mail" value="<?=$user['mail']?>">
         <p class="contents-title" id="address">送付先情報<span style="font-size: 20px; margin-left: 10px;">※登録住所以外へ送る場合は変更してください</span></p>
-        <p class="toggle-radio"><input type="radio" name="sendFor" id="sendFor1" value="1">変更する <input type="radio" name="sendFor" id="sendFor2" value="2"  checked>変更しない</p>
-        <table class="table send-for table-left">
+        <p class="toggle-radio"><input type="radio" name="sendFor" id="sendFor1" value="1" <?=(isset($_GET['action']) and $_GET['action'] == 'fix') ? 'checked' : ''?>>変更する <input type="radio" name="sendFor" id="sendFor2" value="2" <?=!isset($_GET['action']) ? 'checked' : ''?>>変更しない</p>
+        <table class="table send-for table-left" <?=!isset($_GET['action']) ? 'style="display: none;"' : ''?>>
             <tr>
                 <th>郵便番号</th>
-                <td><input type="text" name="postal_code1" value="<?=isset($_POST['postal_code1']) ? $_POST['postal_code1'] : $user['postal_code1']?>"> - <input type="text" name="postal_code2" value="<?=isset($_POST['postal_code2']) ? $_POST['postal_code2'] : $user['postal_code2']?>"> <input type="submit" name="address_search" value="住所検索"><span class="error"><?=isset($error['postal_code1']) ? $error['postal_code1'] : '';?><?=isset($error['postal_code2']) ? $error['postal_code2'] : '';?></span></td>
+                <td>
+                    <input type="text" name="postal_code1" value="<?=isset($_POST['postal_code1']) ? $_POST['postal_code1'] : $user['postal_code1']?>"> - <input type="text" name="postal_code2" value="<?=isset($_POST['postal_code2']) ? $_POST['postal_code2'] : $user['postal_code2']?>">
+                    <input type="submit" name="address_search" value="住所検索">
+                    <span class="error"><?=isset($error['postal_code1']) ? $error['postal_code1'] : '';?><?=isset($error['postal_code2']) ? $error['postal_code2'] : '';?></span>
+                </td>
             </tr>
             <tr>
                 <th>住所</th>
@@ -170,13 +198,28 @@ if (isset($_POST['send'])) {
                     <p>
                         <select name="pref">
                             <?php foreach ($prefectures as $prefecture) :?>
-                                <option value="<?=$prefecture?>" <?=(isset($address[0]['address1']) and $address[0]['address1'] == $prefecture) ? 'selected' : (($prefecture == $prefectures[$user['pref']]) ? 'selected' : '')?>><?=$prefecture?></option>
+                                <?php
+                                    if (isset($hitAddress[0]['address1']) and $hitAddress[0]['address1'] == $prefecture) {
+                                        $pref = 'selected';
+                                    } else {
+                                        if (isset($_POST['pref']) and $_POST['pref'] == $prefecture) {
+                                            $pref = 'selected';
+                                        } else {
+                                            if ($prefectures[$user['pref']] == $prefecture) {
+                                                $pref = 'selected';
+                                            } else {
+                                                $pref = '';
+                                            }
+                                        }
+                                    }
+                                ?>
+                                <option <?=$pref?>><?=$prefecture?></option>
                             <?php endforeach;?>
                         </select>
                     </p>
-                    <p><input type="text" name="city" value="<?=isset($_POST['city']) ? $_POST['city'] : (isset($address[0]['address2']) ? $address[0]['address2'] : $user['city'])?>"><span class="error"><?=isset($error['city']) ? $error['city'] : ''?></span></p>
-                    <p><input type="text" name="address" value='<?=isset($_POST['address']) ? $_POST['address'] : (isset($address[0]['address3']) ? $address[0]['address3'] : $user['address'])?>'><span class="error"><?=isset($error['address']) ? $error['address'] : ''?></span></p>
-                    <p><input type="text" name="other" value='<?=isset($_POST['other']) ? $_POST['other'] : $user['other']?>'><span class="error"><?=isset($error['other']) ? $error['other'] : ''?></span></p>
+                    <p><input type="text" name="city" value="<?=$city?>"><span class="error"><?=isset($error['city']) ? $error['city'] : ''?></span></p>
+                    <p><input type="text" name="address" value="<?=$address?>"><span class="error"><?=isset($error['address']) ? $error['address'] : ''?></span></p>
+                    <p><input type="text" name="other" value="<?=$other?>"><span class="error"><?=isset($error['other']) ? $error['other'] : ''?></span></p>
                 </td>
             </tr>
             <tr>
