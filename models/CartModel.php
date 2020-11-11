@@ -123,7 +123,7 @@ class CartModel extends Model
                 $mailBody .=
                     '<p>' . $product[0]['name'] . $productDetail['size'] . 'cm<br>
                     ' . $productDetail['price'] . '円<br>
-                    ' . $onCart['num'] . '枚</p>
+                    ' . $prodOfTheCart['num'] . '枚</p>
                     <p>-----------------------</p>';
             }
             $mailBody .=
