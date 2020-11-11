@@ -253,31 +253,32 @@ class ProductModel extends Model
     /**
      * 検索及びソート結果を返す
      *
-     * @param String $column
-     * @param String $direction
      * @param String $key
-     * @return void
+     * @return array
      */
-    public function displayResult($column, $direction, $key)
+    public function displayResult($key)
     {
-        if ($key != '') {
-            return $this->search($key);
-        } elseif ($column == 'id') {
-            if ($direction == '▼') {
-                return $this->sortIdDesc();
+        if ($key == 'search') {
+            return $this->search($_POST['keyword']);
+        } elseif ($key == 'sort') {
+            if ($_POST['column'] == 'id') {
+                if ($_POST['sort'] == '▼') {
+                    return $this->sortIdDesc();
+                }
+                return $this->sortIdAsc();
+            } elseif ($_POST['column'] == 'name') {
+                if ($_POST['sort'] == '▼') {
+                    return $this->sortNameDesc();
+                }
+                return $this->sortNameAsc();
+            } elseif ($_POST['column'] == 'updated_at') {
+                if ($_POST['sort'] == '▼') {
+                    return $this->sortUpdatedDesc();
+                }
+                return $this->sortUpdatedAsc();
             }
-            return $this->sortIdAsc();
-        } elseif ($column == 'name') {
-            if ($direction == '▼') {
-                return $this->sortNameDesc();
-            }
-            return $this->sortNameAsc();
-        } elseif ($column == 'updated_at') {
-            if ($direction == '▼') {
-                return $this->sortUpdatedDesc();
-            }
-            return $this->sortUpdatedAsc();
         }
+        return $this->fetchAllData();
     }
 
     /**
