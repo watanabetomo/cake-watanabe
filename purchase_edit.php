@@ -7,12 +7,15 @@ if (!isset($_SESSION['authenticated'])) {
 }
 
 try {
-    $paymentModel = new MPaymentModel();
-    $payments = $paymentModel->fetchAll();
     $productDetailModel = new ProductDetailmodel();
     $productModel = new ProductModel();
+    
+    $paymentModel = new MPaymentModel();
+    $payments = $paymentModel->fetchAll();
+
     $cartModel = new CartModel();
     $cart = $cartModel->fetchAll();
+
     $userModel = new UserModel();
     $user = $userModel->fetchById($_SESSION['userId']);
 } catch (PDOException $e) {
