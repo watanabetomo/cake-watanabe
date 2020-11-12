@@ -5,6 +5,7 @@ if (!isset($_SESSION['admin_authenticated'])) {
     header('Location: login.php');
     exit;
 }
+ 
 ?>
 
 <?php require_once('admin_header.html')?>

@@ -119,7 +119,7 @@ class ProductModel extends Model
      * @param array $array
      * @return void
      */
-    public function imgUpload($id, $array)
+    public function uploadImg($id, $array)
     {
         try{
             $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
@@ -253,26 +253,26 @@ class ProductModel extends Model
     /**
      * 検索及びソート結果を返す
      *
-     * @param String $key
+     * @param array $get
      * @return array
      */
-    public function displayResult($key)
+    public function displayResult($get)
     {
-        if ($key == 'search') {
-            return $this->search($_POST['keyword']);
-        } elseif ($key == 'sort') {
-            if ($_POST['column'] == 'id') {
-                if ($_POST['order'] == '▼') {
+        if (isset($get['keyword'])) {
+            return $this->search($get['keyword']);
+        } elseif (isset($get['order'])) {
+            if ($get['column'] == 'id') {
+                if ($get['order'] == '▼') {
                     return $this->sortIdDesc();
                 }
                 return $this->sortIdAsc();
-            } elseif ($_POST['column'] == 'name') {
-                if ($_POST['order'] == '▼') {
+            } elseif ($get['column'] == 'name') {
+                if ($get['order'] == '▼') {
                     return $this->sortNameDesc();
                 }
                 return $this->sortNameAsc();
-            } elseif ($_POST['column'] == 'updated_at') {
-                if ($_POST['order'] == '▼') {
+            } elseif ($get['column'] == 'updated_at') {
+                if ($get['order'] == '▼') {
                     return $this->sortUpdatedDesc();
                 }
                 return $this->sortUpdatedAsc();

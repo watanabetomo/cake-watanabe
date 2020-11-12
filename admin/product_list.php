@@ -11,7 +11,7 @@ try {
     if (isset($_POST['delete'])) {
         $productModel->delete($_POST['delete_id']);
     }
-    $productList = $productModel->displayResult(isset($_POST['db_connect']) ? $_POST['db_connect'] : '');
+    $productList = $productModel->displayResult($_GET);
 } catch (Exception $e) {
     $error = '商品情報の取得に失敗しました。<br>システム管理者にお問い合わせください。';
 }
@@ -23,13 +23,13 @@ try {
 <main>
     <?php getPage()?>
     <p class="error"><?=isset($error) ? $error : ''?></p>
-    <form action="" method="post">
-        <p class="search"><input type="text" name="keyword"> <input type="submit" name="search" value="絞り込む"> <input type="submit" name="all" value="すべて表示"></p>
+    <form action="" method="get">
+        <p class="search"><input type="text" name="keyword"> <input type="submit" value="絞り込む"> <input type="submit" value="すべて表示"></p>
     </form>
     <table border="1" class="main-table">
         <tr>
             <th>
-                <form action="" method="post">
+                <form action="" method="get">
                     <input type="hidden" name="column" value="id">
                     <input type="submit" name="order" class="icon" value="▲">
                     <p class="sorted">ID</p>
@@ -37,7 +37,7 @@ try {
                 </form>
             </th>
             <th>
-                <form action="" method="post">
+                <form action="" method="get">
                     <input type="hidden" name="column" value="name">
                     <input type="submit" name="order" class="icon" value="▲">
                     <p class="sorted">商品名</p>
@@ -47,7 +47,7 @@ try {
             <th>画像</th>
             <th>登録日時</th>
             <th>
-                <form action="" method="post">
+                <form action="" method="get">
                     <input type="hidden" name="column" value="updated_at">
                     <input type="submit" name="order" class="icon" value="▲">
                     <p class="sorted">更新日時</p>
