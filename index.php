@@ -134,8 +134,8 @@ try {
                 </li>
             </ul>
             <div class="postage">
-                <a href="http://casamingo.gift/souryou.htm"><strong>本州送料３４０円</strong>
-                    ５０００円以上お買い上げのお客様は<strong>期間限定本州送料無料</strong></a>
+                <a href="http://casamingo.gift/souryou.htm"><strong>送料１０００円</strong>
+                    １００００円以上お買い上げのお客様は<strong>送料無料</strong></a>
             </div>
         </header>
         <div id="main">
