@@ -142,12 +142,12 @@ if (isset($_POST['other'])) {
                     $product = $productModel->fetchSingleDetail($productDetail['product_id']);
             ?>
             <tr>
-                <td><?=isset($product['img']) ? '<img src="' . IMG_PATH . $product['img'] . '" alt="' . $product['img'] . '">' : ''?></td>
-                <td><?=$product['name']?></td>
-                <td><?=$prodOfTheCart['num']?></td>
-                <td><?=$productDetail['size']?></td>
-                <td><?=number_format($productDetail['price'])?></td>
-                <td><?=number_format($prodOfTheCart['num'] * $productDetail['price'])?></td>
+                <td><?=isset($product['img']) ? '<img src="' . IMG_PATH . h($product['img']) . '" alt="' . h($product['img']) . '">' : ''?></td>
+                <td><?=h($product['name'])?></td>
+                <td><?=h($prodOfTheCart['num'])?></td>
+                <td><?=h($productDetail['size'])?></td>
+                <td><?=number_format(h($productDetail['price']))?></td>
+                <td><?=number_format(h($prodOfTheCart['num']) * h($productDetail['price']))?></td>
             </tr>
             <?php
                 $totalPrice += $productDetail['price'] * $prodOfTheCart['num'];
@@ -187,7 +187,7 @@ if (isset($_POST['other'])) {
             <tr>
                 <th>郵便番号</th>
                 <td>
-                    <input type="text" name="postal_code1" value="<?=isset($_POST['postal_code1']) ? $_POST['postal_code1'] : $user['postal_code1']?>"> - <input type="text" name="postal_code2" value="<?=isset($_POST['postal_code2']) ? $_POST['postal_code2'] : $user['postal_code2']?>">
+                    <input type="text" name="postal_code1" value="<?=isset($_POST['postal_code1']) ? h($_POST['postal_code1']) : h($user['postal_code1'])?>"> - <input type="text" name="postal_code2" value="<?=isset($_POST['postal_code2']) ? h($_POST['postal_code2']) : h($user['postal_code2'])?>">
                     <input type="submit" name="address_search" value="住所検索">
                     <span class="error"><?=isset($error['postal_code1']) ? $error['postal_code1'] : '';?><?=isset($error['postal_code2']) ? $error['postal_code2'] : '';?></span>
                 </td>
@@ -220,22 +220,22 @@ if (isset($_POST['other'])) {
                             <?php endforeach;?>
                         </select>
                     </p>
-                    <p><input type="text" name="city" value="<?=$city?>"><span class="error"><?=isset($error['city']) ? $error['city'] : ''?></span></p>
-                    <p><input type="text" name="address" value="<?=$address?>"><span class="error"><?=isset($error['address']) ? $error['address'] : ''?></span></p>
-                    <p><input type="text" name="other" value="<?=$other?>"><span class="error"><?=isset($error['other']) ? $error['other'] : ''?></span></p>
+                    <p><input type="text" name="city" value="<?=h($city)?>"><span class="error"><?=isset($error['city']) ? $error['city'] : ''?></span></p>
+                    <p><input type="text" name="address" value="<?=h($address)?>"><span class="error"><?=isset($error['address']) ? $error['address'] : ''?></span></p>
+                    <p><input type="text" name="other" value="<?=h($other)?>"><span class="error"><?=isset($error['other']) ? $error['other'] : ''?></span></p>
                 </td>
             </tr>
             <tr>
                 <th>電話番号</th>
                 <td>
-                    <p><input type="text" name="tel1" value="<?=isset($_POST['tel1']) ? $_POST['tel1'] : $user['tel1']?>"> - <input type="text" name="tel2" value="<?=isset($_POST['tel2']) ? $_POST['tel2'] : $user['tel2']?>"> - <input type="text" name="tel3"  value="<?=isset($_POST['tel3']) ? $_POST['tel3'] : $user['tel3']?>"><span class="error"><?=isset($error['tel1']) ? $error['tel1'] : '';?><?=isset($error['tel2']) ? $error['tel2'] : '';?><?=isset($error['tel3']) ? $error['tel3'] : '';?></span></p>
+                    <p><input type="text" name="tel1" value="<?=isset($_POST['tel1']) ? h($_POST['tel1']) : h($user['tel1'])?>"> - <input type="text" name="tel2" value="<?=isset($_POST['tel2']) ? h($_POST['tel2']) : h($user['tel2'])?>"> - <input type="text" name="tel3"  value="<?=isset($_POST['tel3']) ? h($_POST['tel3']) : h($user['tel3'])?>"><span class="error"><?=isset($error['tel1']) ? $error['tel1'] : '';?><?=isset($error['tel2']) ? $error['tel2'] : '';?><?=isset($error['tel3']) ? $error['tel3'] : '';?></span></p>
                 </td>
             </tr>
             <tr>
                 <th>お名前</th>
                 <td>
-                    <p><input type="text" name="name_kana" value="<?=isset($_POST['name_kana']) ? $_POST['name_kana'] : $user['name_kana']?>"><span class="error"><?=isset($error['name_kana']) ? $error['name_kana'] : ''?></span></p>
-                    <p><input type="text" name="name" value="<?=isset($_POST['name']) ? $_POST['name'] : $user['name']?>"><span class="error"><?=isset($error['name']) ? $error['name'] : ''?></span></p>
+                    <p><input type="text" name="name_kana" value="<?=isset($_POST['name_kana']) ? h($_POST['name_kana']) : h($user['name_kana'])?>"><span class="error"><?=isset($error['name_kana']) ? $error['name_kana'] : ''?></span></p>
+                    <p><input type="text" name="name" value="<?=isset($_POST['name']) ? h($_POST['name']) : h($user['name'])?>"><span class="error"><?=isset($error['name']) ? $error['name'] : ''?></span></p>
                 </td>
             </tr>
         </table>
@@ -243,25 +243,25 @@ if (isset($_POST['other'])) {
         <table class="table table-left">
             <tr>
                 <th>郵便番号</th>
-                <td><?=$user['postal_code1']?> - <?=$user['postal_code2']?></td>
+                <td><?=h($user['postal_code1'])?> - <?=h($user['postal_code2'])?></td>
             </tr>
             <tr>
                 <th>住所</th>
-                <td><?=$prefectures[$user['pref']] . $user['city'] . $user['address'] . $user['other']?></td>
+                <td><?=$prefectures[$user['pref']] . h($user['city']) . h($user['address']) . h($user['other'])?></td>
             </tr>
             <tr>
                 <th>電話番号</th>
-                <td><?=$user['tel1']?> - <?=$user['tel2']?> - <?=$user['tel3']?></td>
+                <td><?=h($user['tel1'])?> - <?=h($user['tel2'])?> - <?=h($user['tel3'])?></td>
             </tr>
             <tr>
                 <th>メールアドレス</th>
-                <td><?=$user['mail']?></td>
+                <td><?=h($user['mail'])?></td>
             </tr>
             <tr>
                 <th>お名前</th>
                 <td>
-                    <p><?=$user['name_kana']?></p>
-                    <p><?=$user['name']?></p>
+                    <p><?=h($user['name_kana'])?></p>
+                    <p><?=h($user['name'])?></p>
                 </td>
             </tr>
         </table>

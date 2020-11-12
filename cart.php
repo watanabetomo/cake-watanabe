@@ -94,18 +94,18 @@ try {
                                     <p style="margin: 10px;"><input type="submit" name="delete" value="削除"></p>
                                 </form>
                             </td>
-                            <td><?=isset($product['img']) ? '<img src="' . IMG_PATH . $product['img'] . '" alt="' . $product['img'] . '">' : '画像なし'?></td>
+                            <td><?=isset($product['img']) ? '<img src="' . IMG_PATH . h($product['img']) . '" alt="' . h($product['img']) . '">' : '画像なし'?></td>
                             <td><?=$product['name']?></td>
                             <td>
                                 <form action="cart.php" method="post">
                                     <input type="hidden" name="id" value="<?=$prodOfTheCart['id']?>">
-                                    <input type="number" name="num" value="<?=$prodOfTheCart['num']?>" style="width: 70px; margin: 10px 10px;">
+                                    <input type="number" name="num" value="<?=h($prodOfTheCart['num'])?>" style="width: 70px; margin: 10px 10px;">
                                     <p><input type="submit" name="change" value="変更"></p>
                                 </form>
                             </td>
-                            <td><?=$productDetail['size']?>cm</td>
-                            <td><?=number_format($productDetail['price'])?>円</td>
-                            <td><?=number_format($prodOfTheCart['num'] * $productDetail['price'])?>円</td>
+                            <td><?=h($productDetail['size'])?>cm</td>
+                            <td><?=number_format(h($productDetail['price']))?>円</td>
+                            <td><?=number_format(h($prodOfTheCart['num']) * h($productDetail['price']))?>円</td>
                         </tr>
                     <?php endforeach; ?>
                 </table>

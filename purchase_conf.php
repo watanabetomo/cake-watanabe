@@ -56,12 +56,12 @@ if (isset($_POST['send'])) {
                 $product = $productModel->fetchSingleDetail($productDetail['product_id']);
             ?>
             <tr>
-                <td><img src="<?=IMG_PATH . $product['img']?>" alt="<?=$product['img']?>"></td>
-                <td><?=$product['name']?></td>
-                <td><?=$prodOfTheCart['num']?></td>
-                <td><?=$productDetail['size']?></td>
-                <td><?=number_format($productDetail['price'])?></td>
-                <td><?=number_format($prodOfTheCart['num'] * $productDetail['price'])?></td>
+                <td><img src="<?=IMG_PATH . h($product['img'])?>" alt="<?=h($product['img'])?>"></td>
+                <td><?=h($product['name'])?></td>
+                <td><?=h($prodOfTheCart['num'])?></td>
+                <td><?=h($productDetail['size'])?></td>
+                <td><?=number_format(h($productDetail['price']))?></td>
+                <td><?=number_format(h($prodOfTheCart['num']) * h($productDetail['price']))?></td>
             </tr>
             <?php
                 $totalPrice += $productDetail['price'] * $prodOfTheCart['num'];
@@ -93,21 +93,21 @@ if (isset($_POST['send'])) {
     <table class="table table-left">
         <tr>
             <th>郵便番号</th>
-            <td><?=$_SESSION['purchase_info']['postal_code1']?> - <?=$_SESSION['purchase_info']['postal_code2']?></td>
+            <td><?=h($_SESSION['purchase_info']['postal_code1'])?> - <?=h($_SESSION['purchase_info']['postal_code2'])?></td>
         </tr>
         <tr>
             <th>住所</th>
-            <td><?=$_SESSION['purchase_info']['pref'] . $_SESSION['purchase_info']['city'] . $_SESSION['purchase_info']['address'] . $_SESSION['purchase_info']['other']?></td>
+            <td><?=h($_SESSION['purchase_info']['pref']) . h($_SESSION['purchase_info']['city']) . h($_SESSION['purchase_info']['address']) . h($_SESSION['purchase_info']['other'])?></td>
         </tr>
         <tr>
             <th>電話番号</th>
-            <td><?=$_SESSION['purchase_info']['tel1']?> - <?=$_SESSION['purchase_info']['tel2']?> - <?=$_SESSION['purchase_info']['tel3']?></td>
+            <td><?=h($_SESSION['purchase_info']['tel1'])?> - <?=h($_SESSION['purchase_info']['tel2'])?> - <?=h($_SESSION['purchase_info']['tel3'])?></td>
         </tr>
         <tr>
             <th>お名前</th>
             <td>
-                <p><?=$_SESSION['purchase_info']['name_kana']?></p>
-                <p><?=$_SESSION['purchase_info']['name']?></p>
+                <p><?=h($_SESSION['purchase_info']['name_kana'])?></p>
+                <p><?=h($_SESSION['purchase_info']['name'])?></p>
             </td>
         </tr>
     </table>
@@ -115,25 +115,25 @@ if (isset($_POST['send'])) {
     <table class="table table-left">
         <tr>
             <th>郵便番号</th>
-            <td><?=$user['postal_code1']?> - <?=$user['postal_code2']?></td>
+            <td><?=h($user['postal_code1'])?> - <?=h($user['postal_code2'])?></td>
         </tr>
         <tr>
             <th>住所</th>
-            <td><?=$prefectures[$user['pref']] . $user['city'] . $user['address'] . $user['other']?></td>
+            <td><?=$prefectures[$user['pref']] . h($user['city']) . h($user['address']) . h($user['other'])?></td>
         </tr>
         <tr>
             <th>電話番号</th>
-            <td><?=$user['tel1']?> - <?=$user['tel2']?> - <?=$user['tel3']?></td>
+            <td><?=h($user['tel1'])?> - <?=h($user['tel2'])?> - <?=h($user['tel3'])?></td>
         </tr>
         <tr>
             <th>メールアドレス</th>
-            <td><?=$user['mail']?></td>
+            <td><?=h($user['mail'])?></td>
         </tr>
         <tr>
             <th>お名前</th>
             <td>
-                <p><?=$user['name_kana']?></p>
-                <p><?=$user['name']?></p>
+                <p><?=h($user['name_kana'])?></p>
+                <p><?=h($user['name'])?></p>
             </td>
         </tr>
     </table>

@@ -305,7 +305,7 @@ try {
             </div><!--/#select-->
             <?php foreach ($productCategories as $category) :?>
                 <div id="<?=str_replace(' ', '', $category['name'])?>">
-                    <h1><a href=""><?=$category['name']?></a></h1>
+                    <h1><a href=""><?=h($category['name'])?></a></h1>
                     <div class="contents02">
                         <?php
                         try {
@@ -317,8 +317,8 @@ try {
                         ?>
                         <?php for ($j=0; $j<count($products); $j++) :?>
                             <div class="contents02_<?=$j + 1?>">
-                                <h2><a href=""><img src="img/<?=$products[$j]['img']?>"></a></h2>
-                                <p><strong><?=$products[$j]['name']?><br></strong><br></p>
+                                <h2><a href=""><img src="img/<?=h($products[$j]['img'])?>"></a></h2>
+                                <p><strong><?=h($products[$j]['name'])?><br></strong><br></p>
                                 <p><span>通常1～4日以内に発送。</span></p>
                                 <ul class="accordion">
                                     <li>
@@ -341,7 +341,7 @@ try {
                                                         <input name="es_item_id" value="<?=$detail['product_id']?>" type="hidden">
                                                         <input name="es_shop_id" value="1482" type="hidden">
                                                         <input name="es_stock_attr_flag" value="0" type="hidden">
-                                                        <input name="es_submit" value="<?=$detail['size']?>cm ￥<?=number_format($detail['price'])?>" type="submit">
+                                                        <input name="es_submit" value="<?=h($detail['size'])?>cm ￥<?=number_format(h($detail['price']))?>" type="submit">
                                                     </form>
                                                 </li>
                                             <?php endforeach;?>
