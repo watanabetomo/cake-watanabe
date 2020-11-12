@@ -135,8 +135,6 @@ class CartModel extends Model
                 );
             }
             $this->truncateCart();
-            mb_language('Japanese');
-            mb_internal_encoding('UTF-8');
             $mailBody =
                 '<p>' . $_SESSION['userName'] . '様</p>
                 <p>お世話になっております。<br>洋菓子店カサミンゴーカスタマーサポートです。</p>
@@ -145,12 +143,12 @@ class CartModel extends Model
                     今一度ご購入商品等にお間違えなどないよう、ご確認いただけましたら幸いでございます。
                 </p>
                 <p>--------------------------------------</p>
-                <h2>【購入情報】</h2>';
+                <p>【購入情報】</p>';
             foreach ($cart as $prodOfTheCart) {
                 $productDetail = $productDetailModel->fetchById($prodOfTheCart['product_detail_id']);
                 $product = $productModel->fetchById($productDetail['product_id']);
                 $mailBody .=
-                    '<p>' . $product[0]['name'] . $productDetail['size'] . 'cm<br>
+                    '<p>' . $product[0]['name'] . '<br>' . $productDetail['size'] . 'cm<br>
                     ' . $productDetail['price'] . '円<br>
                     ' . $prodOfTheCart['num'] . '枚</p>
                     <p>-----------------------</p>';
@@ -161,7 +159,7 @@ class CartModel extends Model
                 送料： ' . $_SESSION['purchase_info']['shipping'] . '<br>
                 合計： ' . $_SESSION['purchase_info']['total_price'] . '</p>
                 <p>--------------------------------------</p>
-                <h2>【送付先情報】</h2>
+                <p>【送付先情報】</p>
                 <p>お名前： ' . $_SESSION['purchase_info']['name'] . '<br>
                 フリガナ： ' . $_SESSION['purchase_info']['name_kana'] . '<br>
                 電話番号： ' . $_SESSION['purchase_info']['tel1'] . ' - ' . $_SESSION['purchase_info']['tel2'] . ' - ' . $_SESSION['purchase_info']['tel3'] . '<br>
@@ -171,7 +169,7 @@ class CartModel extends Model
                 番地： ' . $_SESSION['purchase_info']['address'] . '<br>
                 マンション名等： ' . $_SESSION['purchase_info']['other'] . '</p>
                 <p>--------------------------------------</p>
-                <h2>【請求先情報】</h2>
+                <p>【請求先情報】</p>
                 <p>お名前： ' . $user['name'] . '<br>
                 フリガナ： ' . $user['name_kana'] . '<br>
                 電話番号： ' . $user['tel1'] . ' - ' . $user['tel2'] . ' - ' . $user['tel3'] . '<br>
@@ -183,11 +181,16 @@ class CartModel extends Model
                 <p>--------------------------------------</p>
                 <p>商品ご到着まで。今しばらくお待ちください。</p>
                 <p>※このメールは自動送信メールです。<br>※返信をされてもご回答しかねますのでご了承ください。</p>';
+            $from = 'From:' . mb_encode_mimeheader('洋菓子店カサミンゴー');
+            $from .= "\r\n";
+            $from .= 'Content-type: text/html; charset=UTF-8';
+            mb_language('uni');
+            mb_internal_encoding('UTF-8');
             mb_send_mail(
                 $_SESSION['purchase_info']['mail'],
                 '【洋菓子店カサミンゴー】ご購入商品確認メール',
                 $mailBody,
-                "From: 洋菓子店カサミンゴー\r\nContent-type: text/html; charset=UTF-8"
+                $from
             );
             $this->dbh->commit();
         } catch (PDOException $e) {
