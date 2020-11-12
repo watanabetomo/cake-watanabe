@@ -95,6 +95,9 @@ if (isset($_POST['send'])) {
         $url = "https://zip-cloud.appspot.com/api/search?zipcode=${postal_code}";
         $json = json_decode(file_get_contents($url), true);
         $hitAddress = $json["results"];
+        if (empty($hitAddress)) {
+            $unhitAddressError = '一致する住所がありません。';
+        }
     }
 }
 
@@ -189,7 +192,7 @@ if (isset($_POST['other'])) {
                 <td>
                     <input type="text" name="postal_code1" value="<?=isset($_POST['postal_code1']) ? h($_POST['postal_code1']) : h($user['postal_code1'])?>"> - <input type="text" name="postal_code2" value="<?=isset($_POST['postal_code2']) ? h($_POST['postal_code2']) : h($user['postal_code2'])?>">
                     <input type="submit" name="address_search" value="住所検索">
-                    <span class="error"><?=isset($error['postal_code1']) ? $error['postal_code1'] : '';?><?=isset($error['postal_code2']) ? $error['postal_code2'] : '';?></span>
+                    <span class="error"><?=isset($error['postal_code1']) ? $error['postal_code1'] : ''?><?=isset($error['postal_code2']) ? $error['postal_code2'] : ''?><?=isset($unhitAddressError) ? $unhitAddressError : ''?></span>
                 </td>
             </tr>
             <tr>
@@ -228,7 +231,10 @@ if (isset($_POST['other'])) {
             <tr>
                 <th>電話番号</th>
                 <td>
-                    <p><input type="text" name="tel1" value="<?=isset($_POST['tel1']) ? h($_POST['tel1']) : h($user['tel1'])?>"> - <input type="text" name="tel2" value="<?=isset($_POST['tel2']) ? h($_POST['tel2']) : h($user['tel2'])?>"> - <input type="text" name="tel3"  value="<?=isset($_POST['tel3']) ? h($_POST['tel3']) : h($user['tel3'])?>"><span class="error"><?=isset($error['tel1']) ? $error['tel1'] : '';?><?=isset($error['tel2']) ? $error['tel2'] : '';?><?=isset($error['tel3']) ? $error['tel3'] : '';?></span></p>
+                    <p>
+                        <input type="text" name="tel1" value="<?=isset($_POST['tel1']) ? h($_POST['tel1']) : h($user['tel1'])?>"> - <input type="text" name="tel2" value="<?=isset($_POST['tel2']) ? h($_POST['tel2']) : h($user['tel2'])?>"> - <input type="text" name="tel3"  value="<?=isset($_POST['tel3']) ? h($_POST['tel3']) : h($user['tel3'])?>">
+                        <span class="error"><?=isset($error['tel1']) ? $error['tel1'] : ''?><?=isset($error['tel2']) ? $error['tel2'] : ''?><?=isset($error['tel3']) ? $error['tel3'] : ''?></span>
+                    </p>
                 </td>
             </tr>
             <tr>
