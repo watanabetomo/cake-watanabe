@@ -18,7 +18,7 @@ try {
 } catch (PDOException $e) {
     $error = '商品情報の取得及び登録に失敗しました。<br>カスタマーサポートにお問い合わせください。';
 } catch (Exception $e) {
-    $error = "メールの送信に失敗しました";
+    $error = 'メールの送信に失敗しました';
 }
 
 ?>
