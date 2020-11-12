@@ -24,14 +24,12 @@ try {
     <?php getPage()?>
     <p class="error"><?=isset($error) ? $error : ''?></p>
     <form action="" method="post">
-        <input type="hidden" name="db_connect" value="search">
         <p class="search"><input type="text" name="keyword"> <input type="submit" name="search" value="絞り込む"> <input type="submit" name="all" value="すべて表示"></p>
     </form>
     <table border="1" class="main-table">
         <tr>
             <th>
                 <form action="" method="post">
-                    <input type="hidden" name="db_connect" value="sort">
                     <input type="hidden" name="column" value="id">
                     <input type="submit" name="order" class="icon" value="▲">
                     <p class="sorted">ID</p>
@@ -40,7 +38,6 @@ try {
             </th>
             <th>
                 <form action="" method="post">
-                    <input type="hidden" name="db_connect" value="sort">
                     <input type="hidden" name="column" value="name">
                     <input type="submit" name="order" class="icon" value="▲">
                     <p class="sorted">商品名</p>
@@ -51,7 +48,6 @@ try {
             <th>登録日時</th>
             <th>
                 <form action="" method="post">
-                    <input type="hidden" name="db_connect" value="sort">
                     <input type="hidden" name="column" value="updated_at">
                     <input type="submit" name="order" class="icon" value="▲">
                     <p class="sorted">更新日時</p>

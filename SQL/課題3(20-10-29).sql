@@ -8,21 +8,21 @@ CREATE TABLE user (
     birth_year CHAR(4),
     birth_month CHAR(2),
     birth_day CHAR(2),
-    gender TINYINT NOT NULL,
+    gender SMALLINT UNSIGNED NOT NULL,
     mail TEXT NOT NULL,
     tel1 VARCHAR(5) NOT NULL,
     tel2 VARCHAR(5) NOT NULL,
     tel3 VARCHAR(5) NOT NULL,
     postal_code1 CHAR(3) NOT NULL,
     postal_code2 CHAR(4) NOT NULL,
-    pref TINYINT NOT NULL,
+    pref SMALLINT UNSIGNED NOT NULL,
     city VARCHAR(15) NOT NULL,
     address VARCHAR(100) NOT NULL,
     other VARCHAR(100),
     memo TEXT,
-    status TINYINT NOT NULL,
+    status SMALLINT UNSIGNED NOT NULL,
     last_login_date TIMESTAMP(6) NULL DEFAULT NULL,
-    crated_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+    created_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
     updated_at TIMESTAMP(6) NULL DEFAULT NULL,
     delete_flg BOOLEAN DEFAULT FALSE
 );
@@ -31,7 +31,7 @@ CREATE TABLE cart (
     id SERIAL PRIMARY KEY,
     user_id BIGINT(20) UNSIGNED NOT NULL,
     product_detail_id BIGINT(20) UNSIGNED NOT NULL,
-    num INT UNSIGNED NOT NULL
+    num SMALLINT UNSIGNED NOT NULL
 );
 
 CREATE TABLE `order` (
@@ -45,16 +45,16 @@ CREATE TABLE `order` (
     tel3 VARCHAR(5) NOT NULL,
     postal_code1 CHAR(3) NOT NULL,
     postal_code2 CHAR(4) NOT NULL,
-    pref TINYINT NOT NULL,
+    pref SMALLINT UNSIGNED NOT NULL,
     city VARCHAR(15) NOT NULL,
     address VARCHAR(100) NOT NULL,
     other VARCHAR(100),
     payment_id BIGINT(20) UNSIGNED NOT NULL,
     sub_price INT UNSIGNED NOT NULL,
     shipping_price INT UNSIGNED NOT NULL,
-    tax INT UNSIGNED NOT NULL,
+    tax SMALLINT UNSIGNED NOT NULL,
     total_price INT UNSIGNED NOT NULL,
-    crated_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+    created_at TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
     updated_at TIMESTAMP(6) NULL DEFAULT NULL,
     delete_flg BOOLEAN DEFAULT FALSE
 );
@@ -64,9 +64,9 @@ CREATE TABLE order_detail(
     order_id BIGINT(20) UNSIGNED NOT NULL,
     product_detail_id BIGINT(20) UNSIGNED NOT NULL,
     name TEXT NOT NULL,
-    size INT UNSIGNED NOT NULL,
+    size SMALLINT UNSIGNED NOT NULL,
     price INT UNSIGNED NOT NULL,
-    num INT UNSIGNED NOT NULL
+    num SMALLINT UNSIGNED NOT NULL
 );
 
 CREATE TABLE m_payment(
