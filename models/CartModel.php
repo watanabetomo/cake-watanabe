@@ -119,7 +119,8 @@ class CartModel extends Model
                 $_SESSION['purchase_info']['sub_price'],
                 $_SESSION['purchase_info']['shipping'],
                 TAX * 100,
-                $_SESSION['purchase_info']['total_price']
+                $_SESSION['purchase_info']['total_price'],
+                $this->dbh
             );
             $user = $userModel->fetchById($_SESSION['userId']);
             foreach ($cart as $prodOfTheCart) {
@@ -131,7 +132,8 @@ class CartModel extends Model
                     $product[0]['name'],
                     $productDetail['size'],
                     $productDetail['price'],
-                    $prodOfTheCart['num']
+                    $prodOfTheCart['num'],
+                    $this->dbh
                 );
             }
             $this->truncateCart();

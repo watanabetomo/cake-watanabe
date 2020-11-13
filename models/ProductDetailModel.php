@@ -21,11 +21,12 @@ class ProductDetailModel extends Model
      * @param int $size
      * @param int $price
      * @param int $turn
+     * @param PDO $dbh
      * @return void
      */
-    public function register($id, $size, $price, $turn)
+    public function register($id, $size, $price, $turn, $dbh)
     {
-        $stmt = $this->dbh->prepare('INSERT INTO product_detail(product_id, size, price, turn) VALUES(?, ?, ?, ?)');
+        $stmt = $dbh->prepare('INSERT INTO product_detail(product_id, size, price, turn) VALUES(?, ?, ?, ?)');
         $stmt->execute([$id, $size, $price, $turn]);
     }
 
@@ -36,11 +37,12 @@ class ProductDetailModel extends Model
      * @param int $size
      * @param int $price
      * @param int $turn
+     * @param PDO $dbh
      * @return void
      */
-    public function update($id, $size, $price, $turn)
+    public function update($id, $size, $price, $turn, $dbh)
     {
-        $stmt = $this->dbh->prepare('UPDATE product_detail SET size = ?, price = ? WHERE product_id = ? AND turn = ?');
+        $stmt = $dbh->prepare('UPDATE product_detail SET size = ?, price = ? WHERE product_id = ? AND turn = ?');
         $stmt->execute([$size, $price, $id, $turn]);
     }
 

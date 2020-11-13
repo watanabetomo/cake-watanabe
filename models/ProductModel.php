@@ -48,7 +48,7 @@ class ProductModel extends Model
             $this->dbh->beginTransaction();
             $stmt->execute([$name, $category_id, $delivery_info, $turn, $update_user, $id]);
             for ($i=0; $i<5; $i++) {
-                $productDetailModel->update($id, $size[$i], $price[$i], $i + 1);
+                $productDetailModel->update($id, $size[$i], $price[$i], $i + 1, $this->dbh);
             }
             $this->dbh->commit();
         } catch (PDOException $e) {
@@ -103,7 +103,7 @@ class ProductModel extends Model
             $this->dbh->beginTransaction();
             $stmt->execute([$name, $category_id, $delivery_info, $turn, $create_user]);
             for ($i=0; $i<5; $i++) {
-                $productDetailModel->register($this->getMaxId()[0], $size[$i], $price[$i], $i + 1);
+                $productDetailModel->register($this->getMaxId()[0], $size[$i], $price[$i], $i + 1, $this->dbh);
             }
             $this->dbh->commit();
         } catch (PDOException $e) {

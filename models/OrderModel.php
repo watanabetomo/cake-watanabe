@@ -22,6 +22,7 @@ class OrderModel extends Model
      * @param int $shipping_price
      * @param int $tax
      * @param int $total_price
+     * @param PDO $dbh
      * @return void
      */
     public function commitOrder(
@@ -42,9 +43,10 @@ class OrderModel extends Model
         $sub_price,
         $shipping_price,
         $tax,
-        $total_price
+        $total_price,
+        $dbh
     ) {
-        $stmt = $this->dbh->prepare(
+        $stmt = $dbh->prepare(
             'INSERT INTO `order`(
                 user_id,
                 name,
