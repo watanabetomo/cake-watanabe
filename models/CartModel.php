@@ -138,49 +138,14 @@ class CartModel extends Model
             }
             $this->deleteFromCart();
             $mailBody =
-                $_SESSION['userName'] . "様\n
-                お世話になっております。\n洋菓子店カサミンゴーカスタマーサポートです。\n
-                " . $_SESSION['userName'] . " 様が購入手続きをされました商品について\nお間違えのないようメールをお送りいたしました。\n
-                今一度ご購入商品等にお間違えなどないよう、ご確認いただけましたら幸いでございます。\n
-                --------------------------------------\n
-                【購入情報】\n";
+                $_SESSION['userName'] . "様\n\nお世話になっております。\n洋菓子店カサミンゴーカスタマーサポートです。\n\n" . $_SESSION['userName'] . " 様が購入手続きをされました商品について\nお間違えのないようメールをお送りいたしました。\n今一度ご購入商品等にお間違えなどないよう、ご確認いただけましたら幸いでございます。\n\n--------------------------------------\n\n【購入情報】\n\n";
             foreach ($cart as $prodOfTheCart) {
                 $productDetail = $productDetailModel->fetchById($prodOfTheCart['product_detail_id']);
                 $product = $productModel->fetchById($productDetail['product_id']);
                 $mailBody .=
-                    $product[0]['name'] . "\n" . $productDetail['size'] . "cm\n
-                    " . $productDetail['price'] . "円\n
-                    " . $prodOfTheCart['num'] . "枚\n
-                    -----------------------\n";
+                    $product[0]['name'] . "\n". $productDetail['size'] . "cm\n" . $productDetail['price'] . "円\n" . $prodOfTheCart['num'] . "枚\n\n-----------------------\n\n";
             }
-            $mailBody .=
-                "小計： " . $_SESSION['purchase_info']['sub_price'] . "\n
-                消費税： " . floor($_SESSION['purchase_info']['sub_price'] * TAX) . "\n
-                送料： " . $_SESSION['purchase_info']['shipping'] . "\n
-                合計： " . $_SESSION['purchase_info']['total_price'] . "\n
-                --------------------------------------\n
-                【送付先情報】\n
-                お名前： " . $_SESSION['purchase_info']['name'] . "\n
-                フリガナ： " . $_SESSION['purchase_info']['name_kana'] . "\n
-                電話番号： " . $_SESSION['purchase_info']['tel1'] . ' - ' . $_SESSION['purchase_info']['tel2'] . ' - ' . $_SESSION['purchase_info']['tel3'] . "\n
-                郵便番号： " . $_SESSION['purchase_info']['postal_code1'] . ' - ' . $_SESSION['purchase_info']['postal_code2'] . "\n
-                都道府県： " . $_SESSION['purchase_info']['pref'] . "\n
-                市区町村： " . $_SESSION['purchase_info']['city'] . "\n
-                番地： " . $_SESSION['purchase_info']['address'] . "\n
-                マンション名等： " . $_SESSION['purchase_info']['other'] . "\n
-                --------------------------------------\n
-                【請求先情報】\n
-                お名前： " . $user['name'] . "\n
-                フリガナ： " . $user['name_kana'] . "\n
-                電話番号： " . $user['tel1'] . ' - ' . $user['tel2'] . ' - ' . $user['tel3'] . "\n
-                郵便番号： " . $user['postal_code1'] . ' - ' . $user['postal_code2'] . "\n
-                都道府県： " . $prefectures[$user['pref']] . "\n
-                市区町村： " . $user['city'] . "\n
-                番地： " . $user['address'] . "\n
-                マンション名等： " . $user['other'] . "\n
-                --------------------------------------\n
-                商品ご到着まで。今しばらくお待ちください。\n
-                ※このメールは自動送信メールです。\n※返信をされてもご回答しかねますのでご了承ください。";
+            $mailBody .="小計： " . $_SESSION['purchase_info']['sub_price'] . "円\n消費税： " . floor($_SESSION['purchase_info']['sub_price'] * TAX) . "円\n送料： " . $_SESSION['purchase_info']['shipping'] . "円\n合計： " . $_SESSION['purchase_info']['total_price'] . "円\n\n--------------------------------------\n\n【送付先情報】\n\nお名前： " . $_SESSION['purchase_info']['name'] . "\nフリガナ： " . $_SESSION['purchase_info']['name_kana'] . "\n電話番号： " . $_SESSION['purchase_info']['tel1'] . ' - ' . $_SESSION['purchase_info']['tel2'] . ' - ' . $_SESSION['purchase_info']['tel3'] . "\n郵便番号： " . $_SESSION['purchase_info']['postal_code1'] . ' - ' . $_SESSION['purchase_info']['postal_code2'] . "\n都道府県： " . $_SESSION['purchase_info']['pref'] . "\n市区町村： " . $_SESSION['purchase_info']['city'] . "\n番地： " . $_SESSION['purchase_info']['address'] . "\nマンション名等： " . $_SESSION['purchase_info']['other'] . "\n\n--------------------------------------\n\n【請求先情報】\n\nお名前： " . $user['name'] . "\nフリガナ： " . $user['name_kana'] . "\n電話番号： " . $user['tel1'] . ' - ' . $user['tel2'] . ' - ' . $user['tel3'] . "\n郵便番号： " . $user['postal_code1'] . ' - ' . $user['postal_code2'] . "\n都道府県： " . $prefectures[$user['pref']] . "\n市区町村： " . $user['city'] . "\n番地： " . $user['address'] . "\nマンション名等： " . $user['other'] . "\n\n--------------------------------------\n\n商品ご到着まで。今しばらくお待ちください。\n\n※このメールは自動送信メールです。\n※返信をされてもご回答しかねますのでご了承ください。";
             mb_language('uni');
             mb_internal_encoding('UTF-8');
             if (!mb_send_mail(
