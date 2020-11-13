@@ -11,7 +11,7 @@ try {
     if (isset($_POST['delete'])) {
         $productModel->delete($_POST['delete_id']);
     }
-    $productList = $productModel->displayResult($_GET);
+    $productList = $productModel->getProduct($_GET);
 } catch (Exception $e) {
     $error = '商品情報の取得に失敗しました。<br>システム管理者にお問い合わせください。';
 }

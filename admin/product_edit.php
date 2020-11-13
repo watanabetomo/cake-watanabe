@@ -15,7 +15,7 @@ try {
             $productModel->uploadImg($_GET['id'], $_FILES['img']);
         }
     }
-    if (isset($_GET['action']) and $_GET['action'] == "edit") {
+    if (isset($_GET['action']) and $_GET['action'] == 'edit') {
         $productData = $productModel->fetchSingleProduct($_GET['id']);
         $productData = $_POST + $productData;
     }

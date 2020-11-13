@@ -38,13 +38,7 @@ function getPage()
     $url = explode('_', pathinfo($_SERVER['REQUEST_URI'], PATHINFO_FILENAME));
     $page = $url[count($url) -1];
     unset($url[count($url) - 1]);
-    if (count($url) > 1) {
-        $func = implode('_', $url);
-    } else {
-        $func = $url[0];
-    }
-    $title = $UpperPageTitle[$func] . (isset($_GET['action']) ? $getParam[$_GET['action']] : '') . $lowerPageTitle[$page];
-    echo '<h1><button type="button" class="btn title-button" disabled>' . $title . '</button></h1>';
+    echo '<h1><button type="button" class="btn title-button" disabled>' . $UpperPageTitle[implode('_', $url)] . (isset($_GET['action']) ? $getParam[$_GET['action']] : '') . $lowerPageTitle[$page] . '</button></h1>';
 }
 
 /**

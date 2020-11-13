@@ -197,7 +197,7 @@ class ProductModel extends Model
      * @param array $get
      * @return array
      */
-    public function displayResult($get)
+    public function getProduct($get)
     {
         if (isset($get['keyword']) and $get['keyword'] != '') {
             return $this->search($get['keyword']);
