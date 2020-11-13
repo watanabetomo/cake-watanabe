@@ -282,7 +282,7 @@ if (isset($_POST['other'])) {
                 </td>
             </tr>
         </table>
-        <p class="purchase-button"><input type="submit" name="send" value="確認画面へ"></p>
+        <p class="purchase-button"><input type="submit" name="send" class="btn btn-success" value="確認画面へ"></p>
     </form>
 </main>
 <script src="https://code.jquery.com/jquery-3.3.1.js"></script>

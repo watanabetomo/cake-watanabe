@@ -147,7 +147,7 @@ if (isset($_POST['send'])) {
     <ul class="form">
         <li>
             <form action="" method="post">
-                <p><input type="submit" name="send" value="購入する"></p>
+                <p><input type="submit" name="send" class="btn btn-success" value="購入する"></p>
             </form>
         </li>
         <li>
@@ -155,7 +155,7 @@ if (isset($_POST['send'])) {
                 <?php foreach ($_SESSION['purchase_info'] as $key => $value) :?>
                     <input type="hidden" name="<?=$key?>" value="<?=$value?>">
                 <?php endforeach;?>
-                <p><input type="submit" name="cancel" value="修正する"></p>
+                <p><input type="submit" name="cancel" class="btn btn-danger" value="修正する"></p>
             </form>
         </li>
     </ul>

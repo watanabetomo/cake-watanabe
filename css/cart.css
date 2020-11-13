@@ -30,6 +30,9 @@ main{
     margin-bottom: 0;
     text-align: center;
     color: black;
+}
+
+.nav-item a{
     text-decoration: none;
 }
 
@@ -169,4 +172,8 @@ footer{
 
 .form li {
     margin: 0 10px;
+}
+
+.btn {
+    width: 200px;
 }
