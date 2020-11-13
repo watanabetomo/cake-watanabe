@@ -79,9 +79,9 @@ class CartModel extends Model
      *
      * @return void
      */
-    public function truncateCart()
+    public function deleteFromCart()
     {
-        $this->dbh->query('TRUNCATE TABLE cart');
+        $this->dbh->query('DELETE FROM cart');
     }
 
     /**
@@ -136,8 +136,7 @@ class CartModel extends Model
                     $this->dbh
                 );
             }
-            $this->truncateCart();
-            $this->dbh->commit();
+            $this->deleteFromCart();
             $mailBody =
                 '<p>' . $_SESSION['userName'] . '様</p>
                 <p>お世話になっております。<br>洋菓子店カサミンゴーカスタマーサポートです。</p>
@@ -195,11 +194,12 @@ class CartModel extends Model
                 $mailBody,
                 $from
             )) {
-                $this->dbh->rollBack();
+                throw new Exception;
             }
+            $this->dbh->commit();
         } catch (Exception $e) {
-            throw new Exception($e);
             $this->dbh->rollBack();
+            throw new Exception($e);
         }
     }
 }

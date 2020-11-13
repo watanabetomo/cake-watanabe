@@ -52,8 +52,8 @@ class ProductModel extends Model
             }
             $this->dbh->commit();
         } catch (PDOException $e) {
-            throw new PDOException($e);
             $this->dbh->rollBack();
+            throw new PDOException($e);
         }
     }
 
@@ -107,8 +107,8 @@ class ProductModel extends Model
             }
             $this->dbh->commit();
         } catch (PDOException $e) {
-            throw new PDOException($e);
             $this->dbh->rollBack();
+            throw new PDOException($e);
         }
     }
 
@@ -139,8 +139,8 @@ class ProductModel extends Model
             }
             $this->dbh->commit();
         } catch (Exception $e) {
-            throw new Exception($e);
             $this->dbh->rollBack();
+            throw new Exception($e);
         }
     }
 
