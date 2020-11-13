@@ -25,7 +25,7 @@ try {
             $error['num'] = "商品点数は1以上の数値を入力してください";
         }
     } elseif (isset($_POST['clear'])) {
-        $cartModel->truncateCart();
+        $cartModel->deleteFromCart();
     }
     $cart = $cartModel->fetchAll();
     foreach ($cart as $prodOfTheCart) {
