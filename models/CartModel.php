@@ -135,6 +135,7 @@ class CartModel extends Model
                 );
             }
             $this->truncateCart();
+            $this->dbh->commit();
             $mailBody =
                 '<p>' . $_SESSION['userName'] . '様</p>
                 <p>お世話になっております。<br>洋菓子店カサミンゴーカスタマーサポートです。</p>
@@ -186,19 +187,17 @@ class CartModel extends Model
             $from .= 'Content-type: text/html; charset=UTF-8';
             mb_language('uni');
             mb_internal_encoding('UTF-8');
-            mb_send_mail(
+            if (!mb_send_mail(
                 $_SESSION['purchase_info']['mail'],
                 '【洋菓子店カサミンゴー】ご購入商品確認メール',
                 $mailBody,
                 $from
-            );
-            $this->dbh->commit();
-        } catch (PDOException $e) {
-            throw new PDOException($e);
-            $this->dbh->rollback();
+            )) {
+                $this->dbh->rollBack();
+            }
         } catch (Exception $e) {
             throw new Exception($e);
-            $this->dbh->rollback();
+            $this->dbh->rollBack();
         }
     }
 }
