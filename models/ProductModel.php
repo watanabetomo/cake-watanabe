@@ -46,7 +46,7 @@ class ProductModel extends Model
             $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
             $stmt = $this->dbh->prepare('UPDATE product SET name = ?, product_category_id = ?, delivery_info = ?, turn = ?, update_user = ?, updated_at = current_timestamp() WHERE id = ?');
             $this->dbh->beginTransaction();
-            $stmt->execute([$name, $category_id, $delivery_info, $turn, $update_user, $id]);
+            $stmt->execute([$name == '' ? null : $name, $category_id, $delivery_info == '' ? null : $delivery_info, $turn == '' ? null : $turn, $update_user, $id]);
             for ($i=0; $i<5; $i++) {
                 $productDetailModel->update($id, $size[$i], $price[$i], $i + 1, $this->dbh);
             }
@@ -101,7 +101,7 @@ class ProductModel extends Model
             $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
             $stmt = $this->dbh->prepare('INSERT INTO product(name, product_category_id, delivery_info, turn, create_user) VALUES (?, ?, ?, ?, ?)');
             $this->dbh->beginTransaction();
-            $stmt->execute([$name, $category_id, $delivery_info, $turn, $create_user]);
+            $stmt->execute([$name == '' ? null : $name, $category_id, $delivery_info == '' ? null : $delivery_info, $turn == '' ? null : $turn, $create_user]);
             for ($i=0; $i<5; $i++) {
                 $productDetailModel->register($this->getMaxId()[0], $size[$i], $price[$i], $i + 1, $this->dbh);
             }
@@ -168,72 +168,13 @@ class ProductModel extends Model
     }
 
     /**
-     * idの昇順でproductテーブルの中身を取得を取得
+     * ソート結果を取得
      *
-     * @return array idの昇順で並んだproductテーブルのレコード
+     * @return array ソート実行後のproductテーブルのレコード
      */
-    public function sortIdAsc()
+    public function sort($column, $order)
     {
-        $stmt = $this->dbh->query('SELECT product.id, product.name, product.img, product.created_at, product.updated_at FROM product JOIN product_category ON product.product_category_id = product_category.id WHERE delete_flg = false ORDER BY product.id ASC');
-        return $stmt->fetchAll();
-    }
-
-    /**
-     * idの降順でproductテーブルの中身を取得を取得
-     *
-     * @return array idの降順で並んだproductテーブルのレコード
-     */
-    public function sortIdDesc()
-    {
-        $stmt = $this->dbh->query('SELECT product.id, product.name, product.img, product.created_at, product.updated_at FROM product JOIN product_category ON product.product_category_id = product_category.id WHERE delete_flg = false ORDER BY product.id DESC');
-        return $stmt->fetchAll();
-    }
-
-    /**
-     * nameの昇順でproductテーブルの中身を取得を取得
-     *
-     * @return array nameの昇順で並んだproductテーブルのレコード
-     */
-    public function sortNameAsc()
-    {
-        $stmt = $this->dbh->query('SELECT product.id, product.name, product.img, product.created_at, product.updated_at, CASE WHEN product.name = "" THEN 1 ELSE 0 END AS dummy FROM product JOIN product_category ON product.product_category_id = product_category.id WHERE delete_flg = false ORDER BY dummy ASC, product.name DESC');
-        $stmt->execute();
-        return $stmt->fetchAll();
-    }
-
-    /**
-     * nameの降順でproductテーブルの中身を取得を取得
-     *
-     * @return array nameの降順で並んだproductテーブルのレコード
-     */
-    public function sortNameDesc()
-    {
-        $stmt = $this->dbh->query('SELECT product.id, product.name, product.img, product.created_at, product.updated_at, CASE WHEN product.name = "" THEN 1 ELSE 0 END AS dummy FROM product JOIN product_category ON product.product_category_id = product_category.id WHERE delete_flg = false ORDER BY dummy ASC, product.name ASC');
-        $stmt->execute();
-        return $stmt->fetchAll();
-    }
-
-    /**
-     *updated_atの昇順でproductテーブルの中身を取得を取得
-     *
-     * @return arrayupdated_atの昇順で並んだproductテーブルのレコード
-     */
-    public function sortUpdatedAsc()
-    {
-        $stmt = $this->dbh->query('SELECT product.id, product.name, product.img, product.created_at, product.updated_at FROM product JOIN product_category ON product.product_category_id = product_category.id WHERE delete_flg = false ORDER BY product.updated_at IS NULL ASC, product.updated_at DESC');
-        $stmt->execute();
-        return $stmt->fetchAll();
-    }
-
-    /**
-     * updated_atの降順でproductテーブルの中身を取得を取得
-     *
-     * @return array updated_atの降順で並んだproductテーブルのレコード
-     */
-    public function sortUpdatedDesc()
-    {
-        $stmt = $this->dbh->query('SELECT product.id, product.name, product.img, product.created_at, product.updated_at FROM product JOIN product_category ON product.product_category_id = product_category.id WHERE delete_flg = false ORDER BY product.updated_at IS NULL ASC, product.updated_at ASC');
-        $stmt->execute();
+        $stmt = $this->dbh->query('SELECT product.id, product.name, product.img, product.created_at, product.updated_at FROM product JOIN product_category ON product.product_category_id = product_category.id WHERE delete_flg = false ORDER BY product.' . $column .  ' IS NULL ASC, ' . 'product.' . $column . ' ' . $order);
         return $stmt->fetchAll();
     }
 
@@ -258,25 +199,10 @@ class ProductModel extends Model
      */
     public function displayResult($get)
     {
-        if (isset($get['keyword'])) {
+        if (isset($get['keyword']) and $get['keyword'] != '') {
             return $this->search($get['keyword']);
         } elseif (isset($get['order'])) {
-            if ($get['column'] == 'id') {
-                if ($get['order'] == '▼') {
-                    return $this->sortIdDesc();
-                }
-                return $this->sortIdAsc();
-            } elseif ($get['column'] == 'name') {
-                if ($get['order'] == '▼') {
-                    return $this->sortNameDesc();
-                }
-                return $this->sortNameAsc();
-            } elseif ($get['column'] == 'updated_at') {
-                if ($get['order'] == '▼') {
-                    return $this->sortUpdatedDesc();
-                }
-                return $this->sortUpdatedAsc();
-            }
+            return $this->sort($get['column'], $get['order']);
         }
         return $this->fetchAllData();
     }
@@ -292,5 +218,19 @@ class ProductModel extends Model
         $stmt = $this->dbh->prepare('SELECT img FROM product WHERE id = ?');
         $stmt->execute([$id]);
         return $stmt->fetch();
+    }
+
+    public function fetchSingleProduct($id)
+    {
+        $stmt = $this->dbh->prepare('SELECT * FROM product WHERE id = ?');
+        $stmt->execute([$id]);
+        $productDetailModel = new ProductDetailModel();
+        $product = $stmt->fetch();
+        $details = $productDetailModel->fetchByProductId($id);
+        foreach ($details as $detail) {
+            $product['size'][] = $detail['size'];
+            $product['price'][] = $detail['size'];
+        }
+        return $product;
     }
 }

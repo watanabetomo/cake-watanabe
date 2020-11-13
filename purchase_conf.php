@@ -93,21 +93,21 @@ if (isset($_POST['send'])) {
     <table class="table table-left">
         <tr>
             <th>郵便番号</th>
-            <td><?=h($_SESSION['purchase_info']['postal_code1'])?> - <?=h($_SESSION['purchase_info']['postal_code2'])?></td>
+            <td><?=$_SESSION['purchase_info']['sendFor'] == 1 ? h($_SESSION['purchase_info']['postal_code1']) : $user['postal_code1']?> - <?=$_SESSION['purchase_info']['sendFor'] == 1 ? h($_SESSION['purchase_info']['postal_code2']) : $user['postal_code2']?></td>
         </tr>
         <tr>
             <th>住所</th>
-            <td><?=h($_SESSION['purchase_info']['pref']) . h($_SESSION['purchase_info']['city']) . h($_SESSION['purchase_info']['address']) . h($_SESSION['purchase_info']['other'])?></td>
+            <td><?=($_SESSION['purchase_info']['sendFor'] == 1 ? h($_SESSION['purchase_info']['pref']) : $user['pref']) . ($_SESSION['purchase_info']['sendFor'] == 1 ? h($_SESSION['purchase_info']['city']) : $user['city']) . $_SESSION['purchase_info']['sendFor'] == 1 ? h($_SESSION['purchase_info']['address']) : $user['address'] . ($_SESSION['purchase_info']['sendFor'] == 1 ? h($_SESSION['purchase_info']['other']) : $user['other'])?></td>
         </tr>
         <tr>
             <th>電話番号</th>
-            <td><?=h($_SESSION['purchase_info']['tel1'])?> - <?=h($_SESSION['purchase_info']['tel2'])?> - <?=h($_SESSION['purchase_info']['tel3'])?></td>
+            <td><?=$_SESSION['purchase_info']['sendFor'] == 1 ? h($_SESSION['purchase_info']['tel1']) : $user['tel1']?> - <?=$_SESSION['purchase_info']['sendFor'] == 1 ? h($_SESSION['purchase_info']['tel2']) : $user['tel2']?> - <?=$_SESSION['purchase_info']['sendFor'] == 1 ? h($_SESSION['purchase_info']['tel3']) : $user['tel3']?></td>
         </tr>
         <tr>
             <th>お名前</th>
             <td>
-                <p><?=h($_SESSION['purchase_info']['name_kana'])?></p>
-                <p><?=h($_SESSION['purchase_info']['name'])?></p>
+                <p><?=$_SESSION['purchase_info']['sendFor'] == 1 ? h($_SESSION['purchase_info']['name_kana']) : $user['name_kana']?></p>
+                <p><?=$_SESSION['purchase_info']['sendFor'] == 1 ? h($_SESSION['purchase_info']['name']) : $user['name']?></p>
             </td>
         </tr>
     </table>

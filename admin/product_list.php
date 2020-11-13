@@ -31,17 +31,17 @@ try {
             <th>
                 <form action="" method="get">
                     <input type="hidden" name="column" value="id">
-                    <input type="submit" name="order" class="icon" value="▲">
+                    <button type="submit" name="order" class="icon" value="ASC">▲</button>
                     <p class="sorted">ID</p>
-                    <input type="submit" name="order" class="icon" value="▼">
+                    <button type="submit" name="order" class="icon" value="DESC">▼</button>
                 </form>
             </th>
             <th>
                 <form action="" method="get">
                     <input type="hidden" name="column" value="name">
-                    <input type="submit" name="order" class="icon" value="▲">
+                    <button type="submit" name="order" class="icon" value="ASC">▲</button>
                     <p class="sorted">商品名</p>
-                    <input type="submit" name="order" class="icon" value="▼">
+                    <button type="submit" name="order" class="icon" value="DESC">▼</button>
                 </form>
             </th>
             <th>画像</th>
@@ -49,9 +49,9 @@ try {
             <th>
                 <form action="" method="get">
                     <input type="hidden" name="column" value="updated_at">
-                    <input type="submit" name="order" class="icon" value="▲">
+                    <button type="submit" name="order" class="icon" value="ASC">▲</button>
                     <p class="sorted">更新日時</p>
-                    <input type="submit" name="order" class="icon" value="▼">
+                    <button type="submit" name="order" class="icon" value="DESC">▼</button>
                 </form>
             </th>
             <th><a href="product_edit.php?action=new" role="button" class="btn btn-sm">新規登録</a></th>

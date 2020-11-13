@@ -11,6 +11,15 @@ if (!isset($_POST['send']) and !isset($_POST['register'])) {
     exit;
 }
 
+if (isset($_POST['category_id'])) {
+    try {
+        $productCategoryModel = new ProductCategoryModel();
+        $category = $productCategoryModel->getName($_POST['category_id']);
+    } catch (Exception $e) {
+        $error = '商品情報の取得及び登録に失敗しました。<br>システム管理者にお問い合わせください。';
+    }
+}
+
 ?>
 
 <?php require_once('admin_header.html')?>
@@ -31,7 +40,7 @@ if (!isset($_POST['send']) and !isset($_POST['register'])) {
         </tr>
         <tr>
             <th>商品カテゴリー</th>
-            <td colspan="3"><?=h($_POST['category'])?></td>
+            <td colspan="3"><?=h($category['name'])?></td>
         </tr>
         <tr>
             <th>配送情報</th>
@@ -57,7 +66,7 @@ if (!isset($_POST['send']) and !isset($_POST['register'])) {
     </table>
     <form action="product_done.php<?=(isset($_GET['action'])) ? '?action=' . $_GET['action'] : ''?><?=isset($_GET['id']) ? '&id=' . $_GET['id'] : ''?>" method="post">
         <input type="hidden" name="name" value="<?=$_POST['name']?>">
-        <input type="hidden" name="category" value="<?=$_POST['category']?>">
+        <input type="hidden" name="product_category_id" value="<?=$_POST['category_id']?>">
         <input type="hidden" name="delivery_info" value="<?=$_POST['delivery_info']?>">
         <input type="hidden" name="turn" value="<?=$_POST['turn']?>">
         <?php for ($i=0; $i<5; $i++) :?>
@@ -68,7 +77,7 @@ if (!isset($_POST['send']) and !isset($_POST['register'])) {
     </form>
     <form action="product_edit.php<?=(isset($_GET['action'])) ? '?action=' . $_GET['action'] : ''?><?=isset($_GET['id']) ? '&id=' . $_GET['id'] : ''?>" method="post">
         <input type="hidden" name="name" value="<?=$_POST['name']?>">
-        <input type="hidden" name="category" value="<?=$_POST['category']?>">
+        <input type="hidden" name="product_category_id" value="<?=$_POST['category_id']?>">
         <input type="hidden" name="delivery_info" value="<?=$_POST['delivery_info']?>">
         <input type="hidden" name="turn" value="<?=$_POST['turn']?>">
         <?php for ($i=0; $i<5; $i++) :?>

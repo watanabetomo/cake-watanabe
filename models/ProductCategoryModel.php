@@ -24,4 +24,11 @@ class ProductCategoryModel extends Model
         $stmt->execute([$name]);
         return $stmt->fetch();
     }
+
+    public function getName($id)
+    {
+        $stmt = $this->dbh->prepare('SELECT name FROM product_category WHERE id = ?');
+        $stmt->execute([$id]);
+        return $stmt->fetch();
+    }
 }

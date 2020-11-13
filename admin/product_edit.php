@@ -16,7 +16,8 @@ try {
         }
     }
     if (isset($_GET['action']) and $_GET['action'] == "edit") {
-        $productData = $productModel->fetchById($_GET['id']);
+        $productData = $productModel->fetchSingleProduct($_GET['id']);
+        $productData = $_POST + $productData;
     }
 } catch (PDOException $e) {
     $databaseError = '商品情報の取得及び登録に失敗しました。<br>システム管理者にお問い合わせください。';
@@ -24,16 +25,6 @@ try {
     $fileUploadError = 'ファイルのアップロードに失敗しました。<br>システム管理者にお問い合わせください。';
 }
 
-if (isset($_POST['fix'])) {
-    $productData[0]['name'] = $_POST['name'];
-    $productData[0]['category_name'] = $_POST['category'];
-    $productData[0]['delivery_info'] = $_POST['delivery_info'];
-    $productData[0]['turn'] = $_POST['turn'];
-    for ($i=0; $i<5; $i++) {
-        $productData[$i]['size'] = $_POST['size'][$i];
-        $productData[$i]['price'] = $_POST['price'][$i];
-    }
-}
 
 ?>
 
@@ -52,14 +43,14 @@ if (isset($_POST['fix'])) {
             <?php endif;?>
             <tr>
                 <th>商品名</th>
-                <td colspan="3"><input type="text" name="name" value="<?=isset($productData) ? h($productData[0]['name']) : ''?>"></td>
+                <td colspan="3"><input type="text" name="name" value="<?=isset($productData) ? h($productData['name']) : ''?>"></td>
             </tr>
             <tr>
                 <th>商品カテゴリー</th>
                 <td colspan="3">
-                    <select name="category">
+                    <select name="category_id">
                         <?php foreach ($productCategories as $category) :?>
-                            <option <?=(isset($productData) and $productData[0]['category_name'] == $category['name']) ? 'selected' : ''?>><?=$category['name']?></option>
+                            <option <?=(isset($productData) and $productData['product_category_id'] == $category['id']) ? 'selected' : ''?> value="<?=$category['id']?>"><?=$category['name']?></option>
                         <?php endforeach;?>
                     </select>
                 </td>
@@ -67,13 +58,13 @@ if (isset($_POST['fix'])) {
             <tr>
                 <th>配送情報</th>
                 <td colspan="3">
-                    <input type="text" name="delivery_info" value="<?=isset($productData) ? h($productData[0]['delivery_info']) : ''?>">
+                    <input type="text" name="delivery_info" value="<?=isset($productData) ? h($productData['delivery_info']) : ''?>">
                 </td>
             </tr>
             <tr>
                 <th>表示順(商品)</th>
                 <td colspan="3">
-                    <input type="number" name="turn" value="<?=isset($productData) ? h($productData[0]['turn']) : ''?>">
+                    <input type="number" name="turn" value="<?=isset($productData) ? h($productData['turn']) : ''?>">
                 </td>
             </tr>
             <tr>
@@ -85,8 +76,8 @@ if (isset($_POST['fix'])) {
             <?php for ($i=0; $i<5; $i++) :?>
                 <tr>
                     <td><?=$i?></td>
-                    <td><input type="number" name="size[]" value="<?=isset($productData) ? h($productData[$i]['size']) : ''?>"></td>
-                    <td><input type="number" name="price[]" value="<?=isset($productData) ? h($productData[$i]['price']) : ''?>"></td>
+                    <td><input type="number" name="size[]" value="<?=isset($productData) ? h($productData['size'][$i]) : ''?>"></td>
+                    <td><input type="number" name="price[]" value="<?=isset($productData) ? h($productData['price'][$i]) : ''?>"></td>
                 </tr>
             <?php endfor?>
         </table>
@@ -102,7 +93,7 @@ if (isset($_POST['fix'])) {
                 </tr>
                 <tr>
                     <th>画像</th>
-                    <td><?=isset($productData) ? '<img src="../' . IMG_PATH . $productData[0]['img'] . '" alt="' . $productData[0]['img'] . '"' : ''?></td>
+                    <td><?=isset($productData) ? '<img src="../' . IMG_PATH . $productData['img'] . '" alt="' . $productData['img'] . '"' : ''?></td>
                 </tr>
             </table>
             <p class="submit-button"><input type="submit" class="btn" name="upload" value="登録"></p>
