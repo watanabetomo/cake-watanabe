@@ -1,7 +1,7 @@
 <?php
 require_once('autoload.php');
 
-$hitAddress[0] = [];
+$hitAddress = [];
 
 if (!isset($_SESSION['authenticated'])) {
     header('Location: login.php');
@@ -95,14 +95,16 @@ if (isset($_POST['send'])) {
     if (!isset($error)) {
         $postal_code = $_POST['postal_code1'] . $_POST['postal_code2'];
         $json = json_decode(file_get_contents("https://zip-cloud.appspot.com/api/search?zipcode=${postal_code}"), true);
-        $hitAddress = $json["results"];
+        if (!empty($json['results'])) {
+            $hitAddress = $json["results"][0];
+        }
         if (empty($hitAddress)) {
             $unhitAddressError = '一致する住所がありません。';
         }
     }
 }
 
-$hitAddress[0] = $hitAddress[0] + $_POST;
+$hitAddress = $hitAddress + $_POST;
 
 ?>
 
@@ -183,8 +185,8 @@ $hitAddress[0] = $hitAddress[0] + $_POST;
                             <?php foreach ($prefectures as $prefecture) :?>
                                 <?php
                                     $pref = '';
-                                    if (isset($hitAddress[0]['address1'])) {
-                                        if ($hitAddress[0]['address1'] == $prefecture) {
+                                    if (isset($hitAddress['address1'])) {
+                                        if ($hitAddress['address1'] == $prefecture) {
                                             $pref = 'selected';
                                         }
                                     } else {
@@ -197,8 +199,8 @@ $hitAddress[0] = $hitAddress[0] + $_POST;
                             <?php endforeach;?>
                         </select>
                     </p>
-                    <p><input type="text" name="address2" value="<?=isset($hitAddress[0]['address2']) ? h($hitAddress[0]['address2']) : $user['city']?>"><span class="error"><?=isset($error['address2']) ? $error['address2'] : ''?></span></p>
-                    <p><input type="text" name="address3" value="<?=isset($hitAddress[0]['address3']) ? h($hitAddress[0]['address3']) : $user['address']?>"><span class="error"><?=isset($error['address3']) ? $error['address3'] : ''?></span></p>
+                    <p><input type="text" name="address2" value="<?=isset($hitAddress['address2']) ? h($hitAddress['address2']) : $user['city']?>"><span class="error"><?=isset($error['address2']) ? $error['address2'] : ''?></span></p>
+                    <p><input type="text" name="address3" value="<?=isset($hitAddress['address3']) ? h($hitAddress['address3']) : $user['address']?>"><span class="error"><?=isset($error['address3']) ? $error['address3'] : ''?></span></p>
                     <p><input type="text" name="other" value="<?=isset($_POST['other']) ? h($_POST['other']) : $user['other']?>"><span class="error"><?=isset($error['other']) ? $error['other'] : ''?></span></p>
                 </td>
             </tr>
