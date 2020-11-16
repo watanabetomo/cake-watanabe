@@ -30,11 +30,6 @@ try {
     $error = '商品情報の取得及び登録に失敗しました。<br>カスタマーサポートにお問い合わせください。';
 }
 
-if (isset($_POST['send'])) {
-    header('Location: purchase_done.php');
-    exit;
-}
-
 ?>
 
 <?php require_once('header.html')?>
@@ -146,7 +141,7 @@ if (isset($_POST['send'])) {
     </table>
     <ul class="form">
         <li>
-            <form action="" method="post">
+            <form action="purchase_done.php" method="post">
                 <p><input type="submit" name="send" class="btn btn-success" value="購入する"></p>
             </form>
         </li>

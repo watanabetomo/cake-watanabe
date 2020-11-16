@@ -77,7 +77,6 @@ if (isset($_POST['send'])) {
         foreach ($_POST as $key => $value) {
             $_SESSION['purchase_info'][$key] = $value;
         }
-        unset($_SESSION['purchase_info']['send']);
         header('Location: purchase_conf.php');
         exit;
     }

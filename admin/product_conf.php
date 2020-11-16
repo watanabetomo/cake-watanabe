@@ -7,7 +7,7 @@ if (!isset($_SESSION['admin_authenticated'])) {
 }
 
 if (!isset($_POST['send']) and !isset($_POST['register'])) {
-    header('Location: product_edit.php?action=' . $_GET['action'] . (isset($_GET['id']) ? '&id=' . $_GET['id'] : ''));
+    header('Location: product_list.php');
     exit;
 }
 
