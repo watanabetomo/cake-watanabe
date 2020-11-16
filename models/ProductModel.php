@@ -26,11 +26,10 @@ class ProductModel extends Model
      * @param String $delivery_info
      * @param int $turn
      * @param int $update_user
-     * @param array $size
-     * @param array $price
+     * @param array $details
      * @return void
      */
-    public function update($id, $name, $category_id, $delivery_info, $turn, $update_user, $size, $price)
+    public function update($id, $name, $category_id, $delivery_info, $turn, $update_user, $details)
     {
         try {
             $productDetailModel = new ProductDetailModel();
@@ -39,7 +38,7 @@ class ProductModel extends Model
             $this->dbh->beginTransaction();
             $stmt->execute([$name == '' ? null : $name, $category_id, $delivery_info == '' ? null : $delivery_info, $turn == '' ? null : $turn, $update_user, $id]);
             for ($i=0; $i<5; $i++) {
-                $productDetailModel->update($id, $size[$i], $price[$i], $i + 1, $this->dbh);
+                $productDetailModel->update($id, $details[$i]['size'], $details[$i]['price'], $i + 1, $this->dbh);
             }
             $this->dbh->commit();
         } catch (PDOException $e) {
@@ -81,11 +80,10 @@ class ProductModel extends Model
      * @param String $delivery_info
      * @param int $turn
      * @param int $create_user
-     * @param array $size
-     * @param array $price
+     * @param array $details
      * @return void
      */
-    public function register($name, $category_id, $delivery_info, $turn, $create_user, $size, $price)
+    public function register($name, $category_id, $delivery_info, $turn, $create_user, $details)
     {
         try {
             $productDetailModel = new ProductDetailModel();
@@ -94,7 +92,7 @@ class ProductModel extends Model
             $this->dbh->beginTransaction();
             $stmt->execute([$name == '' ? null : $name, $category_id, $delivery_info == '' ? null : $delivery_info, $turn == '' ? null : $turn, $create_user]);
             for ($i=0; $i<5; $i++) {
-                $productDetailModel->register($this->getMaxId()[0], $size[$i], $price[$i], $i + 1, $this->dbh);
+                $productDetailModel->register($this->getMaxId()[0], $details[$i]['size'], $details[$i]['price'], $i + 1, $this->dbh);
             }
             $this->dbh->commit();
         } catch (PDOException $e) {
@@ -183,11 +181,7 @@ class ProductModel extends Model
         $stmt->execute([$id]);
         $productDetailModel = new ProductDetailModel();
         $product = $stmt->fetch();
-        $details = $productDetailModel->fetchByProductId($id);
-        foreach ($details as $detail) {
-            $product['size'][] = $detail['size'];
-            $product['price'][] = $detail['size'];
-        }
+        $product['details'] = $productDetailModel->getDetails($id);
         return $product;
     }
 }

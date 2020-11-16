@@ -59,8 +59,8 @@ if (isset($_POST['category_id'])) {
         <?php for ($i=0; $i<5; $i++) :?>
             <tr>
                 <td><?=$i?></td>
-                <td><?=h($_POST['size'][$i])?></td>
-                <td><?=h($_POST['price'][$i])?></td>
+                <td><?=h($_POST['details'][$i]['size'])?></td>
+                <td><?=h($_POST['details'][$i]['price'])?></td>
             </tr>
         <?php endfor;?>
     </table>
@@ -70,8 +70,8 @@ if (isset($_POST['category_id'])) {
         <input type="hidden" name="delivery_info" value="<?=$_POST['delivery_info']?>">
         <input type="hidden" name="turn" value="<?=$_POST['turn']?>">
         <?php for ($i=0; $i<5; $i++) :?>
-            <input type="hidden" name="size[]" value="<?=$_POST['size'][$i]?>">
-            <input type="hidden" name="price[]" value="<?=$_POST['price'][$i]?>">
+            <input type="hidden" name="details[<?=$i?>][size]" value="<?=$_POST['details'][$i]['size']?>">
+            <input type="hidden" name="details[<?=$i?>][price]" value="<?=$_POST['details'][$i]['price']?>">
         <?php endfor;?>
         <p class="submit-button register-btn"><input type="submit" name="register" class="btn" value="登録完了する"></p>
     </form>
@@ -81,8 +81,8 @@ if (isset($_POST['category_id'])) {
         <input type="hidden" name="delivery_info" value="<?=$_POST['delivery_info']?>">
         <input type="hidden" name="turn" value="<?=$_POST['turn']?>">
         <?php for ($i=0; $i<5; $i++) :?>
-            <input type="hidden" name="size[]" value="<?=$_POST['size'][$i]?>">
-            <input type="hidden" name="price[]" value="<?=$_POST['price'][$i]?>">
+            <input type="hidden" name="details[<?=$i?>][size]" value="<?=$_POST['details'][$i]['size']?>">
+            <input type="hidden" name="details[<?=$i?>][price]" value="<?=$_POST['details'][$i]['price']?>">
         <?php endfor;?>
         <p class="submit-button"><input type="submit" name="fix" class="btn" value="修正する"></p>
     </form>

@@ -70,6 +70,9 @@ try {
         </div>
         <div class="box2">
             <p class="contents-title">カート</p>
+            <?php echo '<pre>';
+            print_r($_POST);
+            echo '</pre>';?>
             <p class="error"><?=isset($numError) ? $numError : ''?></p>
             <?php if (!empty($cart)) :?>
                 <table class="table-bordered table-center cart">

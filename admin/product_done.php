@@ -9,9 +9,9 @@ if (isset($_POST['register'])) {
     try {
         $productModel = new ProductModel();
         if (isset($_GET['action']) and $_GET['action'] == 'new') {
-            $productModel->register($_POST['name'], $_POST['product_category_id'], $_POST['delivery_info'], $_POST['turn'], $_SESSION['login_id'], $_POST['size'], $_POST['price']);
+            $productModel->register($_POST['name'], $_POST['product_category_id'], $_POST['delivery_info'], $_POST['turn'], $_SESSION['login_id'], $_POST['details']);
         } elseif (isset($_GET['action']) and $_GET['action'] == 'edit' and is_numeric($_GET['id'])) {
-            $productModel->update($_GET['id'], $_POST['name'], $_POST['product_category_id'], $_POST['delivery_info'], $_POST['turn'], $_SESSION['login_id'], $_POST['size'], $_POST['price']);
+            $productModel->update($_GET['id'], $_POST['name'], $_POST['product_category_id'], $_POST['delivery_info'], $_POST['turn'], $_SESSION['login_id'], $_POST['details']);
         } else {
             header('Location: product_list.php');
             exit;

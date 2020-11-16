@@ -76,8 +76,8 @@ try {
             <?php for ($i=0; $i<5; $i++) :?>
                 <tr>
                     <td><?=$i?></td>
-                    <td><input type="number" name="size[]" value="<?=isset($productData) ? h($productData['size'][$i]) : ''?>"></td>
-                    <td><input type="number" name="price[]" value="<?=isset($productData) ? h($productData['price'][$i]) : ''?>"></td>
+                    <td><input type="number" name="details[<?=$i?>][size]" value="<?=isset($productData) ? h($productData['details'][$i]['size']) : ''?>"></td>
+                    <td><input type="number" name="details[<?=$i?>][price]" value="<?=isset($productData) ? h($productData['details'][$i]['price']) : ''?>"></td>
                 </tr>
             <?php endfor?>
         </table>

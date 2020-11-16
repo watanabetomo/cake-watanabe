@@ -7,6 +7,19 @@ class ProductDetailModel extends Model
      * @param int $id
      * @return array sizeとpriceの配列
      */
+    public function getDetails($id)
+    {
+        $stmt = $this->dbh->prepare('SELECT size, price FROM product_detail WHERE product_id = ?');
+        $stmt->execute([$id]);
+        return $stmt->fetchAll();
+    }
+
+    /**
+     * product_idでsizeとpriceを取ってくる（サイズ順）
+     *
+     * @param int $id
+     * @return array sizeとpriceの配列(サイズ順)
+     */
     public function fetchByProductId($id)
     {
         $stmt = $this->dbh->prepare('SELECT * FROM product_detail WHERE product_id = ? ORDER BY size ASC');
