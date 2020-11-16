@@ -22,7 +22,7 @@ try {
         if ($_POST['num'] > 0) {
             $cartModel->changeNum($_POST['num'], $_POST['id']);
         } else {
-            $error['num'] = "商品点数は1以上の数値を入力してください";
+            $numError = "商品点数は1以上の数値を入力してください";
         }
     } elseif (isset($_POST['clear'])) {
         $cartModel->deleteFromCart();
@@ -34,13 +34,13 @@ try {
         $totalPrice += $prodOfTheCart['num'] * $productDetail['price'];
     }
 } catch (Exception $e) {
-    $error['database'] = '商品情報の取得及び登録に失敗しました。<br>カスタマーサポートにお問い合わせください。';
+    $databaseError = '商品情報の取得及び登録に失敗しました。<br>カスタマーサポートにお問い合わせください。';
 }
 
 ?>
 <?php require_once('header.html')?>
 <main>
-    <p class="error"><?=isset($error['database']) ? $error['database'] : ''?></p>
+    <p class="error"><?=isset($databaseError) ? $databaseError : ''?></p>
     <div class="wrapper">
         <div class="box1">
             <div class="card">
@@ -70,7 +70,7 @@ try {
         </div>
         <div class="box2">
             <p class="contents-title">カート</p>
-            <p class="error"><?=isset($error['num']) ? $error['num'] : ''?></p>
+            <p class="error"><?=isset($numError) ? $numError : ''?></p>
             <?php if (!empty($cart)) :?>
                 <table class="table-bordered table-center cart">
                     <tr>
