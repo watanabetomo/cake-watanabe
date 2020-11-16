@@ -50,7 +50,7 @@ try {
                 <td colspan="3">
                     <select name="category_id">
                         <?php foreach ($productCategories as $category) :?>
-                            <option <?=(isset($productData) and $productData['product_category_id'] == $category['id']) ? 'selected' : ''?> value="<?=$category['id']?>"><?=$category['name']?></option>
+                            <option value="<?=$category['id']?>"<?=(isset($productData) and $productData['product_category_id'] == $category['id']) ? ' selected' : ''?>><?=$category['name']?></option>
                         <?php endforeach;?>
                     </select>
                 </td>

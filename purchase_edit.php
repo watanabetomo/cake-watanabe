@@ -186,15 +186,15 @@ $hitAddress = $hitAddress + $_POST;
                                     $pref = '';
                                     if (isset($hitAddress['address1'])) {
                                         if ($hitAddress['address1'] == $prefecture) {
-                                            $pref = 'selected';
+                                            $pref = ' selected';
                                         }
                                     } else {
                                         if ($prefectures[$user['pref']] == $prefecture) {
-                                            $pref = 'selected';
+                                            $pref = ' selected';
                                         }
                                     }
                                 ?>
-                                <option <?=$pref?>><?=$prefecture?></option>
+                                <option<?=$pref?>><?=$prefecture?></option>
                             <?php endforeach;?>
                         </select>
                     </p>

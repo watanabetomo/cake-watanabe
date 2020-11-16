@@ -18,19 +18,6 @@ class ProductModel extends Model
     }
 
     /**
-     * idをもとに、productとそれに紐づくproduct_detailのデータすべてを取得する。
-     *
-     * @param int $id
-     * @return array idが一致したレコード一件分
-     */
-    public function fetchById($id)
-    {
-        $stmt = $this->dbh->prepare('SELECT product.id, product.name, product_category.name AS category_name, product.img, product.delivery_info, product.turn, product_detail.size, product_detail.price, product_detail.turn as detail_turn FROM product JOIN product_category ON product.product_category_id = product_category.id JOIN product_detail ON product.id = product_detail.product_id WHERE product.id = ? ORDER BY turn');
-        $stmt->execute([$id]);
-        return $stmt->fetchAll();
-    }
-
-    /**
      * 商品情報及び商品詳細の更新
      *
      * @param int $id
