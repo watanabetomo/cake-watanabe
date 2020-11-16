@@ -168,9 +168,11 @@ class ProductModel extends Model
     }
 
     /**
-     * ソート結果を取得
+     * ソート
      *
-     * @return array ソート実行後のproductテーブルのレコード
+     * @param String $column
+     * @param String $order
+     * @return void
      */
     public function sort($column, $order)
     {
@@ -211,7 +213,7 @@ class ProductModel extends Model
      * imgを取得
      *
      * @param int $id
-     * @return array img
+     * @return array imgカラム
      */
     public function getImg($id)
     {
@@ -220,6 +222,12 @@ class ProductModel extends Model
         return $stmt->fetch();
     }
 
+    /**
+     * 商品情報の取得
+     *
+     * @param int $id
+     * @return void
+     */
     public function fetchSingleProduct($id)
     {
         $stmt = $this->dbh->prepare('SELECT * FROM product WHERE id = ?');

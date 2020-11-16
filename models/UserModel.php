@@ -38,5 +38,4 @@ class UserModel extends Model
         $stmt = $this->dbh->prepare('UPDATE user SET last_login_date = NOW() WHERE id = ?');
         $stmt->execute([$id]);
     }
-
 }
