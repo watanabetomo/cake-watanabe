@@ -3,13 +3,17 @@ class ProductModel extends Model
 {
 
     /**
-     * product_listとproduct_categoryを結合し、全件を取得する
+     * product_listとproduct_categoryを結合し、データを取得する
      *
-     * @return array product_listとproduct_categoryを結合した全件分のデータ
+     * @param $get GETパラメータ
+     *
+     * @return array product_listとproduct_categoryを結合したのデータ
      */
-    public function fetchAllData()
+    public function getProduct($get)
     {
-        $stmt = $this->dbh->query('SELECT product.id, product.name, product.img, product.created_at, product.updated_at FROM product JOIN product_category ON product.product_category_id = product_category.id WHERE delete_flg = false');
+        $sql = 'SELECT product.id, product.name, product.img, product.created_at, product.updated_at FROM product JOIN product_category ON product.product_category_id = product_category.id WHERE delete_flg = false' . ((isset($get['keyword']) and $get['keyword'] != '') ? ' AND product.name LIKE ?' : '') . (isset($get['order']) ? ' ORDER BY product.' . $get['column'] .  ' IS NULL ASC, product.' . $get['column'] . ' ' . $get['order'] : '');
+        $stmt = $this->dbh->prepare($sql);
+        $stmt->execute([isset($get['keyword']) ? '%' . $get['keyword'] . '%' : '']);
         return $stmt->fetchAll();
     }
 
@@ -155,32 +159,6 @@ class ProductModel extends Model
     }
 
     /**
-     * 検索ワードをnameに含むデータを取得
-     *
-     * @param String $keyword
-     * @return array 検索結果
-     */
-    public function search($keyword)
-    {
-        $stmt = $this->dbh->prepare('SELECT product.id, product.name, product.img, product.created_at, product.updated_at FROM product JOIN product_category ON product.product_category_id = product_category.id WHERE product.name LIKE ? AND delete_flg = false');
-        $stmt->execute(['%' . $keyword . '%']);
-        return $stmt->fetchAll();
-    }
-
-    /**
-     * ソート
-     *
-     * @param String $column
-     * @param String $order
-     * @return void
-     */
-    public function sort($column, $order)
-    {
-        $stmt = $this->dbh->query('SELECT product.id, product.name, product.img, product.created_at, product.updated_at FROM product JOIN product_category ON product.product_category_id = product_category.id WHERE delete_flg = false ORDER BY product.' . $column .  ' IS NULL ASC, ' . 'product.' . $column . ' ' . $order);
-        return $stmt->fetchAll();
-    }
-
-    /**
      * idをもとに一件分の商品情報を取得
      *
      * @param int $id
@@ -191,22 +169,6 @@ class ProductModel extends Model
         $stmt = $this->dbh->prepare('SELECT name, img FROM product WHERE id = ?');
         $stmt->execute([$id]);
         return $stmt->fetch();
-    }
-
-    /**
-     * 検索及びソート結果を返す
-     *
-     * @param array $get
-     * @return array
-     */
-    public function getProduct($get)
-    {
-        if (isset($get['keyword']) and $get['keyword'] != '') {
-            return $this->search($get['keyword']);
-        } elseif (isset($get['order'])) {
-            return $this->sort($get['column'], $get['order']);
-        }
-        return $this->fetchAllData();
     }
 
     /**

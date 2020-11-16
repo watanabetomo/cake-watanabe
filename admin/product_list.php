@@ -14,6 +14,7 @@ try {
     $productList = $productModel->getProduct($_GET);
 } catch (Exception $e) {
     $error = '商品情報の取得に失敗しました。<br>システム管理者にお問い合わせください。';
+    $error = $e->getMessage();
 }
 
 ?>
