@@ -1,6 +1,8 @@
 <?php
 require_once('autoload.php');
 
+$hitAddress[0] = [];
+
 if (!isset($_SESSION['authenticated'])) {
     header('Location: login.php');
     exit;
@@ -33,15 +35,15 @@ if (isset($_POST['send'])) {
     } elseif (!preg_match('/^[0-9]{4}$/', $_POST['postal_code2'])) {
         $error['postal_code2'] = '郵便番号下4桁が間違っています。';
     }
-    if ($_POST['city'] == '') {
-        $error['city'] = '市区町村が入力されていません。';
-    } elseif (!preg_match('/^[0-9A-Za-zぁ-んァ-ヶー一-龠]{1,15}$/u', $_POST['city'])) {
-        $error['city'] = '市区町村が間違っています。';
+    if ($_POST['address2'] == '') {
+        $error['address2'] = '市区町村が入力されていません。';
+    } elseif (!preg_match('/^[0-9A-Za-zぁ-んァ-ヶー一-龠]{1,15}$/u', $_POST['address2'])) {
+        $error['address2'] = '市区町村が間違っています。';
     }
-    if ($_POST['address'] == '') {
-        $error['address'] = '番地が入力されていません。';
-    } elseif (!preg_match('/^[0-9A-Za-zぁ-んァ-ヶー一-龠\-]{1,100}$/u', $_POST['address'])) {
-        $error['address'] = '番地が間違っています。';
+    if ($_POST['address3'] == '') {
+        $error['address3'] = '番地が入力されていません。';
+    } elseif (!preg_match('/^[0-9A-Za-zぁ-んァ-ヶー一-龠\-]{1,100}$/u', $_POST['address3'])) {
+        $error['address3'] = '番地が間違っています。';
     }
     if (!preg_match('/^[0-9A-Za-zぁ-んァ-ヶー一-龠\-]{0,100}$/u', $_POST['other'])) {
         $error['other'] = '建物名等が間違っています。';
@@ -92,8 +94,7 @@ if (isset($_POST['send'])) {
     }
     if (!isset($error)) {
         $postal_code = $_POST['postal_code1'] . $_POST['postal_code2'];
-        $url = "https://zip-cloud.appspot.com/api/search?zipcode=${postal_code}";
-        $json = json_decode(file_get_contents($url), true);
+        $json = json_decode(file_get_contents("https://zip-cloud.appspot.com/api/search?zipcode=${postal_code}"), true);
         $hitAddress = $json["results"];
         if (empty($hitAddress)) {
             $unhitAddressError = '一致する住所がありません。';
@@ -101,29 +102,8 @@ if (isset($_POST['send'])) {
     }
 }
 
-if (isset($hitAddress[0]['address2'])) {
-    $city = $hitAddress[0]['address2'];
-} else {
-    if (isset($_POST['city'])) {
-        $city = $_POST['city'];
-    } else {
-        $city = $user['city'];
-    }
-}
-if (isset($hitAddress[0]['address3'])) {
-    $address = $hitAddress[0]['address3'];
-} else {
-    if (isset($_POST['address'])) {
-        $address = $_POST['address'];
-    } else {
-        $address = $user['address'];
-    }
-}
-if (isset($_POST['other'])) {
-    $other = $_POST['other'];
-} else {
-    $other = $user['other'];
-}
+$hitAddress[0] = $hitAddress[0] + $_POST;
+
 ?>
 
 <?php require_once('header.html')?>
@@ -141,8 +121,8 @@ if (isset($_POST['other'])) {
         </tr>
         <?php foreach ($cart as $prodOfTheCart) :?>
             <?php
-                    $productDetail = $productDetailModel->fetchById($prodOfTheCart['product_detail_id']);
-                    $product = $productModel->fetchSingleDetail($productDetail['product_id']);
+                $productDetail = $productDetailModel->fetchById($prodOfTheCart['product_detail_id']);
+                $product = $productModel->fetchSingleDetail($productDetail['product_id']);
             ?>
             <tr>
                 <td><?=isset($product['img']) ? '<img src="' . IMG_PATH . h($product['img']) . '" alt="' . h($product['img']) . '">' : ''?></td>
@@ -199,7 +179,7 @@ if (isset($_POST['other'])) {
                 <th>住所</th>
                 <td>
                     <p>
-                        <select name="pref">
+                        <select name="address1">
                             <?php foreach ($prefectures as $prefecture) :?>
                                 <?php
                                     $pref = '';
@@ -208,14 +188,8 @@ if (isset($_POST['other'])) {
                                             $pref = 'selected';
                                         }
                                     } else {
-                                        if (isset($_POST['pref'])) {
-                                            if ($_POST['pref'] == $prefecture) {
-                                                $pref = 'selected';
-                                            }
-                                        } else {
-                                            if ($prefectures[$user['pref']] == $prefecture) {
-                                                $pref = 'selected';
-                                            }
+                                        if ($prefectures[$user['pref']] == $prefecture) {
+                                            $pref = 'selected';
                                         }
                                     }
                                 ?>
@@ -223,9 +197,9 @@ if (isset($_POST['other'])) {
                             <?php endforeach;?>
                         </select>
                     </p>
-                    <p><input type="text" name="city" value="<?=h($city)?>"><span class="error"><?=isset($error['city']) ? $error['city'] : ''?></span></p>
-                    <p><input type="text" name="address" value="<?=h($address)?>"><span class="error"><?=isset($error['address']) ? $error['address'] : ''?></span></p>
-                    <p><input type="text" name="other" value="<?=h($other)?>"><span class="error"><?=isset($error['other']) ? $error['other'] : ''?></span></p>
+                    <p><input type="text" name="address2" value="<?=isset($hitAddress[0]['address2']) ? h($hitAddress[0]['address2']) : $user['city']?>"><span class="error"><?=isset($error['address2']) ? $error['address2'] : ''?></span></p>
+                    <p><input type="text" name="address3" value="<?=isset($hitAddress[0]['address3']) ? h($hitAddress[0]['address3']) : $user['address']?>"><span class="error"><?=isset($error['address3']) ? $error['address3'] : ''?></span></p>
+                    <p><input type="text" name="other" value="<?=isset($_POST['other']) ? h($_POST['other']) : $user['other']?>"><span class="error"><?=isset($error['other']) ? $error['other'] : ''?></span></p>
                 </td>
             </tr>
             <tr>
