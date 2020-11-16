@@ -35,7 +35,7 @@ function getPage()
         'done' => '完了',
         'edit' => '',
     ];
-    $url = explode('_', pathinfo($_SERVER['REQUEST_URI'], PATHINFO_FILENAME));
+    $url = explode('_', pathinfo($_SERVER['PHP_SELF'], PATHINFO_FILENAME));
     $page = $url[count($url) -1];
     unset($url[count($url) - 1]);
     echo '<h1><button type="button" class="btn title-button" disabled>' . $UpperPageTitle[implode('_', $url)] . (isset($_GET['action']) ? $getParam[$_GET['action']] : '') . $lowerPageTitle[$page] . '</button></h1>';
