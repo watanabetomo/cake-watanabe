@@ -118,12 +118,7 @@ class CartModel extends Model
             $mailBody .= "小計： " . $_SESSION['purchase_info']['sub_price'] . "円\n消費税： " . floor($_SESSION['purchase_info']['sub_price'] * TAX) . "円\n送料： " . $_SESSION['purchase_info']['shipping'] . "円\n合計： " . $_SESSION['purchase_info']['total_price'] . "円\n\n--------------------------------------\n\n【送付先情報】\n\nお名前： " . $_SESSION['purchase_info']['name'] . "\nフリガナ： " . $_SESSION['purchase_info']['name_kana'] . "\n電話番号： " . $_SESSION['purchase_info']['tel1'] . ' - ' . $_SESSION['purchase_info']['tel2'] . ' - ' . $_SESSION['purchase_info']['tel3'] . "\n郵便番号： " . $_SESSION['purchase_info']['postal_code1'] . ' - ' . $_SESSION['purchase_info']['postal_code2'] . "\n都道府県： " . $_SESSION['purchase_info']['pref'] . "\n市区町村： " . $_SESSION['purchase_info']['city'] . "\n番地： " . $_SESSION['purchase_info']['address'] . "\nマンション名等： " . $_SESSION['purchase_info']['other'] . "\n\n--------------------------------------\n\n【請求先情報】\n\nお名前： " . $user['name'] . "\nフリガナ： " . $user['name_kana'] . "\n電話番号： " . $user['tel1'] . ' - ' . $user['tel2'] . ' - ' . $user['tel3'] . "\n郵便番号： " . $user['postal_code1'] . ' - ' . $user['postal_code2'] . "\n都道府県： " . $prefectures[$user['pref']] . "\n市区町村： " . $user['city'] . "\n番地： " . $user['address'] . "\nマンション名等： " . $user['other'] . "\n\n--------------------------------------\n\n商品ご到着まで。今しばらくお待ちください。\n\n※このメールは自動送信メールです。\n※返信をされてもご回答しかねますのでご了承ください。";
             mb_language('uni');
             mb_internal_encoding('UTF-8');
-            if (!mb_send_mail(
-                $_SESSION['purchase_info']['mail'],
-                '【洋菓子店カサミンゴー】ご購入商品確認メール',
-                $mailBody,
-                'From:' . mb_encode_mimeheader('洋菓子店カサミンゴー')
-            )) {
+            if (!mb_send_mail($_SESSION['purchase_info']['mail'], '【洋菓子店カサミンゴー】ご購入商品確認メール', $mailBody, 'From:' . mb_encode_mimeheader('洋菓子店カサミンゴー'))) {
                 throw new Exception;
             }
             $this->dbh->commit();
