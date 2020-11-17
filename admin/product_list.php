@@ -76,5 +76,8 @@ try {
             </tr>
         <?php endforeach; ?>
     </table>
+    <?php if (empty($productList)) :?>
+        <p class="empty">現在登録されている商品は0件です</p>
+    <?php endif;?>
 </main>
 <?php require_once('admin_footer.html')?>
