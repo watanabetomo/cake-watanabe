@@ -1,11 +1,11 @@
 <?php
 require_once('../autoload.php');
 
-if (!isset($_SESSION['admin']['authenticated'])) {
+if (!isset($_SESSION['admin_authenticated'])) {
     header('Location: login.php');
     exit;
 }
-
+ 
 ?>
 
 <?php require_once('admin_header.html')?>
