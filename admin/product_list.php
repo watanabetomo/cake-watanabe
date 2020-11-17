@@ -14,7 +14,6 @@ try {
     $productList = $productModel->getProduct($_GET);
 } catch (Exception $e) {
     $error = '商品情報の取得に失敗しました。<br>システム管理者にお問い合わせください。';
-    $error = $e->getMessage();
 }
 
 ?>
@@ -77,7 +76,7 @@ try {
         <?php endforeach; ?>
     </table>
     <?php if (empty($productList)) :?>
-        <p class="empty">現在登録されている商品は0件です</p>
+        <p class="empty">商品情報がありません</p>
     <?php endif;?>
 </main>
 <?php require_once('admin_footer.html')?>
