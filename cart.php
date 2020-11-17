@@ -1,7 +1,7 @@
 <?php
 require_once('autoload.php');
 
-if (!isset($_SESSION['authenticated'])) {
+if (!isset($_SESSION['user']['authenticated'])) {
     header('Location: login.php');
     exit;
 }
@@ -12,7 +12,7 @@ try {
     $productDetailModel = new ProductDetailModel();
     if (isset($_POST['es_submit'])) {
         $productDetail = $productDetailModel->fetchById($_POST['detail_id']);
-        $cartModel->addToCart($_SESSION['userId'], $_POST['detail_id']);
+        $cartModel->addToCart($_SESSION['user']['userId'], $_POST['detail_id']);
     } elseif (isset($_POST['continue'])) {
         header('Location: index.php');
         exit;
@@ -70,9 +70,6 @@ try {
         </div>
         <div class="box2">
             <p class="contents-title">カート</p>
-            <?php echo '<pre>';
-            print_r($_POST);
-            echo '</pre>';?>
             <p class="error"><?=isset($numError) ? $numError : ''?></p>
             <?php if (!empty($cart)) :?>
                 <table class="table-bordered table-center cart">

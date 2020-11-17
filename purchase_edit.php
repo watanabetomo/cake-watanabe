@@ -3,7 +3,7 @@ require_once('autoload.php');
 
 $hitAddress = [];
 
-if (!isset($_SESSION['authenticated'])) {
+if (!isset($_SESSION['user']['authenticated'])) {
     header('Location: login.php');
     exit;
 }
@@ -19,7 +19,7 @@ try {
     $cart = $cartModel->fetchAll();
 
     $userModel = new UserModel();
-    $user = $userModel->fetchById($_SESSION['userId']);
+    $user = $userModel->fetchById($_SESSION['user']['userId']);
 } catch (Exception $e) {
     $error['database'] = '商品情報の取得に失敗しました。<br>カスタマーサポートにお問い合わせください。';
 }
@@ -77,6 +77,7 @@ if (isset($_POST['send'])) {
         foreach ($_POST as $key => $value) {
             $_SESSION['purchase_info'][$key] = $value;
         }
+        unset($_SESSION['purchase_info']['send']);
         header('Location: purchase_conf.php');
         exit;
     }
@@ -165,7 +166,7 @@ $hitAddress = $hitAddress + $_POST;
         <input type="hidden" name="shipping" value="<?=($totalPrice * (1 + TAX) > 10000) ? 0 : 1000?>">
         <input type="hidden" name="total_price" value="<?=floor($totalPrice * (1 + TAX) + $shipping)?>">
         <input type="hidden" name="mail" value="<?=$user['mail']?>">
-        <p class="contents-title" id="address">送付先情報<span style="font-size: 20px; margin-left: 10px;">※登録住所以外へ送る場合は変更してください</span></p>
+        <p class="contents-title" id="address">送付先情報<span class="sub-message">※登録住所以外へ送る場合は変更してください</span></p>
         <p class="toggle-radio"><input type="radio" name="sendFor" id="sendFor1" value="1" <?=(isset($_GET['action']) and $_GET['action'] == 'fix') ? 'checked' : ''?>>変更する <input type="radio" name="sendFor" id="sendFor2" value="2" <?=!isset($_GET['action']) ? 'checked' : ''?>>変更しない</p>
         <table class="table send-for table-left" <?=!isset($_GET['action']) ? 'style="display: none;"' : ''?>>
             <tr>

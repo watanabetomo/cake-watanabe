@@ -1,7 +1,7 @@
 <?php
 require_once('autoload.php');
 
-if (isset($_SESSION['authenticated'])) {
+if (isset($_SESSION['user']['authenticated'])) {
     header('Location: cart.php');
     exit;
 }
@@ -15,10 +15,10 @@ if (isset($_POST['login'])) {
             $user = $userModel->fetchByLoginId($_POST['id']);
             if (!empty($user) and $_POST['pass'] == $user['login_pass']) {
                 session_regenerate_id(true);
-                $_SESSION['authenticated'] = password_hash($_POST['id'] . $_POST['pass'], PASSWORD_DEFAULT);
+                $_SESSION['user']['authenticated'] = password_hash($_POST['id'] . $_POST['pass'], PASSWORD_DEFAULT);
                 $userModel->updateLoginDate($user['id']);
-                $_SESSION['userName'] = $user['name'];
-                $_SESSION['userId'] = $user['id'];
+                $_SESSION['user']['userName'] = $user['name'];
+                $_SESSION['user']['userId'] = $user['id'];
                 header('Location: cart.php');
                 exit;
             }

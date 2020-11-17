@@ -177,3 +177,8 @@ footer{
 .btn {
     width: 200px;
 }
+
+.sub-message {
+    font-size: 20px;
+    margin-left: 10px;
+}

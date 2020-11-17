@@ -10,15 +10,15 @@ if (isset($_POST['send'])) {
             $adminUser = $adminUserModel->fetchAdminUser($_POST['id']);
             if (!empty($adminUser) and password_verify($_POST['pass'], $adminUser['login_pass'])) {
                 session_regenerate_id(true);
-                $_SESSION['admin_authenticated'] = password_hash($_POST['id'] . $_POST['pass'], PASSWORD_DEFAULT);
-                $_SESSION['userName'] = $adminUser['name'];
-                $_SESSION['login_id'] = $adminUser['id'];
+                $_SESSION['admin']['authenticated'] = password_hash($_POST['id'] . $_POST['pass'], PASSWORD_DEFAULT);
+                $_SESSION['admin']['userName'] = $adminUser['name'];
+                $_SESSION['admin']['login_id'] = $adminUser['id'];
                 if (intval(date('H')) > 4 and intval(date('H')) <= 11) {
-                    $_SESSION['now'] = 'おはようございます。';
+                    $_SESSION['admin']['now'] = 'おはようございます。';
                 } elseif (intval(date('H')) > 11 and intval(date('H')) <= 17) {
-                    $_SESSION['now'] = 'こんにちは。';
+                    $_SESSION['admin']['now'] = 'こんにちは。';
                 } else {
-                    $_SESSION['now'] = 'こんばんわ。';
+                    $_SESSION['admin']['now'] = 'こんばんわ。';
                 }
                 header('Location: top.php');
                 exit;

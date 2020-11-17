@@ -108,15 +108,15 @@ class CartModel extends Model
             $cart = $this->fetchAll();
             $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
             $this->dbh->beginTransaction();
-            $orderModel->commitOrder($_SESSION['userId'], $_SESSION['purchase_info']['name'], $_SESSION['purchase_info']['name_kana'], $_SESSION['purchase_info']['mail'], $_SESSION['purchase_info']['tel1'], $_SESSION['purchase_info']['tel2'], $_SESSION['purchase_info']['tel3'], $_SESSION['purchase_info']['postal_code1'], $_SESSION['purchase_info']['postal_code2'], array_search($_SESSION['purchase_info']['address1'], $prefectures), $_SESSION['purchase_info']['address2'], $_SESSION['purchase_info']['address3'], $_SESSION['purchase_info']['other'], $_SESSION['purchase_info']['payment'], $_SESSION['purchase_info']['sub_price'], $_SESSION['purchase_info']['shipping'], TAX * 100, $_SESSION['purchase_info']['total_price'], $this->dbh);
-            $user = $userModel->fetchById($_SESSION['userId']);
+            $orderModel->commitOrder($_SESSION['user']['userId'], $_SESSION['purchase_info']['name'], $_SESSION['purchase_info']['name_kana'], $_SESSION['purchase_info']['mail'], $_SESSION['purchase_info']['tel1'], $_SESSION['purchase_info']['tel2'], $_SESSION['purchase_info']['tel3'], $_SESSION['purchase_info']['postal_code1'], $_SESSION['purchase_info']['postal_code2'], array_search($_SESSION['purchase_info']['address1'], $prefectures), $_SESSION['purchase_info']['address2'], $_SESSION['purchase_info']['address3'], $_SESSION['purchase_info']['other'], $_SESSION['purchase_info']['payment'], $_SESSION['purchase_info']['sub_price'], $_SESSION['purchase_info']['shipping'], TAX * 100, $_SESSION['purchase_info']['total_price'], $this->dbh);
+            $user = $userModel->fetchById($_SESSION['user']['userId']);
             foreach ($cart as $prodOfTheCart) {
                 $productDetail = $productDetailModel->fetchById($prodOfTheCart['product_detail_id']);
                 $product = $productModel->fetchById($productDetail['product_id']);
                 $oederDetailModel->registOrderDetail($orderModel->getMaxId()[0], $prodOfTheCart['product_detail_id'], $product[0]['name'], $productDetail['size'], $productDetail['price'], $prodOfTheCart['num'], $this->dbh);
             }
             $this->deleteFromCart();
-            $mailBody = $_SESSION['userName'] . "様\n\nお世話になっております。\n洋菓子店カサミンゴーカスタマーサポートです。\n\n" . $_SESSION['userName'] . "様が購入手続きをされました商品について\nお間違えのないようメールをお送りいたしました。\n今一度ご購入商品等にお間違えなどないよう、ご確認いただけましたら幸いでございます。\n\n--------------------------------------\n\n【購入情報】\n\n";
+            $mailBody = $_SESSION['user']['userName'] . "様\n\nお世話になっております。\n洋菓子店カサミンゴーカスタマーサポートです。\n\n" . $_SESSION['userName'] . "様が購入手続きをされました商品について\nお間違えのないようメールをお送りいたしました。\n今一度ご購入商品等にお間違えなどないよう、ご確認いただけましたら幸いでございます。\n\n--------------------------------------\n\n【購入情報】\n\n";
             foreach ($cart as $prodOfTheCart) {
                 $productDetail = $productDetailModel->fetchById($prodOfTheCart['product_detail_id']);
                 $product = $productModel->fetchById($productDetail['product_id']);

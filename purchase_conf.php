@@ -1,7 +1,7 @@
 <?php
 require_once('autoload.php');
 
-if (!isset($_SESSION['authenticated'])) {
+if (!isset($_SESSION['user']['authenticated'])) {
     header('Location: login.php');
     exit;
 }
@@ -22,7 +22,7 @@ try {
     $cart = $cartModel->fetchAll();
 
     $userModel = new UserModel();
-    $user = $userModel->fetchById($_SESSION['userId']);
+    $user = $userModel->fetchById($_SESSION['user']['userId']);
 
     $mPaymentModel = new MPaymentModel();
     $payment = $mPaymentModel->fetchByid($_SESSION['purchase_info']['payment']);
