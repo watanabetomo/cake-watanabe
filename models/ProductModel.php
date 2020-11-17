@@ -12,8 +12,12 @@ class ProductModel extends Model
     public function getProduct($get)
     {
         $sql = 'SELECT product.id, product.name, product.img, product.created_at, product.updated_at';
-        $sql .= 'FROM product JOIN product_category ON product.product_category_id = product_category.id';
-        $sql .= 'WHERE delete_flg = false' . ((isset($get['keyword']) and $get['keyword'] != '') ? ' AND product.name LIKE ?' : '') . (isset($get['order']) ? ' ORDER BY product.' . $get['column'] .  ' IS NULL ASC, product.' . $get['column'] . ' ' . $get['order'] : '');
+        $sql .= ' FROM product';
+        $sql .= ' JOIN product_category';
+        $sql .= ' ON product.product_category_id = product_category.id';
+        $sql .= ' WHERE delete_flg = false';
+        $sql .= ((isset($get['keyword']) and $get['keyword'] != '') ? ' AND product.name LIKE ?' : '');
+        $sql .= (isset($get['order']) ? ' ORDER BY product.' . $get['column'] .  ' IS NULL ASC, product.' . $get['column'] . ' ' . $get['order'] : '');
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([isset($get['keyword']) ? '%' . $get['keyword'] . '%' : '']);
         return $stmt->fetchAll();
@@ -37,8 +41,8 @@ class ProductModel extends Model
             $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
             $this->dbh->beginTransaction();
             $sql = 'UPDATE product';
-            $sql .= 'SET name = ?, product_category_id = ?, delivery_info = ?, turn = ?, update_user = ?, updated_at = current_timestamp()';
-            $sql .= 'WHERE id = ?';
+            $sql .= ' SET name = ?, product_category_id = ?, delivery_info = ?, turn = ?, update_user = ?, updated_at = current_timestamp()';
+            $sql .= ' WHERE id = ?';
             $stmt = $this->dbh->prepare($sql);
             $stmt->execute([
                 $name == '' ? null : $name,
@@ -86,9 +90,9 @@ class ProductModel extends Model
     public function fetchByCategoryId($id)
     {
         $sql = 'SELECT id, name, img';
-        $sql .= 'FROM product';
-        $sql .= 'WHERE product_category_id = ? AND delete_flg = false';
-        $sql .= 'ORDER BY turn ASC';
+        $sql .= ' FROM product';
+        $sql .=  'WHERE product_category_id = ? AND delete_flg = false';
+        $sql .= ' ORDER BY turn ASC';
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
         return $stmt->fetchAll();
