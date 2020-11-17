@@ -115,7 +115,7 @@ class ProductModel extends Model
             $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
             $this->dbh->beginTransaction();
             $sql = 'INSERT INTO product(name, product_category_id, delivery_info, turn, create_user)';
-            $sql .= 'VALUES (?, ?, ?, ?, ?)';
+            $sql .= ' VALUES (?, ?, ?, ?, ?)';
             $stmt = $this->dbh->prepare($sql);
             $stmt->execute([
                 $name == '' ? null : $name,
