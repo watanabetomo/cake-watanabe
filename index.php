@@ -315,7 +315,7 @@ try {
                             $error = 'データベースとの接続に失敗しました';
                         }
                         ?>
-                        <?php for ($j=0; $j<count($products); $j++) :?>
+                        <?php for ($j = 0; $j < count($products); $j++) :?>
                             <div class="contents02_<?=$j + 1?>">
                                 <h2><a href=""><img src="img/<?=h($products[$j]['img'])?>"></a></h2>
                                 <p><strong><?=h($products[$j]['name'])?><br></strong><br></p>

@@ -56,7 +56,7 @@ if (isset($_POST['category_id'])) {
             <th>サイズ(cm)</th>
             <th>価格(円)</th>
         </tr>
-        <?php for ($i=0; $i<5; $i++) :?>
+        <?php for ($i = 0; $i < 5; $i++) :?>
             <tr>
                 <td><?=$i?></td>
                 <td><?=h($_POST['details'][$i]['size'])?></td>
@@ -69,7 +69,7 @@ if (isset($_POST['category_id'])) {
         <input type="hidden" name="product_category_id" value="<?=$_POST['category_id']?>">
         <input type="hidden" name="delivery_info" value="<?=$_POST['delivery_info']?>">
         <input type="hidden" name="turn" value="<?=$_POST['turn']?>">
-        <?php for ($i=0; $i<5; $i++) :?>
+        <?php for ($i = 0; $i < 5; $i++) :?>
             <input type="hidden" name="details[<?=$i?>][size]" value="<?=$_POST['details'][$i]['size']?>">
             <input type="hidden" name="details[<?=$i?>][price]" value="<?=$_POST['details'][$i]['price']?>">
         <?php endfor;?>

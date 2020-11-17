@@ -26,7 +26,7 @@ function getPage()
         'edit' => '編集',
         'new' => '登録'
     ];
-    $UpperPageTitle = [
+    $upperPageTitle = [
         'product' => '商品'
     ];
     $lowerPageTitle = [
@@ -38,7 +38,7 @@ function getPage()
     $url = explode('_', pathinfo($_SERVER['PHP_SELF'], PATHINFO_FILENAME));
     $page = $url[count($url) -1];
     unset($url[count($url) - 1]);
-    echo '<h1><button type="button" class="btn title-button" disabled>' . $UpperPageTitle[implode('_', $url)] . (isset($_GET['action']) ? $getParam[$_GET['action']] : '') . $lowerPageTitle[$page] . '</button></h1>';
+    echo '<h1><button type="button" class="btn title-button" disabled>' . $upperPageTitle[implode('_', $url)] . (isset($_GET['action']) ? $getParam[$_GET['action']] : '') . $lowerPageTitle[$page] . '</button></h1>';
 }
 
 /**

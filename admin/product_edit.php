@@ -15,9 +15,13 @@ try {
             $productModel->uploadImg($_GET['id'], $_FILES['img']);
         }
     }
-    if (isset($_GET['action']) and $_GET['action'] == 'edit') {
-        $productData = $productModel->fetchSingleProduct($_GET['id']);
-        $productData = $_POST + $productData;
+    if (isset($_GET['action'])) {
+        if ($_GET['action'] == 'edit') {
+            $productData = $productModel->fetchSingleProduct($_GET['id']);
+            $productData = $_POST + $productData;
+        } elseif ($_GET['action'] == 'new') {
+            $productData = $_POST;
+        }
     }
 } catch (PDOException $e) {
     $databaseError = '商品情報の取得及び登録に失敗しました。<br>システム管理者にお問い合わせください。';
@@ -43,14 +47,14 @@ try {
             <?php endif;?>
             <tr>
                 <th>商品名</th>
-                <td colspan="3"><input type="text" name="name" value="<?=isset($productData) ? h($productData['name']) : ''?>"></td>
+                <td colspan="3"><input type="text" name="name" value="<?=isset($productData['name']) ? h($productData['name']) : ''?>"></td>
             </tr>
             <tr>
                 <th>商品カテゴリー</th>
                 <td colspan="3">
                     <select name="category_id">
                         <?php foreach ($productCategories as $category) :?>
-                            <option value="<?=$category['id']?>"<?=(isset($productData) and $productData['product_category_id'] == $category['id']) ? ' selected' : ''?>><?=$category['name']?></option>
+                            <option value="<?=$category['id']?>"<?=(isset($productData['product_category_id']) and $productData['product_category_id'] == $category['id']) ? ' selected' : ''?>><?=$category['name']?></option>
                         <?php endforeach;?>
                     </select>
                 </td>
@@ -58,13 +62,13 @@ try {
             <tr>
                 <th>配送情報</th>
                 <td colspan="3">
-                    <input type="text" name="delivery_info" value="<?=isset($productData) ? h($productData['delivery_info']) : ''?>">
+                    <input type="text" name="delivery_info" value="<?=isset($productData['delivery_info']) ? h($productData['delivery_info']) : ''?>">
                 </td>
             </tr>
             <tr>
                 <th>表示順(商品)</th>
                 <td colspan="3">
-                    <input type="number" name="turn" value="<?=isset($productData) ? h($productData['turn']) : ''?>">
+                    <input type="number" name="turn" value="<?=isset($productData['turn']) ? h($productData['turn']) : ''?>">
                 </td>
             </tr>
             <tr>
@@ -73,11 +77,11 @@ try {
                 <th>サイズ(cm)</th>
                 <th>価格(円)</th>
             </tr>
-            <?php for ($i=0; $i<5; $i++) :?>
+            <?php for ($i = 0; $i < 5; $i++) :?>
                 <tr>
                     <td><?=$i?></td>
-                    <td><input type="number" name="details[<?=$i?>][size]" value="<?=isset($productData) ? h($productData['details'][$i]['size']) : ''?>"></td>
-                    <td><input type="number" name="details[<?=$i?>][price]" value="<?=isset($productData) ? h($productData['details'][$i]['price']) : ''?>"></td>
+                    <td><input type="number" name="details[<?=$i?>][size]" value="<?=isset($productData['details'][$i]['size']) ? h($productData['details'][$i]['size']) : ''?>"></td>
+                    <td><input type="number" name="details[<?=$i?>][price]" value="<?=isset($productData['details'][$i]['price']) ? h($productData['details'][$i]['price']) : ''?>"></td>
                 </tr>
             <?php endfor?>
         </table>

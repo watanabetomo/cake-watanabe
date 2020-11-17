@@ -34,8 +34,8 @@ class ProductModel extends Model
         try {
             $productDetailModel = new ProductDetailModel();
             $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
-            $stmt = $this->dbh->prepare('UPDATE product SET name = ?, product_category_id = ?, delivery_info = ?, turn = ?, update_user = ?, updated_at = current_timestamp() WHERE id = ?');
             $this->dbh->beginTransaction();
+            $stmt = $this->dbh->prepare('UPDATE product SET name = ?, product_category_id = ?, delivery_info = ?, turn = ?, update_user = ?, updated_at = current_timestamp() WHERE id = ?');
             $stmt->execute([$name == '' ? null : $name, $category_id, $delivery_info == '' ? null : $delivery_info, $turn == '' ? null : $turn, $update_user, $id]);
             for ($i=0; $i<5; $i++) {
                 $productDetailModel->update($id, $details[$i]['size'], $details[$i]['price'], $i + 1, $this->dbh);
@@ -121,14 +121,13 @@ class ProductModel extends Model
                     throw new Exception;
                 }
                 exec('sudo chmod 0755 ../' . IMG_PATH);
-            } elseif ($array['error'] == UPLOAD_ERR_NO_FILE) {
-                throw new Exception;
             } else {
                 throw new Exception;
             }
             $this->dbh->commit();
         } catch (Exception $e) {
             $this->dbh->rollBack();
+            exec('sudo chmod 0755 ../' . IMG_PATH);
             throw new Exception($e);
         }
     }
