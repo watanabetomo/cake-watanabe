@@ -11,13 +11,10 @@ if (!isset($_SESSION['user']['authenticated'])) {
 try {
     $productDetailModel = new ProductDetailmodel();
     $productModel = new ProductModel();
-
     $paymentModel = new MPaymentModel();
     $payments = $paymentModel->fetchAll();
-
     $cartModel = new CartModel();
     $cart = $cartModel->fetchAll();
-
     $userModel = new UserModel();
     $user = $userModel->fetchById($_SESSION['user']['userId']);
 } catch (Exception $e) {
