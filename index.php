@@ -359,7 +359,6 @@ try {
                     <div class="info">
                         <p>大きなサイズは多少お時間を頂戴しております。</p>
                     </div>
-                </div><!--/#cheesecake-->
             <?php endforeach; ?>
                     <div class="info">
                         <p>数量限定につき完売の際はご容赦ください。</p>
