@@ -8,7 +8,8 @@ class ProductCategoryModel extends Model
      */
     public function fetchAllName()
     {
-        $stmt = $this->dbh->query('SELECT id, name FROM product_category ORDER BY turn ASC');
+        $sql = 'SELECT id, name FROM product_category ORDER BY turn ASC';
+        $stmt = $this->dbh->query($sql);
         return $stmt->fetchAll();
     }
 
@@ -20,14 +21,16 @@ class ProductCategoryModel extends Model
      */
     public function getIdByName($name)
     {
-        $stmt = $this->dbh->prepare('SELECT id FROM product_category WHERE name = ?');
+        $sql = 'SELECT id FROM product_category WHERE name = ?';
+        $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$name]);
         return $stmt->fetch();
     }
 
     public function getName($id)
     {
-        $stmt = $this->dbh->prepare('SELECT name FROM product_category WHERE id = ?');
+        $sql = 'SELECT name FROM product_category WHERE id = ?';
+        $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
         return $stmt->fetch();
     }
