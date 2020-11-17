@@ -89,7 +89,7 @@ try {
     <div id="wrapper">
         <header>
             <p class="error"><?=isset($error) ? $error : ''?></p>
-            <p class="top-nav"><a href="login.php">ログイン</a>　<a href="cart.php">カート</a></p>
+            <p class="top-nav"><a href="login.php">ログイン</a> <a href="cart.php">カート</a></p>
             <div id="slider">
                 <ul class="bxslider">
                     <li><img src="img/slide01.jpg"></li>
@@ -490,9 +490,9 @@ try {
             </div><!--/#contents12-->
         </div><!--/#main-->
         <p id="pagetop"><a href="#wrapper"><img src="img/pagetop.png" alt="ページトップボタン"></a></p>
-        <footer>
-            <small>Copyright Casa Mingo All Rights Reserved.　Kitaowaribe397-1 Nagano-shi Nagano 3810014 JAPAN</small>
-        </footer>
     </div><!--/#wrapper-->
+    <footer>
+        <small>Copyright Casa Mingo All Rights Reserved.　Kitaowaribe397-1 Nagano-shi Nagano 3810014 JAPAN</small>
+    </footer>
 </body>
 </html>
