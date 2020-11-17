@@ -91,7 +91,7 @@ class ProductModel extends Model
     {
         $sql = 'SELECT id, name, img';
         $sql .= ' FROM product';
-        $sql .=  'WHERE product_category_id = ? AND delete_flg = false';
+        $sql .= ' WHERE product_category_id = ? AND delete_flg = false';
         $sql .= ' ORDER BY turn ASC';
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
