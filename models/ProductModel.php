@@ -112,7 +112,6 @@ class ProductModel extends Model
     public function register($name, $category_id, $delivery_info, $turn, $create_user, $details)
     {
         try {
-            $productDetailModel = new ProductDetailModel();
             $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
             $this->dbh->beginTransaction();
             $sql = 'INSERT INTO product(name, product_category_id, delivery_info, turn, create_user)';
@@ -126,6 +125,7 @@ class ProductModel extends Model
                 $create_user
             ]);
             $id = $this->getMaxId();
+            $productDetailModel = new ProductDetailModel();
             for ($i = 0; $i < 5; $i++) {
                 $productDetailModel->register(
                     $id,

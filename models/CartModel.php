@@ -100,17 +100,17 @@ class CartModel extends Model
     {
         global $prefectures;
         try {
-            $orderModel = new OrderModel();
-            $productDetailModel = new ProductDetailModel();
-            $productModel = new ProductModel();
-            $oederDetailModel = new OrderDetailModel();
-            $userModel = new UserModel();
             $cart = $this->fetchAll();
             $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
             $this->dbh->beginTransaction();
+            $orderModel = new OrderModel();
             $orderModel->commitOrder($_SESSION['user']['userId'], $_SESSION['purchase_info']['name'], $_SESSION['purchase_info']['name_kana'], $_SESSION['purchase_info']['mail'], $_SESSION['purchase_info']['tel1'], $_SESSION['purchase_info']['tel2'], $_SESSION['purchase_info']['tel3'], $_SESSION['purchase_info']['postal_code1'], $_SESSION['purchase_info']['postal_code2'], array_search($_SESSION['purchase_info']['address1'], $prefectures), $_SESSION['purchase_info']['city'], $_SESSION['purchase_info']['address'], $_SESSION['purchase_info']['other'], $_SESSION['purchase_info']['payment'], $_SESSION['purchase_info']['sub_price'], $_SESSION['purchase_info']['shipping'], TAX * 100, $_SESSION['purchase_info']['total_price'], $this->dbh);
+            $userModel = new UserModel();
             $user = $userModel->fetchById($_SESSION['user']['userId']);
             $id = $orderModel->getMaxId();
+            $productDetailModel = new ProductDetailModel();
+            $productModel = new ProductModel();
+            $oederDetailModel = new OrderDetailModel();
             foreach ($cart as $prodOfTheCart) {
                 $productDetail = $productDetailModel->fetchById($prodOfTheCart['product_detail_id']);
                 $product = $productModel->fetchSingleProduct($productDetail['product_id']);
