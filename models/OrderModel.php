@@ -39,8 +39,6 @@ class OrderModel extends Model
      */
     public function getMaxId()
     {
-        $sql = 'SELECT MAX(id) FROM `order`';
-        $stmt = $this->dbh->query($sql);
-        return $stmt->fetch();
+        return $this->dbh->lastInsertId();
     }
 }

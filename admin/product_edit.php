@@ -6,29 +6,41 @@ if (!isset($_SESSION['admin']['authenticated'])) {
     exit;
 }
 
+if (!isset($_GET['action'])) {
+    header('Location: product_list.php');
+    exit;
+}
+
+if ($_GET['action'] != 'edit' and $_GET['action'] != 'new') {
+    header('Location: product_list.php');
+    exit;
+}
+
+try {
+    $productModel = new ProductModel();
+    $productData = [];
+    if ($_GET['action'] == 'edit') {
+        $productData = $productModel->fetchSingleProduct($_GET['id']);
+    }
+    $productData = $_POST + $productData;
+} catch (Exception $e) {
+    header('Location: product_list.php');
+    exit;
+}
+
 try {
     $productCategoryModel = new ProductCategoryModel();
-    $productModel = new ProductModel();
     $productCategories = $productCategoryModel->fetchAllName();
     if (isset($_POST['upload'])) {
         if (!empty($_FILES['img'])) {
             $productModel->uploadImg($_GET['id'], $_FILES['img']);
         }
     }
-    if (isset($_GET['action'])) {
-        if ($_GET['action'] == 'edit') {
-            $productData = $productModel->fetchSingleProduct($_GET['id']);
-            $productData = $_POST + $productData;
-        } elseif ($_GET['action'] == 'new') {
-            $productData = $_POST;
-        }
-    }
 } catch (PDOException $e) {
-    $databaseError = '商品情報の取得及び登録に失敗しました。<br>システム管理者にお問い合わせください。';
+    $databaseError = '商品情報の取得及び' . ($_GET['action'] == 'edit' ? '更新' : '登録') . 'に失敗しました。<br>システム管理者にお問い合わせください。';
 } catch (Exception $e) {
     $fileUploadError = 'ファイルのアップロードに失敗しました。<br>システム管理者にお問い合わせください。';
 }
-
 
 ?>
 

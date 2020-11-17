@@ -6,6 +6,11 @@ if (!isset($_SESSION['admin']['authenticated'])) {
     exit;
 }
 
+if (!isset($_GET['action'])) {
+    header('Location: product_list.php');
+    exit;
+}
+
 if ($_GET['action'] != 'edit' and $_GET['action'] != 'new') {
     header('Location: product_list.php');
     exit;
@@ -16,7 +21,7 @@ if (isset($_POST['category_id'])) {
         $productCategoryModel = new ProductCategoryModel();
         $category = $productCategoryModel->getName($_POST['category_id']);
     } catch (Exception $e) {
-        $error = '商品情報の取得及び登録に失敗しました。<br>システム管理者にお問い合わせください。';
+        $error = '商品情報の取得及び' . ($_GET['action'] == 'edit' ? '更新' : '登録') . 'に失敗しました。<br>システム管理者にお問い合わせください。';
     }
 }
 
