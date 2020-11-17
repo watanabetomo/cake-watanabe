@@ -35,15 +35,15 @@ if (isset($_POST['send'])) {
     } elseif (!preg_match('/^[0-9]{4}$/', $_POST['postal_code2'])) {
         $error['postal_code2'] = '郵便番号下4桁が間違っています。';
     }
-    if ($_POST['address2'] == '') {
-        $error['address2'] = '市区町村が入力されていません。';
-    } elseif (!preg_match('/^[0-9A-Za-zぁ-んァ-ヶー一-龠]{1,15}$/u', $_POST['address2'])) {
-        $error['address2'] = '市区町村が間違っています。';
+    if ($_POST['city'] == '') {
+        $error['city'] = '市区町村が入力されていません。';
+    } elseif (!preg_match('/^[0-9A-Za-zぁ-んァ-ヶー一-龠]{1,15}$/u', $_POST['city'])) {
+        $error['city'] = '市区町村が間違っています。';
     }
-    if ($_POST['address3'] == '') {
-        $error['address3'] = '番地が入力されていません。';
-    } elseif (!preg_match('/^[0-9A-Za-zぁ-んァ-ヶー一-龠\-]{1,100}$/u', $_POST['address3'])) {
-        $error['address3'] = '番地が間違っています。';
+    if ($_POST['address'] == '') {
+        $error['address'] = '番地が入力されていません。';
+    } elseif (!preg_match('/^[0-9A-Za-zぁ-んァ-ヶー一-龠\-]{1,100}$/u', $_POST['address'])) {
+        $error['address'] = '番地が間違っています。';
     }
     if (!preg_match('/^[0-9A-Za-zぁ-んァ-ヶー一-龠\-]{0,100}$/u', $_POST['other'])) {
         $error['other'] = '建物名等が間違っています。';
@@ -97,6 +97,9 @@ if (isset($_POST['send'])) {
         $json = json_decode(file_get_contents("https://zip-cloud.appspot.com/api/search?zipcode=${postal_code}"), true);
         if (!empty($json['results'])) {
             $hitAddress = $json["results"][0];
+            $hitAddress['city'] = $hitAddress['address2'] . $hitAddress['address3'];
+            $hitAddress['address'] = '';
+            $hitAddress['other'] = '';
         }
         if (empty($hitAddress)) {
             $unhitAddressError = '一致する住所がありません。';
@@ -130,9 +133,9 @@ $hitAddress = $hitAddress + $_POST;
                 <td><?=isset($product['img']) ? '<img src="' . IMG_PATH . h($product['img']) . '" alt="' . h($product['img']) . '">' : ''?></td>
                 <td><?=h($product['name'])?></td>
                 <td><?=h($prodOfTheCart['num'])?></td>
-                <td><?=h($productDetail['size'])?></td>
-                <td><?=number_format(h($productDetail['price']))?></td>
-                <td><?=number_format(h($prodOfTheCart['num']) * h($productDetail['price']))?></td>
+                <td><?=h($productDetail['size'])?>cm</td>
+                <td><?=number_format(h($productDetail['price']))?>円</td>
+                <td><?=number_format(h($prodOfTheCart['num']) * h($productDetail['price']))?>円</td>
             </tr>
             <?php
                 $totalPrice += $productDetail['price'] * $prodOfTheCart['num'];
@@ -145,19 +148,19 @@ $hitAddress = $hitAddress + $_POST;
             <td><?=$totalCount?></td>
             <td></td>
             <td></td>
-            <td><?=number_format($totalPrice)?></td>
+            <td><?=number_format($totalPrice)?>円</td>
         </tr>
         <tr>
             <td colspan="5">消費税</td>
-            <td><?=number_format(floor($totalPrice * TAX))?></td>
+            <td><?=number_format(floor($totalPrice * TAX))?>円</td>
         </tr>
         <tr>
             <td colspan="5">送料（税込み）</td>
-            <td><?=number_format($shipping)?></td>
+            <td><?=number_format($shipping)?>円</td>
         </tr>
         <tr>
             <td colspan="5">総合計</td>
-            <td><?=number_format(floor($totalPrice * (1 + TAX) + $shipping))?></td>
+            <td><?=number_format(floor($totalPrice * (1 + TAX) + $shipping))?>円</td>
         </tr>
     </table>
     <form action="purchase_edit.php?action=fix#address" method="post">
@@ -199,9 +202,9 @@ $hitAddress = $hitAddress + $_POST;
                             <?php endforeach;?>
                         </select>
                     </p>
-                    <p><input type="text" name="address2" value="<?=isset($hitAddress['address2']) ? h($hitAddress['address2']) : $user['city']?>"><span class="error"><?=isset($error['address2']) ? $error['address2'] : ''?></span></p>
-                    <p><input type="text" name="address3" value="<?=isset($hitAddress['address3']) ? h($hitAddress['address3']) : $user['address']?>"><span class="error"><?=isset($error['address3']) ? $error['address3'] : ''?></span></p>
-                    <p><input type="text" name="other" value="<?=isset($_POST['other']) ? h($_POST['other']) : $user['other']?>"><span class="error"><?=isset($error['other']) ? $error['other'] : ''?></span></p>
+                    <p><input type="text" name="city" value="<?=isset($hitAddress['city']) ? h($hitAddress['city']) : $user['city']?>"><span class="error"><?=isset($error['city']) ? $error['city'] : ''?></span></p>
+                    <p><input type="text" name="address" value="<?=isset($hitAddress['address']) ? h($hitAddress['address']) : $user['address']?>"><span class="error"><?=isset($error['address']) ? $error['address3'] : ''?></span></p>
+                    <p><input type="text" name="other" value="<?=isset($hitAddress['other']) ? h($hitAddress['other']) : $user['other']?>"><span class="error"><?=isset($error['other']) ? $error['other'] : ''?></span></p>
                 </td>
             </tr>
             <tr>

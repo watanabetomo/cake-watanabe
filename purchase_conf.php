@@ -92,7 +92,7 @@ try {
         </tr>
         <tr>
             <th>住所</th>
-            <td><?=($_SESSION['purchase_info']['sendFor'] == 1 ? h($_SESSION['purchase_info']['address1']) : $prefectures[$user['pref']]) . ($_SESSION['purchase_info']['sendFor'] == 1 ? h($_SESSION['purchase_info']['address2']) : $user['city']) . ($_SESSION['purchase_info']['sendFor'] == 1 ? h($_SESSION['purchase_info']['address3']) : $user['address']) . ($_SESSION['purchase_info']['sendFor'] == 1 ? h($_SESSION['purchase_info']['other']) : $user['other'])?></td>
+            <td><?=($_SESSION['purchase_info']['sendFor'] == 1 ? h($_SESSION['purchase_info']['address1']) : $prefectures[$user['pref']]) . ($_SESSION['purchase_info']['sendFor'] == 1 ? h($_SESSION['purchase_info']['city']) : $user['city']) . ($_SESSION['purchase_info']['sendFor'] == 1 ? h($_SESSION['purchase_info']['address']) : $user['address']) . ($_SESSION['purchase_info']['sendFor'] == 1 ? h($_SESSION['purchase_info']['other']) : $user['other'])?></td>
         </tr>
         <tr>
             <th>電話番号</th>
