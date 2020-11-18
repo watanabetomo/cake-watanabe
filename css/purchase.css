@@ -1,5 +1,5 @@
 main{
-    min-height: 470px;
+    min-height: 400px;
 }
 
 .logout{
@@ -57,7 +57,7 @@ main{
     display: grid;
     grid-template-columns: 1fr 2fr;
     grid-gap: 10px;
-    min-height: 500px;
+    min-height: 435px;
 }
 
 .box1{
