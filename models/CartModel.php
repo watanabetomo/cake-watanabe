@@ -19,10 +19,18 @@ class CartModel extends Model
         }
         if (!isset($idExist)) {
             $sql =
-                'INSERT INTO '
-                    . 'cart (user_id, product_detail_id, num) '
-                . 'VALUES '
-                    . '(?, ?, 1)';
+                'INSERT '
+                . 'INTO '
+                    . 'cart '
+                . '('
+                    . 'user_id'
+                . ',    product_detail_id'
+                . ',    num'
+                . ') VALUES ('
+                    . '?'
+                . ',    ?'
+                . ',    1'
+                . ')';
             $stmt = $this->dbh->prepare($sql);
             $stmt->execute([$userId, $detailId]);
         }
