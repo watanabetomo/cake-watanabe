@@ -6,12 +6,11 @@ if (!isset($_SESSION['admin']['authenticated'])) {
     exit;
 }
 
-if (!isset($_GET['action'])) {
-    header('Location: product_list.php');
-    exit;
-}
-
-if ($_GET['action'] != 'edit' and $_GET['action'] != 'new') {
+if (
+    !isset($_GET['action'])
+    or ($_GET['action'] != 'edit' and $_GET['action'] != 'new')
+    or ($_GET['action'] == 'edit' and !isset($_GET['id']))
+) {
     header('Location: product_list.php');
     exit;
 }

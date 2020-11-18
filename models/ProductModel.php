@@ -23,7 +23,7 @@ class ProductModel extends Model
         . 'JOIN product_category '
             . 'ON product.product_category_id = product_category.id '
         . 'WHERE '
-            . 'delete_flg = false '
+            . 'delete_flg = false'
         . ((isset($get['keyword']) and $get['keyword'] != '') ? ' AND product.name LIKE ?' : '')
         . (isset($get['order']) ? ' ORDER BY product.' . $get['column'] .  ' IS NULL ASC, product.' . $get['column'] . ' ' . $get['order'] : '');
         $stmt = $this->dbh->prepare($sql);
@@ -62,7 +62,7 @@ class ProductModel extends Model
                     . 'turn = ?, '
                     . 'update_user = ?, '
                     . 'updated_at = current_timestamp() '
-                . 'WHERE'
+                . 'WHERE '
                     . 'id = ?';
             $stmt = $this->dbh->prepare($sql);
             $stmt->execute([
@@ -98,7 +98,13 @@ class ProductModel extends Model
      */
     public function delete($id)
     {
-        $sql = 'UPDATE product SET delete_flg = true WHERE id = ?';
+        $sql =
+            'UPDATE '
+                . 'product '
+            . 'SET '
+                . 'delete_flg = true '
+            . 'WHERE '
+                . 'id = ?';
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
     }

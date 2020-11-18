@@ -6,17 +6,12 @@ if (!isset($_SESSION['admin']['authenticated'])) {
     exit;
 }
 
-if (!isset($_GET['action'])) {
-    header('Location: product_list.php');
-    exit;
-}
-
-if ($_GET['action'] != 'edit' and $_GET['action'] != 'new') {
-    header('Location: product_list.php');
-    exit;
-}
-
-if (!isset($_POST['register'])) {
+if (
+    !isset($_GET['action'])
+    or ($_GET['action'] != 'edit' and $_GET['action'] != 'new')
+    or ($_GET['action'] == 'edit' and !isset($_GET['id']))
+    or !isset($_POST['register'])
+) {
     header('Location: product_list.php');
     exit;
 }
@@ -24,9 +19,9 @@ if (!isset($_POST['register'])) {
 try {
     $productModel = new ProductModel();
     if (isset($_GET['action']) and $_GET['action'] == 'new') {
-        $productModel->register($_POST['name'], $_POST['product_category_id'], $_POST['delivery_info'], $_POST['turn'], $_SESSION['login_id'], $_POST['details']);
+        $productModel->register($_POST['name'], $_POST['product_category_id'], $_POST['delivery_info'], $_POST['turn'], $_SESSION['admin']['login_id'], $_POST['details']);
     } elseif (isset($_GET['action']) and $_GET['action'] == 'edit' and is_numeric($_GET['id'])) {
-        $productModel->update($_GET['id'], $_POST['name'], $_POST['product_category_id'], $_POST['delivery_info'], $_POST['turn'], $_SESSION['login_id'], $_POST['details']);
+        $productModel->update($_GET['id'], $_POST['name'], $_POST['product_category_id'], $_POST['delivery_info'], $_POST['turn'], $_SESSION['admin']['login_id'], $_POST['details']);
     }
 } catch (Exception $e) {
     $error = '商品情報の取得及び' . ($_GET['action'] == 'edit' ? '更新' : '登録') . 'に失敗しました。<br>システム管理者にお問い合わせください。';

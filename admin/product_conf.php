@@ -6,12 +6,12 @@ if (!isset($_SESSION['admin']['authenticated'])) {
     exit;
 }
 
-if (!isset($_GET['action'])) {
-    header('Location: product_list.php');
-    exit;
-}
-
-if ($_GET['action'] != 'edit' and $_GET['action'] != 'new') {
+if (
+    !isset($_GET['action'])
+    or ($_GET['action'] != 'edit' and $_GET['action'] != 'new')
+    or ($_GET['action'] == 'edit' and !isset($_GET['id']))
+    or !isset($_POST['send'])
+) {
     header('Location: product_list.php');
     exit;
 }
@@ -78,7 +78,7 @@ if (isset($_POST['category_id'])) {
             <input type="hidden" name="details[<?=$i?>][size]" value="<?=$_POST['details'][$i]['size']?>">
             <input type="hidden" name="details[<?=$i?>][price]" value="<?=$_POST['details'][$i]['price']?>">
         <?php endfor;?>
-        <p class="submit-button register-btn"><input type="submit" name="register" class="btn" value="登録完了する"></p>
+        <p class="submit-button register-btn"><input type="submit" name="register" class="btn" value="<?=($_GET['action'] == 'edit' ? '更新' : '登録')?>完了する"></p>
     </form>
     <form action="product_edit.php<?=(isset($_GET['action'])) ? '?action=' . $_GET['action'] : ''?><?=isset($_GET['id']) ? '&id=' . $_GET['id'] : ''?>" method="post">
         <input type="hidden" name="name" value="<?=$_POST['name']?>">
