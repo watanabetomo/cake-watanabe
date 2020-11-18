@@ -6,6 +6,11 @@ if (!isset($_SESSION['user']['authenticated'])) {
     exit;
 }
 
+if (isset($_POST['continue'])) {
+    header('Location: index.php');
+    exit;
+}
+
 try {
     $cartModel = new CartModel();
     $productModel = new ProductModel();
@@ -13,10 +18,7 @@ try {
     if (isset($_POST['es_submit'])) {
         $productDetail = $productDetailModel->fetchById($_POST['detail_id']);
         $cartModel->addToCart($_SESSION['user']['userId'], $_POST['detail_id']);
-    } elseif (isset($_POST['continue'])) {
-        header('Location: index.php');
-        exit;
-    } elseif (isset($_POST['delete'])) {
+    }elseif (isset($_POST['delete'])) {
         $cartModel->delete($_POST['deleteId']);
     } elseif (isset($_POST['change'])) {
         if ($_POST['num'] > 0) {

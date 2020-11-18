@@ -8,6 +8,11 @@ if (!isset($_SESSION['user']['authenticated'])) {
     exit;
 }
 
+if (!isset($_POST['purchase']) and !isset($_POST['fix']) and !isset($_POST['send'])) {
+    header('Location: cart.php');
+    exit;
+}
+
 try {
     $productDetailModel = new ProductDetailmodel();
     $productModel = new ProductModel();
