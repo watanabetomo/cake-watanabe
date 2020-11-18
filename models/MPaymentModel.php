@@ -8,7 +8,11 @@ class MPaymentModel extends Model
      */
     public function fetchAll()
     {
-        $sql = 'SELECT * FROM m_payment';
+        $sql =
+            'SELECT '
+                . '* '
+            . 'FROM '
+                . 'm_payment';
         $stmt = $this->dbh->query($sql);
         return $stmt->fetchAll();
     }
@@ -21,7 +25,13 @@ class MPaymentModel extends Model
      */
     public function fetchByid($id)
     {
-        $sql = 'SELECT * FROM m_payment WHERE id = ?';
+        $sql =
+            'SELECT '
+                . '* '
+            . 'FROM '
+                . 'm_payment '
+            . 'WHERE '
+                . 'id = ?';
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
         return $stmt->fetch();

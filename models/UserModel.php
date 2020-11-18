@@ -9,7 +9,15 @@ class UserModel extends Model
      */
     public function fetchByLoginId($id)
     {
-        $sql = 'SELECT id, login_pass, name FROM user WHERE login_id = ?';
+        $sql =
+            'SELECT '
+                . 'id, '
+                . 'login_pass, '
+                . 'name '
+            . 'FROM '
+                . 'user '
+            . 'WHERE '
+                . 'login_id = ?';
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
         return $stmt->fetch();
@@ -23,7 +31,13 @@ class UserModel extends Model
      */
     public function fetchById($id)
     {
-        $sql = 'SELECT * FROM user WHERE id = ?';
+        $sql =
+            'SELECT '
+                . '* '
+            . 'FROM '
+                . 'user '
+            . 'WHERE '
+                . 'id = ?';
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
         return $stmt->fetch();
@@ -37,7 +51,13 @@ class UserModel extends Model
      */
     public function updateLoginDate($id)
     {
-        $sql = 'UPDATE user SET last_login_date = NOW() WHERE id = ?';
+        $sql =
+            'UPDATE '
+                . 'user '
+            . 'SET '
+                . 'last_login_date = NOW() '
+            . 'WHERE '
+                . 'id = ?';
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
     }

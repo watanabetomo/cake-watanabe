@@ -18,7 +18,11 @@ class CartModel extends Model
             }
         }
         if (!isset($idExist)) {
-            $sql = 'INSERT INTO cart(user_id, product_detail_id, num) VALUES(?, ?, 1)';
+            $sql =
+                'INSERT INTO '
+                    . 'cart (user_id, product_detail_id, num) '
+                . 'VALUES '
+                    . '(?, ?, 1)';
             $stmt = $this->dbh->prepare($sql);
             $stmt->execute([$userId, $detailId]);
         }
@@ -31,7 +35,11 @@ class CartModel extends Model
      */
     public function fetchAll()
     {
-        $sql = 'SELECT * FROM cart';
+        $sql =
+            'SELECT '
+                . '* '
+            . 'FROM '
+                . 'cart';
         $stmt = $this->dbh->query($sql);
         return $stmt->fetchAll();
     }
@@ -44,7 +52,11 @@ class CartModel extends Model
      */
     public function delete($id)
     {
-        $sql = 'DELETE FROM cart WHERE id = ?';
+        $sql =
+            'DELETE FROM '
+                . 'cart '
+            . 'WHERE '
+                . 'id = ?';
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
     }
@@ -58,7 +70,13 @@ class CartModel extends Model
      */
     public function changeNum($num, $id)
     {
-        $sql = 'UPDATE cart SET num = ? WHERE id = ?';
+        $sql =
+            'UPDATE '
+                . 'cart '
+            . 'SET '
+                . 'num = ? '
+            . 'WHERE '
+                . 'id = ?';
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$num, $id]);
     }
@@ -71,11 +89,23 @@ class CartModel extends Model
      */
     public function addNum($id)
     {
-        $sql = 'SELECT num FROM cart WHERE product_detail_id = ?';
+        $sql =
+            'SELECT '
+                . 'num '
+            . 'FROM '
+                . 'cart '
+            . 'WHERE '
+                . 'product_detail_id = ?';
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
         $num = $stmt->fetch();
-        $sql = 'UPDATE cart SET num = ? WHERE product_detail_id = ?';
+        $sql =
+            'UPDATE '
+                . 'cart '
+            . 'SET '
+                . 'num = ? '
+            . 'WHERE '
+                . 'product_detail_id = ?';
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$num['num'] + 1, $id]);
     }
@@ -87,7 +117,9 @@ class CartModel extends Model
      */
     public function deleteFromCart()
     {
-        $sql ='DELETE FROM cart';
+        $sql =
+            'DELETE FROM '
+                . 'cart';
         $this->dbh->query($sql);
     }
 
