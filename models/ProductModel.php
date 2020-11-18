@@ -11,15 +11,27 @@ class ProductModel extends Model
      */
     public function getProduct($get)
     {
-        $sql = 'SELECT product.id, product.name, product.img, product.created_at, product.updated_at';
-        $sql .= ' FROM product';
-        $sql .= ' JOIN product_category';
-        $sql .= ' ON product.product_category_id = product_category.id';
-        $sql .= ' WHERE delete_flg = false';
-        $sql .= ((isset($get['keyword']) and $get['keyword'] != '') ? ' AND product.name LIKE ?' : '');
-        $sql .= (isset($get['order']) ? ' ORDER BY product.' . $get['column'] .  ' IS NULL ASC, product.' . $get['column'] . ' ' . $get['order'] : '');
+        $sql =
+        'SELECT '
+            . 'product.id, '
+            . 'product.name, '
+            . 'product.img, '
+            . 'product.created_at, '
+            . 'product.updated_at '
+        . 'FROM '
+            . 'product '
+        . 'JOIN product_category '
+            . 'ON product.product_category_id = product_category.id '
+        . 'WHERE '
+            . 'delete_flg = false '
+        . ((isset($get['keyword']) and $get['keyword'] != '') ? ' AND product.name LIKE ?' : '')
+        . (isset($get['order']) ? ' ORDER BY product.' . $get['column'] .  ' IS NULL ASC, product.' . $get['column'] . ' ' . $get['order'] : '');
         $stmt = $this->dbh->prepare($sql);
-        $stmt->execute([isset($get['keyword']) ? '%' . $get['keyword'] . '%' : '']);
+        if (isset($get['keyword'])) {
+            $stmt->execute(['%' . $get['keyword'] . '%']);
+        } else {
+            $stmt->execute();
+        }
         return $stmt->fetchAll();
     }
 
@@ -40,16 +52,26 @@ class ProductModel extends Model
         try {
             $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
             $this->dbh->beginTransaction();
-            $sql = 'UPDATE product';
-            $sql .= ' SET name = ?, product_category_id = ?, delivery_info = ?, turn = ?, update_user = ?, updated_at = current_timestamp()';
-            $sql .= ' WHERE id = ?';
+            $sql =
+                'UPDATE '
+                    . 'product '
+                . 'SET '
+                    . 'name = ?, '
+                    . 'product_category_id = ?, '
+                    . 'delivery_info = ?, '
+                    . 'turn = ?, '
+                    . 'update_user = ?, '
+                    . 'updated_at = current_timestamp() '
+                . 'WHERE'
+                    . 'id = ?';
             $stmt = $this->dbh->prepare($sql);
             $stmt->execute([
                 $name == '' ? null : $name,
                 $category_id,
                 $delivery_info == '' ? null : $delivery_info,
                 $turn == '' ? null : $turn,
-                $update_user, $id
+                $update_user,
+                $id
             ]);
             $productDetailModel = new ProductDetailModel();
             for ($i = 0; $i < 5; $i++) {
@@ -89,10 +111,18 @@ class ProductModel extends Model
      */
     public function fetchByCategoryId($id)
     {
-        $sql = 'SELECT id, name, img';
-        $sql .= ' FROM product';
-        $sql .= ' WHERE product_category_id = ? AND delete_flg = false';
-        $sql .= ' ORDER BY turn ASC';
+        $sql =
+            'SELECT '
+                . 'id, '
+                . 'name, '
+                . 'img '
+            . 'FROM '
+                . 'product '
+            . 'WHERE '
+                . 'product_category_id = ? '
+                . 'AND delete_flg = false '
+            . 'ORDER BY '
+                . 'turn ASC';
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
         return $stmt->fetchAll();
@@ -114,8 +144,11 @@ class ProductModel extends Model
         try {
             $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
             $this->dbh->beginTransaction();
-            $sql = 'INSERT INTO product(name, product_category_id, delivery_info, turn, create_user)';
-            $sql .= ' VALUES (?, ?, ?, ?, ?)';
+            $sql =
+                'INSERT INTO '
+                    . 'product (name, product_category_id, delivery_info, turn, create_user) '
+                . 'VALUES '
+                    . '(?, ?, ?, ?, ?)';
             $stmt = $this->dbh->prepare($sql);
             $stmt->execute([
                 $name == '' ? null : $name,
@@ -154,7 +187,12 @@ class ProductModel extends Model
         try{
             $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
             $this->dbh->beginTransaction();
-            $sql = 'UPDATE product SET img = ?, updated_at = CURRENT_TIMESTAMP() WHERE id = ?';
+            $sql =
+                'UPDATE '
+                    . 'product SET img = ?, '
+                    . 'updated_at = CURRENT_TIMESTAMP() '
+                . 'WHERE '
+                    . 'id = ?';
             $stmt = $this->dbh->prepare($sql);
             $stmt->execute([$array['name'], $id]);
             if ($array['error'] == UPLOAD_ERR_OK) {
@@ -163,6 +201,7 @@ class ProductModel extends Model
                     $array['tmp_name'],
                     '../' . IMG_PATH . mb_convert_encoding($array['name'], 'cp932', 'utf8')
                 )) {
+                    exec('sudo chmod 0755 ../' . IMG_PATH);
                     throw new Exception;
                 }
                 exec('sudo chmod 0755 ../' . IMG_PATH);
@@ -172,7 +211,6 @@ class ProductModel extends Model
             $this->dbh->commit();
         } catch (Exception $e) {
             $this->dbh->rollBack();
-            exec('sudo chmod 0755 ../' . IMG_PATH);
             throw new Exception($e);
         }
     }
@@ -195,7 +233,14 @@ class ProductModel extends Model
      */
     public function fetchSingleDetail($id)
     {
-        $sql = 'SELECT name, img FROM product WHERE id = ?';
+        $sql =
+            'SELECT '
+                . 'name, '
+                . 'img '
+            . 'FROM '
+                . 'product '
+            . 'WHERE '
+                . 'id = ?';
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
         return $stmt->fetch();
@@ -209,7 +254,13 @@ class ProductModel extends Model
      */
     public function getImg($id)
     {
-        $sql = 'SELECT img FROM product WHERE id = ?';
+        $sql =
+            'SELECT '
+                . 'img '
+            . 'FROM '
+                . 'product '
+            . 'WHERE '
+                . 'id = ?';
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_COLUMN);
@@ -223,11 +274,17 @@ class ProductModel extends Model
      */
     public function fetchSingleProduct($id)
     {
-        $sql = 'SELECT * FROM product WHERE id = ?';
+        $sql =
+            'SELECT '
+                . '* '
+            . 'FROM '
+                . 'product '
+            . 'WHERE '
+                . 'id = ?';
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
-        $productDetailModel = new ProductDetailModel();
         $product = $stmt->fetch();
+        $productDetailModel = new ProductDetailModel();
         $product['details'] = $productDetailModel->getDetails($id);
         return $product;
     }
