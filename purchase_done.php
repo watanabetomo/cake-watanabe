@@ -16,7 +16,7 @@ try {
     $cartModel->purchaseComplete($prefectures);
     unset($_SESSION['purchase_info']);
 } catch (Exception $e) {
-    $error = '商品情報の取得及び登録に失敗しました。<br>カスタマーサポートにお問い合わせください。';
+    $error = '商品の購入に失敗しました。<br>カスタマーサポートにお問い合わせください。';
 }
 
 ?>
