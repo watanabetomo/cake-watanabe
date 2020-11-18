@@ -27,11 +27,7 @@ class ProductModel extends Model
         . ((isset($get['keyword']) and $get['keyword'] != '') ? ' AND product.name LIKE ?' : '')
         . (isset($get['order']) ? ' ORDER BY product.' . $get['column'] .  ' IS NULL ASC, product.' . $get['column'] . ' ' . $get['order'] : '');
         $stmt = $this->dbh->prepare($sql);
-        if (isset($get['keyword'])) {
-            $stmt->execute(['%' . $get['keyword'] . '%']);
-        } else {
-            $stmt->execute();
-        }
+        $stmt->execute(isset($get['keyword']) ? ['%' . $get['keyword'] . '%'] : null);
         return $stmt->fetchAll();
     }
 
@@ -151,10 +147,22 @@ class ProductModel extends Model
             $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
             $this->dbh->beginTransaction();
             $sql =
-                'INSERT INTO '
-                    . 'product (name, product_category_id, delivery_info, turn, create_user) '
-                . 'VALUES '
-                    . '(?, ?, ?, ?, ?)';
+                'INSERT '
+                . 'INTO '
+                    . 'product '
+                . '('
+                    . 'name'
+                . ',    product_category_id'
+                . ',    delivery_info'
+                . ',    turn'
+                . ',    create_user'
+                . ') VALUES ('
+                    . '?'
+                . ',    ?'
+                . ',    ?'
+                . ',    ?'
+                . ',    ?'
+                . ')';
             $stmt = $this->dbh->prepare($sql);
             $stmt->execute([
                 $name == '' ? null : $name,

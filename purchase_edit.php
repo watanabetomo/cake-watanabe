@@ -137,7 +137,7 @@ $hitAddress = $hitAddress + $_POST;
                 $product = $productModel->fetchSingleDetail($productDetail['product_id']);
             ?>
             <tr>
-                <td><?=isset($product['img']) ? '<img src="' . IMG_PATH . h($product['img']) . '" alt="' . h($product['img']) . '">' : ''?></td>
+                <td><?=isset($product['img']) ? '<img src="' . IMG_PATH . h($product['img']) . '" alt="' . h($product['img']) . '">' : '画像なし'?></td>
                 <td><?=h($product['name'])?></td>
                 <td><?=h($prodOfTheCart['num'])?></td>
                 <td><?=h($productDetail['size'])?>cm</td>

@@ -57,10 +57,20 @@ class ProductDetailModel extends Model
     public function register($id, $size, $price, $turn, $dbh)
     {
         $sql =
-            'INSERT INTO '
-                . 'product_detail (product_id, size, price, turn) '
-            . 'VALUES '
-                . '(?, ?, ?, ?)';
+            'INSERT '
+            . 'INTO '
+                . 'product_detail '
+            . '('
+                . 'product_id'
+            . ',    size'
+            . ',    price'
+            . ',    turn'
+            . ') VALUES ('
+                . '?'
+            . ',    ?'
+            . ',    ?'
+            . ',    ?'
+            . ')';
         $stmt = $dbh->prepare($sql);
         $stmt->execute([$id, $size, $price, $turn]);
     }

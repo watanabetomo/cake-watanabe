@@ -10,6 +10,8 @@ if (
     !isset($_GET['action'])
     or ($_GET['action'] != 'edit' and $_GET['action'] != 'new')
     or ($_GET['action'] == 'edit' and !isset($_GET['id']))
+    or ($_GET['action'] == 'edit' and !is_numeric($_GET['id']))
+    or ($_GET['action'] == 'edit' and $_GET['id'] < 1)
 ) {
     header('Location: product_list.php');
     exit;
@@ -17,24 +19,22 @@ if (
 
 try {
     $productModel = new ProductModel();
-    $productData = [];
-    if ($_GET['action'] == 'edit') {
-        $productData = $productModel->fetchSingleProduct($_GET['id']);
-    }
-    $productData = $_POST + $productData;
-} catch (Exception $e) {
-    header('Location: product_list.php');
-    exit;
-}
-
-try {
-    $productCategoryModel = new ProductCategoryModel();
-    $productCategories = $productCategoryModel->fetchAllName();
     if (isset($_POST['upload'])) {
         if (!empty($_FILES['img'])) {
             $productModel->uploadImg($_GET['id'], $_FILES['img']);
         }
     }
+    $productData = [];
+    if ($_GET['action'] == 'edit') {
+        $productData = $productModel->fetchSingleProduct($_GET['id']);
+        if (empty($productData['details'])) {
+            header('Location: product_list.php');
+            exit;
+        }
+    }
+    $productData = $_POST + $productData;
+    $productCategoryModel = new ProductCategoryModel();
+    $productCategories = $productCategoryModel->fetchAllName();
 } catch (PDOException $e) {
     $databaseError = '商品情報の取得及び' . ($_GET['action'] == 'edit' ? '更新' : '登録') . 'に失敗しました。<br>システム管理者にお問い合わせください。';
 } catch (Exception $e) {
@@ -108,7 +108,7 @@ try {
                 </tr>
                 <tr>
                     <th>画像</th>
-                    <td><?=isset($productData) ? '<img src="../' . IMG_PATH . $productData['img'] . '" alt="' . $productData['img'] . '"' : ''?></td>
+                    <td><?=isset($productData['img']) ? '<img src="../' . IMG_PATH . $productData['img'] . '" alt="' . $productData['img'] . '"' : ''?></td>
                 </tr>
             </table>
             <p class="submit-button"><input type="submit" class="btn" name="upload" value="登録"></p>
