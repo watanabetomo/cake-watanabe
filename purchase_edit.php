@@ -210,7 +210,7 @@ $hitAddress = $hitAddress + $_POST;
                         </select>
                     </p>
                     <p><input type="text" name="city" value="<?=isset($hitAddress['city']) ? h($hitAddress['city']) : $user['city']?>"><span class="error"><?=isset($error['city']) ? $error['city'] : ''?></span></p>
-                    <p><input type="text" name="address" value="<?=isset($hitAddress['address']) ? h($hitAddress['address']) : $user['address']?>"><span class="error"><?=isset($error['address']) ? $error['address3'] : ''?></span></p>
+                    <p><input type="text" name="address" value="<?=isset($hitAddress['address']) ? h($hitAddress['address']) : $user['address']?>"><span class="error"><?=isset($error['address']) ? $error['address'] : ''?></span></p>
                     <p><input type="text" name="other" value="<?=isset($hitAddress['other']) ? h($hitAddress['other']) : $user['other']?>"><span class="error"><?=isset($error['other']) ? $error['other'] : ''?></span></p>
                 </td>
             </tr>
