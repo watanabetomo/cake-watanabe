@@ -177,7 +177,7 @@ $hitAddress = $hitAddress + $_POST;
         <input type="hidden" name="total_price" value="<?=floor($totalPrice * (1 + TAX) + $shipping)?>">
         <input type="hidden" name="mail" value="<?=$user['mail']?>">
         <p class="contents-title" id="address">送付先情報<span class="sub-message">※登録住所以外へ送る場合は変更してください</span></p>
-        <p class="toggle-radio"><input type="radio" name="sendFor" id="sendFor1" value="1" <?=(isset($_GET['action']) and $_GET['action'] == 'fix') ? 'checked' : ''?>>変更する <input type="radio" name="sendFor" id="sendFor2" value="2" <?=!isset($_GET['action']) ? 'checked' : ''?>>変更しない</p>
+        <p class="toggle-radio"><input type="radio" name="sendFor" id="sendFor1" value="1"<?=(isset($_GET['action']) and $_GET['action'] == 'fix') ? ' checked' : ''?>>変更する <input type="radio" name="sendFor" id="sendFor2" value="2"<?=!isset($_GET['action']) ? ' checked' : ''?>>変更しない</p>
         <table class="table send-for table-left" <?=!isset($_GET['action']) ? 'style="display: none;"' : ''?>>
             <tr>
                 <th>郵便番号</th>
@@ -263,7 +263,7 @@ $hitAddress = $hitAddress + $_POST;
                 <th>支払方法</th>
                 <td>
                     <?php foreach ($payments as $payment) :?>
-                        <input type="radio" name="payment" class="radio" value="<?=$payment['id']?>" <?=($payment['name'] == '各種クレジットカード決済') ? 'checked' : ''?>><?=$payment['name']?>
+                        <input type="radio" name="payment" class="radio" value="<?=$payment['id']?>"<?=($payment['name'] == '各種クレジットカード決済') ? ' checked' : ''?>><?=$payment['name']?>
                     <?php endforeach;?>
                 </td>
             </tr>
