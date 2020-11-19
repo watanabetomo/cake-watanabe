@@ -131,7 +131,8 @@ class CartModel extends Model
     public function deleteFromCart()
     {
         $sql =
-            'DELETE FROM '
+            'DELETE '
+            . 'FROM '
                 . 'cart'
         ;
         $this->dbh->query($sql);

@@ -31,53 +31,55 @@ try {
 }
 
 if (isset($_POST['send'])) {
-    if ($_POST['postal_code1'] == '') {
-        $error['postal_code1'] = '郵便番号上3桁が入力されていません。';
-    } elseif (!preg_match('/^[0-9]{3}$/', $_POST['postal_code1'])) {
-        $error['postal_code1'] = '郵便番号上3桁が間違っています。';
-    }
-    if ($_POST['postal_code2'] == '') {
-        $error['postal_code2'] = '郵便番号下4桁が入力されていません。';
-    } elseif (!preg_match('/^[0-9]{4}$/', $_POST['postal_code2'])) {
-        $error['postal_code2'] = '郵便番号下4桁が間違っています。';
-    }
-    if ($_POST['city'] == '') {
-        $error['city'] = '市区町村が入力されていません。';
-    } elseif (!preg_match('/^[0-9A-Za-zぁ-んァ-ヶー一-龠]{1,15}$/u', $_POST['city'])) {
-        $error['city'] = '市区町村が間違っています。';
-    }
-    if ($_POST['address'] == '') {
-        $error['address'] = '番地が入力されていません。';
-    } elseif (!preg_match('/^[0-9A-Za-zぁ-んァ-ヶー一-龠\-]{1,100}$/u', $_POST['address'])) {
-        $error['address'] = '番地が間違っています。';
-    }
-    if (!preg_match('/^[0-9A-Za-zぁ-んァ-ヶー一-龠\-]{0,100}$/u', $_POST['other'])) {
-        $error['other'] = '建物名等が間違っています。';
-    }
-    if ($_POST['tel1'] == '') {
-        $error['tel1'] = '市外局番が入力されていません。';
-    } elseif (!preg_match('/^[0-9]{1,5}$/', $_POST['tel1'])) {
-        $error['tel1'] = '市外局番が間違っています。';
-    }
-    if ($_POST['tel2'] == '') {
-        $error['tel2'] = '電話番号（入力欄2）が入力されていません。';
-    } elseif (!preg_match('/^[0-9]{1,5}$/', $_POST['tel2'])) {
-        $error['tel2'] = '電話番号（入力欄2）が間違っています。';
-    }
-    if ($_POST['tel3'] == '') {
-        $error['tel3'] = '電話番号（入力欄3）が入力されていません。';
-    } elseif (!preg_match('/^[0-9]{1,5}$/', $_POST['tel3'])) {
-        $error['tel3'] = '電話番号（入力欄3）が間違っています。';
-    }
-    if ($_POST['name_kana'] == '') {
-        $error['name_kana'] = 'フリガナが入力されていません。';
-    } elseif (!preg_match('/^[A-Za-zぁ-んァ-ヶー一-龠]{1,20}$/u', $_POST['name_kana'])) {
-        $error['name_kana'] = 'フリガナが間違っています。';
-    }
-    if ($_POST['name'] == '') {
-        $error['name'] = '名前が入力されていません。';
-    } elseif (!preg_match('/^[A-Za-zぁ-んァ-ヶー一-龠]{1,15}$/u', $_POST['name'])) {
-        $error['name'] = '名前が間違っています。';
+    if ($_POST['sendFor'] == 1) {
+        if ($_POST['postal_code1'] == '') {
+            $error['postal_code1'] = '郵便番号上3桁が入力されていません。';
+        } elseif (!preg_match('/^[0-9]{3}$/', $_POST['postal_code1'])) {
+            $error['postal_code1'] = '郵便番号上3桁が間違っています。';
+        }
+        if ($_POST['postal_code2'] == '') {
+            $error['postal_code2'] = '郵便番号下4桁が入力されていません。';
+        } elseif (!preg_match('/^[0-9]{4}$/', $_POST['postal_code2'])) {
+            $error['postal_code2'] = '郵便番号下4桁が間違っています。';
+        }
+        if ($_POST['city'] == '') {
+            $error['city'] = '市区町村が入力されていません。';
+        } elseif (!preg_match('/^[0-9A-Za-zぁ-んァ-ヶー一-龠]{1,15}$/u', $_POST['city'])) {
+            $error['city'] = '市区町村が間違っています。';
+        }
+        if ($_POST['address'] == '') {
+            $error['address'] = '番地が入力されていません。';
+        } elseif (!preg_match('/^[0-9A-Za-zぁ-んァ-ヶー一-龠\-]{1,100}$/u', $_POST['address'])) {
+            $error['address'] = '番地が間違っています。';
+        }
+        if (!preg_match('/^[0-9A-Za-zぁ-んァ-ヶー一-龠\-]{0,100}$/u', $_POST['other'])) {
+            $error['other'] = '建物名等が間違っています。';
+        }
+        if ($_POST['tel1'] == '') {
+            $error['tel1'] = '市外局番が入力されていません。';
+        } elseif (!preg_match('/^[0-9]{1,5}$/', $_POST['tel1'])) {
+            $error['tel1'] = '市外局番が間違っています。';
+        }
+        if ($_POST['tel2'] == '') {
+            $error['tel2'] = '電話番号（入力欄2）が入力されていません。';
+        } elseif (!preg_match('/^[0-9]{1,5}$/', $_POST['tel2'])) {
+            $error['tel2'] = '電話番号（入力欄2）が間違っています。';
+        }
+        if ($_POST['tel3'] == '') {
+            $error['tel3'] = '電話番号（入力欄3）が入力されていません。';
+        } elseif (!preg_match('/^[0-9]{1,5}$/', $_POST['tel3'])) {
+            $error['tel3'] = '電話番号（入力欄3）が間違っています。';
+        }
+        if ($_POST['name_kana'] == '') {
+            $error['name_kana'] = 'フリガナが入力されていません。';
+        } elseif (!preg_match('/^[A-Za-zぁ-んァ-ヶー一-龠]{1,20}$/u', $_POST['name_kana'])) {
+            $error['name_kana'] = 'フリガナが間違っています。';
+        }
+        if ($_POST['name'] == '') {
+            $error['name'] = '名前が入力されていません。';
+        } elseif (!preg_match('/^[A-Za-zぁ-んァ-ヶー一-龠]{1,15}$/u', $_POST['name'])) {
+            $error['name'] = '名前が間違っています。';
+        }
     }
     if (!isset($error)) {
         if ($_POST['sendFor'] == 1) {
@@ -85,8 +87,7 @@ if (isset($_POST['send'])) {
                 $_SESSION['purchase_info'][$key] = $value;
             }
             unset($_SESSION['purchase_info']['send']);
-        }
-        if ($_POST['sendFor'] == 2 and isset($_SESSION['purchase_info'])) {
+        } elseif ($_POST['sendFor'] == 2 and isset($_SESSION['purchase_info'])) {
             unset($_SESSION['purchase_info']);
             $_SESSION['purchase_info']['token'] = $_POST['token'];
             $_SESSION['purchase_info']['payment'] = $_POST['payment'];
@@ -257,9 +258,13 @@ $address = (isset($hitAddress) ? $hitAddress : []) + $_POST + $user;
             <tr>
                 <th>支払方法</th>
                 <td>
-                    <?php foreach ($payments as $payment) :?>
-                        <input type="radio" name="payment" class="radio" value="<?=$payment['name']?>"<?=($payment['name'] == '各種クレジットカード決済') ? ' checked' : ''?>><?=$payment['name']?>
-                    <?php endforeach;?>
+                    <?php if (!empty($payments)) :?>
+                        <?php foreach ($payments as $payment) :?>
+                            <input type="radio" name="payment" class="radio" value="<?=$payment['id']?>"<?=($payment['name'] == '各種クレジットカード決済') ? ' checked' : ''?>><?=$payment['name']?>
+                        <?php endforeach;?>
+                    <?php else:?>
+                        <p>支払方法がありません</p>
+                    <?php endif;?>
                 </td>
             </tr>
         </table>

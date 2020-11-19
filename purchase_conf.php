@@ -13,7 +13,7 @@ if ((isset($_SESSION['purchase_info']['token']) ? $_SESSION['purchase_info']['to
 
 try {
     $paymentModel = new MPaymentModel();
-    $payments = $paymentModel->fetchAll();
+    $payment = $paymentModel->fetchById($_SESSION['purchase_info']['payment']);
     $productDetailModel = new ProductDetailmodel();
     $productModel = new ProductModel();
     $cartModel = new CartModel();
@@ -133,7 +133,7 @@ $purchaseInfo = $_SESSION['purchase_info'] + $user;
     <table class="table table-left">
         <tr>
             <th>支払方法</th>
-            <td><?=$purchaseInfo['payment']?></td>
+            <td><?=$payment['name']?></td>
         </tr>
     </table>
     <ul class="form">
