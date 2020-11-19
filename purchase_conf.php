@@ -26,7 +26,9 @@ try {
 }
 
 $purchaseInfo = $_SESSION['purchase_info'] + $user;
-
+echo '<pre>';
+print_r($_SESSION['purchase_info']);
+echo '</pre>';
 ?>
 
 <?php require_once('header.html')?>

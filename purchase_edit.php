@@ -83,17 +83,11 @@ if (isset($_POST['submit'])) {
     }
     if (!isset($error)) {
         if ($_POST['sendFor'] == 1) {
-            foreach ($_POST as $key => $value) {
-                $_SESSION['purchase_info'][$key] = $value;
-                unset($_SESSION['purchase_info']['submit']);
-            }
+            $_SESSION['purchase_info'] = $_POST;
         } elseif ($_POST['sendFor'] == 2) {
-            $_SESSION['purchase_info']['token'] = $_POST['token'];
-            $_SESSION['purchase_info']['payment'] = $_POST['payment'];
-            foreach ($user as $key => $value) {
-                $_SESSION['purchase_info'][$key] = $value;
-            }
+            $_SESSION['purchase_info'] = $user + $_POST;
         }
+        unset($_SESSION['purchase_info']['submit']);
         header('Location: purchase_conf.php');
         exit;
     }
