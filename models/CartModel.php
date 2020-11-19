@@ -168,11 +168,12 @@ class CartModel extends Model
                 $_SESSION['purchase_info']['payment'],
                 $_SESSION['purchase_info']['sub_price'],
                 $_SESSION['purchase_info']['shipping'], TAX * 100,
-                $_SESSION['purchase_info']['total_price'], $this->dbh
+                $_SESSION['purchase_info']['total_price'],
+                $this->dbh
             );
+            $id = $orderModel->getMaxId();
             $userModel = new UserModel();
             $user = $userModel->fetchById($_SESSION['user']['userId']);
-            $id = $orderModel->getMaxId();
             $productDetailModel = new ProductDetailModel();
             $productModel = new ProductModel();
             $oederDetailModel = new OrderDetailModel();

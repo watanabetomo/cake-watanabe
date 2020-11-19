@@ -16,7 +16,7 @@ if ((
 
 try {
     $cartModel = new CartModel();
-    $cartModel->purchaseComplete($prefectures);
+    $cartModel->purchaseComplete();
     unset($_SESSION['purchase_info']);
 } catch (Exception $e) {
     $error = '商品の購入に失敗しました。<br>カスタマーサポートにお問い合わせください。';
