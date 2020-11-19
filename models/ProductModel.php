@@ -5,25 +5,24 @@ class ProductModel extends Model
     /**
      * product_listとproduct_categoryを結合し、データを取得する
      *
-     * @param $get GETパラメータ
-     *
+     * @param array $get 
      * @return array product_listとproduct_categoryを結合したのデータ
      */
     public function getProduct($get)
     {
         $sql =
             'SELECT '
-                . 'product.id, '
-                . 'product.name, '
-                . 'product.img, '
-                . 'product.created_at, '
-                . 'product.updated_at '
+                . 'id, '
+                . 'name, '
+                . 'img, '
+                . 'created_at, '
+                . 'updated_at '
             . 'FROM '
                 . 'product '
             . 'WHERE '
                 . 'delete_flg = false'
-            . ((isset($get['keyword']) and $get['keyword'] != '') ? ' AND product.name LIKE ?' : '')
-            . (isset($get['order']) ? ' ORDER BY product.' . $get['column'] . ' IS NULL ASC, product.' . $get['column'] . ' ' . $get['order'] : '')
+            . ((isset($get['keyword']) and $get['keyword'] != '') ? ' AND name LIKE ?' : '')
+            . (isset($get['order']) ? ' ORDER BY ' . $get['column'] . ' IS NULL ASC, ' . $get['column'] . ' ' . $get['order'] : '')
         ;
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute(isset($get['keyword']) ? ['%' . $get['keyword'] . '%'] : null);
