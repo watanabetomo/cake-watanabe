@@ -85,6 +85,7 @@ if (isset($_POST['submit'])) {
         if ($_POST['sendFor'] == 1) {
             foreach ($_POST as $key => $value) {
                 $_SESSION['purchase_info'][$key] = $value;
+                unset($_SESSION['purchase_info']['submit']);
             }
         } elseif ($_POST['sendFor'] == 2) {
             $_SESSION['purchase_info']['token'] = $_POST['token'];
