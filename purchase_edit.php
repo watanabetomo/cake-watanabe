@@ -231,7 +231,7 @@ $address = (isset($hitAddress) ? $hitAddress : []) + $_POST + $user;
         <table class="table table-left">
             <tr>
                 <th>郵便番号</th>
-                <td><?=h($user['postal_code1'])?> - <?=h($user['postal_code2'])?></td>
+                <td><?=h($user['postal_code1']) . ' - ' . h($user['postal_code2'])?></td>
             </tr>
             <tr>
                 <th>住所</th>
@@ -239,7 +239,7 @@ $address = (isset($hitAddress) ? $hitAddress : []) + $_POST + $user;
             </tr>
             <tr>
                 <th>電話番号</th>
-                <td><?=h($user['tel1'])?> - <?=h($user['tel2'])?> - <?=h($user['tel3'])?></td>
+                <td><?=h($user['tel1']) . ' - ' . h($user['tel2']) . ' - ' . h($user['tel3'])?></td>
             </tr>
             <tr>
                 <th>メールアドレス</th>

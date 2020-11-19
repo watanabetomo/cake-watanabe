@@ -53,7 +53,7 @@ if (isset($_POST['login'])) {
                 <table>
                     <tr>
                         <th>ログインID</th>
-                        <td><input type="text" name="id" value=""></td>
+                        <td><input type="text" name="id" value="<?=isset($_POST['id']) ? $_POST['id'] : ''?>"></td>
                     </tr>
                     <tr>
                         <th>パスワード</th>

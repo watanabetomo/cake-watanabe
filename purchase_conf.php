@@ -85,7 +85,7 @@ $purchaseInfo = $_SESSION['purchase_info'] + $user;
     <table class="table table-left">
         <tr>
             <th>郵便番号</th>
-            <td><?=$purchaseInfo['postal_code1']?> - <?=$purchaseInfo['postal_code2']?></td>
+            <td><?=$purchaseInfo['postal_code1'] . ' - ' . $purchaseInfo['postal_code2']?></td>
         </tr>
         <tr>
             <th>住所</th>
@@ -93,7 +93,7 @@ $purchaseInfo = $_SESSION['purchase_info'] + $user;
         </tr>
         <tr>
             <th>電話番号</th>
-            <td><?=$purchaseInfo['tel1']?> - <?=$purchaseInfo['tel2']?> - <?=$purchaseInfo['tel3']?></td>
+            <td><?=$purchaseInfo['tel1'] . ' - ' . $purchaseInfo['tel2'] . ' - ' . $purchaseInfo['tel3']?></td>
         </tr>
         <tr>
             <th>お名前</th>
@@ -107,7 +107,7 @@ $purchaseInfo = $_SESSION['purchase_info'] + $user;
     <table class="table table-left">
         <tr>
             <th>郵便番号</th>
-            <td><?=h($user['postal_code1'])?> - <?=h($user['postal_code2'])?></td>
+            <td><?=h($user['postal_code1']) . ' - ' . h($user['postal_code2'])?></td>
         </tr>
         <tr>
             <th>住所</th>
@@ -115,7 +115,7 @@ $purchaseInfo = $_SESSION['purchase_info'] + $user;
         </tr>
         <tr>
             <th>電話番号</th>
-            <td><?=h($user['tel1'])?> - <?=h($user['tel2'])?> - <?=h($user['tel3'])?></td>
+            <td><?=h($user['tel1']) . ' - ' . h($user['tel2']) . ' - ' . h($user['tel3'])?></td>
         </tr>
         <tr>
             <th>メールアドレス</th>
