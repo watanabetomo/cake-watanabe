@@ -214,7 +214,7 @@ $address = (isset($hitAddress) ? $hitAddress : []) + $_POST + $user;
                 <th>電話番号</th>
                 <td>
                     <p>
-                        <input type="text" name="tel1" value="<?=$address['tel1']?>"> - <input type="text" name="tel2" value="<?=$address['tel2']?>"> - <input type="text" name="tel3"  value="<?=$address['tel3']?>">
+                        <input type="text" name="tel1" value="<?=$address['tel1']?>"> - <input type="text" name="tel2" value="<?=$address['tel2']?>"> - <input type="text" name="tel3" value="<?=$address['tel3']?>">
                         <span class="error"><?=isset($error['tel1']) ? $error['tel1'] : ''?><?=isset($error['tel2']) ? $error['tel2'] : ''?><?=isset($error['tel3']) ? $error['tel3'] : ''?></span>
                     </p>
                 </td>

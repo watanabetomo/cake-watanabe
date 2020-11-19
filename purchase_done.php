@@ -6,7 +6,10 @@ if (!isset($_SESSION['user']['authenticated'])) {
     exit;
 }
 
-if ((isset($_SESSION['purchase_info']['token']) ? $_SESSION['purchase_info']['token'] : '') != getToken() and !isset($_POST['send'])) {
+if ((
+    isset($_SESSION['purchase_info']['token']) ? $_SESSION['purchase_info']['token'] : '') != getToken()
+    and !isset($_POST['send'])
+) {
     header('Location: purchase_edit.php');
     exit;
 }
