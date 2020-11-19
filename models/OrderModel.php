@@ -113,13 +113,4 @@ class OrderModel extends Model
         ]);
     }
 
-    /**
-     * orderテーブルのid最大値を取得する
-     *
-     * @return array orderテーブルのidの最大値(要素一つの配列)
-     */
-    public function getMaxId()
-    {
-        return $this->dbh->lastInsertId();
-    }
 }

@@ -171,7 +171,7 @@ class CartModel extends Model
                 $_SESSION['purchase_info']['total_price'],
                 $this->dbh
             );
-            $id = $orderModel->getMaxId();
+            $id = $this->dbh->lastInsertId();
             $userModel = new UserModel();
             $user = $userModel->fetchById($_SESSION['user']['userId']);
             $productDetailModel = new ProductDetailModel();
@@ -210,6 +210,8 @@ class CartModel extends Model
                     . $prodOfTheCart['num'] . "枚\n\n"
                     . "-----------------------\n\n";
             }
+            $mPaymentModel = new MPaymentModel();
+            $payment = $mPaymentModel->fetchByid($_SESSION['purchase_info']['payment']);
             $mailBody .=
                 '小計： ' . $_SESSION['purchase_info']['sub_price'] . "円\n"
                 . '消費税： ' . floor($_SESSION['purchase_info']['sub_price'] * TAX) . "円\n"
@@ -235,7 +237,7 @@ class CartModel extends Model
                 . '市区町村： ' . $user['city'] . "\n"
                 . '番地： ' . $user['address'] . "\n"
                 . 'マンション名等： ' . $user['other'] . "\n"
-                . 'お支払方法： ' . $_SESSION['purchase_info']['payment'] . "\n\n"
+                . 'お支払方法： ' . $payment['name'] . "\n\n"
                 . "--------------------------------------\n\n"
                 . "商品ご到着まで。今しばらくお待ちください。\n\n"
                 . "※このメールは自動送信メールです。\n"

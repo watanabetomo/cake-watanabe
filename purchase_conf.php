@@ -51,9 +51,9 @@ $purchaseInfo = $_SESSION['purchase_info'] + $user;
                 <td><?=isset($product['img']) ? '<img src="' . IMG_PATH . h($product['img']) . '" alt="' . h($product['img']) . '">' : '画像なし'?></td>
                 <td><?=h($product['name'])?></td>
                 <td><?=h($prodOfTheCart['num'])?></td>
-                <td><?=h($productDetail['size'])?></td>
-                <td><?=number_format(h($productDetail['price']))?></td>
-                <td><?=number_format(h($prodOfTheCart['num']) * h($productDetail['price']))?></td>
+                <td><?=h($productDetail['size'])?>cm</td>
+                <td><?=number_format(h($productDetail['price']))?>円</td>
+                <td><?=number_format(h($prodOfTheCart['num']) * h($productDetail['price']))?>円</td>
             </tr>
             <?php
                 $totalPrice += $productDetail['price'] * $prodOfTheCart['num'];
@@ -66,19 +66,19 @@ $purchaseInfo = $_SESSION['purchase_info'] + $user;
             <td><?=$totalCount?></td>
             <td></td>
             <td></td>
-            <td><?=number_format($totalPrice)?></td>
+            <td><?=number_format($totalPrice)?>円</td>
         </tr>
         <tr>
             <td colspan="5">消費税</td>
-            <td><?=number_format(floor($totalPrice * TAX))?></td>
+            <td><?=number_format(floor($totalPrice * TAX))?>円</td>
         </tr>
         <tr>
             <td colspan="5">送料（税込み）</td>
-            <td><?=number_format($shipping)?></td>
+            <td><?=number_format($shipping)?>円</td>
         </tr>
         <tr>
             <td colspan="5">総合計</td>
-            <td><?=number_format(floor($totalPrice * (1 + TAX) + $shipping))?></td>
+            <td><?=number_format(floor($totalPrice * (1 + TAX) + $shipping))?>円</td>
         </tr>
     </table>
     <p class="contents-title">送付先情報</p>

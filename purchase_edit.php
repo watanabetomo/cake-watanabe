@@ -9,7 +9,7 @@ if (!isset($_SESSION['user']['authenticated'])) {
 if (
     !isset($_POST['purchase'])
     and !isset($_POST['fix'])
-    and !isset($_POST['send'])
+    and !isset($_POST['submit'])
     and !isset($_POST['address_search'])
 ) {
     header('Location: cart.php');
@@ -30,7 +30,7 @@ try {
     $error['database'] = '商品情報の取得に失敗しました。<br>カスタマーサポートにお問い合わせください。';
 }
 
-if (isset($_POST['send'])) {
+if (isset($_POST['submit'])) {
     if ($_POST['sendFor'] == 1) {
         if ($_POST['postal_code1'] == '') {
             $error['postal_code1'] = '郵便番号上3桁が入力されていません。';
@@ -86,11 +86,14 @@ if (isset($_POST['send'])) {
             foreach ($_POST as $key => $value) {
                 $_SESSION['purchase_info'][$key] = $value;
             }
-            unset($_SESSION['purchase_info']['send']);
         } elseif ($_POST['sendFor'] == 2 and isset($_SESSION['purchase_info'])) {
             unset($_SESSION['purchase_info']);
             $_SESSION['purchase_info']['token'] = $_POST['token'];
             $_SESSION['purchase_info']['payment'] = $_POST['payment'];
+            $_SESSION['purchase_info']['pref'] = $prefectures[$user['pref']];
+            foreach ($user as $key => $value) {
+                $_SESSION['purchase_info'][$key] = $value;
+            }
         }
         header('Location: purchase_conf.php');
         exit;
@@ -268,7 +271,7 @@ $address = (isset($hitAddress) ? $hitAddress : []) + $_POST + $user;
                 </td>
             </tr>
         </table>
-        <p class="purchase-button"><input type="submit" name="send" class="btn btn-success" value="確認画面へ"></p>
+        <p class="purchase-button"><input type="submit" name="submit" class="btn btn-success" value="確認画面へ"></p>
     </form>
 </main>
 <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
