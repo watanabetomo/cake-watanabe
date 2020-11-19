@@ -33,7 +33,8 @@ class OrderdetailModel extends Model
             . ',    ?'
             . ',    ?'
             . ',    ?'
-            . ')';
+            . ')'
+        ;
         $stmt = $dbh->prepare($sql);
         $stmt->execute([$orderId, $detailId, $name, $size, $price, $num]);
     }

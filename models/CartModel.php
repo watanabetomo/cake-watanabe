@@ -30,7 +30,8 @@ class CartModel extends Model
                     . '?'
                 . ',    ?'
                 . ',    1'
-                . ')';
+                . ')'
+            ;
             $stmt = $this->dbh->prepare($sql);
             $stmt->execute([$userId, $detailId]);
         }
@@ -64,7 +65,8 @@ class CartModel extends Model
             'DELETE FROM '
                 . 'cart '
             . 'WHERE '
-                . 'id = ?';
+                . 'id = ?'
+            ;
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
     }
@@ -84,7 +86,8 @@ class CartModel extends Model
             . 'SET '
                 . 'num = ? '
             . 'WHERE '
-                . 'id = ?';
+                . 'id = ?'
+        ;
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$num, $id]);
     }
@@ -103,7 +106,8 @@ class CartModel extends Model
             . 'FROM '
                 . 'cart '
             . 'WHERE '
-                . 'product_detail_id = ?';
+                . 'product_detail_id = ?'
+        ;
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
         $num = $stmt->fetch();
@@ -113,7 +117,8 @@ class CartModel extends Model
             . 'SET '
                 . 'num = ? '
             . 'WHERE '
-                . 'product_detail_id = ?';
+                . 'product_detail_id = ?'
+        ;
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$num['num'] + 1, $id]);
     }
@@ -127,7 +132,8 @@ class CartModel extends Model
     {
         $sql =
             'DELETE FROM '
-                . 'cart';
+                . 'cart'
+        ;
         $this->dbh->query($sql);
     }
 

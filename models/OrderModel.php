@@ -88,7 +88,8 @@ class OrderModel extends Model
             . ',    ?'
             . ',    ?'
             . ',    ?'
-        . ')';
+            . ')'
+        ;
         $stmt = $dbh->prepare($sql);
         $stmt->execute([
             $user_id,

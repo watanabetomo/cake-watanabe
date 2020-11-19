@@ -17,7 +17,8 @@ class UserModel extends Model
             . 'FROM '
                 . 'user '
             . 'WHERE '
-                . 'login_id = ?';
+                . 'login_id = ?'
+        ;
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
         return $stmt->fetch();
@@ -37,7 +38,8 @@ class UserModel extends Model
             . 'FROM '
                 . 'user '
             . 'WHERE '
-                . 'id = ?';
+                . 'id = ?'
+        ;
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
         return $stmt->fetch();
@@ -57,7 +59,8 @@ class UserModel extends Model
             . 'SET '
                 . 'last_login_date = NOW() '
             . 'WHERE '
-                . 'id = ?';
+                . 'id = ?'
+        ;
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
     }

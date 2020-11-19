@@ -16,7 +16,8 @@ class AdminUserModel extends Model
                 . 'admin_user '
             . 'WHERE '
                 . 'delete_flg = false '
-                . 'AND login_id = ?';
+                . 'AND login_id = ?'
+        ;
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
         return $stmt->fetch();

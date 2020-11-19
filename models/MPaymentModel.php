@@ -12,7 +12,8 @@ class MPaymentModel extends Model
             'SELECT '
                 . '* '
             . 'FROM '
-                . 'm_payment';
+                . 'm_payment'
+        ;
         $stmt = $this->dbh->query($sql);
         return $stmt->fetchAll();
     }
@@ -31,7 +32,8 @@ class MPaymentModel extends Model
             . 'FROM '
                 . 'm_payment '
             . 'WHERE '
-                . 'id = ?';
+                . 'id = ?'
+        ;
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
         return $stmt->fetch();
