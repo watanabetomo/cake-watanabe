@@ -1,8 +1,6 @@
 <?php
 require_once('autoload.php');
 
-$hitAddress = [];
-
 if (!isset($_SESSION['user']['authenticated'])) {
     header('Location: login.php');
     exit;
@@ -27,6 +25,7 @@ try {
     $cart = $cartModel->fetchAll();
     $userModel = new UserModel();
     $user = $userModel->fetchById($_SESSION['user']['userId']);
+    $user['pref'] = $prefectures[$user['pref']];
 } catch (Exception $e) {
     $error['database'] = '商品情報の取得に失敗しました。<br>カスタマーサポートにお問い合わせください。';
 }
@@ -81,10 +80,17 @@ if (isset($_POST['send'])) {
         $error['name'] = '名前が間違っています。';
     }
     if (!isset($error)) {
-        foreach ($_POST as $key => $value) {
-            $_SESSION['purchase_info'][$key] = $value;
+        if ($_POST['sendFor'] == 1) {
+            foreach ($_POST as $key => $value) {
+                $_SESSION['purchase_info'][$key] = $value;
+            }
+            unset($_SESSION['purchase_info']['send']);
         }
-        unset($_SESSION['purchase_info']['send']);
+        if ($_POST['sendFor'] == 2 and isset($_SESSION['purchase_info'])) {
+            unset($_SESSION['purchase_info']);
+            $_SESSION['purchase_info']['token'] = $_POST['token'];
+            $_SESSION['purchase_info']['payment'] = $_POST['payment'];
+        }
         header('Location: purchase_conf.php');
         exit;
     }
@@ -104,17 +110,18 @@ if (isset($_POST['send'])) {
         $json = json_decode(file_get_contents("https://zip-cloud.appspot.com/api/search?zipcode=${postal_code}"), true);
         if (!empty($json['results'])) {
             $hitAddress = $json["results"][0];
+            $hitAddress['pref'] = $hitAddress['address1'];
             $hitAddress['city'] = $hitAddress['address2'] . $hitAddress['address3'];
             $hitAddress['address'] = '';
             $hitAddress['other'] = '';
         }
-        if (empty($hitAddress)) {
-            $unhitAddressError = '一致する住所がありません。';
+        if (!isset($hitAddress)) {
+            $addressSearchError = '一致する住所がありません。';
         }
     }
 }
 
-$hitAddress = $hitAddress + $_POST;
+$address = (isset($hitAddress) ? $hitAddress : []) + $_POST + $user;
 
 ?>
 
@@ -178,47 +185,35 @@ $hitAddress = $hitAddress + $_POST;
         <input type="hidden" name="mail" value="<?=$user['mail']?>">
         <p class="contents-title" id="address">送付先情報<span class="sub-message">※登録住所以外へ送る場合は変更してください</span></p>
         <p class="toggle-radio"><input type="radio" name="sendFor" id="sendFor1" value="1"<?=(isset($_GET['action']) and $_GET['action'] == 'fix') ? ' checked' : ''?>>変更する <input type="radio" name="sendFor" id="sendFor2" value="2"<?=!isset($_GET['action']) ? ' checked' : ''?>>変更しない</p>
-        <table class="table send-for table-left" <?=!isset($_GET['action']) ? 'style="display: none;"' : ''?>>
+        <table class="table send-for table-left"<?=!isset($_GET['action']) ? ' style="display: none;"' : ''?>>
             <tr>
                 <th>郵便番号</th>
                 <td>
-                    <input type="text" name="postal_code1" value="<?=isset($_POST['postal_code1']) ? h($_POST['postal_code1']) : h($user['postal_code1'])?>"> - <input type="text" name="postal_code2" value="<?=isset($_POST['postal_code2']) ? h($_POST['postal_code2']) : h($user['postal_code2'])?>">
+                    <input type="text" name="postal_code1" value="<?=$address['postal_code1']?>"> - <input type="text" name="postal_code2" value="<?=$address['postal_code2']?>">
                     <input type="submit" name="address_search" value="住所検索">
-                    <span class="error"><?=isset($error['postal_code1']) ? $error['postal_code1'] : ''?><?=isset($error['postal_code2']) ? $error['postal_code2'] : ''?><?=isset($unhitAddressError) ? $unhitAddressError : ''?></span>
+                    <span class="error"><?=isset($error['postal_code1']) ? $error['postal_code1'] : ''?><?=isset($error['postal_code2']) ? $error['postal_code2'] : ''?><?=isset($addressSearchError) ? $addressSearchError : ''?></span>
                 </td>
             </tr>
             <tr>
                 <th>住所</th>
                 <td>
                     <p>
-                        <select name="address1">
+                        <select name="pref">
                             <?php foreach ($prefectures as $prefecture) :?>
-                                <?php
-                                    $pref = '';
-                                    if (isset($hitAddress['address1'])) {
-                                        if ($hitAddress['address1'] == $prefecture) {
-                                            $pref = ' selected';
-                                        }
-                                    } else {
-                                        if ($prefectures[$user['pref']] == $prefecture) {
-                                            $pref = ' selected';
-                                        }
-                                    }
-                                ?>
-                                <option<?=$pref?>><?=$prefecture?></option>
+                                <option<?=$address['pref'] == $prefecture ? ' selected' : ''?>><?=$prefecture?></option>
                             <?php endforeach;?>
                         </select>
                     </p>
-                    <p><input type="text" name="city" value="<?=isset($hitAddress['city']) ? h($hitAddress['city']) : $user['city']?>"><span class="error"><?=isset($error['city']) ? $error['city'] : ''?></span></p>
-                    <p><input type="text" name="address" value="<?=isset($hitAddress['address']) ? h($hitAddress['address']) : $user['address']?>"><span class="error"><?=isset($error['address']) ? $error['address'] : ''?></span></p>
-                    <p><input type="text" name="other" value="<?=isset($hitAddress['other']) ? h($hitAddress['other']) : $user['other']?>"><span class="error"><?=isset($error['other']) ? $error['other'] : ''?></span></p>
+                    <p><input type="text" name="city" value="<?=$address['city']?>"><span class="error"><?=isset($error['city']) ? $error['city'] : ''?></span></p>
+                    <p><input type="text" name="address" value="<?=$address['address']?>"><span class="error"><?=isset($error['address']) ? $error['address'] : ''?></span></p>
+                    <p><input type="text" name="other" value="<?=$address['other']?>"><span class="error"><?=isset($error['other']) ? $error['other'] : ''?></span></p>
                 </td>
             </tr>
             <tr>
                 <th>電話番号</th>
                 <td>
                     <p>
-                        <input type="text" name="tel1" value="<?=isset($_POST['tel1']) ? h($_POST['tel1']) : h($user['tel1'])?>"> - <input type="text" name="tel2" value="<?=isset($_POST['tel2']) ? h($_POST['tel2']) : h($user['tel2'])?>"> - <input type="text" name="tel3"  value="<?=isset($_POST['tel3']) ? h($_POST['tel3']) : h($user['tel3'])?>">
+                        <input type="text" name="tel1" value="<?=$address['tel1']?>"> - <input type="text" name="tel2" value="<?=$address['tel2']?>"> - <input type="text" name="tel3"  value="<?=$address['tel3']?>">
                         <span class="error"><?=isset($error['tel1']) ? $error['tel1'] : ''?><?=isset($error['tel2']) ? $error['tel2'] : ''?><?=isset($error['tel3']) ? $error['tel3'] : ''?></span>
                     </p>
                 </td>
@@ -226,8 +221,8 @@ $hitAddress = $hitAddress + $_POST;
             <tr>
                 <th>お名前</th>
                 <td>
-                    <p><input type="text" name="name_kana" value="<?=isset($_POST['name_kana']) ? h($_POST['name_kana']) : h($user['name_kana'])?>"><span class="error"><?=isset($error['name_kana']) ? $error['name_kana'] : ''?></span></p>
-                    <p><input type="text" name="name" value="<?=isset($_POST['name']) ? h($_POST['name']) : h($user['name'])?>"><span class="error"><?=isset($error['name']) ? $error['name'] : ''?></span></p>
+                    <p><input type="text" name="name_kana" value="<?=$address['name_kana']?>"><span class="error"><?=isset($error['name_kana']) ? $error['name_kana'] : ''?></span></p>
+                    <p><input type="text" name="name" value="<?=$address['name']?>"><span class="error"><?=isset($error['name']) ? $error['name'] : ''?></span></p>
                 </td>
             </tr>
         </table>
@@ -239,7 +234,7 @@ $hitAddress = $hitAddress + $_POST;
             </tr>
             <tr>
                 <th>住所</th>
-                <td><?=$prefectures[$user['pref']] . h($user['city']) . h($user['address']) . h($user['other'])?></td>
+                <td><?=h($user['pref']) . h($user['city']) . h($user['address']) . h($user['other'])?></td>
             </tr>
             <tr>
                 <th>電話番号</th>
@@ -263,7 +258,7 @@ $hitAddress = $hitAddress + $_POST;
                 <th>支払方法</th>
                 <td>
                     <?php foreach ($payments as $payment) :?>
-                        <input type="radio" name="payment" class="radio" value="<?=$payment['id']?>"<?=($payment['name'] == '各種クレジットカード決済') ? ' checked' : ''?>><?=$payment['name']?>
+                        <input type="radio" name="payment" class="radio" value="<?=$payment['name']?>"<?=($payment['name'] == '各種クレジットカード決済') ? ' checked' : ''?>><?=$payment['name']?>
                     <?php endforeach;?>
                 </td>
             </tr>

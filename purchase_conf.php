@@ -20,11 +20,12 @@ try {
     $cart = $cartModel->fetchAll();
     $userModel = new UserModel();
     $user = $userModel->fetchById($_SESSION['user']['userId']);
-    $mPaymentModel = new MPaymentModel();
-    $payment = $mPaymentModel->fetchByid($_SESSION['purchase_info']['payment']);
+    $user['pref'] = $prefectures[$user['pref']];
 } catch (Exception $e) {
     $error = '商品情報の取得に失敗しました。<br>カスタマーサポートにお問い合わせください。';
 }
+
+$purchaseInfo = $_SESSION['purchase_info'] + $user;
 
 ?>
 
@@ -84,21 +85,21 @@ try {
     <table class="table table-left">
         <tr>
             <th>郵便番号</th>
-            <td><?=$_SESSION['purchase_info']['sendFor'] == 1 ? h($_SESSION['purchase_info']['postal_code1']) : $user['postal_code1']?> - <?=$_SESSION['purchase_info']['sendFor'] == 1 ? h($_SESSION['purchase_info']['postal_code2']) : $user['postal_code2']?></td>
+            <td><?=$purchaseInfo['postal_code1']?> - <?=$purchaseInfo['postal_code2']?></td>
         </tr>
         <tr>
             <th>住所</th>
-            <td><?=($_SESSION['purchase_info']['sendFor'] == 1 ? h($_SESSION['purchase_info']['address1']) : $prefectures[$user['pref']]) . ($_SESSION['purchase_info']['sendFor'] == 1 ? h($_SESSION['purchase_info']['city']) : $user['city']) . ($_SESSION['purchase_info']['sendFor'] == 1 ? h($_SESSION['purchase_info']['address']) : $user['address']) . ($_SESSION['purchase_info']['sendFor'] == 1 ? h($_SESSION['purchase_info']['other']) : $user['other'])?></td>
+            <td><?=$purchaseInfo['pref'] . $purchaseInfo['city'] . $purchaseInfo['address'] . $purchaseInfo['other']?></td>
         </tr>
         <tr>
             <th>電話番号</th>
-            <td><?=$_SESSION['purchase_info']['sendFor'] == 1 ? h($_SESSION['purchase_info']['tel1']) : $user['tel1']?> - <?=$_SESSION['purchase_info']['sendFor'] == 1 ? h($_SESSION['purchase_info']['tel2']) : $user['tel2']?> - <?=$_SESSION['purchase_info']['sendFor'] == 1 ? h($_SESSION['purchase_info']['tel3']) : $user['tel3']?></td>
+            <td><?=$purchaseInfo['tel1']?> - <?=$purchaseInfo['tel2']?> - <?=$purchaseInfo['tel3']?></td>
         </tr>
         <tr>
             <th>お名前</th>
             <td>
-                <p><?=$_SESSION['purchase_info']['sendFor'] == 1 ? h($_SESSION['purchase_info']['name_kana']) : $user['name_kana']?></p>
-                <p><?=$_SESSION['purchase_info']['sendFor'] == 1 ? h($_SESSION['purchase_info']['name']) : $user['name']?></p>
+                <p><?=$purchaseInfo['name_kana']?></p>
+                <p><?=$purchaseInfo['name']?></p>
             </td>
         </tr>
     </table>
@@ -110,7 +111,7 @@ try {
         </tr>
         <tr>
             <th>住所</th>
-            <td><?=$prefectures[$user['pref']] . h($user['city']) . h($user['address']) . h($user['other'])?></td>
+            <td><?=h($user['pref']) . h($user['city']) . h($user['address']) . h($user['other'])?></td>
         </tr>
         <tr>
             <th>電話番号</th>
@@ -132,7 +133,7 @@ try {
     <table class="table table-left">
         <tr>
             <th>支払方法</th>
-            <td><?=$payment['name']?></td>
+            <td><?=$purchaseInfo['payment']?></td>
         </tr>
     </table>
     <ul class="form">
@@ -143,7 +144,7 @@ try {
         </li>
         <li>
             <form action="purchase_edit.php?action=fix#address" method="post">
-                <?php foreach ($_SESSION['purchase_info'] as $key => $value) :?>
+                <?php foreach ($purchaseInfo as $key => $value) :?>
                     <input type="hidden" name="<?=$key?>" value="<?=$value?>">
                 <?php endforeach;?>
                 <p><input type="submit" name="fix" class="btn btn-danger" value="修正する"></p>

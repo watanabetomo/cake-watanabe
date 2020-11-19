@@ -154,7 +154,7 @@ class CartModel extends Model
                 $_SESSION['purchase_info']['tel3'],
                 $_SESSION['purchase_info']['postal_code1'],
                 $_SESSION['purchase_info']['postal_code2'],
-                array_search($_SESSION['purchase_info']['address1'], $prefectures),
+                array_search($_SESSION['purchase_info']['pref'], $prefectures),
                 $_SESSION['purchase_info']['city'],
                 $_SESSION['purchase_info']['address'],
                 $_SESSION['purchase_info']['other'],
@@ -213,7 +213,7 @@ class CartModel extends Model
                 . 'フリガナ： ' . $_SESSION['purchase_info']['name_kana'] . "\n"
                 . '電話番号： ' . $_SESSION['purchase_info']['tel1'] . ' - ' . $_SESSION['purchase_info']['tel2'] . ' - ' . $_SESSION['purchase_info']['tel3'] . "\n"
                 . '郵便番号： ' . $_SESSION['purchase_info']['postal_code1'] . ' - ' . $_SESSION['purchase_info']['postal_code2'] . "\n"
-                . '都道府県： ' . $_SESSION['purchase_info']['address1'] . "\n"
+                . '都道府県： ' . $_SESSION['purchase_info']['pref'] . "\n"
                 . '市区町村： ' . $_SESSION['purchase_info']['city'] . "\n"
                 . '番地： ' . $_SESSION['purchase_info']['address'] . "\n"
                 . 'マンション名等： ' . $_SESSION['purchase_info']['other'] . "\n\n"
