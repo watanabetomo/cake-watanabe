@@ -86,11 +86,9 @@ if (isset($_POST['submit'])) {
             foreach ($_POST as $key => $value) {
                 $_SESSION['purchase_info'][$key] = $value;
             }
-        } elseif ($_POST['sendFor'] == 2 and isset($_SESSION['purchase_info'])) {
-            unset($_SESSION['purchase_info']);
+        } elseif ($_POST['sendFor'] == 2) {
             $_SESSION['purchase_info']['token'] = $_POST['token'];
             $_SESSION['purchase_info']['payment'] = $_POST['payment'];
-            $_SESSION['purchase_info']['pref'] = $prefectures[$user['pref']];
             foreach ($user as $key => $value) {
                 $_SESSION['purchase_info'][$key] = $value;
             }
