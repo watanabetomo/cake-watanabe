@@ -12,20 +12,19 @@ class ProductModel extends Model
     public function getProduct($get)
     {
         $sql =
-        'SELECT '
-            . 'product.id, '
-            . 'product.name, '
-            . 'product.img, '
-            . 'product.created_at, '
-            . 'product.updated_at '
-        . 'FROM '
-            . 'product '
-        . 'JOIN product_category '
-            . 'ON product.product_category_id = product_category.id '
-        . 'WHERE '
-            . 'delete_flg = false'
-        . ((isset($get['keyword']) and $get['keyword'] != '') ? ' AND product.name LIKE ?' : '')
-        . (isset($get['order']) ? ' ORDER BY product.' . $get['column'] .  ' IS NULL ASC, product.' . $get['column'] . ' ' . $get['order'] : '');
+            'SELECT '
+                . 'product.id, '
+                . 'product.name, '
+                . 'product.img, '
+                . 'product.created_at, '
+                . 'product.updated_at '
+            . 'FROM '
+                . 'product '
+            . 'WHERE '
+                . 'delete_flg = false'
+            . ((isset($get['keyword']) and $get['keyword'] != '') ? ' AND product.name LIKE ?' : '')
+            . (isset($get['order']) ? ' ORDER BY product.' . $get['column'] . ' IS NULL ASC, product.' . $get['column'] . ' ' . $get['order'] : '')
+        ;
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute(isset($get['keyword']) ? ['%' . $get['keyword'] . '%'] : null);
         return $stmt->fetchAll();
@@ -59,7 +58,8 @@ class ProductModel extends Model
                     . 'update_user = ?, '
                     . 'updated_at = current_timestamp() '
                 . 'WHERE '
-                    . 'id = ?';
+                    . 'id = ?'
+            ;
             $stmt = $this->dbh->prepare($sql);
             $stmt->execute([
                 $name == '' ? null : $name,
@@ -100,7 +100,8 @@ class ProductModel extends Model
             . 'SET '
                 . 'delete_flg = true '
             . 'WHERE '
-                . 'id = ?';
+                . 'id = ?'
+        ;
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
     }
@@ -124,7 +125,8 @@ class ProductModel extends Model
                 . 'product_category_id = ? '
                 . 'AND delete_flg = false '
             . 'ORDER BY '
-                . 'turn ASC';
+                . 'turn ASC'
+        ;
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
         return $stmt->fetchAll();
@@ -162,7 +164,8 @@ class ProductModel extends Model
                 . ',    ?'
                 . ',    ?'
                 . ',    ?'
-                . ')';
+                . ')'
+            ;
             $stmt = $this->dbh->prepare($sql);
             $stmt->execute([
                 $name == '' ? null : $name,
@@ -206,7 +209,8 @@ class ProductModel extends Model
                     . 'product SET img = ?, '
                     . 'updated_at = CURRENT_TIMESTAMP() '
                 . 'WHERE '
-                    . 'id = ?';
+                    . 'id = ?'
+            ;
             $stmt = $this->dbh->prepare($sql);
             $stmt->execute([$array['name'], $id]);
             if ($array['error'] == UPLOAD_ERR_OK) {
@@ -254,7 +258,8 @@ class ProductModel extends Model
             . 'FROM '
                 . 'product '
             . 'WHERE '
-                . 'id = ?';
+                . 'id = ?'
+        ;
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
         return $stmt->fetch();
@@ -274,7 +279,8 @@ class ProductModel extends Model
             . 'FROM '
                 . 'product '
             . 'WHERE '
-                . 'id = ?';
+                . 'id = ?'
+        ;
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_COLUMN);
@@ -294,12 +300,21 @@ class ProductModel extends Model
             . 'FROM '
                 . 'product '
             . 'WHERE '
-                . 'id = ?';
+                . 'id = ?'
+        ;
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
         $product = $stmt->fetch();
+        if (empty($product) or $product['delete_flg'] == true) {
+            header('Location: product_list.php');
+            exit;
+        }
         $productDetailModel = new ProductDetailModel();
         $product['details'] = $productDetailModel->getDetails($id);
+        if (empty($product['details'])) {
+            header('Location: product_list.php');
+            exit;
+        }
         return $product;
     }
 }

@@ -15,9 +15,14 @@ class ProductCategoryModel extends Model
             . 'FROM '
                 . 'product_category '
             . 'ORDER BY '
-                . 'turn ASC';
-        $stmt = $this->dbh->query($sql);
-        return $stmt->fetchAll();
+                . 'turn ASC'
+        ;
+        $stmt = $this->dbh->query($sql)->fetchAll();
+        if (empty($stmt)) {
+            header('Location: product_list.php');
+            exit;
+        }
+        return $stmt;
     }
 
     /**
@@ -34,7 +39,8 @@ class ProductCategoryModel extends Model
             . 'FROM '
                 . 'product_category '
             . 'WHERE '
-                . 'name = ?';
+                . 'name = ?'
+        ;
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$name]);
         return $stmt->fetch();
@@ -48,7 +54,8 @@ class ProductCategoryModel extends Model
             . 'FROM '
                 . 'product_category '
             . 'WHERE '
-                . 'id = ?';
+                . 'id = ?'
+        ;
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
         return $stmt->fetch();

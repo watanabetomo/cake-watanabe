@@ -9,9 +9,7 @@ if (!isset($_SESSION['admin']['authenticated'])) {
 if (
     !isset($_GET['action'])
     or ($_GET['action'] != 'edit' and $_GET['action'] != 'new')
-    or ($_GET['action'] == 'edit' and !isset($_GET['id']))
-    or ($_GET['action'] == 'edit' and !is_numeric($_GET['id']))
-    or ($_GET['action'] == 'edit' and $_GET['id'] < 1)
+    or ($_GET['action'] == 'edit' and (!isset($_GET['id']) or !is_numeric($_GET['id']) or $_GET['id'] < 1))
 ) {
     header('Location: product_list.php');
     exit;
@@ -27,10 +25,6 @@ try {
     $productData = [];
     if ($_GET['action'] == 'edit') {
         $productData = $productModel->fetchSingleProduct($_GET['id']);
-        if (empty($productData['details'])) {
-            header('Location: product_list.php');
-            exit;
-        }
     }
     $productData = $_POST + $productData;
     $productCategoryModel = new ProductCategoryModel();

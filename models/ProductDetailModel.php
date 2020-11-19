@@ -16,7 +16,8 @@ class ProductDetailModel extends Model
             . 'FROM '
                 . 'product_detail '
             . 'WHERE '
-                . 'product_id = ?';
+                . 'product_id = ?'
+        ;
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
         return $stmt->fetchAll();
@@ -38,7 +39,8 @@ class ProductDetailModel extends Model
             . 'WHERE '
                 . 'product_id = ? '
             . 'ORDER BY '
-                . 'size ASC';
+                . 'size ASC'
+        ;
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
         return $stmt->fetchAll();
@@ -70,7 +72,8 @@ class ProductDetailModel extends Model
             . ',    ?'
             . ',    ?'
             . ',    ?'
-            . ')';
+            . ')'
+        ;
         $stmt = $dbh->prepare($sql);
         $stmt->execute([$id, $size, $price, $turn]);
     }
@@ -95,7 +98,8 @@ class ProductDetailModel extends Model
                 . 'price = ? '
             . 'WHERE '
                 . 'product_id = ? '
-                . 'AND turn = ?';
+                . 'AND turn = ?'
+        ;
         $stmt = $dbh->prepare($sql);
         $stmt->execute([$size, $price, $id, $turn]);
     }
@@ -114,7 +118,8 @@ class ProductDetailModel extends Model
             . 'FROM '
                 . 'product_detail '
             . 'WHERE '
-                . 'id = ?';
+                . 'id = ?'
+        ;
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
         return $stmt->fetch();
