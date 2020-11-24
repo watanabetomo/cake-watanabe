@@ -41,9 +41,9 @@ try {
 <main>
     <?php getPage()?>
     <p class="error"><?=isset($databaseError) ? $databaseError : ''?></p>
-    <form action="product_conf.php<?=(isset($_GET['action'])) ? '?action=' . $_GET['action'] : ''?><?=isset($_GET['id']) ? '&id=' . $_GET['id'] : ''?>" method="post">
+    <form action="product_conf.php?action=<?=$_GET['action']?><?=isset($_GET['id']) ? '&id=' . $_GET['id'] : ''?>" method="post">
         <table border="1">
-            <?php if (isset($_GET['action']) and $_GET['action'] == 'edit') :?>
+            <?php if ($_GET['action'] == 'edit') :?>
                 <tr>
                     <th>ID</th>
                     <td colspan="3"><?=$_GET['id']?></td>
@@ -91,7 +91,7 @@ try {
         </table>
         <p class="submit-button"><input type="submit" name="send" class="btn" value="確認画面へ"></p>
     </form>
-    <?php if (isset($_GET['action']) and $_GET['action'] == 'edit') :?>
+    <?php if ($_GET['action'] == 'edit') :?>
         <p class="error"><?=isset($fileUploadError) ? $fileUploadError : ''?></p>
         <form id="upload" action="" method="post" enctype="multipart/form-data" onsubmit="return confirm('本当に画像をアップロードしますか？')">
             <table border="1" style="margin-top: 70px;">

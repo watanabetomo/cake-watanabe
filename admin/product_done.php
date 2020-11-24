@@ -8,8 +8,7 @@ if (!isset($_SESSION['admin']['authenticated'])) {
 
 if (
     !isset($_GET['action'])
-    or ($_GET['action'] != 'edit' and $_GET['action'] != 'new')
-    or ($_GET['action'] == 'edit' and (!isset($_GET['id']) or !is_numeric($_GET['id']) or $_GET['id'] < 1))
+    or (($_GET['action'] != 'edit' or !isset($_GET['id']) or !preg_match('/^[1-9][0-9]*$/', $_GET['id'])) and $_GET['action'] != 'new')
     or !isset($_POST['register'])
 ) {
     header('Location: product_list.php');
@@ -18,9 +17,9 @@ if (
 
 try {
     $productModel = new ProductModel();
-    if (isset($_GET['action']) and $_GET['action'] == 'new') {
+    if ($_GET['action'] == 'new') {
         $productModel->register($_POST['name'], $_POST['product_category_id'], $_POST['delivery_info'], $_POST['turn'], $_SESSION['admin']['login_id'], $_POST['details']);
-    } elseif (isset($_GET['action']) and $_GET['action'] == 'edit' and is_numeric($_GET['id'])) {
+    } elseif ($_GET['action'] == 'edit') {
         $productModel->update($_GET['id'], $_POST['name'], $_POST['product_category_id'], $_POST['delivery_info'], $_POST['turn'], $_SESSION['admin']['login_id'], $_POST['details']);
     }
 } catch (Exception $e) {

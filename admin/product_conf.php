@@ -8,8 +8,7 @@ if (!isset($_SESSION['admin']['authenticated'])) {
 
 if (
     !isset($_GET['action'])
-    or ($_GET['action'] != 'edit' and $_GET['action'] != 'new')
-    or ($_GET['action'] == 'edit' and (!isset($_GET['id']) or !is_numeric($_GET['id']) or $_GET['id'] < 1))
+    or (($_GET['action'] != 'edit' or !isset($_GET['id']) or !preg_match('/^[1-9][0-9]*$/', $_GET['id'])) and $_GET['action'] != 'new')
     or !isset($_POST['send'])
 ) {
     header('Location: product_list.php');
@@ -33,7 +32,7 @@ if (isset($_POST['category_id'])) {
     <?php getPage()?>
     <p class="error"><?=isset($error) ? $error : ''?></p>
     <table border="1">
-        <?php if (isset($_GET['action']) and $_GET['action'] != 'new') :?>
+        <?php if ($_GET['action'] != 'new') :?>
             <tr>
                 <th>ID</th>
                 <td colspan="3"><?=$_GET['id']?></td>
@@ -69,7 +68,7 @@ if (isset($_POST['category_id'])) {
             </tr>
         <?php endfor;?>
     </table>
-    <form action="product_done.php<?=(isset($_GET['action'])) ? '?action=' . $_GET['action'] : ''?><?=isset($_GET['id']) ? '&id=' . $_GET['id'] : ''?>" method="post">
+    <form action="product_done.php?action='<?=$_GET['action']?><?=isset($_GET['id']) ? '&id=' . $_GET['id'] : ''?>" method="post">
         <input type="hidden" name="name" value="<?=$_POST['name']?>">
         <input type="hidden" name="product_category_id" value="<?=$_POST['category_id']?>">
         <input type="hidden" name="delivery_info" value="<?=$_POST['delivery_info']?>">
@@ -80,7 +79,7 @@ if (isset($_POST['category_id'])) {
         <?php endfor;?>
         <p class="submit-button register-btn"><input type="submit" name="register" class="btn" value="<?=($_GET['action'] == 'edit' ? '更新' : '登録')?>完了する"></p>
     </form>
-    <form action="product_edit.php<?=(isset($_GET['action'])) ? '?action=' . $_GET['action'] : ''?><?=isset($_GET['id']) ? '&id=' . $_GET['id'] : ''?>" method="post">
+    <form action="product_edit.php?action='<?=$_GET['action']?><?=isset($_GET['id']) ? '&id=' . $_GET['id'] : ''?>" method="post">
         <input type="hidden" name="name" value="<?=$_POST['name']?>">
         <input type="hidden" name="product_category_id" value="<?=$_POST['category_id']?>">
         <input type="hidden" name="delivery_info" value="<?=$_POST['delivery_info']?>">
