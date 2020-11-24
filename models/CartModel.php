@@ -136,6 +136,16 @@ class CartModel extends Model
                 . 'cart'
         ;
         $this->dbh->query($sql);
+        $sql =
+            'DBCC '
+            . 'CHECKIDENT '
+            . '('
+                . 'cart '
+            . ',    RESEED '
+            . ',    0'
+            . ')'
+        ;
+        $this->dbh->query($sql);
     }
 
     /**

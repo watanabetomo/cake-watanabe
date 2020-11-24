@@ -341,7 +341,9 @@ try {
                                                         <input name="es_item_id" value="<?=$detail['product_id']?>" type="hidden">
                                                         <input name="es_shop_id" value="1482" type="hidden">
                                                         <input name="es_stock_attr_flag" value="0" type="hidden">
-                                                        <input name="es_submit" value="<?=h($detail['size'])?>cm ￥<?=number_format(h($detail['price']))?>" type="submit">
+                                                        <?php if ($detail['size'] != null and $detail['price'] != null) :?>
+                                                            <input name="es_submit" value="<?=h($detail['size'])?>cm ￥<?=number_format(h($detail['price']))?>" type="submit">
+                                                        <?php endif;?>
                                                     </form>
                                                 </li>
                                             <?php endforeach;?>
@@ -359,6 +361,7 @@ try {
                     <div class="info">
                         <p>大きなサイズは多少お時間を頂戴しております。</p>
                     </div>
+                </div>
             <?php endforeach; ?>
                     <div class="info">
                         <p>数量限定につき完売の際はご容赦ください。</p>
@@ -388,7 +391,6 @@ try {
                         </div><!--/#open05-->
                     </div><!--/#modal02-->
                 </div><!--/#contents04-->
-            </div><!--/#seasoncake-->
             <div id="contents05">
                 <p><strong>テレビや雑誌でご紹介いただきました。</strong></p><br>
                 <p>11/01　<a href="https://www.eposcard.co.jp/index.html">マルイで使えるEPOS CARD NEWSのお取り寄せコーナーで「感動のパーティーケーキ」と絶賛紹介されました。</a></p>
@@ -490,9 +492,9 @@ try {
             </div><!--/#contents12-->
         </div><!--/#main-->
         <p id="pagetop"><a href="#wrapper"><img src="img/pagetop.png" alt="ページトップボタン"></a></p>
-    </div><!--/#wrapper-->
     <footer>
         <small>Copyright Casa Mingo All Rights Reserved.　Kitaowaribe397-1 Nagano-shi Nagano 3810014 JAPAN</small>
     </footer>
+    </div><!--/#wrapper-->
 </body>
 </html>
