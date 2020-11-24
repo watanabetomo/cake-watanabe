@@ -150,12 +150,14 @@ class CartModel extends Model
             $cart = $this->fetchAll();
             $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
             $this->dbh->beginTransaction();
+            $userModel = new UserModel();
+            $user = $userModel->fetchById($_SESSION['user']['userId']);
             $orderModel = new OrderModel();
             $orderModel->commitOrder(
                 $_SESSION['user']['userId'],
                 $_SESSION['purchase_info']['name'],
                 $_SESSION['purchase_info']['name_kana'],
-                $_SESSION['purchase_info']['mail'],
+                $user['mail'],
                 $_SESSION['purchase_info']['tel1'],
                 $_SESSION['purchase_info']['tel2'],
                 $_SESSION['purchase_info']['tel3'],
@@ -167,13 +169,12 @@ class CartModel extends Model
                 $_SESSION['purchase_info']['other'],
                 $_SESSION['purchase_info']['payment'],
                 $_SESSION['purchase_info']['sub_price'],
-                $_SESSION['purchase_info']['shipping'], TAX * 100,
+                $_SESSION['purchase_info']['shipping'],
+                TAX * 100,
                 $_SESSION['purchase_info']['total_price'],
                 $this->dbh
             );
             $id = $this->dbh->lastInsertId();
-            $userModel = new UserModel();
-            $user = $userModel->fetchById($_SESSION['user']['userId']);
             $productDetailModel = new ProductDetailModel();
             $productModel = new ProductModel();
             $oederDetailModel = new OrderDetailModel();
@@ -251,7 +252,7 @@ class CartModel extends Model
             mb_language('uni');
             mb_internal_encoding('UTF-8');
             if (!mb_send_mail(
-                $_SESSION['purchase_info']['mail'],
+                $user['mail'],
                 '【洋菓子店カサミンゴー】ご購入商品確認メール',
                 $mailBody,
                 'From:' . mb_encode_mimeheader('洋菓子店カサミンゴー')

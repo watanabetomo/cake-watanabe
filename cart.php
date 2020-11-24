@@ -12,13 +12,13 @@ if (isset($_POST['continue'])) {
 }
 
 try {
-    $cartModel = new CartModel();
     $productModel = new ProductModel();
     $productDetailModel = new ProductDetailModel();
+    $cartModel = new CartModel();
     if (isset($_POST['es_submit'])) {
         $productDetail = $productDetailModel->fetchById($_POST['detail_id']);
         $cartModel->addToCart($_SESSION['user']['userId'], $_POST['detail_id']);
-    }elseif (isset($_POST['delete'])) {
+    } elseif (isset($_POST['delete'])) {
         $cartModel->delete($_POST['deleteId']);
     } elseif (isset($_POST['change'])) {
         if ($_POST['num'] > 0) {
@@ -109,7 +109,7 @@ try {
                             <td><?=number_format(h($productDetail['price']))?>円</td>
                             <td><?=number_format(h($prodOfTheCart['num']) * h($productDetail['price']))?>円</td>
                         </tr>
-                    <?php endforeach; ?>
+                    <?php endforeach;?>
                 </table>
                 <form action="" method="post">
                     <p class="submit-button"><input type="submit" class="btn btn-primary" name="continue" value="買い物を続ける"> <input type="submit" class="btn btn-danger" name="clear" value="カートを空にする"></p>

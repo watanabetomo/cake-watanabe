@@ -73,7 +73,7 @@ try {
                     </p>
                 </td>
             </tr>
-        <?php endforeach; ?>
+        <?php endforeach;?>
     </table>
     <?php if (empty($productList)) :?>
         <p class="empty">商品情報がありません</p>
