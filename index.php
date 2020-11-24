@@ -361,7 +361,7 @@ try {
                     <div class="info">
                         <p>大きなサイズは多少お時間を頂戴しております。</p>
                     </div>
-                </div>
+                </div><!-- .cakename -->
             <?php endforeach; ?>
             <div class="info">
                 <p>数量限定につき完売の際はご容赦ください。</p>
@@ -390,7 +390,6 @@ try {
                     </div><!--/.modal_window-->
                 </div><!--/#open05-->
             </div><!--/#modal02-->
-        </div><!--/#contents04-->
         <div id="contents05">
             <p><strong>テレビや雑誌でご紹介いただきました。</strong></p><br>
             <p>11/01　<a href="https://www.eposcard.co.jp/index.html">マルイで使えるEPOS CARD NEWSのお取り寄せコーナーで「感動のパーティーケーキ」と絶賛紹介されました。</a></p>

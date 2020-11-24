@@ -18,10 +18,6 @@ class ProductCategoryModel extends Model
                 . 'turn ASC'
         ;
         $stmt = $this->dbh->query($sql)->fetchAll();
-        if (empty($stmt)) {
-            header('Location: product_list.php');
-            exit;
-        }
         return $stmt;
     }
 

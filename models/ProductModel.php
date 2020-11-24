@@ -3,10 +3,10 @@ class ProductModel extends Model
 {
 
     /**
-     * product_listとproduct_categoryを結合し、データを取得する
+     * product_listのデータを取得する
      *
-     * @param array $get 
-     * @return array product_listとproduct_categoryを結合したのデータ
+     * @param array $get
+     * @return array product_listのデータ
      */
     public function getProduct($get)
     {
@@ -152,17 +152,17 @@ class ProductModel extends Model
                 . 'INTO '
                     . 'product '
                 . '('
-                    . 'name'
-                . ',    product_category_id'
-                . ',    delivery_info'
-                . ',    turn'
-                . ',    create_user'
+                    . 'name, '
+                    . 'product_category_id, '
+                    . 'delivery_info, '
+                    . 'turn, '
+                    . 'create_user'
                 . ') VALUES ('
+                    . '?, '
+                    . '?, '
+                    . '?, '
+                    . '?, '
                     . '?'
-                . ',    ?'
-                . ',    ?'
-                . ',    ?'
-                . ',    ?'
                 . ')'
             ;
             $stmt = $this->dbh->prepare($sql);
@@ -300,11 +300,12 @@ class ProductModel extends Model
                 . 'product '
             . 'WHERE '
                 . 'id = ?'
+                . 'AND delete_flg = true'
         ;
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
         $product = $stmt->fetch();
-        if (empty($product) or $product['delete_flg'] == true) {
+        if (empty($product)) {
             header('Location: product_list.php');
             exit;
         }
