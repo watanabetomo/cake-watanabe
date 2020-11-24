@@ -257,7 +257,8 @@ class ProductModel extends Model
             . 'FROM '
                 . 'product '
             . 'WHERE '
-                . 'id = ?'
+                . 'id = ? '
+                . 'AND delete_flg = false'
         ;
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
@@ -278,7 +279,8 @@ class ProductModel extends Model
             . 'FROM '
                 . 'product '
             . 'WHERE '
-                . 'id = ?'
+                . 'id = ? '
+                . 'AND delete_flg = false'
         ;
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);

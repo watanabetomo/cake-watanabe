@@ -17,7 +17,7 @@ try {
     $cartModel = new CartModel();
     if (isset($_POST['es_submit'])) {
         $productDetail = $productDetailModel->fetchById($_POST['detail_id']);
-        $cartModel->addToCart($_SESSION['user']['userId'], $_POST['detail_id']);
+        $cartModel->addToCart($_POST['detail_id']);
     } elseif (isset($_POST['delete'])) {
         $cartModel->delete($_POST['deleteId']);
     } elseif (isset($_POST['change'])) {

@@ -4,11 +4,10 @@ class CartModel extends Model
     /**
      * カートに商品を追加
      *
-     * @param int $userId
      * @param int $detailId
      * @return void
      */
-    public function addToCart($userId, $detailId)
+    public function addToCart($detailId)
     {
         $cart = $this->fetchAll();
         foreach ($cart as $prodOfTheCart) {
@@ -33,7 +32,7 @@ class CartModel extends Model
                 . ')'
             ;
             $stmt = $this->dbh->prepare($sql);
-            $stmt->execute([$userId, $detailId]);
+            $stmt->execute([$_SESSION['user']['userId'], $detailId]);
         }
     }
 
