@@ -17,10 +17,16 @@ class UserModel extends Model
             . 'FROM '
                 . 'user '
             . 'WHERE '
-                . 'login_id = ?'
+                . 'login_id = ? '
+                . 'AND delete_flg = false'
         ;
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
+        $stmt = $stmt->fetch();
+        if (empty($stmt)) {
+            header('Location: login.php');
+            exit;
+        }
         return $stmt->fetch();
     }
 
@@ -38,11 +44,17 @@ class UserModel extends Model
             . 'FROM '
                 . 'user '
             . 'WHERE '
-                . 'id = ?'
+                . 'id = ? '
+                . 'AND delete_flg = false'
         ;
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
-        return $stmt->fetch();
+        $stmt = $stmt->fetch();
+        if (empty($stmt)) {
+            header('Location: login.php');
+            exit;
+        }
+        return $stmt;
     }
 
     /**

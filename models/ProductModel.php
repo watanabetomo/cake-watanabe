@@ -300,7 +300,7 @@ class ProductModel extends Model
                 . 'product '
             . 'WHERE '
                 . 'id = ?'
-                . 'AND delete_flg = true'
+                . 'AND delete_flg = false'
         ;
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
