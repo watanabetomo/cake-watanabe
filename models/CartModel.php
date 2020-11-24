@@ -61,7 +61,8 @@ class CartModel extends Model
     public function delete($id)
     {
         $sql =
-            'DELETE FROM '
+            'DELETE '
+            . 'FROM '
                 . 'cart '
             . 'WHERE '
                 . 'id = ?'
