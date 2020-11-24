@@ -53,7 +53,7 @@ try {
                         <?php if (!empty($cart)) :?>
                             <p class="purchase"><input type="submit" name="purchase" value="レジに進む" class="btn btn-success"></p>
                         <?php endif;?>
-                        <h3 class="sub-title">合計金額（税込）</h3>
+                        <p class="sub-title">合計金額（税込）</p>
                         <table class="table table-right">
                             <tr>
                                 <th>小計</th>

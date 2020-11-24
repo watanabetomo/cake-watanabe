@@ -80,12 +80,14 @@ table{
 
 .card{
     width: 90%;
-    margin: 40px auto;
+    margin: 30px auto;
 }
 
 .sub-title{
     text-align: center;
     margin-top: 40px;
+    font-size: 25px;
+    font-weight: bold;
 }
 
 .table{
