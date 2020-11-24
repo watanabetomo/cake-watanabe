@@ -32,7 +32,7 @@ if (isset($_POST['category_id'])) {
     <?php getPage()?>
     <p class="error"><?=isset($error) ? $error : ''?></p>
     <table border="1">
-        <?php if ($_GET['action'] != 'new') :?>
+        <?php if ($_GET['action'] == 'edit') :?>
             <tr>
                 <th>ID</th>
                 <td colspan="3"><?=$_GET['id']?></td>
