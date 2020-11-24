@@ -57,7 +57,8 @@ class ProductModel extends Model
                     . 'update_user = ?, '
                     . 'updated_at = current_timestamp() '
                 . 'WHERE '
-                    . 'id = ?'
+                    . 'id = ? '
+                    . 'AND delete_flg = false'
             ;
             $stmt = $this->dbh->prepare($sql);
             $stmt->execute([
@@ -99,7 +100,8 @@ class ProductModel extends Model
             . 'SET '
                 . 'delete_flg = true '
             . 'WHERE '
-                . 'id = ?'
+                . 'id = ? '
+                . 'AND delete_flg = false'
         ;
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
@@ -208,7 +210,8 @@ class ProductModel extends Model
                     . 'product SET img = ?, '
                     . 'updated_at = CURRENT_TIMESTAMP() '
                 . 'WHERE '
-                    . 'id = ?'
+                    . 'id = ? '
+                    . 'AND delete_flg = false'
             ;
             $stmt = $this->dbh->prepare($sql);
             $stmt->execute([$array['name'], $id]);

@@ -27,7 +27,7 @@ class UserModel extends Model
             header('Location: login.php');
             exit;
         }
-        return $stmt->fetch();
+        return $stmt;
     }
 
     /**
@@ -71,7 +71,8 @@ class UserModel extends Model
             . 'SET '
                 . 'last_login_date = NOW() '
             . 'WHERE '
-                . 'id = ?'
+                . 'id = ? '
+                . 'AND delete_flg = false'
         ;
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
