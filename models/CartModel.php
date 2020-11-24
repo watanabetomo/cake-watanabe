@@ -208,7 +208,7 @@ class CartModel extends Model
                     $product['name'] . "\n"
                     . $productDetail['size'] . "cm\n"
                     . $productDetail['price'] . "円\n"
-                    . $prodOfTheCart['num'] . "枚\n\n"
+                    . $prodOfTheCart['num'] . "点\n\n"
                     . "-----------------------\n\n";
             }
             $mPaymentModel = new MPaymentModel();
