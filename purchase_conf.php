@@ -42,6 +42,10 @@ $purchaseInfo = $_SESSION['purchase_info'] + $user;
             <th>単価</th>
             <th>税抜価格</th>
         </tr>
+        <?php
+            $totalPrice = 0;
+            $totalCount = 0;
+        ?>
         <?php foreach ($cart as $prodOfTheCart) :?>
             <?php
                 $productDetail = $productDetailModel->fetchById($prodOfTheCart['product_detail_id']);

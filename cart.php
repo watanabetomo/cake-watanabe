@@ -30,6 +30,8 @@ try {
         $cartModel->deleteFromCart();
     }
     $cart = $cartModel->fetchAll();
+    $totalPrice = 0;
+    $totalCount = 0;
     foreach ($cart as $prodOfTheCart) {
         $productDetail = $productDetailModel->fetchById($prodOfTheCart['product_detail_id']);
         $totalCount += $prodOfTheCart['num'];
