@@ -33,7 +33,7 @@ function getPage()
         'list' => '一覧',
         'conf' => '確認',
         'done' => '完了',
-        'edit' => '',
+        'edit' => ''
     ];
     $url = explode('_', pathinfo($_SERVER['PHP_SELF'], PATHINFO_FILENAME));
     $page = $url[count($url) -1];
