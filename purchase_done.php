@@ -10,7 +10,7 @@ if ((
     isset($_SESSION['purchase_info']['token']) ? $_SESSION['purchase_info']['token'] : '') != getToken()
     and !isset($_POST['send'])
 ) {
-    header('Location: purchase_edit.php');
+    header('Location: cart.php');
     exit;
 }
 

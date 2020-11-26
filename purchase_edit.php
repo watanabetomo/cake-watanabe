@@ -157,7 +157,7 @@ $address = (isset($hitAddress) ? $hitAddress : []) + $_POST + $user;
                 $totalCount += $prodOfTheCart['num'];
             ?>
         <?php endforeach;?>
-        <?php $shipping = ($totalPrice * (1 + TAX) > 10000) ? 0 : 1000?>
+        <?php $shipping = ($totalPrice > 10000) ? 0 : 1000?>
         <tr>
             <td colspan="2">小計</td>
             <td><?=$totalCount?></td>
@@ -181,7 +181,7 @@ $address = (isset($hitAddress) ? $hitAddress : []) + $_POST + $user;
     <form action="purchase_edit.php?action=fix#address" method="post">
         <input type="hidden" name="token" value="<?=getToken()?>">
         <input type="hidden" name="sub_price" value="<?=floor($totalPrice)?>">
-        <input type="hidden" name="shipping" value="<?=($totalPrice * (1 + TAX) > 10000) ? 0 : 1000?>">
+        <input type="hidden" name="shipping" value="<?=($totalPrice > 10000) ? 0 : 1000?>">
         <input type="hidden" name="total_price" value="<?=floor($totalPrice * (1 + TAX) + $shipping)?>">
         <p class="contents-title" id="address">送付先情報<span class="sub-message">※登録住所以外へ送る場合は変更してください</span></p>
         <p class="toggle-radio"><input type="radio" name="sendFor" id="sendFor1" value="1"<?=(isset($_GET['action']) and $_GET['action'] == 'fix') ? ' checked' : ''?>>変更する <input type="radio" name="sendFor" id="sendFor2" value="2"<?=!isset($_GET['action']) ? ' checked' : ''?>>変更しない</p>

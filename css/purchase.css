@@ -105,8 +105,7 @@ table{
 }
 
 .table tr{
-    border-bottom: 1px solid gray;
-    border-top: none;
+    border-bottom: 1px solid #dee2e6;
 }
 
 .table-right td{

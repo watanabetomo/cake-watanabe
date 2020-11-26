@@ -7,7 +7,7 @@ if (!isset($_SESSION['user']['authenticated'])) {
 }
 
 if ((isset($_SESSION['purchase_info']['token']) ? $_SESSION['purchase_info']['token'] : '') != getToken()) {
-    header('Location: purchase_edit.php');
+    header('Location: cart.php');
     exit;
 }
 
@@ -64,7 +64,7 @@ $purchaseInfo = $_SESSION['purchase_info'] + $user;
                 $totalCount += $prodOfTheCart['num'];
             ?>
         <?php endforeach;?>
-        <?php $shipping = ($totalPrice * (1 + TAX) > 10000) ? 0 : 1000?>
+        <?php $shipping = ($totalPrice > 10000) ? 0 : 1000?>
         <tr>
             <td colspan="2">小計</td>
             <td><?=$totalCount?></td>

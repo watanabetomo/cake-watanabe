@@ -24,7 +24,7 @@ try {
         if ($_POST['num'] > 0) {
             $cartModel->changeNum($_POST['num'], $_POST['id']);
         } else {
-            $numError = "商品点数は1以上の数値を入力してください";
+            $numError = '商品点数は1以上の数値を入力してください';
         }
     } elseif (isset($_POST['clear'])) {
         $cartModel->deleteFromCart();
@@ -57,15 +57,15 @@ try {
                         <table class="table table-right">
                             <tr>
                                 <th>小計</th>
-                                <td><?=!empty($cart) ? number_format(floor($totalPrice)) : ''?></td>
+                                <td><?=!empty($cart) ? number_format(floor($totalPrice)) . '円' : ''?></td>
                             </tr>
                             <tr>
                                 <th>商品点数</th>
-                                <td><?=!empty($cart) ? $totalCount : ''?></td>
+                                <td><?=!empty($cart) ? $totalCount . '点' : ''?></td>
                             </tr>
                             <tr>
                                 <th>送料</th>
-                                <td><?=!empty($cart) ? ((($totalPrice * (TAX + 1)) > 10000) ? 0 : number_format(1000)) : ''?></td>
+                                <td><?=!empty($cart) ? (($totalPrice > 10000) ? 0 : number_format(1000)) . '円' : ''?></td>
                             </tr>
                         </table>
                     </form>
