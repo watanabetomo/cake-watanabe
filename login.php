@@ -8,7 +8,7 @@ if (isset($_POST['login'])) {
         try {
             $userModel = new UserModel();
             $user = $userModel->fetchByLoginId($_POST['id']);
-            if (!empty($user) and $_POST['pass'] == $user['login_pass']) {
+            if (!empty($user) and ($_POST['pass'] == $user['login_pass'])) {
                 session_regenerate_id(true);
                 $_SESSION['user']['authenticated'] = password_hash($_POST['id'] . $_POST['pass'], PASSWORD_DEFAULT);
                 $userModel->updateLoginDate($user['id']);
@@ -32,7 +32,7 @@ if (isset($_POST['login'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>洋菓子店カサミンゴー | バースデーケーキ | 誕生日ケーキ | 宅配 | 通販 | お取り寄せ</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <link rel="stylesheet" href="css/login.css">
 </head>
