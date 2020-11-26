@@ -1,5 +1,5 @@
 main{
-    min-height: 470px;
+    min-height: 435px;
 }
 
 .logout{
@@ -30,6 +30,9 @@ main{
     margin-bottom: 0;
     text-align: center;
     color: black;
+}
+
+.nav-item a{
     text-decoration: none;
 }
 
@@ -55,7 +58,7 @@ main{
     display: grid;
     grid-template-columns: 1fr 2fr;
     grid-gap: 10px;
-    min-height: 500px;
+    min-height: 435px;
 }
 
 .box1{
@@ -78,12 +81,14 @@ table{
 
 .card{
     width: 90%;
-    margin: 40px auto;
+    margin: 30px auto;
 }
 
 .sub-title{
     text-align: center;
     margin-top: 40px;
+    font-size: 25px;
+    font-weight: bold;
 }
 
 .table{
@@ -101,8 +106,7 @@ table{
 }
 
 .table tr{
-    border-bottom: 1px solid gray;
-    border-top: none;
+    border-bottom: 1px solid #dee2e6;
 }
 
 .table-right td{
@@ -146,6 +150,7 @@ footer{
 
 .error{
     color: red;
+    text-align: center;
 }
 
 .toggle-radio{
@@ -168,6 +173,7 @@ footer{
     height: 98.4px;
 }
 
+<<<<<<< HEAD:css/cart.css
 .fa-history {
     width: 36px;
 }
@@ -175,3 +181,23 @@ footer{
 .page {
     text-align: center;
 }
+=======
+.form {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+}
+
+.form li {
+    margin: 0 10px;
+}
+
+.btn {
+    width: 200px;
+}
+
+.sub-message {
+    font-size: 20px;
+    margin-left: 10px;
+}
+>>>>>>> master:css/purchase.css

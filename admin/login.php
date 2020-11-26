@@ -10,22 +10,22 @@ if (isset($_POST['send'])) {
             $adminUser = $adminUserModel->fetchAdminUser($_POST['id']);
             if (!empty($adminUser) and password_verify($_POST['pass'], $adminUser['login_pass'])) {
                 session_regenerate_id(true);
-                $_SESSION['admin_authenticated'] = password_hash($_POST['id'] . $_POST['pass'], PASSWORD_DEFAULT);
-                $_SESSION['userName'] = $adminUser['name'];
-                $_SESSION['login_id'] = $adminUser['id'];
+                $_SESSION['admin']['authenticated'] = password_hash($_POST['id'] . $_POST['pass'], PASSWORD_DEFAULT);
+                $_SESSION['admin']['userName'] = $adminUser['name'];
+                $_SESSION['admin']['login_id'] = $adminUser['id'];
                 if (intval(date('H')) > 4 and intval(date('H')) <= 11) {
-                    $_SESSION['now'] = 'おはようございます。';
+                    $_SESSION['admin']['now'] = 'おはようございます。';
                 } elseif (intval(date('H')) > 11 and intval(date('H')) <= 17) {
-                    $_SESSION['now'] = 'こんにちは。';
+                    $_SESSION['admin']['now'] = 'こんにちは。';
                 } else {
-                    $_SESSION['now'] = 'こんばんわ。';
+                    $_SESSION['admin']['now'] = 'こんばんわ。';
                 }
                 header('Location: top.php');
                 exit;
             }
             $error = 'IDかパスワードが間違っています';
-        } catch (PDOException $e) {
-            $error = 'データベースへの接続が失敗しました';
+        } catch (Exception $e) {
+            $error = '管理者情報の取得に失敗しました。<br>システム管理者にお問い合わせください。';
         }
     }
 }
@@ -44,14 +44,14 @@ if (isset($_POST['send'])) {
 
 <body class="login-body">
     <h1>洋菓子店カサミンゴー商品管理システム 管理者ログイン</h1>
-    <?php if (isset($error)): ?>
+    <?php if (isset($error)) :?>
         <p style="color: red;"><?=$error?></p>
     <?php endif; ?>
     <form action="" method="post">
         <table class="login-table">
             <tr>
                 <td>ログインID</td>
-                <td><input type="text" name="id" value="<?=isset($_POST['id']) ? h($_POST['id']) : '';?>"></td>
+                <td><input type="text" name="id" value="<?=isset($_POST['id']) ? h($_POST['id']) : ''?>"></td>
             </tr>
             <tr>
                 <td>パスワード</td>

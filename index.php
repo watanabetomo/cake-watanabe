@@ -89,7 +89,7 @@ try {
     <div id="wrapper">
         <header>
             <p class="error"><?=isset($error) ? $error : ''?></p>
-            <p class="top-nav"><a href="login.php">ログイン</a>　<a href="cart.php">カート</a></p>
+            <p class="top-nav"><a href="login.php">ログイン</a> <a href="cart.php">カート</a></p>
             <div id="slider">
                 <ul class="bxslider">
                     <li><img src="img/slide01.jpg"></li>
@@ -134,8 +134,8 @@ try {
                 </li>
             </ul>
             <div class="postage">
-                <a href="http://casamingo.gift/souryou.htm"><strong>本州送料３４０円</strong>
-                    ５０００円以上お買い上げのお客様は<strong>期間限定本州送料無料</strong></a>
+                <a href="http://casamingo.gift/souryou.htm"><strong>送料１０００円</strong>
+                    １００００円以上お買い上げのお客様は<strong>送料無料</strong></a>
             </div>
         </header>
         <div id="main">
@@ -305,20 +305,20 @@ try {
             </div><!--/#select-->
             <?php foreach ($productCategories as $category) :?>
                 <div id="<?=str_replace(' ', '', $category['name'])?>">
-                    <h1><a href=""><?=$category['name']?></a></h1>
+                    <h1><a href=""><?=h($category['name'])?></a></h1>
                     <div class="contents02">
                         <?php
-                        try {
-                            $productModel = new ProductModel();
-                            $products = $productModel->fetchByCategoryId($category['id']);
-                        } catch (PDOException $e) {
-                            $error = 'データベースとの接続に失敗しました';
-                        }
+                            try {
+                                $productModel = new ProductModel();
+                                $products = $productModel->fetchByCategoryId($category['id']);
+                            } catch (PDOException $e) {
+                                $error = 'データベースとの接続に失敗しました';
+                            }
                         ?>
-                        <?php for ($j=0; $j<count($products); $j++) :?>
+                        <?php for ($j = 0; $j < count($products); $j++) :?>
                             <div class="contents02_<?=$j + 1?>">
-                                <h2><a href=""><img src="img/<?=$products[$j]['img']?>"></a></h2>
-                                <p><strong><?=$products[$j]['name']?><br></strong><br></p>
+                                <h2><a href=""><img src="img/<?=h($products[$j]['img'])?>"></a></h2>
+                                <p><strong><?=h($products[$j]['name'])?><br></strong><br></p>
                                 <p><span>通常1～4日以内に発送。</span></p>
                                 <ul class="accordion">
                                     <li>
@@ -341,7 +341,9 @@ try {
                                                         <input name="es_item_id" value="<?=$detail['product_id']?>" type="hidden">
                                                         <input name="es_shop_id" value="1482" type="hidden">
                                                         <input name="es_stock_attr_flag" value="0" type="hidden">
-                                                        <input name="es_submit" value="<?=$detail['size']?>cm ￥<?=number_format($detail['price'])?>" type="submit">
+                                                        <?php if ($detail['size'] != null and $detail['price'] != null) :?>
+                                                            <input name="es_submit" value="<?=h($detail['size'])?>cm ￥<?=number_format(h($detail['price']))?>" type="submit">
+                                                        <?php endif;?>
                                                     </form>
                                                 </li>
                                             <?php endforeach;?>
@@ -359,141 +361,139 @@ try {
                     <div class="info">
                         <p>大きなサイズは多少お時間を頂戴しております。</p>
                     </div>
-                </div><!--/#cheesecake-->
+                </div><!-- .cakename -->
             <?php endforeach; ?>
-                    <div class="info">
-                        <p>数量限定につき完売の際はご容赦ください。</p>
-                    </div>
-                    <div id="modal02">
-                        <div id="open04">
-                            <a href="#contents04" class="close_overlay">×</a>
-                            <div class="modal_window">
-                                <h3>期間限定ケーキ</h3>
-                                <p><strong>タルト・オー・シトロン　レモンのタルト</strong><br>
-                                    サクサクのタルト生地に、目にも鮮やかなレモンクリームがたっぷり詰まった逸品。<br>
-                                    口に入れれば、レモンのすっぱさがパッと広がり、その余韻が香りと共に口いっぱいに広がり続けます。</p>
-                                <p><strong>16cm ￥3,650</strong>｜<strong>18cm ￥4,800</strong></p>
-                                <a href="#contents">【×】CLOSE</a>
-                            </div><!--/.modal_window-->
-                        </div><!--/#open04-->
-                        <div id="open05">
-                            <a href="#contents04" class="close_overlay">×</a>
-                            <div class="modal_window">
-                                <h3>季節限定・通販限定ケーキ</h3>
-                                <p><strong>ムース・オー・カシス</strong><br>
-                                    ヨーロッパから取り寄せるこだわりの黒すぐりと北海道の生クリームの甘酸っぱいふわふわムース。<br>
-                                    スポンジには北海道産純生クリーム、そしてこだわりの黒すぐりジャムとナッツをふんだんに使用。</p>
-                                <p><strong>15cm ￥4,000</strong>｜<strong>20cm ￥6,300</strong></p>
-                                <a href="#contents">【×】CLOSE</a>
-                            </div><!--/.modal_window-->
-                        </div><!--/#open05-->
-                    </div><!--/#modal02-->
-                </div><!--/#contents04-->
-            </div><!--/#seasoncake-->
-            <div id="contents05">
-                <p><strong>テレビや雑誌でご紹介いただきました。</strong></p><br>
-                <p>11/01　<a href="https://www.eposcard.co.jp/index.html">マルイで使えるEPOS CARD NEWSのお取り寄せコーナーで「感動のパーティーケーキ」と絶賛紹介されました。</a></p>
-                <p>06/01　クロネコヤマトが厳選！「北信越美味めぐり」トップページに、厳選されたおすすめの逸品として紹介されました。</p>
-                <p>05/21　Do！sul!どうする？６月号に紹介されました。</p>
-                <p>04/16　Do！sul!どうする？５月号に紹介されました。</p>
-                <p>03/06　Do！sul!どうする？４月号に紹介されました。</p>
-                <p>02/25　<a href="http://www.goodnagano.com/info/issue/index.php?bcd=ko">長野こまち４月号に紹介されました。</a></p>
-                <p>02/03　SBC信越放送テレビ「３時は！ららら♪」に紹介されました。</p>
-                <p>11/06　<a href="http://shukan.bunshun.jp/category/magazine">有名作家ご推薦の店として週刊文春１１月６日号に紹介されました。</a></p>
-                <p>07/02　SBC信越放送テレビ「信州まるごとワイド『キャッチ』」に紹介されました。</p>
-                <p>06/04　NHKテレビ「暮らしのティータイム」に出演しました。</p>
-                <div class="sample1">
-                    <img src="img/sample07.jpg">
-                </div>
-                <div class="sample2">
-                    <img src="img/sample01.jpg"><img src="img/sample02.jpg"><img src="img/sample03.jpg"><img src="img/sample04.jpg"><img src="img/sample05.jpg"><img src="img/sample06.jpg">
-                </div>
-            </div><!--/#contents05-->
-            <div id="contents06">
-                <p><strong>全国お菓子人気ランキングで１位に輝きました。</strong></p><br>
-                <p><a href="http://www.e-shops.jp/sh/rk13/html/">日本最大級ネットショップランキングで１位に輝きました。</a></p>
-            </div><!--/#contents06-->
-            <div id="contents07">
-                <p><strong>お客様の声</strong></p><br>
-                <p><span>お買い上げ商品：ウィーンの銘菓ザッハートルテ</span></p>
-                <p><span>★★★★★</span></p>
-                <p>上品な味わいで口溶けがクセになるきめ細かいチョコですね。<br>チョコはビターですが、中のジャム（素材を生かした適度な甘さ）とうまく調和していて美味しかったです。<br>今まで色々食べましたが、このケーキは絶品だと思います！お味は大人向けだと思います！<br>届いた日に一人で半分ペロっと食べてしまいました。すごくオススメ！！
-                </p>
-                <br><br>
-                <p><span>お買い上げ商品：シュス木苺レアチーズケーキ</span></p>
-                <p><span>★★★★★</span></p>
-                <p>先週、和歌山県に小さなバースデーケーキを送っていただきました。<br>
-                    その節は、急な依頼にご対応下さいましてありがとうございました。<br>誕生日ケーキが出てきた途端にパーティームードになり、おかげさまでHappyなお祝いができました。<br>お祝いにはやっぱりケーキですね♪そしてお味は最高でした！<br>
-                    夕食後、直ぐでしたが、とっても美味しくて二人でペロリと食べてしまいました。<br>今回のケーキは是非また食べたいですが、他のケーキも食べてみたいと思いました。
-                </p><br>
-                <p><a href="http://casamingo.gift/index_koe.htm">もっと見る>>></a></p>
-            </div><!--/#contents07-->
-            <div id="contents08">
-                <p><strong>ご注文方法</strong></p><br>
-                <p><span>「ご注文」ボタンからサイズをお選び下さい。</span></p>
-                <p>商品を選び注文が進むと、到着日、到着時間を指定する画面へ進みます。<br>
-                    その後、記念日チョコレートプレートを選択する画面が出てきますので、<br>
-                    ご希望のメッセージにてお作りさせていただきます。全商品にプレートがお付けできます。</p>
-                <p><span>お急ぎの方はご希望商品をお電話にてお申し付け下さい。指定場所にご指定日時必着でお届けいたします。<br>
-                        平日１８時までのご注文で本州は最短翌日午前中お届けが可能な場合があります。</span></p>
-                <img src="img/tel.png" alt="電話番号">
-                <a href="mailto:miyakawa@casamingo.jp"><img src="img/mail.png" alt="メール"></a>
-                <p>只今大変ご注文が殺到しておりますので、できるだけ「ご注文」ボタンからご注文下さい。</p>
-                <p><a href="http://www.amazon.co.jp/gp/redirect.html?ie=UTF8&amp;location=http%3A%2F%2Fwww.amazon.co.jp%2Fb%3Fie%3DUTF8%26me%3DA1LTMHN3LQOUNT%26qid%3D1224330145&amp;tag=suumr202-22&amp;linkCode=ur2&amp;camp=247&amp;creative=7399">
-                        amazonからのご注文も可能です。</a></p>
-            </div><!--/#contents08-->
-            <div id="contents09">
-                <p><strong>時間帯お届けサービス</strong></p><br>
-                <img src="img/time.png" alt="時間帯お届け">
-            </div><!--/#contents09-->
-            <div id="contents10">
-                <div class="pack">
-                    <p><span>梱包について</span></p>
-                    <p>愛情がたっぷりと注がれた洋菓子は衛生面に最大限の注意を払い丁寧に梱包しております。</p>
-                </div>
-                <div class="pack_l">
-                    <img src="img/pack1.jpg">
-                    <p>箱には環境に優しいマシュマロクッションやエアークッションをしっかり詰めて包装いたします。</p>
-                </div>
-                <div class="pack_r">
-                    <img src="img/pack2.jpg">
-                    <p>累計50000台以上の発送実績から絶対に壊れない梱包方法を見つけました。
-                        作り立ての味がお楽しみ頂けるよう工夫されております。</p>
-                </div>
-                <div class="pack_l">
-                    <img src="img/pack3.jpg">
-                    <p>ギフトにふさわしい豪華デコレーションボックスでお届けさせていただきます。<br>
-                        ギフト専門店につき納品書は同封されません。</p>
-                </div>
-            </div><!--/#contents10-->
-            <div id="contents11">
-                <div class="pack">
-                    <p><span>食材へのこだわり</span></p>
-                </div>
-                <div class="pack_l">
-                    <img src="img/syokuzai1.gif">
-                    <p>ヨーロッパ諸国から取り寄せるフルーツ、ナッツ、チョコレート等、最高級の素材を使用しているため、生産数が限られており、お届けまでに多少お時間を頂戴しておりますが、丁寧に仕上げ包装し、必ずご満足頂けるような美しいケーキをお届けさせて頂きます。</p>
-                </div>
-                <div class="pack_r">
-                    <img src="img/syokuzai2.gif">
-                    <p>当店では健康を気になさる方でも安心してお楽しみいただけるよう、香料、着色料、保存料等を添加せずに製造しております。</p>
-                </div>
-                <div class="pack_l">
-                    <img src="img/syokuzai3.gif">
-                    <p>当社の洋菓子は職人が厳選素材を贅沢に使用し、６時間以上かけて一台一台お作りしているため、一日に製造できる数も限られております。あらかじめご了承下さい。</p>
-                </div>
-            </div><!--/#contents11-->
-            <div id="contents12">
-                <p><strong>作り手紹介</strong></p><br>
-                <p><span>シェフ パティシエ 宮川鈴弘</span><br>
-                    １０歳の頃から独学でドイツ語を勉強、１６歳からオーストリア・インスブルックの洋菓子店、<br>
-                    コンディトライ・ヴァリエ、コンディトライ・ワハター等々の屈指の名店で修行を積み、徹底的に<br>鮮度にこだわった洋菓子の宅配専門店として「洋菓子店カサミンゴー」をオープン。<br>行列が出来る店として話題に。中でもシュス木苺レアチーズケーキは鈴弘氏お勧めの逸品。</p>
-            </div><!--/#contents12-->
-        </div><!--/#main-->
-        <p id="pagetop"><a href="#wrapper"><img src="img/pagetop.png" alt="ページトップボタン"></a></p>
-        <footer>
-            <small>Copyright Casa Mingo All Rights Reserved.　Kitaowaribe397-1 Nagano-shi Nagano 3810014 JAPAN</small>
-        </footer>
-    </div><!--/#wrapper-->
+            <div class="info">
+                <p>数量限定につき完売の際はご容赦ください。</p>
+            </div>
+            <div id="modal02">
+                <div id="open04">
+                    <a href="#contents04" class="close_overlay">×</a>
+                    <div class="modal_window">
+                        <h3>期間限定ケーキ</h3>
+                        <p><strong>タルト・オー・シトロン　レモンのタルト</strong><br>
+                            サクサクのタルト生地に、目にも鮮やかなレモンクリームがたっぷり詰まった逸品。<br>
+                            口に入れれば、レモンのすっぱさがパッと広がり、その余韻が香りと共に口いっぱいに広がり続けます。</p>
+                        <p><strong>16cm ￥3,650</strong>｜<strong>18cm ￥4,800</strong></p>
+                        <a href="#contents">【×】CLOSE</a>
+                    </div><!--/.modal_window-->
+                </div><!--/#open04-->
+                <div id="open05">
+                    <a href="#contents04" class="close_overlay">×</a>
+                    <div class="modal_window">
+                        <h3>季節限定・通販限定ケーキ</h3>
+                        <p><strong>ムース・オー・カシス</strong><br>
+                            ヨーロッパから取り寄せるこだわりの黒すぐりと北海道の生クリームの甘酸っぱいふわふわムース。<br>
+                            スポンジには北海道産純生クリーム、そしてこだわりの黒すぐりジャムとナッツをふんだんに使用。</p>
+                        <p><strong>15cm ￥4,000</strong>｜<strong>20cm ￥6,300</strong></p>
+                        <a href="#contents">【×】CLOSE</a>
+                    </div><!--/.modal_window-->
+                </div><!--/#open05-->
+            </div><!--/#modal02-->
+        <div id="contents05">
+            <p><strong>テレビや雑誌でご紹介いただきました。</strong></p><br>
+            <p>11/01　<a href="https://www.eposcard.co.jp/index.html">マルイで使えるEPOS CARD NEWSのお取り寄せコーナーで「感動のパーティーケーキ」と絶賛紹介されました。</a></p>
+            <p>06/01　クロネコヤマトが厳選！「北信越美味めぐり」トップページに、厳選されたおすすめの逸品として紹介されました。</p>
+            <p>05/21　Do！sul!どうする？６月号に紹介されました。</p>
+            <p>04/16　Do！sul!どうする？５月号に紹介されました。</p>
+            <p>03/06　Do！sul!どうする？４月号に紹介されました。</p>
+            <p>02/25　<a href="http://www.goodnagano.com/info/issue/index.php?bcd=ko">長野こまち４月号に紹介されました。</a></p>
+            <p>02/03　SBC信越放送テレビ「３時は！ららら♪」に紹介されました。</p>
+            <p>11/06　<a href="http://shukan.bunshun.jp/category/magazine">有名作家ご推薦の店として週刊文春１１月６日号に紹介されました。</a></p>
+            <p>07/02　SBC信越放送テレビ「信州まるごとワイド『キャッチ』」に紹介されました。</p>
+            <p>06/04　NHKテレビ「暮らしのティータイム」に出演しました。</p>
+            <div class="sample1">
+                <img src="img/sample07.jpg">
+            </div>
+            <div class="sample2">
+                <img src="img/sample01.jpg"><img src="img/sample02.jpg"><img src="img/sample03.jpg"><img src="img/sample04.jpg"><img src="img/sample05.jpg"><img src="img/sample06.jpg">
+            </div>
+        </div><!--/#contents05-->
+        <div id="contents06">
+            <p><strong>全国お菓子人気ランキングで１位に輝きました。</strong></p><br>
+            <p><a href="http://www.e-shops.jp/sh/rk13/html/">日本最大級ネットショップランキングで１位に輝きました。</a></p>
+        </div><!--/#contents06-->
+        <div id="contents07">
+            <p><strong>お客様の声</strong></p><br>
+            <p><span>お買い上げ商品：ウィーンの銘菓ザッハートルテ</span></p>
+            <p><span>★★★★★</span></p>
+            <p>上品な味わいで口溶けがクセになるきめ細かいチョコですね。<br>チョコはビターですが、中のジャム（素材を生かした適度な甘さ）とうまく調和していて美味しかったです。<br>今まで色々食べましたが、このケーキは絶品だと思います！お味は大人向けだと思います！<br>届いた日に一人で半分ペロっと食べてしまいました。すごくオススメ！！
+            </p>
+            <br><br>
+            <p><span>お買い上げ商品：シュス木苺レアチーズケーキ</span></p>
+            <p><span>★★★★★</span></p>
+            <p>先週、和歌山県に小さなバースデーケーキを送っていただきました。<br>
+                その節は、急な依頼にご対応下さいましてありがとうございました。<br>誕生日ケーキが出てきた途端にパーティームードになり、おかげさまでHappyなお祝いができました。<br>お祝いにはやっぱりケーキですね♪そしてお味は最高でした！<br>
+                夕食後、直ぐでしたが、とっても美味しくて二人でペロリと食べてしまいました。<br>今回のケーキは是非また食べたいですが、他のケーキも食べてみたいと思いました。
+            </p><br>
+            <p><a href="http://casamingo.gift/index_koe.htm">もっと見る>>></a></p>
+        </div><!--/#contents07-->
+        <div id="contents08">
+            <p><strong>ご注文方法</strong></p><br>
+            <p><span>「ご注文」ボタンからサイズをお選び下さい。</span></p>
+            <p>商品を選び注文が進むと、到着日、到着時間を指定する画面へ進みます。<br>
+                その後、記念日チョコレートプレートを選択する画面が出てきますので、<br>
+                ご希望のメッセージにてお作りさせていただきます。全商品にプレートがお付けできます。</p>
+            <p><span>お急ぎの方はご希望商品をお電話にてお申し付け下さい。指定場所にご指定日時必着でお届けいたします。<br>
+                    平日１８時までのご注文で本州は最短翌日午前中お届けが可能な場合があります。</span></p>
+            <img src="img/tel.png" alt="電話番号">
+            <a href="mailto:miyakawa@casamingo.jp"><img src="img/mail.png" alt="メール"></a>
+            <p>只今大変ご注文が殺到しておりますので、できるだけ「ご注文」ボタンからご注文下さい。</p>
+            <p><a href="http://www.amazon.co.jp/gp/redirect.html?ie=UTF8&amp;location=http%3A%2F%2Fwww.amazon.co.jp%2Fb%3Fie%3DUTF8%26me%3DA1LTMHN3LQOUNT%26qid%3D1224330145&amp;tag=suumr202-22&amp;linkCode=ur2&amp;camp=247&amp;creative=7399">
+                    amazonからのご注文も可能です。</a></p>
+        </div><!--/#contents08-->
+        <div id="contents09">
+            <p><strong>時間帯お届けサービス</strong></p><br>
+            <img src="img/time.png" alt="時間帯お届け">
+        </div><!--/#contents09-->
+        <div id="contents10">
+            <div class="pack">
+                <p><span>梱包について</span></p>
+                <p>愛情がたっぷりと注がれた洋菓子は衛生面に最大限の注意を払い丁寧に梱包しております。</p>
+            </div>
+            <div class="pack_l">
+                <img src="img/pack1.jpg">
+                <p>箱には環境に優しいマシュマロクッションやエアークッションをしっかり詰めて包装いたします。</p>
+            </div>
+            <div class="pack_r">
+                <img src="img/pack2.jpg">
+                <p>累計50000台以上の発送実績から絶対に壊れない梱包方法を見つけました。
+                    作り立ての味がお楽しみ頂けるよう工夫されております。</p>
+            </div>
+            <div class="pack_l">
+                <img src="img/pack3.jpg">
+                <p>ギフトにふさわしい豪華デコレーションボックスでお届けさせていただきます。<br>
+                    ギフト専門店につき納品書は同封されません。</p>
+            </div>
+        </div><!--/#contents10-->
+        <div id="contents11">
+            <div class="pack">
+                <p><span>食材へのこだわり</span></p>
+            </div>
+            <div class="pack_l">
+                <img src="img/syokuzai1.gif">
+                <p>ヨーロッパ諸国から取り寄せるフルーツ、ナッツ、チョコレート等、最高級の素材を使用しているため、生産数が限られており、お届けまでに多少お時間を頂戴しておりますが、丁寧に仕上げ包装し、必ずご満足頂けるような美しいケーキをお届けさせて頂きます。</p>
+            </div>
+            <div class="pack_r">
+                <img src="img/syokuzai2.gif">
+                <p>当店では健康を気になさる方でも安心してお楽しみいただけるよう、香料、着色料、保存料等を添加せずに製造しております。</p>
+            </div>
+            <div class="pack_l">
+                <img src="img/syokuzai3.gif">
+                <p>当社の洋菓子は職人が厳選素材を贅沢に使用し、６時間以上かけて一台一台お作りしているため、一日に製造できる数も限られております。あらかじめご了承下さい。</p>
+            </div>
+        </div><!--/#contents11-->
+        <div id="contents12">
+            <p><strong>作り手紹介</strong></p><br>
+            <p><span>シェフ パティシエ 宮川鈴弘</span><br>
+                １０歳の頃から独学でドイツ語を勉強、１６歳からオーストリア・インスブルックの洋菓子店、<br>
+                コンディトライ・ヴァリエ、コンディトライ・ワハター等々の屈指の名店で修行を積み、徹底的に<br>鮮度にこだわった洋菓子の宅配専門店として「洋菓子店カサミンゴー」をオープン。<br>行列が出来る店として話題に。中でもシュス木苺レアチーズケーキは鈴弘氏お勧めの逸品。</p>
+        </div><!--/#contents12-->
+    </div><!--/#main-->
+    <p id="pagetop"><a href="#wrapper"><img src="img/pagetop.png" alt="ページトップボタン"></a></p>
+    <footer>
+        <small>Copyright Casa Mingo All Rights Reserved.　Kitaowaribe397-1 Nagano-shi Nagano 3810014 JAPAN</small>
+    </footer>
+</div><!--/#wrapper-->
 </body>
 </html>

@@ -10,12 +10,32 @@ class OrderdetailModel extends Model
      * @param int $size
      * @param int $price
      * @param int $num
+     * @param PDO $dbh
      * @return void
      */
-    public function registOrderDetail($orderId, $detailId, $name, $size, $price, $num)
+    public function registOrderDetail($orderId, $detailId, $name, $size, $price, $num, $dbh)
     {
-        $this->connect();
-        $stmt = $this->dbh->prepare('INSERT INTO order_detail(order_id, product_detail_id, name, size, price, num) VALUES(?, ?, ?, ?, ?, ?)');
+        $sql =
+            'INSERT '
+            . 'INTO '
+                . 'order_detail'
+            . '('
+                . 'order_id, '
+                . 'product_detail_id, '
+                . 'name, '
+                . 'size, '
+                . 'price, '
+                . 'num'
+            . ') VALUES ('
+                . '?, '
+                . '?, '
+                . '?, '
+                . '?, '
+                . '?, '
+                . '?'
+            . ')'
+        ;
+        $stmt = $dbh->prepare($sql);
         $stmt->execute([$orderId, $detailId, $name, $size, $price, $num]);
     }
 

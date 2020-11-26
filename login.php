@@ -1,7 +1,7 @@
 <?php
 require_once('autoload.php');
 
-if (isset($_SESSION['authenticated'])) {
+if (isset($_SESSION['user']['authenticated'])) {
     header('Location: cart.php');
     exit;
 }
@@ -15,19 +15,20 @@ if (isset($_POST['login'])) {
             $user = $userModel->fetchByLoginId($_POST['id']);
             if (!empty($user) and $_POST['pass'] == $user['login_pass']) {
                 session_regenerate_id(true);
-                $_SESSION['authenticated'] = password_hash($_POST['id'] . $_POST['pass'], PASSWORD_DEFAULT);
+                $_SESSION['user']['authenticated'] = password_hash($_POST['id'] . $_POST['pass'], PASSWORD_DEFAULT);
                 $userModel->updateLoginDate($user['id']);
-                $_SESSION['userName'] = $user['name'];
-                $_SESSION['userId'] = $user['id'];
+                $_SESSION['user']['userName'] = $user['name'];
+                $_SESSION['user']['userId'] = $user['id'];
                 header('Location: cart.php');
                 exit;
             }
             $error = 'IDかパスワードが間違っています';
-        } catch (PDOException $e) {
-            $error = 'データベースに接続できませんでした。';
+        } catch (Exception $e) {
+            $error = '会員情報の取得に失敗しました。<br>カスタマーサポートにお問い合わせください。';
         }
     }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -45,14 +46,14 @@ if (isset($_POST['login'])) {
     <div class="card">
         <div class="card-body">
             <h1>洋菓子店カサミンゴー 会員ログイン</h1>
-            <?php if (isset($error)): ?>
+            <?php if (isset($error)) :?>
                 <p class="error"><?=$error?></p>
-            <?php endif; ?>
+            <?php endif;?>
             <form action="" method="post">
                 <table>
                     <tr>
                         <th>ログインID</th>
-                        <td><input type="text" name="id" value=""></td>
+                        <td><input type="text" name="id" value="<?=isset($_POST['id']) ? $_POST['id'] : ''?>"></td>
                     </tr>
                     <tr>
                         <th>パスワード</th>

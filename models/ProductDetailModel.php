@@ -7,10 +7,41 @@ class ProductDetailModel extends Model
      * @param int $id
      * @return array sizeとpriceの配列
      */
+    public function getDetails($id)
+    {
+        $sql =
+            'SELECT '
+                . 'size, '
+                . 'price '
+            . 'FROM '
+                . 'product_detail '
+            . 'WHERE '
+                . 'product_id = ?'
+        ;
+        $stmt = $this->dbh->prepare($sql);
+        $stmt->execute([$id]);
+        return $stmt->fetchAll();
+    }
+
+    /**
+     * product_idでsizeとpriceを取ってくる（サイズ順）
+     *
+     * @param int $id
+     * @return array sizeとpriceの配列(サイズ順)
+     */
     public function fetchByProductId($id)
     {
-        $this->connect();
-        $stmt = $this->dbh->prepare('SELECT * FROM product_detail WHERE product_id = ? ORDER BY size ASC');
+        $sql =
+            'SELECT '
+                . '* '
+            . 'FROM '
+                . 'product_detail '
+            . 'WHERE '
+                . 'product_id = ? '
+            . 'ORDER BY '
+                . 'size ASC'
+        ;
+        $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
         return $stmt->fetchAll();
     }
@@ -22,12 +53,28 @@ class ProductDetailModel extends Model
      * @param int $size
      * @param int $price
      * @param int $turn
+     * @param PDO $dbh
      * @return void
      */
-    public function register($id, $size, $price, $turn)
+    public function register($id, $size, $price, $turn, $dbh)
     {
-        $this->connect();
-        $stmt = $this->dbh->prepare('INSERT INTO product_detail(product_id, size, price, turn) VALUES(?, ?, ?, ?)');
+        $sql =
+            'INSERT '
+            . 'INTO '
+                . 'product_detail '
+            . '('
+                . 'product_id, '
+                . 'size, '
+                . 'price, '
+                . 'turn, '
+            . ') VALUES ('
+                . '?, '
+                . '?, '
+                . '?, '
+                . '?, '
+            . ')'
+        ;
+        $stmt = $dbh->prepare($sql);
         $stmt->execute([$id, $size, $price, $turn]);
     }
 
@@ -38,12 +85,22 @@ class ProductDetailModel extends Model
      * @param int $size
      * @param int $price
      * @param int $turn
+     * @param PDO $dbh
      * @return void
      */
-    public function update($id, $size, $price, $turn)
+    public function update($id, $size, $price, $turn, $dbh)
     {
-        $this->connect();
-        $stmt = $this->dbh->prepare('UPDATE product_detail SET size = ?, price = ? WHERE product_id = ? AND turn = ?');
+        $sql =
+            'UPDATE '
+                . 'product_detail '
+            . 'SET '
+                . 'size = ?, '
+                . 'price = ? '
+            . 'WHERE '
+                . 'product_id = ? '
+                . 'AND turn = ?'
+        ;
+        $stmt = $dbh->prepare($sql);
         $stmt->execute([$size, $price, $id, $turn]);
     }
 
@@ -55,8 +112,15 @@ class ProductDetailModel extends Model
      */
     public function fetchById($id)
     {
-        $this->connect();
-        $stmt = $this->dbh->prepare('SELECT * FROM product_detail WHERE id = ?');
+        $sql =
+            'SELECT '
+                . '* '
+            . 'FROM '
+                . 'product_detail '
+            . 'WHERE '
+                . 'id = ?'
+        ;
+        $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
         return $stmt->fetch();
     }

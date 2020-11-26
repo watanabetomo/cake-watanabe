@@ -3,28 +3,29 @@ class ProductModel extends Model
 {
 
     /**
-     * product_listとproduct_categoryを結合し、全件を取得する
+     * product_listのデータを取得する
      *
-     * @return array product_listとproduct_categoryを結合した全件分のデータ
+     * @param array $get
+     * @return array product_listのデータ
      */
-    public function fetchAllData()
+    public function getProduct($get)
     {
-        $this->connect();
-        $stmt = $this->dbh->query('SELECT product.id, product.name, product.img, product.created_at, product.updated_at FROM product JOIN product_category ON product.product_category_id = product_category.id WHERE delete_flg = false');
-        return $stmt->fetchAll();
-    }
-
-    /**
-     * idをもとに、productとそれに紐づくproduct_detailのデータすべてを取得する。
-     *
-     * @param int $id
-     * @return array idが一致したレコード一件分
-     */
-    public function fetchById($id)
-    {
-        $this->connect();
-        $stmt = $this->dbh->prepare('SELECT product.id, product.name, product_category.name AS category_name, product.img, product.delivery_info, product.turn, product_detail.size, product_detail.price, product_detail.turn as detail_turn FROM product JOIN product_category ON product.product_category_id = product_category.id JOIN product_detail ON product.id = product_detail.product_id WHERE product.id = ? ORDER BY turn');
-        $stmt->execute([$id]);
+        $sql =
+            'SELECT '
+                . 'id, '
+                . 'name, '
+                . 'img, '
+                . 'created_at, '
+                . 'updated_at '
+            . 'FROM '
+                . 'product '
+            . 'WHERE '
+                . 'delete_flg = false'
+            . ((isset($get['keyword']) and $get['keyword'] != '') ? ' AND name LIKE ?' : '')
+            . (isset($get['order']) ? ' ORDER BY ' . $get['column'] . ' IS NULL ASC, ' . $get['column'] . ' ' . $get['order'] : '')
+        ;
+        $stmt = $this->dbh->prepare($sql);
+        $stmt->execute(isset($get['keyword']) ? ['%' . $get['keyword'] . '%'] : null);
         return $stmt->fetchAll();
     }
 
@@ -37,26 +38,51 @@ class ProductModel extends Model
      * @param String $delivery_info
      * @param int $turn
      * @param int $update_user
-     * @param array $size
-     * @param array $price
+     * @param array $details
      * @return void
      */
-    public function update($id, $name, $category_id, $delivery_info, $turn, $update_user, $size, $price)
+    public function update($id, $name, $category_id, $delivery_info, $turn, $update_user, $details)
     {
         try {
-            $productDetailModel = new ProductDetailModel();
-            $this->connect();
             $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
-            $stmt = $this->dbh->prepare('UPDATE product SET name = ?, product_category_id = ?, delivery_info = ?, turn = ?, update_user = ?, updated_at = current_timestamp() WHERE id = ?');
             $this->dbh->beginTransaction();
-            $stmt->execute([$name, $category_id, $delivery_info, $turn, $update_user, $id]);
-            for ($i=0; $i<5; $i++) {
-                $productDetailModel->update($id, $size[$i], $price[$i], $i + 1);
+            $sql =
+                'UPDATE '
+                    . 'product '
+                . 'SET '
+                    . 'name = ?, '
+                    . 'product_category_id = ?, '
+                    . 'delivery_info = ?, '
+                    . 'turn = ?, '
+                    . 'update_user = ?, '
+                    . 'updated_at = current_timestamp() '
+                . 'WHERE '
+                    . 'id = ? '
+                    . 'AND delete_flg = false'
+            ;
+            $stmt = $this->dbh->prepare($sql);
+            $stmt->execute([
+                $name == '' ? null : $name,
+                $category_id,
+                $delivery_info == '' ? null : $delivery_info,
+                $turn == '' ? null : $turn,
+                $update_user,
+                $id
+            ]);
+            $productDetailModel = new ProductDetailModel();
+            for ($i = 0; $i < 5; $i++) {
+                $productDetailModel->update(
+                    $id,
+                    $details[$i]['size'] == '' ? null : $details[$i]['size'],
+                    $details[$i]['price'] == '' ? null : $details[$i]['price'],
+                    $i + 1,
+                    $this->dbh
+                );
             }
             $this->dbh->commit();
         } catch (PDOException $e) {
+            $this->dbh->rollBack();
             throw new PDOException($e);
-            $this->dbh->rollback();
         }
     }
 
@@ -68,8 +94,16 @@ class ProductModel extends Model
      */
     public function delete($id)
     {
-        $this->connect();
-        $stmt = $this->dbh->prepare('UPDATE product SET delete_flg = true WHERE id = ?');
+        $sql =
+            'UPDATE '
+                . 'product '
+            . 'SET '
+                . 'delete_flg = true '
+            . 'WHERE '
+                . 'id = ? '
+                . 'AND delete_flg = false'
+        ;
+        $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
     }
 
@@ -81,8 +115,20 @@ class ProductModel extends Model
      */
     public function fetchByCategoryId($id)
     {
-        $this->connect();
-        $stmt = $this->dbh->prepare('SELECT id, name, img FROM product WHERE product_category_id = ? AND delete_flg = false ORDER BY turn IS NULL ASC');
+        $sql =
+            'SELECT '
+                . 'id, '
+                . 'name, '
+                . 'img '
+            . 'FROM '
+                . 'product '
+            . 'WHERE '
+                . 'product_category_id = ? '
+                . 'AND delete_flg = false '
+            . 'ORDER BY '
+                . 'turn ASC'
+        ;
+        $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
         return $stmt->fetchAll();
     }
@@ -95,26 +141,55 @@ class ProductModel extends Model
      * @param String $delivery_info
      * @param int $turn
      * @param int $create_user
-     * @param array $size
-     * @param array $price
+     * @param array $details
      * @return void
      */
-    public function register($name, $category_id, $delivery_info, $turn, $create_user, $size, $price)
+    public function register($name, $category_id, $delivery_info, $turn, $create_user, $details)
     {
         try {
-            $productDetailModel = new ProductDetailModel();
-            $this->connect();
             $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
-            $stmt = $this->dbh->prepare('INSERT INTO product(name, product_category_id, delivery_info, turn, create_user) VALUES (?, ?, ?, ?, ?)');
             $this->dbh->beginTransaction();
-            $stmt->execute([$name, $category_id, $delivery_info, $turn, $create_user]);
-            for ($i=0; $i<5; $i++) {
-                $productDetailModel->register($this->getMaxId()[0], $size[$i], $price[$i], $i + 1);
+            $sql =
+                'INSERT '
+                . 'INTO '
+                    . 'product '
+                . '('
+                    . 'name, '
+                    . 'product_category_id, '
+                    . 'delivery_info, '
+                    . 'turn, '
+                    . 'create_user'
+                . ') VALUES ('
+                    . '?, '
+                    . '?, '
+                    . '?, '
+                    . '?, '
+                    . '?'
+                . ')'
+            ;
+            $stmt = $this->dbh->prepare($sql);
+            $stmt->execute([
+                $name == '' ? null : $name,
+                $category_id,
+                $delivery_info == '' ? null : $delivery_info,
+                $turn == '' ? null : $turn,
+                $create_user
+            ]);
+            $id = $this->getMaxId();
+            $productDetailModel = new ProductDetailModel();
+            for ($i = 0; $i < 5; $i++) {
+                $productDetailModel->register(
+                    $id,
+                    $details[$i]['size'] == '' ? null : $details[$i]['size'],
+                    $details[$i]['price'] == '' ? null : $details[$i]['price'],
+                    $i + 1,
+                    $this->dbh
+                );
             }
             $this->dbh->commit();
         } catch (PDOException $e) {
+            $this->dbh->rollBack();
             throw new PDOException($e);
-            $this->dbh->rollback();
         }
     }
 
@@ -122,135 +197,52 @@ class ProductModel extends Model
      * 画像アップロード及びDBの画像情報更新
      *
      * @param int $id
-     * @param String $img
-     * @param String $tempName
-     * @param String $error
+     * @param array $array
      * @return void
      */
-    public function imgUpload($id, $img, $tempName, $error)
+    public function uploadImg($id, $array)
     {
         try{
-            $this->connect();
             $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
-            $stmt = $this->dbh->prepare('UPDATE product SET img = ?, updated_at = CURRENT_TIMESTAMP() WHERE id = ?');
             $this->dbh->beginTransaction();
-            $stmt->execute([$img, $id]);
-            if ($error == UPLOAD_ERR_OK) {
+            $sql =
+                'UPDATE '
+                    . 'product SET img = ?, '
+                    . 'updated_at = CURRENT_TIMESTAMP() '
+                . 'WHERE '
+                    . 'id = ? '
+                    . 'AND delete_flg = false'
+            ;
+            $stmt = $this->dbh->prepare($sql);
+            $stmt->execute([$array['name'], $id]);
+            if ($array['error'] == UPLOAD_ERR_OK) {
                 exec('sudo chmod 0777 ../' . IMG_PATH);
-                if (!move_uploaded_file($tempName, '../' . IMG_PATH . mb_convert_encoding($img, 'cp932', 'utf8'))) {
+                if (!move_uploaded_file(
+                    $array['tmp_name'],
+                    '../' . IMG_PATH . mb_convert_encoding($array['name'], 'cp932', 'utf8')
+                )) {
+                    exec('sudo chmod 0755 ../' . IMG_PATH);
                     throw new Exception;
                 }
                 exec('sudo chmod 0755 ../' . IMG_PATH);
-            } elseif ($error == UPLOAD_ERR_NO_FILE) {
-                throw new Exception;
             } else {
                 throw new Exception;
             }
             $this->dbh->commit();
         } catch (Exception $e) {
+            $this->dbh->rollBack();
             throw new Exception($e);
-            $this->dbh->rollback();
         }
     }
 
     /**
      * idの最大値を取得
      *
-     * @return MAX(id)
+     * @return id
      */
     public function getMaxId()
     {
-        return $this->dbh->query('SELECT MAX(id) FROM product')->fetch();
-    }
-
-    /**
-     * 検索ワードをnameに含むデータを取得
-     *
-     * @param String $keyword
-     * @return array 検索結果
-     */
-    public function search($keyword)
-    {
-        $this->connect();
-        $stmt = $this->dbh->prepare('SELECT product.id, product.name, product.img, product.created_at, product.updated_at FROM product JOIN product_category ON product.product_category_id = product_category.id WHERE product.name LIKE ? AND delete_flg = false');
-        $stmt->execute(['%' . $keyword . '%']);
-        return $stmt->fetchAll();
-    }
-
-    /**
-     * idの昇順でproductテーブルの中身を取得を取得
-     *
-     * @return array idの昇順で並んだproductテーブルのレコード
-     */
-    public function sortIdAsc()
-    {
-        $this->connect();
-        $stmt = $this->dbh->query('SELECT product.id, product.name, product.img, product.created_at, product.updated_at FROM product JOIN product_category ON product.product_category_id = product_category.id WHERE delete_flg = false ORDER BY product.id ASC');
-        return $stmt->fetchAll();
-    }
-
-    /**
-     * idの降順でproductテーブルの中身を取得を取得
-     *
-     * @return array idの降順で並んだproductテーブルのレコード
-     */
-    public function sortIdDesc()
-    {
-        $this->connect();
-        $stmt = $this->dbh->query('SELECT product.id, product.name, product.img, product.created_at, product.updated_at FROM product JOIN product_category ON product.product_category_id = product_category.id WHERE delete_flg = false ORDER BY product.id DESC');
-        return $stmt->fetchAll();
-    }
-
-    /**
-     * nameの昇順でproductテーブルの中身を取得を取得
-     *
-     * @return array nameの昇順で並んだproductテーブルのレコード
-     */
-    public function sortNameAsc()
-    {
-        $this->connect();
-        $stmt = $this->dbh->query('SELECT product.id, product.name, product.img, product.created_at, product.updated_at, CASE WHEN product.name = "" THEN 1 ELSE 0 END AS dummy FROM product JOIN product_category ON product.product_category_id = product_category.id WHERE delete_flg = false ORDER BY dummy ASC, product.name DESC');
-        $stmt->execute();
-        return $stmt->fetchAll();
-    }
-
-    /**
-     * nameの降順でproductテーブルの中身を取得を取得
-     *
-     * @return array nameの降順で並んだproductテーブルのレコード
-     */
-    public function sortNameDesc()
-    {
-        $this->connect();
-        $stmt = $this->dbh->query('SELECT product.id, product.name, product.img, product.created_at, product.updated_at, CASE WHEN product.name = "" THEN 1 ELSE 0 END AS dummy FROM product JOIN product_category ON product.product_category_id = product_category.id WHERE delete_flg = false ORDER BY dummy ASC, product.name ASC');
-        $stmt->execute();
-        return $stmt->fetchAll();
-    }
-
-    /**
-     *updated_atの昇順でproductテーブルの中身を取得を取得
-     *
-     * @return arrayupdated_atの昇順で並んだproductテーブルのレコード
-     */
-    public function sortUpdatedAsc()
-    {
-        $this->connect();
-        $stmt = $this->dbh->query('SELECT product.id, product.name, product.img, product.created_at, product.updated_at FROM product JOIN product_category ON product.product_category_id = product_category.id WHERE delete_flg = false ORDER BY product.updated_at IS NULL ASC, product.updated_at DESC');
-        $stmt->execute();
-        return $stmt->fetchAll();
-    }
-
-    /**
-     * updated_atの降順でproductテーブルの中身を取得を取得
-     *
-     * @return array updated_atの降順で並んだproductテーブルのレコード
-     */
-    public function sortUpdatedDesc()
-    {
-        $this->connect();
-        $stmt = $this->dbh->query('SELECT product.id, product.name, product.img, product.created_at, product.updated_at FROM product JOIN product_category ON product.product_category_id = product_category.id WHERE delete_flg = false ORDER BY product.updated_at IS NULL ASC, product.updated_at ASC');
-        $stmt->execute();
-        return $stmt->fetchAll();
+        return $this->dbh->lastInsertId();
     }
 
     /**
@@ -261,53 +253,73 @@ class ProductModel extends Model
      */
     public function fetchSingleDetail($id)
     {
-        $this->connect();
-        $stmt = $this->dbh->prepare('SELECT name, img FROM product WHERE id = ?');
+        $sql =
+            'SELECT '
+                . 'name, '
+                . 'img '
+            . 'FROM '
+                . 'product '
+            . 'WHERE '
+                . 'id = ? '
+                . 'AND delete_flg = false'
+        ;
+        $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
         return $stmt->fetch();
-    }
-
-    /**
-     * 検索及びソート結果を返す
-     *
-     * @param String $column
-     * @param String $direction
-     * @param String $key
-     * @return void
-     */
-    public function displayResult($column, $direction, $key)
-    {
-        if ($key != '') {
-            return $this->search($key);
-        } elseif ($column == 'id') {
-            if ($direction == '▼') {
-                return $this->sortIdDesc();
-            }
-            return $this->sortIdAsc();
-        } elseif ($column == 'name') {
-            if ($direction == '▼') {
-                return $this->sortNameDesc();
-            }
-            return $this->sortNameAsc();
-        } elseif ($column == 'updated_at') {
-            if ($direction == '▼') {
-                return $this->sortUpdatedDesc();
-            }
-            return $this->sortUpdatedAsc();
-        }
     }
 
     /**
      * imgを取得
      *
      * @param int $id
-     * @return array img
+     * @return array imgカラム
      */
     public function getImg($id)
     {
-        $this->connect();
-        $stmt = $this->dbh->prepare('SELECT img FROM product WHERE id = ?');
+        $sql =
+            'SELECT '
+                . 'img '
+            . 'FROM '
+                . 'product '
+            . 'WHERE '
+                . 'id = ? '
+                . 'AND delete_flg = false'
+        ;
+        $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
-        return $stmt->fetch();
+        return $stmt->fetch(PDO::FETCH_COLUMN);
+    }
+
+    /**
+     * 商品情報の取得
+     *
+     * @param int $id
+     * @return void
+     */
+    public function fetchSingleProduct($id)
+    {
+        $sql =
+            'SELECT '
+                . '* '
+            . 'FROM '
+                . 'product '
+            . 'WHERE '
+                . 'id = ?'
+                . 'AND delete_flg = false'
+        ;
+        $stmt = $this->dbh->prepare($sql);
+        $stmt->execute([$id]);
+        $product = $stmt->fetch();
+        if (empty($product)) {
+            header('Location: product_list.php');
+            exit;
+        }
+        $productDetailModel = new ProductDetailModel();
+        $product['details'] = $productDetailModel->getDetails($id);
+        if (empty($product['details'])) {
+            header('Location: product_list.php');
+            exit;
+        }
+        return $product;
     }
 }

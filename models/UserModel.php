@@ -9,10 +9,25 @@ class UserModel extends Model
      */
     public function fetchByLoginId($id)
     {
-        $this->connect();
-        $stmt = $this->dbh->prepare('SELECT id, login_pass, name FROM user WHERE login_id = ?');
+        $sql =
+            'SELECT '
+                . 'id, '
+                . 'login_pass, '
+                . 'name '
+            . 'FROM '
+                . 'user '
+            . 'WHERE '
+                . 'login_id = ? '
+                . 'AND delete_flg = false'
+        ;
+        $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
-        return $stmt->fetch();
+        $stmt = $stmt->fetch();
+        if (empty($stmt)) {
+            header('Location: login.php');
+            exit;
+        }
+        return $stmt;
     }
 
     /**
@@ -23,10 +38,23 @@ class UserModel extends Model
      */
     public function fetchById($id)
     {
-        $this->connect();
-        $stmt = $this->dbh->prepare('SELECT * FROM user WHERE id = ?');
+        $sql =
+            'SELECT '
+                . '* '
+            . 'FROM '
+                . 'user '
+            . 'WHERE '
+                . 'id = ? '
+                . 'AND delete_flg = false'
+        ;
+        $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
-        return $stmt->fetch();
+        $stmt = $stmt->fetch();
+        if (empty($stmt)) {
+            header('Location: login.php');
+            exit;
+        }
+        return $stmt;
     }
 
     /**
@@ -37,9 +65,16 @@ class UserModel extends Model
      */
     public function updateLoginDate($id)
     {
-        $this->connect();
-        $stmt = $this->dbh->prepare('UPDATE user SET last_login_date = NOW() WHERE id = ?');
+        $sql =
+            'UPDATE '
+                . 'user '
+            . 'SET '
+                . 'last_login_date = NOW() '
+            . 'WHERE '
+                . 'id = ? '
+                . 'AND delete_flg = false'
+        ;
+        $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
     }
-
 }

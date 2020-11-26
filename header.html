@@ -7,7 +7,7 @@
     <title>カート</title>
     <script src="https://kit.fontawesome.com/98508d537e.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/cart.css">
+    <link rel="stylesheet" href="css/purchase.css">
 </head>
 
 <body>
@@ -17,23 +17,25 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item icon">
-                        <a href="index.php"><i class="fas fa-home fa-2x"></i>
-                        <p>home</p></a>
+                        <a href="index.php"><i class="fas fa-home fa-2x"></i><p>home</p></a>
                     </li>
                     <li class="nav-item icon">
-                        <a href="cart.php"><i class="fas fa-shopping-cart fa-2x"></i>
-                        <p>cart</p></a>
+                        <a href="cart.php"><i class="fas fa-shopping-cart fa-2x"></i><p>cart</p></a>
                     </li>
                     <li class="nav-item icon">
+<<<<<<< HEAD
                         <a href="history.php"><i class="fas fa-history fa-2x"></i>
                         <p>history</p></a>
                     </li>
                     <li class="nav-item icon">
                         <a href="admin/top.php"><i class="fas fa-user-lock fa-2x"></i>
                         <p>admin</p></a>
+=======
+                        <a href="admin/top.php"><i class="fas fa-user-lock fa-2x"></i><p>admin</p></a>
+>>>>>>> master
                     </li>
                 </ul>
             </div>
         </nav>
-        <p class="greeting">ようこそ<?=$_SESSION['userName']?>さん <a href="logout.php" class="logout">ログアウトする</a></p>
+        <p class="greeting">ようこそ<?=$_SESSION['user']['userName']?>さん <a href="logout.php" class="logout">ログアウトする</a></p>
     </header>

@@ -74,7 +74,7 @@ footer p {
 
 .error {
     color: red;
-    margin: 0 auto;
+    text-align: center;
 }
 
 #upload{
@@ -100,4 +100,15 @@ footer p {
 
 .sorted{
     margin: 5px 0;
+}
+
+.register-btn {
+    float: left;
+    margin-right: 20px;
+}
+
+.empty {
+    text-align: center;
+    font-size: 25px;
+    margin-top: 20px;
 }

@@ -4,23 +4,35 @@ class CartModel extends Model
     /**
      * カートに商品を追加
      *
-     * @param int $userId
      * @param int $detailId
      * @return void
      */
-    public function addToCart($userId, $detailId)
+    public function addToCart($detailId)
     {
-        $this->connect();
         $cart = $this->fetchAll();
-        foreach($cart as $onCart) {
-            if($onCart['product_detail_id'] == $detailId) {
-                $this->addNum($onCart['product_detail_id']);
+        foreach ($cart as $prodOfTheCart) {
+            if ($prodOfTheCart['product_detail_id'] == $detailId) {
+                $this->addNum($prodOfTheCart['product_detail_id']);
                 $idExist = true;
             }
         }
         if (!isset($idExist)) {
-            $stmt = $this->dbh->prepare('INSERT INTO cart(user_id, product_detail_id, num) VALUES(?, ?, 1)');
-            $stmt->execute([$userId, $detailId]);
+            $sql =
+                'INSERT '
+                . 'INTO '
+                    . 'cart '
+                . '('
+                    . 'user_id, '
+                    . 'product_detail_id, '
+                    . 'num'
+                . ') VALUES ('
+                    . '?, '
+                    . '?, '
+                    . '1'
+                . ')'
+            ;
+            $stmt = $this->dbh->prepare($sql);
+            $stmt->execute([$_SESSION['user']['userId'], $detailId]);
         }
     }
 
@@ -31,8 +43,12 @@ class CartModel extends Model
      */
     public function fetchAll()
     {
-        $this->connect();
-        $stmt = $this->dbh->query('SELECT * FROM cart');
+        $sql =
+            'SELECT '
+                . '* '
+            . 'FROM '
+                . 'cart';
+        $stmt = $this->dbh->query($sql);
         return $stmt->fetchAll();
     }
 
@@ -44,8 +60,14 @@ class CartModel extends Model
      */
     public function delete($id)
     {
-        $this->connect();
-        $stmt = $this->dbh->prepare('DELETE FROM cart WHERE id = ?');
+        $sql =
+            'DELETE '
+            . 'FROM '
+                . 'cart '
+            . 'WHERE '
+                . 'id = ?'
+            ;
+        $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
     }
 
@@ -58,8 +80,15 @@ class CartModel extends Model
      */
     public function changeNum($num, $id)
     {
-        $this->connect();
-        $stmt = $this->dbh->prepare('UPDATE cart SET num = ? WHERE id = ?');
+        $sql =
+            'UPDATE '
+                . 'cart '
+            . 'SET '
+                . 'num = ? '
+            . 'WHERE '
+                . 'id = ?'
+        ;
+        $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$num, $id]);
     }
 
@@ -71,11 +100,26 @@ class CartModel extends Model
      */
     public function addNum($id)
     {
-        $this->connect();
-        $stmt = $this->dbh->prepare('SELECT num FROM cart WHERE product_detail_id = ?');
+        $sql =
+            'SELECT '
+                . 'num '
+            . 'FROM '
+                . 'cart '
+            . 'WHERE '
+                . 'product_detail_id = ?'
+        ;
+        $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
         $num = $stmt->fetch();
-        $stmt = $this->dbh->prepare('UPDATE cart SET num = ? WHERE product_detail_id = ?');
+        $sql =
+            'UPDATE '
+                . 'cart '
+            . 'SET '
+                . 'num = ? '
+            . 'WHERE '
+                . 'product_detail_id = ?'
+        ;
+        $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$num['num'] + 1, $id]);
     }
 
@@ -84,89 +128,141 @@ class CartModel extends Model
      *
      * @return void
      */
-    public function truncateCart() {
-        $this->connect();
-        $this->dbh->query('TRUNCATE TABLE cart');
+    public function deleteFromCart()
+    {
+        $sql =
+            'DELETE '
+            . 'FROM '
+                . 'cart'
+        ;
+        $this->dbh->query($sql);
     }
 
     /**
      * cartを空にし、order, order_detailに注文情報を登録する。メールの送信をする。
      *
-     * @param array $prefectures
      * @return void
      */
-    public function purchaseComplete($prefectures)
+    public function purchaseComplete()
     {
+        global $prefectures;
         try {
-            $orderModel = new OrderModel();
-            $productDetailModel = new ProductDetailModel();
-            $productModel = new ProductModel();
-            $oederDetailModel = new OrderDetailModel();
-            $userModel = new UserModel();
             $cart = $this->fetchAll();
             $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
             $this->dbh->beginTransaction();
-            $orderModel->commitOrder($_SESSION['userId'], $_SESSION['purchase_info']['name'], $_SESSION['purchase_info']['name_kana'], $_SESSION['purchase_info']['mail'], $_SESSION['purchase_info']['tel1'], $_SESSION['purchase_info']['tel2'], $_SESSION['purchase_info']['tel3'], $_SESSION['purchase_info']['postal_code1'], $_SESSION['purchase_info']['postal_code2'], array_search($_SESSION['purchase_info']['pref'], $prefectures), $_SESSION['purchase_info']['city'], $_SESSION['purchase_info']['address'], $_SESSION['purchase_info']['other'], $_SESSION['purchase_info']['payment'], $_SESSION['purchase_info']['sub_price'], $_SESSION['purchase_info']['shipping'], ($_SESSION['purchase_info']['tax'] * 100), $_SESSION['purchase_info']['total_price']);
-            $user = $userModel->fetchById($_SESSION['userId']);
-            foreach ($cart as $onCart) {
-                $productDetail = $productDetailModel->fetchById($onCart['product_detail_id']);
-                $product = $productModel->fetchById($productDetail['product_id']);
-                $oederDetailModel->registOrderDetail($orderModel->getMaxId()[0], $onCart['product_detail_id'], $product[0]['name'], $productDetail['size'], $productDetail['price'], $onCart['num']);
+            $userModel = new UserModel();
+            $user = $userModel->fetchById($_SESSION['user']['userId']);
+            $orderModel = new OrderModel();
+            $orderModel->commitOrder(
+                $_SESSION['user']['userId'],
+                $_SESSION['purchase_info']['name'],
+                $_SESSION['purchase_info']['name_kana'],
+                $user['mail'],
+                $_SESSION['purchase_info']['tel1'],
+                $_SESSION['purchase_info']['tel2'],
+                $_SESSION['purchase_info']['tel3'],
+                $_SESSION['purchase_info']['postal_code1'],
+                $_SESSION['purchase_info']['postal_code2'],
+                array_search($_SESSION['purchase_info']['pref'], $prefectures),
+                $_SESSION['purchase_info']['city'],
+                $_SESSION['purchase_info']['address'],
+                $_SESSION['purchase_info']['other'],
+                $_SESSION['purchase_info']['payment'],
+                $_SESSION['purchase_info']['sub_price'],
+                $_SESSION['purchase_info']['shipping'],
+                TAX * 100,
+                $_SESSION['purchase_info']['total_price'],
+                $this->dbh
+            );
+            $id = $this->dbh->lastInsertId();
+            $productDetailModel = new ProductDetailModel();
+            $productModel = new ProductModel();
+            $oederDetailModel = new OrderDetailModel();
+            foreach ($cart as $prodOfTheCart) {
+                $productDetail = $productDetailModel->fetchById($prodOfTheCart['product_detail_id']);
+                $product = $productModel->fetchSingleProduct($productDetail['product_id']);
+                $oederDetailModel->registOrderDetail(
+                    $id,
+                    $prodOfTheCart['product_detail_id'],
+                    $product['name'],
+                    $productDetail['size'],
+                    $productDetail['price'],
+                    $prodOfTheCart['num'],
+                    $this->dbh
+                );
             }
-            $this->truncateCart();
-            mb_language('Japanese');
-            mb_internal_encoding('UTF-8');
+            $this->deleteFromCart();
             $mailBody =
-                '<p>' . $_SESSION['userName'] . '様</p>
-                <p>お世話になっております。<br>洋菓子店カサミンゴーカスタマーサポートです。</p>
-                <p> ' . $_SESSION['userName'] . ' 様が購入手続きをされました商品について<br>お間違えのないようメールをお送りいたしました。<br>今一度ご購入商品等にお間違えなどないよう、ご確認いただけましたら幸いでございます。</p>
-                <p>--------------------------------------</p>
-                <h2>【購入情報】</h2>';
-            foreach($cart as $onCart) {
-                $productDetail = $productDetailModel->fetchById($onCart['product_detail_id']);
-                $product = $productModel->fetchById($productDetail['product_id']);
+                $_SESSION['user']['userName'] . "様\n\n"
+                . "お世話になっております。\n"
+                . "洋菓子店カサミンゴーカスタマーサポートです。\n\n"
+                . $_SESSION['user']['userName'] . "様が購入手続きをされました商品について\n"
+                . "お間違えのないようメールをお送りいたしました。\n"
+                . "今一度ご購入商品等にお間違えなどないよう、ご確認いただけましたら幸いでございます。\n\n"
+                . "--------------------------------------\n\n"
+                . "【購入情報】\n\n";
+            foreach ($cart as $prodOfTheCart) {
+                $productDetail = $productDetailModel->fetchById($prodOfTheCart['product_detail_id']);
+                $product = $productModel->fetchSingleProduct($productDetail['product_id']);
                 $mailBody .=
-                    '<p>' . $product[0]['name'] . $productDetail['size'] . 'cm<br>
-                    ' . $productDetail['price'] . '円<br>
-                    ' . $onCart['num'] . '枚</p>
-                    <p>-----------------------</p>';
+                    $product['name'] . "\n"
+                    . $productDetail['size'] . "cm\n"
+                    . $productDetail['price'] . "円\n"
+                    . $prodOfTheCart['num'] . "点\n\n"
+                    . "-----------------------\n\n";
             }
+            $mPaymentModel = new MPaymentModel();
+            $payment = $mPaymentModel->fetchByid($_SESSION['purchase_info']['payment']);
             $mailBody .=
-                '<p>小計： ' . $_SESSION['purchase_info']['sub_price'] . '<br>
-                消費税： ' . $_SESSION['purchase_info']['sub_price'] * TAX . '<br>
-                送料： ' . $_SESSION['purchase_info']['shipping'] . '<br>
-                合計： ' . $_SESSION['purchase_info']['sub_price'] * (1 + TAX) . '</p>
-                <p>--------------------------------------</p>
-                <h2>【送付先情報】</h2>
-                <p>お名前： ' . $_SESSION['purchase_info']['name'] . '<br>
-                フリガナ： ' . $_SESSION['purchase_info']['name_kana'] . '<br>
-                電話番号： ' . $_SESSION['purchase_info']['tel1'] . ' - ' . $_SESSION['purchase_info']['tel2'] . ' - ' . $_SESSION['purchase_info']['tel3'] . '<br>
-                郵便番号： ' . $_SESSION['purchase_info']['postal_code1'] . ' - ' . $_SESSION['purchase_info']['postal_code2'] . '<br>
-                都道府県： ' . $_SESSION['purchase_info']['pref'] . '<br>
-                市区町村： ' . $_SESSION['purchase_info']['city'] . '<br>
-                番地： ' . $_SESSION['purchase_info']['address'] . '<br>
-                マンション名等： ' . $_SESSION['purchase_info']['other'] . '</p>
-                <p>--------------------------------------</p>
-                <h2>【請求先情報】</h2>
-                <p>お名前： ' . $user['name'] . '<br>
-                フリガナ： ' . $user['name_kana'] . '<br>
-                電話番号： ' . $user['tel1'] . ' - ' . $user['tel2'] . ' - ' . $user['tel3'] . '<br>
-                郵便番号： ' . $user['postal_code1'] . ' - ' . $user['postal_code2'] . '<br>
-                都道府県： ' . $prefectures[$user['pref']] . '<br>
-                市区町村： ' . $user['city'] . '<br>
-                番地： ' . $user['address'] . '<br>
-                マンション名等： ' . $user['other'] . '</p>
-                <p>--------------------------------------</p>
-                <p>商品ご到着まで。今しばらくお待ちください。</p>
-                <p>※このメールは自動送信メールです。<br>※返信をされてもご回答しかねますのでご了承ください。</p>';
-            mb_send_mail(MAIL_TO, '【洋菓子店カサミンゴー】ご購入商品確認メール', $mailBody, "From: 洋菓子店カサミンゴー\r\nContent-type: text/html; charset=UTF-8");
+                '小計： ' . $_SESSION['purchase_info']['sub_price'] . "円\n"
+                . '消費税： ' . floor($_SESSION['purchase_info']['sub_price'] * TAX) . "円\n"
+                . '送料： ' . $_SESSION['purchase_info']['shipping'] . "円\n"
+                . '合計： ' . $_SESSION['purchase_info']['total_price'] . "円\n\n"
+                . "--------------------------------------\n\n"
+                . "【送付先情報】\n\n"
+                . 'お名前： ' . $_SESSION['purchase_info']['name'] . "\n"
+                . 'フリガナ： ' . $_SESSION['purchase_info']['name_kana'] . "\n"
+                . '電話番号： ' . $_SESSION['purchase_info']['tel1'] . ' - ' . $_SESSION['purchase_info']['tel2'] . ' - ' . $_SESSION['purchase_info']['tel3'] . "\n"
+                . '郵便番号： ' . $_SESSION['purchase_info']['postal_code1'] . ' - ' . $_SESSION['purchase_info']['postal_code2'] . "\n"
+                . '都道府県： ' . $_SESSION['purchase_info']['pref'] . "\n"
+                . '市区町村： ' . $_SESSION['purchase_info']['city'] . "\n"
+                . '番地： ' . $_SESSION['purchase_info']['address'] . "\n"
+                . 'マンション名等： ' . $_SESSION['purchase_info']['other'] . "\n\n"
+                . "--------------------------------------\n\n"
+                . "【請求先情報】\n\n"
+                . 'お名前： ' . $user['name'] . "\n"
+                . 'フリガナ： ' . $user['name_kana'] . "\n"
+                . '電話番号： ' . $user['tel1'] . ' - ' . $user['tel2'] . ' - ' . $user['tel3'] . "\n"
+                . '郵便番号： ' . $user['postal_code1'] . ' - ' . $user['postal_code2'] . "\n"
+                . '都道府県： ' . $prefectures[$user['pref']] . "\n"
+                . '市区町村： ' . $user['city'] . "\n"
+                . '番地： ' . $user['address'] . "\n"
+                . 'マンション名等： ' . $user['other'] . "\n"
+                . 'お支払方法： ' . $payment['name'] . "\n\n"
+                . "--------------------------------------\n\n"
+                . "商品ご到着まで。今しばらくお待ちください。\n\n"
+                . "※このメールは自動送信メールです。\n"
+                . "※返信をされてもご回答しかねますのでご了承ください。\n\n"
+                . "〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜\n"
+                . "洋菓子店カサミンゴー\n"
+                . "TEL：000-0000-0000\n"
+                . "住所：福島県郡山市中ノ目3-149-12\n"
+                . "mail：t.watanabe@ebacorp.jp\n"
+                . '〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜';
+            mb_language('uni');
+            mb_internal_encoding('UTF-8');
+            if (!mb_send_mail(
+                $user['mail'],
+                '【洋菓子店カサミンゴー】ご購入商品確認メール',
+                $mailBody,
+                'From:' . mb_encode_mimeheader('洋菓子店カサミンゴー')
+            )) {
+                throw new Exception;
+            }
             $this->dbh->commit();
-        } catch (PDOException $e) {
-            throw new PDOException($e);
-            $this->dbh->rollback();
         } catch (Exception $e) {
+            $this->dbh->rollBack();
             throw new Exception($e);
-            $this->dbh->rollback();
         }
     }
 }
