@@ -113,7 +113,6 @@ class OrderModel extends Model
         ]);
     }
 
-<<<<<<< HEAD
     /**
      * orderテーブルのid最大値を取得する
      *
@@ -157,6 +156,3 @@ class OrderModel extends Model
         return $this->dbh->query('SELECT COUNT(*) FROM `order`')->fetch();
     }
 }
-=======
-}
->>>>>>> master
