@@ -8,7 +8,7 @@ if (!isset($_SESSION['admin']['authenticated'])) {
 
 if (
     !isset($_GET['action'])
-    or ($_GET['action'] != 'new' and ($_GET['action'] != 'edit' or !isset($_GET['id']) or !preg_match('/^[1-9][0-9]*$/', $_GET['id'])))
+    or ($_GET['action'] != 'new' and !($_GET['action'] == 'edit' and isset($_GET['id']) and preg_match('/^[1-9][0-9]*$/', $_GET['id'])))
     or !isset($_POST['send'])
 ) {
     header('Location: product_list.php');
