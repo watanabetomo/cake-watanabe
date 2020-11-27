@@ -1,5 +1,5 @@
 main{
-    min-height: 435px;
+    min-height: 480px;
 }
 
 .logout{
@@ -57,7 +57,7 @@ main{
     display: grid;
     grid-template-columns: 1fr 2fr;
     grid-gap: 10px;
-    min-height: 435px;
+    min-height: 480px;
 }
 
 .box1{
@@ -182,5 +182,9 @@ footer{
 
 .sub-message {
     font-size: 20px;
+    margin-left: 10px;
+}
+
+#sendFor2 {
     margin-left: 10px;
 }

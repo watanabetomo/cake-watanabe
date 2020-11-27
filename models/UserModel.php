@@ -22,12 +22,7 @@ class UserModel extends Model
         ;
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
-        $stmt = $stmt->fetch();
-        if (empty($stmt)) {
-            header('Location: login.php');
-            exit;
-        }
-        return $stmt;
+        return $stmt->fetch();
     }
 
     /**
