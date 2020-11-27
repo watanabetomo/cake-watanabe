@@ -7,7 +7,7 @@ size サイズ
 price 価格
 
 orderテーブル修正（カラム追加）
-status 購入・確定・キャンセルの各状態を保持
+status 購入・確定・キャンセルの各状態を保持(1:購入 2:確定 3:キャンセル)
 
 CREATE TABLE stock (
     id SERIAL PRIMARY KEY,
