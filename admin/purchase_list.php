@@ -67,14 +67,14 @@ try {
             <?php else :?>
                 <a href="?page=<?=$page - 1?>">前のページへ</a> |
             <?php endif;?>
-            <?php for ($i = 1; $i <= ceil($pageNum[0] / 5); $i++) :?>
+            <?php for ($i = 1; $i <= ceil($pageNum / 5); $i++) :?>
                 <?php if ($page == $i) :?>
                     <?=$i?> |
                 <?php else :?>
                     <a href="?page=<?=$i?>"><?=$i?></a> |
                 <?php endif;?>
             <?php endfor;?>
-            <?php if ($page == ceil($pageNum[0] / 5)) :?>
+            <?php if ($page == ceil($pageNum / 5)) :?>
                 次のページへ
             <?php else :?>
                 <a href="?page=<?=$page + 1?>">次のページへ</a>
