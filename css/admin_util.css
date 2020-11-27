@@ -112,3 +112,14 @@ footer p {
     font-size: 25px;
     margin-top: 20px;
 }
+
+.purchase-list {
+    text-align: center;
+}
+
+.page {
+    text-align: center;
+    margin-top: 10px;
+    margin-right: 10px;
+    font-size: 20px;
+}
