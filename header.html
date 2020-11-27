@@ -21,8 +21,11 @@
                             <a href="cart.php"><i class="fas fa-shopping-cart fa-2x"></i><p>cart</p></a>
                         </li>
                     <?php endif;?>
+                    <li class="nav-item icon">
+                        <a href="logout.php"><i class="fas fa-sign-out-alt fa-2x"></i><p>logout</p></a>
+                    </li>
                 </ul>
             </div>
         </nav>
-        <p class="greeting">ようこそ<?=$_SESSION['user']['userName']?>さん <a href="logout.php" class="logout">ログアウトする</a></p>
+        <p class="greeting">ようこそ<?=$_SESSION['user']['userName']?>さん</p>
     </header>

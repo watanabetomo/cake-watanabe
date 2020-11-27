@@ -162,6 +162,12 @@ li.menu__single:hover ul.menu__second-level {
 	clear: both;
 }
 
+.postage p{
+	color: #cc9933;
+    margin-top: 20px;
+    font-size: 25px;
+}
+
 .postage a{
 	display: block;
 	text-decoration: none;
