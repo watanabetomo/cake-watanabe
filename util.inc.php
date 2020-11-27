@@ -24,7 +24,8 @@ function getPage()
         'new' => '登録'
     ];
     $upperPageTitle = [
-        'product' => '商品'
+        'product' => '商品',
+        'purchase'=> '注文情報'
     ];
     $lowerPageTitle = [
         'list' => '一覧',
