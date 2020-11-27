@@ -19,6 +19,10 @@ try {
 } catch (PDOException $e) {
     $error = 'データベースに接続できませんでした。';
 }
+
+if (isset($_POST['cancel'])) {
+
+}
 ?>
 
 <?php require_once('admin_header.html')?>
@@ -66,7 +70,8 @@ try {
                     </td>
                     <td>
                         <form action="" method="post">
-                            <p><input type="submit" value="キャンセル"></p>
+                            <input type="hidden" value="<?=$order['id']?>">
+                            <p><input type="submit" name="cancel" value="キャンセル"></p>
                         </form>
                     </td>
                 </tr>

@@ -2,7 +2,7 @@
 id 在庫情報id（主キー）
 product_detail_id 商品詳細id
 actual_num 実在庫数
-unsettled_num 注文未確定在庫数
+unsettled_num 注文未確定在庫数(今回は使いません)
 name 商品名
 size サイズ
 price 価格
