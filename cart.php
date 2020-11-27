@@ -23,6 +23,8 @@ try {
     } elseif (isset($_POST['change'])) {
         if ($_POST['num'] > 0) {
             $cartModel->changeNum($_POST['num'], $_POST['id']);
+        }elseif ($_POST['num'] == 0) {
+            $cartModel->delete($_POST['id']);
         } else {
             $numError = '商品点数は1以上の数値を入力してください';
         }

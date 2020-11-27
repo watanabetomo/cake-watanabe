@@ -1,7 +1,16 @@
 body {
     background-image: url("../img/contentback.jpg");
     text-align: center;
-    margin-top: 200px;
+}
+
+.logo {
+    margin: 0 auto;
+    width: 600px;
+    height: 255px;
+}
+
+main {
+    min-height: 350px;
 }
 
 table {
@@ -10,7 +19,7 @@ table {
 
 .card {
     width: 50%;
-    margin: 0 auto;
+    margin: 30px auto;
     background-color: #ffe;
 }
 
@@ -24,4 +33,16 @@ p {
 
 .error {
     color: red;
+}
+
+footer{
+    background: black;
+    height: 100px;
+}
+
+.footer{
+    text-align: center;
+    color: white;
+    margin-bottom: 0;
+    padding-top: 20px;
 }

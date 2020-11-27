@@ -89,7 +89,6 @@ try {
     <div id="wrapper">
         <header>
             <p class="error"><?=isset($error) ? $error : ''?></p>
-            <p class="top-nav"><a href="login.php">ログイン</a> <a href="cart.php">カート</a></p>
             <div id="slider">
                 <ul class="bxslider">
                     <li><img src="img/slide01.jpg"></li>
@@ -131,6 +130,14 @@ try {
                 <li class="menu__single">
                     <span><a href="http://www.amazon.co.jp/gp/redirect.html?ie=UTF8&amp;location=http%3A%2F%2Fwww.amazon.co.jp%2Fb%3Fie%3DUTF8%26me%3DA1LTMHN3LQOUNT%26qid%3D1224330145&amp;tag=suumr202-22&amp;linkCode=ur2&amp;camp=247&amp;creative=7399">
                             amazon</a></span>
+                </li>
+                <li class="menu__single">
+                    <span><a href="login.php">
+                            login</a></span>
+                </li>
+                <li class="menu__single">
+                    <span><a href="cart.php">
+                            cart</a></span>
                 </li>
             </ul>
             <div class="postage">

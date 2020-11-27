@@ -28,7 +28,6 @@ if (isset($_POST['login'])) {
 
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -38,27 +37,35 @@ if (isset($_POST['login'])) {
 </head>
 
 <body>
-    <div class="card">
-        <div class="card-body">
-            <h1>洋菓子店カサミンゴー 会員ログイン</h1>
-            <?php if (isset($error)) :?>
-                <p class="error"><?=$error?></p>
-            <?php endif;?>
-            <form action="" method="post">
-                <table>
-                    <tr>
-                        <th>ログインID</th>
-                        <td><input type="text" name="id" value="<?=isset($_POST['id']) ? $_POST['id'] : ''?>"></td>
-                    </tr>
-                    <tr>
-                        <th>パスワード</th>
-                        <td><input type="password" name="pass"></td>
-                    </tr>
-                </table>
-                <p><input type="submit" name="login" value="ログイン"></p>
-            </form>
+    <header>
+        <a href="index.php"><img class="logo" src="img/logo.png" alt="logo.png"></a>
+    </header>
+    <main>
+        <div class="card">
+            <div class="card-body">
+                <h1>洋菓子店カサミンゴー 会員ログイン</h1>
+                <?php if (isset($error)) :?>
+                    <p class="error"><?=$error?></p>
+                <?php endif;?>
+                <form action="" method="post">
+                    <table>
+                        <tr>
+                            <th>ログインID</th>
+                            <td><input type="text" name="id" value="<?=isset($_POST['id']) ? $_POST['id'] : ''?>"></td>
+                        </tr>
+                        <tr>
+                            <th>パスワード</th>
+                            <td><input type="password" name="pass"></td>
+                        </tr>
+                    </table>
+                    <p><input type="submit" name="login" value="ログイン"></p>
+                </form>
+            </div>
         </div>
-    </div>
+    </main>
+    <footer>
+        <p class="footer">Copyright Casa Mingo All Rights Reserved.　Kitaowaribe397-1 Nagano-shi Nagano 3810014 JAPAN</p>
+    </footer>
 </body>
 
 </html>
