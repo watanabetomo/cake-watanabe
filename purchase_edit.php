@@ -119,6 +119,7 @@ if (isset($_POST['submit'])) {
 }
 
 $address = (isset($hitAddress) ? $hitAddress : []) + $_POST + $user;
+$checkedPayment = isset($_POST['payment']) ? $_POST['payment'] : '1';
 
 ?>
 
@@ -259,7 +260,7 @@ $address = (isset($hitAddress) ? $hitAddress : []) + $_POST + $user;
                 <td>
                     <?php if (!empty($payments)) :?>
                         <?php foreach ($payments as $payment) :?>
-                            <input type="radio" name="payment" class="radio" value="<?=$payment['id']?>"<?=($payment['name'] == '各種クレジットカード決済') ? ' checked' : ''?>><?=$payment['name']?>
+                            <input type="radio" name="payment" class="radio" value="<?=$payment['id']?>"<?=($payment['id'] == $checkedPayment) ? ' checked' : ''?>><?=$payment['name']?>
                         <?php endforeach;?>
                     <?php else:?>
                         <p>支払方法がありません</p>
