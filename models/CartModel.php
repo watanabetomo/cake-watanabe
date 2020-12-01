@@ -269,7 +269,7 @@ class CartModel extends Model
                 . "住所：福島県郡山市中ノ目3-149-12\n"
                 . "mail：t.watanabe@ebacorp.jp\n"
                 . '〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜';
-            mb_language('uni');
+            mb_language('japanese');
             mb_internal_encoding('UTF-8');
             if (!mb_send_mail(
                 $user['mail'],
