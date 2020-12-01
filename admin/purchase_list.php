@@ -13,16 +13,23 @@ if (isset($_GET['page'])) {
 }
 
 try {
+    $orderDetailModel = new OrderDetailModel();
     $orderModel = new OrderModel();
-    $orders = $orderModel->pagination($page);
-    $pageNum = $orderModel->countPage();
 } catch (PDOException $e) {
-    $error = 'データベースに接続できませんでした。';
+    $error = 'データベースに接続できませんでした。<br>カスタマーサポートにお問い合わせください。';
 }
 
 if (isset($_POST['cancel'])) {
-
+    try {
+        $orderModel->cancel($_POST['id']);
+    } catch (PDOException $e) {
+        $error = '注文情報のキャンセルに失敗しました。<br>カスタマーサポートにお問い合わせください。';
+    }
 }
+
+$orders = $orderModel->pagination($page);
+$pageNum = $orderModel->countPage();
+
 ?>
 
 <?php require_once('admin_header.html')?>
@@ -50,7 +57,6 @@ if (isset($_POST['cancel'])) {
             </tr>
             <?php foreach ($orders as $order) :?>
                 <?php
-                    $orderDetailModel = new OrderDetailModel();
                     $orderDetails = $orderDetailModel->getOrderDetail($order['id']);
                 ?>
                 <tr>
@@ -80,7 +86,7 @@ if (isset($_POST['cancel'])) {
                     </td>
                     <td>
                         <form action="" method="post">
-                            <input type="hidden" value="<?=$order['id']?>">
+                            <input type="hidden" name="id" value="<?=$order['id']?>">
                             <p><input type="submit" name="cancel" value="キャンセル"></p>
                         </form>
                     </td>

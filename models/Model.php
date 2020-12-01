@@ -1,5 +1,6 @@
 <?php
 require_once('UserModel.php');
+require_once('StockModel.php');
 require_once('OrderModel.php');
 require_once('OrderDetailModel.php');
 require_once('CartModel.php');
