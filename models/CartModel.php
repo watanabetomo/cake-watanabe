@@ -163,7 +163,7 @@ class CartModel extends Model
      *
      * @return void
      */
-    public function purchaseComplete()
+    public function purchaseComplete($purchaseInfo)
     {
         global $prefectures;
         try {
@@ -175,30 +175,30 @@ class CartModel extends Model
             $orderModel = new OrderModel();
             $orderModel->commitOrder(
                 $_SESSION['user']['userId'],
-                $_SESSION['purchase_info']['name'],
-                $_SESSION['purchase_info']['name_kana'],
+                $purchaseInfo['name'],
+                $purchaseInfo['name_kana'],
                 $user['mail'],
-                $_SESSION['purchase_info']['tel1'],
-                $_SESSION['purchase_info']['tel2'],
-                $_SESSION['purchase_info']['tel3'],
-                $_SESSION['purchase_info']['postal_code1'],
-                $_SESSION['purchase_info']['postal_code2'],
-                array_search($_SESSION['purchase_info']['pref'], $prefectures),
-                $_SESSION['purchase_info']['city'],
-                $_SESSION['purchase_info']['address'],
-                $_SESSION['purchase_info']['other'],
-                $_SESSION['purchase_info']['payment'],
-                $_SESSION['purchase_info']['sub_price'],
-                $_SESSION['purchase_info']['shipping'],
+                $purchaseInfo['tel1'],
+                $purchaseInfo['tel2'],
+                $purchaseInfo['tel3'],
+                $purchaseInfo['postal_code1'],
+                $purchaseInfo['postal_code2'],
+                $purchaseInfo['pref'],
+                $purchaseInfo['city'],
+                $purchaseInfo['address'],
+                $purchaseInfo['other'],
+                $purchaseInfo['payment'],
+                $purchaseInfo['sub_price'],
+                $purchaseInfo['shipping'],
                 TAX * 100,
-                $_SESSION['purchase_info']['total_price'],
+                $purchaseInfo['total_price'],
                 $this->dbh
             );
             $id = $this->dbh->lastInsertId();
             $productDetailModel = new ProductDetailModel();
             $productModel = new ProductModel();
             $oederDetailModel = new OrderDetailModel();
-            foreach ($cart as $item) {
+            foreach ($cart['cart'] as $item) {
                 $productDetail = $productDetailModel->fetchById($item['product_detail_id']);
                 $product = $productModel->fetchSingleProduct($productDetail['product_id']);
                 $oederDetailModel->registOrderDetail(
@@ -221,7 +221,7 @@ class CartModel extends Model
                 . "今一度ご購入商品等にお間違えなどないよう、ご確認いただけましたら幸いでございます。\n\n"
                 . "--------------------------------------\n\n"
                 . "【購入情報】\n\n";
-            foreach ($cart as $item) {
+            foreach ($cart['cart'] as $item) {
                 $productDetail = $productDetailModel->fetchById($item['product_detail_id']);
                 $product = $productModel->fetchSingleProduct($productDetail['product_id']);
                 $mailBody .=
@@ -232,22 +232,22 @@ class CartModel extends Model
                     . "-----------------------\n\n";
             }
             $mPaymentModel = new MPaymentModel();
-            $payment = $mPaymentModel->fetchByid($_SESSION['purchase_info']['payment']);
+            $payment = $mPaymentModel->fetchByid($purchaseInfo['payment']);
             $mailBody .=
-                '小計： ' . $_SESSION['purchase_info']['sub_price'] . "円\n"
-                . '消費税： ' . floor($_SESSION['purchase_info']['sub_price'] * TAX) . "円\n"
-                . '送料： ' . $_SESSION['purchase_info']['shipping'] . "円\n"
-                . '合計： ' . $_SESSION['purchase_info']['total_price'] . "円\n\n"
+                '小計： ' . $purchaseInfo['sub_price'] . "円\n"
+                . '消費税： ' . $purchaseInfo['tax_price'] . "円\n"
+                . '送料： ' . $purchaseInfo['shipping'] . "円\n"
+                . '合計： ' . $purchaseInfo['total_price'] . "円\n\n"
                 . "--------------------------------------\n\n"
                 . "【送付先情報】\n\n"
-                . 'お名前： ' . $_SESSION['purchase_info']['name'] . "\n"
-                . 'フリガナ： ' . $_SESSION['purchase_info']['name_kana'] . "\n"
-                . '電話番号： ' . $_SESSION['purchase_info']['tel1'] . ' - ' . $_SESSION['purchase_info']['tel2'] . ' - ' . $_SESSION['purchase_info']['tel3'] . "\n"
-                . '郵便番号： ' . $_SESSION['purchase_info']['postal_code1'] . ' - ' . $_SESSION['purchase_info']['postal_code2'] . "\n"
-                . '都道府県： ' . $_SESSION['purchase_info']['pref'] . "\n"
-                . '市区町村： ' . $_SESSION['purchase_info']['city'] . "\n"
-                . '番地： ' . $_SESSION['purchase_info']['address'] . "\n"
-                . 'マンション名等： ' . $_SESSION['purchase_info']['other'] . "\n\n"
+                . 'お名前： ' . $purchaseInfo['name'] . "\n"
+                . 'フリガナ： ' . $purchaseInfo['name_kana'] . "\n"
+                . '電話番号： ' . $purchaseInfo['tel1'] . ' - ' . $purchaseInfo['tel2'] . ' - ' . $purchaseInfo['tel3'] . "\n"
+                . '郵便番号： ' . $purchaseInfo['postal_code1'] . ' - ' . $purchaseInfo['postal_code2'] . "\n"
+                . '都道府県： ' . $purchaseInfo['pref'] . "\n"
+                . '市区町村： ' . $purchaseInfo['city'] . "\n"
+                . '番地： ' . $purchaseInfo['address'] . "\n"
+                . 'マンション名等： ' . $purchaseInfo['other'] . "\n\n"
                 . "--------------------------------------\n\n"
                 . "【請求先情報】\n\n"
                 . 'お名前： ' . $user['name'] . "\n"

@@ -6,7 +6,10 @@ if (!isset($_SESSION['user']['authenticated'])) {
     exit;
 }
 
-if ((isset($_POST['token']) ? $_POST['token'] : '') != getToken()) {
+if (
+    (isset($_POST['token']) ? $_POST['token'] : '') != getToken()
+    and !isset($_POST['submit'])
+) {
     header('Location: cart.php');
     exit;
 }
@@ -225,6 +228,9 @@ $purchaseInfo = $_POST + $user;
     <ul class="form">
         <li>
             <form action="purchase_done.php" method="post">
+                <?php foreach ($purchaseInfo as $key => $value) :?>
+                    <input type="hidden" name="<?=$key?>" value="<?=$value?>">
+                <?php endforeach;?>
                 <p><input type="submit" name="send" class="btn btn-success" value="購入する"></p>
             </form>
         </li>

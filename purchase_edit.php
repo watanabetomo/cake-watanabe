@@ -9,6 +9,7 @@ if (!isset($_SESSION['user']['authenticated'])) {
 if (
     !isset($_POST['purchase'])
     and !isset($_POST['fix'])
+    and !isset($_POST['submit'])
     and !isset($_POST['address_search'])
 ) {
     header('Location: cart.php');
@@ -110,12 +111,13 @@ $checkedPayment = isset($_POST['payment']) ? $_POST['payment'] : '1';
     </table>
     <form action="purchase_conf.php#address" method="post">
         <input type="hidden" name="token" value="<?=getToken()?>">
-        <input type="hidden" name="sub_price" value="<?=number_formet($cart['totalPrice'])?>">
+        <input type="hidden" name="sub_price" value="<?=number_format($cart['totalPrice'])?>">
+        <input type="hidden" name="tax_price" value="<?=number_format($cart['totalPrice'] * TAX)?>">
         <input type="hidden" name="shipping" value="<?=number_format($cart['shipping'])?>">
         <input type="hidden" name="total_price" value="<?=number_format(floor($cart['totalPrice'] * (1 + TAX) + $cart['shipping']))?>">
         <p class="contents-title" id="address">送付先情報<span class="sub-message">※登録住所以外へ送る場合は変更してください</span></p>
         <p class="toggle-radio"><input type="radio" name="sendFor" id="sendFor1" value="1"<?=(isset($_GET['action']) and $_GET['action'] == 'fix') ? ' checked' : ''?>>変更する <input type="radio" name="sendFor" id="sendFor2" value="2"<?=!isset($_GET['action']) ? ' checked' : ''?>>変更しない</p>
-        <table class="table send-for table-left"<?=!isset($_GET['action']) ? ' style="display: none;"' : ''?>>
+        <table class="table send-for table-left"<?=!isset($_GET['action']) and $_GET['action'] == 'fix' ? ' style="display: none;"' : ''?>>
             <tr>
                 <th>
                     郵便番号
@@ -217,7 +219,7 @@ $checkedPayment = isset($_POST['payment']) ? $_POST['payment'] : '1';
                 <td>
                     <?php if (!empty($payments)) :?>
                         <?php foreach ($payments as $payment) :?>
-                            <input type="radio" name="payment" class="radio" value="<?=$payment['id']?>"<?=($payment['id'] == $checkedPayment) ? ' checked' : ''?>><?=$payment['name']?>
+                            <input type="radio" name="payment" class="radio" value="<?=h($payment['id'])?>"<?=($payment['id'] == $checkedPayment) ? ' checked' : ''?>><?=$payment['name']?>
                         <?php endforeach;?>
                     <?php else:?>
                         <p>支払方法がありません</p>

@@ -28,7 +28,7 @@ try {
     }
     $cart = $cartModel->fetchAll();
 } catch (Exception $e) {
-    $databaseError = '商品情報の取得および更新に失敗しました。<br>カスタマーサポートにお問い合わせください。';
+    $databaseError = '商品情報の取得に失敗しました。<br>カスタマーサポートにお問い合わせください。';
 }
 
 ?>
