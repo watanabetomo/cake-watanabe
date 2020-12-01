@@ -15,12 +15,14 @@ try {
         $cartModel->addToCart($_POST['detail_id']);
     } elseif (isset($_POST['delete'])) {
         $cartModel->delete($_POST['id']);
-    } elseif (isset($_POST['change']) and preg_match('/^[0-9]*$/', $_POST['num'])) {
-        if ($_POST['num'] > 0) {
-            $cartModel->changeNum($_POST['num'], $_POST['id']);
-        }elseif ($_POST['num'] == 0) {
-            $cartModel->delete($_POST['id']);
-        } else {
+    } elseif (isset($_POST['change'])) {
+        if (preg_match('/^[0-9]*$/', $_POST['num'])) {
+            if ($_POST['num'] > 0) {
+                $cartModel->changeNum($_POST['num'], $_POST['id']);
+            } elseif ($_POST['num'] == 0) {
+                $cartModel->delete($_POST['id']);
+            }
+        }else {
             $numError = '商品点数は0以上の数値を入力してください';
         }
     } elseif (isset($_POST['clear'])) {
