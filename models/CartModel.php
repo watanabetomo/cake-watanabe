@@ -274,14 +274,14 @@ class CartModel extends Model
                 . '〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜';
             mb_language('uni');
             mb_internal_encoding('UTF-8');
-            if (!mb_send_mail(
-                $user['mail'],
-                '【洋菓子店カサミンゴー】ご購入商品確認メール',
-                $mailBody,
-                'From:' . mb_encode_mimeheader('洋菓子店カサミンゴー')
-            )) {
-                throw new Exception;
-            }
+            // if (!mb_send_mail(
+            //     $user['mail'],
+            //     '【洋菓子店カサミンゴー】ご購入商品確認メール',
+            //     $mailBody,
+            //     'From:' . mb_encode_mimeheader('洋菓子店カサミンゴー')
+            // )) {
+            //     throw new Exception;
+            // }
             $this->dbh->commit();
         } catch (Exception $e) {
             $this->dbh->rollBack();

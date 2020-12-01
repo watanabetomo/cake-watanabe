@@ -15,7 +15,7 @@ class StockModel extends Model
             'UPDATE '
                 . 'stock '
             . 'SET '
-                . 'num = ? '
+                . 'actual_num = ? '
             . 'WHERE '
                 . 'product_detail_id = ?'
         ;
@@ -38,7 +38,7 @@ class StockModel extends Model
     {
         $sql =
             'SELECT '
-                . 'num '
+                . 'actual_num '
             . 'FROM '
                 . 'stock '
             . 'WHERE '
