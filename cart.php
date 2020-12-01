@@ -40,22 +40,22 @@ try {
             <div class="card">
                 <div class="card-body">
                     <form action="purchase_edit.php" method="post">
-                        <?php if (!empty($cart[0])) :?>
+                        <?php if (!empty($cart['cart'])) :?>
                             <p class="purchase"><input type="submit" name="purchase" value="レジに進む" class="btn btn-success"></p>
                         <?php endif;?>
                         <p class="sub-title">合計金額（税込）</p>
                         <table class="table table-right">
                             <tr>
                                 <th>小計</th>
-                                <td><?=!empty(h($carth[0])) ? number_format(h($cart[1])) . '円' : ''?></td>
+                                <td><?=!empty($cart['cart']) ? number_format(h($cart['totalPrice'])) . '円' : ''?></td>
                             </tr>
                             <tr>
                                 <th>商品点数</th>
-                                <td><?=!empty(h($cart[0])) ? h($cart[2]) . '点' : ''?></td>
+                                <td><?=!empty($cart['cart']) ? h($cart['totalCount']) . '点' : ''?></td>
                             </tr>
                             <tr>
                                 <th>送料</th>
-                                <td><?=!empty(h($cart[0])) ? number_format(h($cart[3])) . '円' : ''?></td>
+                                <td><?=!empty($cart['cart']) ? number_format(h($cart['shipping'])) . '円' : ''?></td>
                             </tr>
                         </table>
                     </form>
@@ -65,7 +65,7 @@ try {
         <div class="box2">
             <p class="contents-title">カート</p>
             <p class="error"><?=isset($numError) ? $numError : ''?></p>
-            <?php if (!empty($cart[0])) :?>
+            <?php if (!empty($cart['cart'])) :?>
                 <table class="table-bordered table-center cart">
                     <tr>
                         <th>
@@ -90,7 +90,7 @@ try {
                             税抜価格
                         </th>
                     </tr>
-                    <?php foreach ($cart[0] as $item) :?>
+                    <?php foreach ($cart['cart'] as $item) :?>
                         <?php
                             $productDetail = $productDetailModel->fetchById($item['product_detail_id']);
                             $product = $productModel->fetchSingleDetail($productDetail['product_id']);

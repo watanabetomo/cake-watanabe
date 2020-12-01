@@ -101,7 +101,7 @@ $purchaseInfo = $_POST + $user;
             <th>単価</th>
             <th>税抜価格</th>
         </tr>
-        <?php foreach ($cart[0] as $item) :?>
+        <?php foreach ($cart['cart'] as $item) :?>
             <?php
                 $productDetail = $productDetailModel->fetchById($item['product_detail_id']);
                 $product = $productModel->fetchSingleDetail($productDetail['product_id']);
@@ -117,22 +117,22 @@ $purchaseInfo = $_POST + $user;
         <?php endforeach;?>
         <tr>
             <td colspan="2">小計</td>
-            <td><?=h($cart[2])?></td>
+            <td><?=h($cart['totalCount'])?></td>
             <td></td>
             <td></td>
-            <td><?=number_format(h($cart[1]))?>円</td>
+            <td><?=number_format(h($cart['totalPrice']))?>円</td>
         </tr>
         <tr>
             <td colspan="5">消費税</td>
-            <td><?=number_format(floor(h($cart[1]) * TAX))?>円</td>
+            <td><?=number_format(floor(h($cart['totalPrice']) * TAX))?>円</td>
         </tr>
         <tr>
             <td colspan="5">送料（税込み）</td>
-            <td><?=number_format(h($cart[3]))?>円</td>
+            <td><?=number_format(h($cart['shipping']))?>円</td>
         </tr>
         <tr>
             <td colspan="5">総合計</td>
-            <td><?=number_format(floor(h($cart[1]) * (1 + TAX) + h($cart[3])))?>円</td>
+            <td><?=number_format(floor(h($cart['totalPrice']) * (1 + TAX) + h($cart['shipping'])))?>円</td>
         </tr>
     </table>
     <p class="contents-title">送付先情報</p>

@@ -74,7 +74,7 @@ $checkedPayment = isset($_POST['payment']) ? $_POST['payment'] : '1';
             <th>単価</th>
             <th>税抜価格</th>
         </tr>
-        <?php foreach ($cart[0] as $item) :?>
+        <?php foreach ($cart['cart'] as $item) :?>
             <?php
                 $productDetail = $productDetailModel->fetchById($item['product_detail_id']);
                 $product = $productModel->fetchSingleDetail($productDetail['product_id']);
@@ -90,29 +90,29 @@ $checkedPayment = isset($_POST['payment']) ? $_POST['payment'] : '1';
         <?php endforeach;?>
         <tr>
             <td colspan="2">小計</td>
-            <td><?=h($cart[2])?></td>
+            <td><?=h($cart['totalCount'])?></td>
             <td></td>
             <td></td>
-            <td><?=number_format(h($cart[1]))?>円</td>
+            <td><?=number_format(h($cart['totalPrice']))?>円</td>
         </tr>
         <tr>
             <td colspan="5">消費税</td>
-            <td><?=number_format(floor(h($cart[1]) * TAX))?>円</td>
+            <td><?=number_format(floor(h($cart['totalPrice']) * TAX))?>円</td>
         </tr>
         <tr>
             <td colspan="5">送料（税込み）</td>
-            <td><?=number_format(h($cart[3]))?>円</td>
+            <td><?=number_format(h($cart['shipping']))?>円</td>
         </tr>
         <tr>
             <td colspan="5">総合計</td>
-            <td><?=number_format(floor(h($cart[1]) * (1 + TAX) + h($cart[3])))?>円</td>
+            <td><?=number_format(floor(h($cart['totalPrice']) * (1 + TAX) + h($cart['shipping'])))?>円</td>
         </tr>
     </table>
     <form action="purchase_conf.php#address" method="post">
         <input type="hidden" name="token" value="<?=getToken()?>">
-        <input type="hidden" name="sub_price" value="<?=number_formet($cart[1])?>">
-        <input type="hidden" name="shipping" value="<?=number_format($cart[3])?>">
-        <input type="hidden" name="total_price" value="<?=number_format(floor($cart[1] * (1 + TAX) + $cart[3]))?>">
+        <input type="hidden" name="sub_price" value="<?=number_formet($cart['totalPrice'])?>">
+        <input type="hidden" name="shipping" value="<?=number_format($cart['shipping'])?>">
+        <input type="hidden" name="total_price" value="<?=number_format(floor($cart['totalPrice'] * (1 + TAX) + $cart['shipping']))?>">
         <p class="contents-title" id="address">送付先情報<span class="sub-message">※登録住所以外へ送る場合は変更してください</span></p>
         <p class="toggle-radio"><input type="radio" name="sendFor" id="sendFor1" value="1"<?=(isset($_GET['action']) and $_GET['action'] == 'fix') ? ' checked' : ''?>>変更する <input type="radio" name="sendFor" id="sendFor2" value="2"<?=!isset($_GET['action']) ? ' checked' : ''?>>変更しない</p>
         <table class="table send-for table-left"<?=!isset($_GET['action']) ? ' style="display: none;"' : ''?>>

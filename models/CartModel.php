@@ -9,14 +9,18 @@ class CartModel extends Model
      */
     public function addToCart($detailId)
     {
-        $cart = $this->fetchAll();
-        foreach ($cart[0] as $item) {
-            if ($item['product_detail_id'] == $detailId) {
-                $this->addNum($item['product_detail_id']);
-                $idExist = true;
-            }
-        }
-        if (!isset($idExist)) {
+        $sql =
+            'SELECT '
+                . '* '
+            . 'FROM '
+                . 'cart '
+            . 'WHERE '
+                . 'product_detail_id = ?'
+        ;
+        $stmt = $this->dbh->prepare($sql);
+        $stmt->execute([$detailId]);
+        $cart = $stmt->fetch();
+        if (empty($cart)) {
             $sql =
                 'INSERT '
                 . 'INTO '
@@ -33,6 +37,8 @@ class CartModel extends Model
             ;
             $stmt = $this->dbh->prepare($sql);
             $stmt->execute([$_SESSION['user']['userId'], $detailId]);
+        } else {
+            $this->addNum($detailId);
         }
     }
 
@@ -58,7 +64,12 @@ class CartModel extends Model
             $totalCount += $item['num'];
             $totalPrice += $item['num'] * $productDetail['price'];
         }
-        return [$cart, $totalPrice, $totalCount, ($totalPrice > 10000) ? 0 : 1000];
+        return [
+            'cart' => $cart,
+            'totalPrice' => $totalPrice,
+            'totalCount' => $totalCount,
+            'shipping' => ($totalPrice > 10000) ? 0 : 1000
+        ];
     }
 
     /**
