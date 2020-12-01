@@ -117,22 +117,22 @@ $purchaseInfo = $_POST + $user;
         <?php endforeach;?>
         <tr>
             <td colspan="2">小計</td>
-            <td><?=$cart[2]?></td>
+            <td><?=h($cart[2])?></td>
             <td></td>
             <td></td>
-            <td><?=number_format($cart[1])?>円</td>
+            <td><?=number_format(h($cart[1]))?>円</td>
         </tr>
         <tr>
             <td colspan="5">消費税</td>
-            <td><?=number_format(floor($cart[1] * TAX))?>円</td>
+            <td><?=number_format(floor(h($cart[1]) * TAX))?>円</td>
         </tr>
         <tr>
             <td colspan="5">送料（税込み）</td>
-            <td><?=number_format($cart[3])?>円</td>
+            <td><?=number_format(h($cart[3]))?>円</td>
         </tr>
         <tr>
             <td colspan="5">総合計</td>
-            <td><?=number_format(floor($tcart[1] * (1 + TAX) + $cart[3]))?>円</td>
+            <td><?=number_format(floor(h($cart[1]) * (1 + TAX) + h($cart[3])))?>円</td>
         </tr>
     </table>
     <p class="contents-title">送付先情報</p>
@@ -142,7 +142,7 @@ $purchaseInfo = $_POST + $user;
                 郵便番号
             </th>
             <td>
-                <?=$purchaseInfo['postal_code1'] . ' - ' . $purchaseInfo['postal_code2']?>
+                <?=h($purchaseInfo['postal_code1']) . ' - ' . h($purchaseInfo['postal_code2'])?>
             </td>
         </tr>
         <tr>
@@ -150,7 +150,7 @@ $purchaseInfo = $_POST + $user;
                 住所
             </th>
             <td>
-                <?=$purchaseInfo['pref'] . $purchaseInfo['city'] . $purchaseInfo['address'] . $purchaseInfo['other']?>
+                <?=h($purchaseInfo['pref']) . h($purchaseInfo['city']) . h($purchaseInfo['address']) . h($purchaseInfo['other'])?>
             </td>
         </tr>
         <tr>
@@ -158,7 +158,7 @@ $purchaseInfo = $_POST + $user;
                 電話番号
             </th>
             <td>
-                <?=$purchaseInfo['tel1'] . ' - ' . $purchaseInfo['tel2'] . ' - ' . $purchaseInfo['tel3']?>
+                <?=h($purchaseInfo['tel1']) . ' - ' . h($purchaseInfo['tel2']) . ' - ' . h($purchaseInfo['tel3'])?>
             </td>
         </tr>
         <tr>
@@ -166,8 +166,8 @@ $purchaseInfo = $_POST + $user;
                 お名前
             </th>
             <td>
-                <p><?=$purchaseInfo['name_kana']?></p>
-                <p><?=$purchaseInfo['name']?></p>
+                <p><?=h($purchaseInfo['name_kana'])?></p>
+                <p><?=h($purchaseInfo['name'])?></p>
             </td>
         </tr>
     </table>
@@ -219,7 +219,7 @@ $purchaseInfo = $_POST + $user;
     <table class="table table-left">
         <tr>
             <th>支払方法</th>
-            <td><?=$payment['name']?></td>
+            <td><?=h($payment['name'])?></td>
         </tr>
     </table>
     <ul class="form">

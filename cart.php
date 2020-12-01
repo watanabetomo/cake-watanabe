@@ -47,15 +47,15 @@ try {
                         <table class="table table-right">
                             <tr>
                                 <th>小計</th>
-                                <td><?=!empty($cart[0]) ? number_format($cart[1]) . '円' : ''?></td>
+                                <td><?=!empty(h($carth[0])) ? number_format(h($cart[1])) . '円' : ''?></td>
                             </tr>
                             <tr>
                                 <th>商品点数</th>
-                                <td><?=!empty($cart[0]) ? $cart[2] . '点' : ''?></td>
+                                <td><?=!empty(h($cart[0])) ? h($cart[2]) . '点' : ''?></td>
                             </tr>
                             <tr>
                                 <th>送料</th>
-                                <td><?=!empty($cart[0]) ? number_format($cart[3]) . '円' : ''?></td>
+                                <td><?=!empty(h($cart[0])) ? number_format(h($cart[3])) . '円' : ''?></td>
                             </tr>
                         </table>
                     </form>
@@ -106,7 +106,7 @@ try {
                                 <?=isset($product['img']) ? '<img src="' . IMG_PATH . h($product['img']) . '" alt="' . h($product['img']) . '">' : '画像なし'?>
                             </td>
                             <td>
-                                <?=$product['name']?>
+                                <?=h($product['name'])?>
                             </td>
                             <td>
                                 <form action="cart.php" method="post">

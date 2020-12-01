@@ -90,22 +90,22 @@ $checkedPayment = isset($_POST['payment']) ? $_POST['payment'] : '1';
         <?php endforeach;?>
         <tr>
             <td colspan="2">小計</td>
-            <td><?=$cart[2]?></td>
+            <td><?=h($cart[2])?></td>
             <td></td>
             <td></td>
-            <td><?=number_format($cart[1])?>円</td>
+            <td><?=number_format(h($cart[1]))?>円</td>
         </tr>
         <tr>
             <td colspan="5">消費税</td>
-            <td><?=number_format(floor($cart[1] * TAX))?>円</td>
+            <td><?=number_format(floor(h($cart[1]) * TAX))?>円</td>
         </tr>
         <tr>
             <td colspan="5">送料（税込み）</td>
-            <td><?=number_format($cart[3])?>円</td>
+            <td><?=number_format(h($cart[3]))?>円</td>
         </tr>
         <tr>
             <td colspan="5">総合計</td>
-            <td><?=number_format(floor($cart[1] * (1 + TAX) + $cart[3]))?>円</td>
+            <td><?=number_format(floor(h($cart[1]) * (1 + TAX) + h($cart[3])))?>円</td>
         </tr>
     </table>
     <form action="purchase_conf.php#address" method="post">
@@ -121,7 +121,7 @@ $checkedPayment = isset($_POST['payment']) ? $_POST['payment'] : '1';
                     郵便番号
                 </th>
                 <td>
-                    <input type="text" id="postal_code1" name="postal_code1" value="<?=$address['postal_code1']?>"> - <input type="text" id="postal_code2" name="postal_code2" value="<?=$address['postal_code2']?>">
+                    <input type="text" id="postal_code1" name="postal_code1" value="<?=h($address['postal_code1'])?>"> - <input type="text" id="postal_code2" name="postal_code2" value="<?=h($address['postal_code2'])?>">
                     <input type="submit" name="address_search" formaction="purchase_edit.php?action=fix#address" formmethod="POST" value="住所検索">
                     <span class="error"><?=isset($error['postal_code1']) ? $error['postal_code1'] : ''?><?=isset($error['postal_code2']) ? $error['postal_code2'] : ''?><?=isset($addressSearchError) ? $addressSearchError : ''?></span>
                 </td>
@@ -138,9 +138,9 @@ $checkedPayment = isset($_POST['payment']) ? $_POST['payment'] : '1';
                             <?php endforeach;?>
                         </select>
                     </p>
-                    <p><input type="text" id="city" name="city" value="<?=$address['city']?>"><span class="error"><?=isset($error['city']) ? $error['city'] : ''?></span></p>
-                    <p><input type="text" id="address" name="address" value="<?=$address['address']?>"><span class="error"><?=isset($error['address']) ? $error['address'] : ''?></span></p>
-                    <p><input type="text" name="other" value="<?=$address['other']?>"><span class="error"><?=isset($error['other']) ? $error['other'] : ''?></span></p>
+                    <p><input type="text" id="city" name="city" value="<?=h($address['city'])?>"><span class="error"><?=isset($error['city']) ? $error['city'] : ''?></span></p>
+                    <p><input type="text" id="address" name="address" value="<?=h($address['address'])?>"><span class="error"><?=isset($error['address']) ? $error['address'] : ''?></span></p>
+                    <p><input type="text" name="other" value="<?=h($address['other'])?>"><span class="error"><?=isset($error['other']) ? $error['other'] : ''?></span></p>
                 </td>
             </tr>
             <tr>
@@ -149,7 +149,7 @@ $checkedPayment = isset($_POST['payment']) ? $_POST['payment'] : '1';
                 </th>
                 <td>
                     <p>
-                        <input type="text" name="tel1" value="<?=$address['tel1']?>"> - <input type="text" name="tel2" value="<?=$address['tel2']?>"> - <input type="text" name="tel3" value="<?=$address['tel3']?>">
+                        <input type="text" name="tel1" value="<?=h($address['tel1'])?>"> - <input type="text" name="tel2" value="<?=h($address['tel2'])?>"> - <input type="text" name="tel3" value="<?=h($address['tel3'])?>">
                         <span class="error"><?=isset($error['tel1']) ? $error['tel1'] : ''?><?=isset($error['tel2']) ? $error['tel2'] : ''?><?=isset($error['tel3']) ? $error['tel3'] : ''?></span>
                     </p>
                 </td>
@@ -159,8 +159,8 @@ $checkedPayment = isset($_POST['payment']) ? $_POST['payment'] : '1';
                     お名前
                 </th>
                 <td>
-                    <p><input type="text" name="name_kana" value="<?=$address['name_kana']?>"><span class="error"><?=isset($error['name_kana']) ? $error['name_kana'] : ''?></span></p>
-                    <p><input type="text" name="name" value="<?=$address['name']?>"><span class="error"><?=isset($error['name']) ? $error['name'] : ''?></span></p>
+                    <p><input type="text" name="name_kana" value="<?=h($address['name_kana'])?>"><span class="error"><?=isset($error['name_kana']) ? $error['name_kana'] : ''?></span></p>
+                    <p><input type="text" name="name" value="<?=h($address['name'])?>"><span class="error"><?=isset($error['name']) ? $error['name'] : ''?></span></p>
                 </td>
             </tr>
         </table>
