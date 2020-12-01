@@ -117,7 +117,7 @@ $checkedPayment = isset($_POST['payment']) ? $_POST['payment'] : '1';
         <input type="hidden" name="total_price" value="<?=number_format(floor($cart['totalPrice'] * (1 + TAX) + $cart['shipping']))?>">
         <p class="contents-title" id="address">送付先情報<span class="sub-message">※登録住所以外へ送る場合は変更してください</span></p>
         <p class="toggle-radio"><input type="radio" name="sendFor" id="sendFor1" value="1"<?=(isset($_GET['action']) and $_GET['action'] == 'fix') ? ' checked' : ''?>>変更する <input type="radio" name="sendFor" id="sendFor2" value="2"<?=!isset($_GET['action']) ? ' checked' : ''?>>変更しない</p>
-        <table class="table send-for table-left"<?=!isset($_GET['action']) and $_GET['action'] == 'fix' ? ' style="display: none;"' : ''?>>
+        <table class="table send-for table-left"<?=!(isset($_GET['action']) and $_GET['action'] == 'fix') ? ' style="display: none;"' : ''?>>
             <tr>
                 <th>
                     郵便番号
