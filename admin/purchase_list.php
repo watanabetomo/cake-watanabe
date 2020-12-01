@@ -28,6 +28,7 @@ if (isset($_POST['cancel'])) {
         $error = '注文情報のキャンセルに失敗しました。<br>カスタマーサポートにお問い合わせください。';
     }
 }
+
 ?>
 
 <?php require_once('admin_header.html')?>
