@@ -13,6 +13,7 @@ if (isset($_GET['page'])) {
 }
 
 try {
+    $orderDetailModel = new OrderDetailModel();
     $orderModel = new OrderModel();
     $orders = $orderModel->pagination($page);
     $pageNum = $orderModel->countPage();
@@ -21,7 +22,16 @@ try {
 }
 
 if (isset($_POST['cancel'])) {
-
+    $orderDetails = $orderDetailModel->getOrderDetail($_POST['id']);
+    $orderModel->cancel($_POST['id']);
+    try {
+        $stockModel = new StockModel();
+        foreach ($orderDetails as $orderDetail) {
+            $stockModel->fluctuate($orderDetail['num'], $orderDetail['product_detail_id'], 0, $stockModel->dbh);
+        }
+    } catch (PDOException $e) {
+        $error = 'データベースに接続できませんでした。';
+    }
 }
 ?>
 
@@ -50,7 +60,6 @@ if (isset($_POST['cancel'])) {
             </tr>
             <?php foreach ($orders as $order) :?>
                 <?php
-                    $orderDetailModel = new OrderDetailModel();
                     $orderDetails = $orderDetailModel->getOrderDetail($order['id']);
                 ?>
                 <tr>
@@ -80,7 +89,7 @@ if (isset($_POST['cancel'])) {
                     </td>
                     <td>
                         <form action="" method="post">
-                            <input type="hidden" value="<?=$order['id']?>">
+                            <input type="hidden" name="id" value="<?=$order['id']?>">
                             <p><input type="submit" name="cancel" value="キャンセル"></p>
                         </form>
                     </td>

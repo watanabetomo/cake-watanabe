@@ -192,12 +192,14 @@ class CartModel extends Model
                 $purchaseInfo['shipping'],
                 TAX * 100,
                 $purchaseInfo['total_price'],
-                $this->dbh
+                $this->dbh,
+                2
             );
             $id = $this->dbh->lastInsertId();
             $productDetailModel = new ProductDetailModel();
             $productModel = new ProductModel();
             $oederDetailModel = new OrderDetailModel();
+            $stockModel = new StockModel();
             foreach ($cart['cart'] as $item) {
                 $productDetail = $productDetailModel->fetchById($item['product_detail_id']);
                 $product = $productModel->fetchSingleProduct($productDetail['product_id']);
@@ -210,6 +212,7 @@ class CartModel extends Model
                     $item['num'],
                     $this->dbh
                 );
+                $stockModel->fluctuate($item['num'], $item['product_detail_id'], 1, $this->dbh);
             }
             $this->deleteFromCart();
             $mailBody =

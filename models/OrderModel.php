@@ -44,7 +44,8 @@ class OrderModel extends Model
         $shipping_price,
         $tax,
         $total_price,
-        $dbh
+        $dbh,
+        $status
     ) {
         $sql =
             'INSERT '
@@ -68,8 +69,10 @@ class OrderModel extends Model
                 . 'sub_price, '
                 . 'shipping_price, '
                 . 'tax, '
-                . 'total_price'
+                . 'total_price, '
+                . 'status'
             . ') VALUES ('
+                . '?, '
                 . '?, '
                 . '?, '
                 . '?, '
@@ -109,7 +112,8 @@ class OrderModel extends Model
             $sub_price,
             $shipping_price,
             $tax,
-            $total_price
+            $total_price,
+            $status
         ]);
     }
 
@@ -135,5 +139,25 @@ class OrderModel extends Model
     {
         $this->connect();
         return $this->dbh->query('SELECT COUNT(*) FROM `order`')->fetch(PDO::FETCH_COLUMN);
+    }
+
+    /**
+     * ステータスをキャンセルに変更する
+     *
+     * @param int $id
+     * @return void
+     */
+    public function cancel($id)
+    {
+        $sql =
+            'UPDATE '
+                . 'order '
+            . 'SET '
+                . 'status = 3 '
+            . 'WHERE '
+                . 'id = ?'
+        ;
+        $stmt = $this->dbh->prepare($sql);
+        $stmt->execute([$id]);
     }
 }

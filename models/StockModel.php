@@ -9,7 +9,7 @@ class StockModel extends Model
      * @param int $code
      * @return void
      */
-    public function fluctuate($num, $id, $code)
+    public function fluctuate($num, $id, $code, $dbh)
     {
         $sql =
             'UPDATE '
@@ -19,7 +19,7 @@ class StockModel extends Model
             . 'WHERE '
                 . 'product_detail_id = ?'
         ;
-        $stmt = $this->dbh->prepare($sql);
+        $stmt = $dbh->prepare($sql);
         if ($code == 1) {
             $num = $this->getNum($id) + $num;
         } elseif ($code == 0) {
