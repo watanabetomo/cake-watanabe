@@ -10,9 +10,9 @@ class CartModel extends Model
     public function addToCart($detailId)
     {
         $cart = $this->fetchAll();
-        foreach ($cart as $prodOfTheCart) {
-            if ($prodOfTheCart['product_detail_id'] == $detailId) {
-                $this->addNum($prodOfTheCart['product_detail_id']);
+        foreach ($cart[0] as $item) {
+            if ($item['product_detail_id'] == $detailId) {
+                $this->addNum($item['product_detail_id']);
                 $idExist = true;
             }
         }
@@ -49,7 +49,16 @@ class CartModel extends Model
             . 'FROM '
                 . 'cart';
         $stmt = $this->dbh->query($sql);
-        return $stmt->fetchAll();
+        $cart = $stmt->fetchAll();
+        $totalPrice = 0;
+        $totalCount = 0;
+        $productDetailModel = new ProductDetailModel();
+        foreach ($cart as $item) {
+            $productDetail = $productDetailModel->fetchById($item['product_detail_id']);
+            $totalCount += $item['num'];
+            $totalPrice += $item['num'] * $productDetail['price'];
+        }
+        return [$cart, $totalPrice, $totalCount, ($totalPrice > 10000) ? 0 : 1000];
     }
 
     /**
@@ -178,16 +187,16 @@ class CartModel extends Model
             $productDetailModel = new ProductDetailModel();
             $productModel = new ProductModel();
             $oederDetailModel = new OrderDetailModel();
-            foreach ($cart as $prodOfTheCart) {
-                $productDetail = $productDetailModel->fetchById($prodOfTheCart['product_detail_id']);
+            foreach ($cart as $item) {
+                $productDetail = $productDetailModel->fetchById($item['product_detail_id']);
                 $product = $productModel->fetchSingleProduct($productDetail['product_id']);
                 $oederDetailModel->registOrderDetail(
                     $id,
-                    $prodOfTheCart['product_detail_id'],
+                    $item['product_detail_id'],
                     $product['name'],
                     $productDetail['size'],
                     $productDetail['price'],
-                    $prodOfTheCart['num'],
+                    $item['num'],
                     $this->dbh
                 );
             }
@@ -201,14 +210,14 @@ class CartModel extends Model
                 . "今一度ご購入商品等にお間違えなどないよう、ご確認いただけましたら幸いでございます。\n\n"
                 . "--------------------------------------\n\n"
                 . "【購入情報】\n\n";
-            foreach ($cart as $prodOfTheCart) {
-                $productDetail = $productDetailModel->fetchById($prodOfTheCart['product_detail_id']);
+            foreach ($cart as $item) {
+                $productDetail = $productDetailModel->fetchById($item['product_detail_id']);
                 $product = $productModel->fetchSingleProduct($productDetail['product_id']);
                 $mailBody .=
                     $product['name'] . "\n"
                     . $productDetail['size'] . "cm\n"
                     . $productDetail['price'] . "円\n"
-                    . $prodOfTheCart['num'] . "点\n\n"
+                    . $item['num'] . "点\n\n"
                     . "-----------------------\n\n";
             }
             $mPaymentModel = new MPaymentModel();

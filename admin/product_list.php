@@ -44,8 +44,12 @@ try {
                     <button type="submit" name="order" class="icon" value="DESC">▼</button>
                 </form>
             </th>
-            <th>画像</th>
-            <th>登録日時</th>
+            <th>
+                画像
+            </th>
+            <th>
+                登録日時
+            </th>
             <th>
                 <form action="" method="get">
                     <input type="hidden" name="column" value="updated_at">
@@ -54,15 +58,27 @@ try {
                     <button type="submit" name="order" class="icon" value="DESC">▼</button>
                 </form>
             </th>
-            <th><a href="product_edit.php?action=new" role="button" class="btn btn-sm">新規登録</a></th>
+            <th>
+                <a href="product_edit.php?action=new" role="button" class="btn btn-sm">新規登録</a>
+            </th>
         </tr>
         <?php foreach ($productList as $product) :?>
             <tr>
-                <td><?=h($product['id'])?></td>
-                <td><?=h($product['name'])?></td>
-                <td><?=isset($product['img']) ? '<img src="../' . IMG_PATH . h($product['img']) . '" alt="' . h($product['img']) . '">' : '未登録'?></td>
-                <td><?=(new DateTime(h($product['created_at'])))->format('Y-m-d H:i:s')?></td>
-                <td><?=!is_null($product['updated_at']) ? (new DateTime(h($product['updated_at'])))->format('Y-m-d H:i:s') : ''?></td>
+                <td>
+                    <?=h($product['id'])?>
+                </td>
+                <td>
+                    <?=h($product['name'])?>
+                </td>
+                <td>
+                    <?=isset($product['img']) ? '<img src="../' . IMG_PATH . h($product['img']) . '" alt="' . h($product['img']) . '">' : '未登録'?>
+                </td>
+                <td>
+                    <?=(new DateTime(h($product['created_at'])))->format('Y-m-d H:i:s')?>
+                </td>
+                <td>
+                    <?=!is_null($product['updated_at']) ? (new DateTime(h($product['updated_at'])))->format('Y-m-d H:i:s') : ''?>
+                </td>
                 <td>
                     <p>
                         <a href="product_edit.php?action=edit&id=<?=h($product['id'])?>" class="btn btn-sm" style="margin-top:20px;">編集</a>

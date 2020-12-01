@@ -6,14 +6,70 @@ if (!isset($_SESSION['user']['authenticated'])) {
     exit;
 }
 
-if ((isset($_SESSION['purchase_info']['token']) ? $_SESSION['purchase_info']['token'] : '') != getToken()) {
+if ((isset($_POST['token']) ? $_POST['token'] : '') != getToken()) {
     header('Location: cart.php');
     exit;
 }
 
+if (isset($_POST['submit'])) {
+    if ($_POST['sendFor'] == 1) {
+        if ($_POST['postal_code1'] == '') {
+            $error['postal_code1'] = '郵便番号上3桁が入力されていません。';
+        } elseif (!preg_match('/^[0-9]{3}$/', $_POST['postal_code1'])) {
+            $error['postal_code1'] = '郵便番号上3桁が間違っています。';
+        }
+        if ($_POST['postal_code2'] == '') {
+            $error['postal_code2'] = '郵便番号下4桁が入力されていません。';
+        } elseif (!preg_match('/^[0-9]{4}$/', $_POST['postal_code2'])) {
+            $error['postal_code2'] = '郵便番号下4桁が間違っています。';
+        }
+        if ($_POST['city'] == '') {
+            $error['city'] = '市区町村が入力されていません。';
+        } elseif (!preg_match('/^[0-9A-Za-zぁ-んァ-ヶー一-龠]{1,15}$/u', $_POST['city'])) {
+            $error['city'] = '市区町村が間違っています。';
+        }
+        if ($_POST['address'] == '') {
+            $error['address'] = '番地が入力されていません。';
+        } elseif (!preg_match('/^[0-9A-Za-zぁ-んァ-ヶー一-龠\-]{1,100}$/u', $_POST['address'])) {
+            $error['address'] = '番地が間違っています。';
+        }
+        if (!preg_match('/^[0-9A-Za-zぁ-んァ-ヶー一-龠\-]{0,100}$/u', $_POST['other'])) {
+            $error['other'] = '建物名等が間違っています。';
+        }
+        if ($_POST['tel1'] == '') {
+            $error['tel1'] = '市外局番が入力されていません。';
+        } elseif (!preg_match('/^[0-9]{1,5}$/', $_POST['tel1'])) {
+            $error['tel1'] = '市外局番が間違っています。';
+        }
+        if ($_POST['tel2'] == '') {
+            $error['tel2'] = '電話番号（入力欄2）が入力されていません。';
+        } elseif (!preg_match('/^[0-9]{1,5}$/', $_POST['tel2'])) {
+            $error['tel2'] = '電話番号（入力欄2）が間違っています。';
+        }
+        if ($_POST['tel3'] == '') {
+            $error['tel3'] = '電話番号（入力欄3）が入力されていません。';
+        } elseif (!preg_match('/^[0-9]{1,5}$/', $_POST['tel3'])) {
+            $error['tel3'] = '電話番号（入力欄3）が間違っています。';
+        }
+        if ($_POST['name_kana'] == '') {
+            $error['name_kana'] = 'フリガナが入力されていません。';
+        } elseif (!preg_match('/^[A-Za-zぁ-んァ-ヶー一-龠]{1,20}$/u', $_POST['name_kana'])) {
+            $error['name_kana'] = 'フリガナが間違っています。';
+        }
+        if ($_POST['name'] == '') {
+            $error['name'] = '名前が入力されていません。';
+        } elseif (!preg_match('/^[A-Za-zぁ-んァ-ヶー一-龠]{1,15}$/u', $_POST['name'])) {
+            $error['name'] = '名前が間違っています。';
+        }
+    }
+    if (isset($error)) {
+        $_GET['action'] = 'fix';
+    }
+}
+
 try {
     $paymentModel = new MPaymentModel();
-    $payment = $paymentModel->fetchById($_SESSION['purchase_info']['payment']);
+    $payment = $paymentModel->fetchById($_POST['payment']);
     $productDetailModel = new ProductDetailmodel();
     $productModel = new ProductModel();
     $cartModel = new CartModel();
@@ -22,17 +78,20 @@ try {
     $user = $userModel->fetchById($_SESSION['user']['userId']);
     $user['pref'] = $prefectures[$user['pref']];
 } catch (Exception $e) {
-    $error = '商品情報の取得に失敗しました。<br>カスタマーサポートにお問い合わせください。';
+    $databaseError = '商品情報の取得に失敗しました。<br>カスタマーサポートにお問い合わせください。';
 }
 
-$purchaseInfo = $_SESSION['purchase_info'] + $user;
+$purchaseInfo = $_POST + $user;
 
 ?>
 
 <?php require_once('header.html')?>
 <main>
+    <p class="error"><?=isset($databaseError) ? $dataBaseError : ''?></p>
+    <?php if (isset($error)) :?>
+        <?php require_once('purchase_edit.php')?>
+    <?php else :?>
     <p class="contents-title">確認</p>
-    <p class="error"><?=isset($error) ? $error : ''?></p>
     <table class="table table-bordered table-center">
         <tr>
             <th>商品画像</th>
@@ -42,65 +101,70 @@ $purchaseInfo = $_SESSION['purchase_info'] + $user;
             <th>単価</th>
             <th>税抜価格</th>
         </tr>
-        <?php
-            $totalPrice = 0;
-            $totalCount = 0;
-        ?>
-        <?php foreach ($cart as $prodOfTheCart) :?>
+        <?php foreach ($cart[0] as $item) :?>
             <?php
-                $productDetail = $productDetailModel->fetchById($prodOfTheCart['product_detail_id']);
+                $productDetail = $productDetailModel->fetchById($item['product_detail_id']);
                 $product = $productModel->fetchSingleDetail($productDetail['product_id']);
             ?>
             <tr>
                 <td><?=isset($product['img']) ? '<img src="' . IMG_PATH . h($product['img']) . '" alt="' . h($product['img']) . '">' : '画像なし'?></td>
                 <td><?=h($product['name'])?></td>
-                <td><?=h($prodOfTheCart['num'])?></td>
+                <td><?=h($item['num'])?></td>
                 <td><?=h($productDetail['size'])?>cm</td>
                 <td><?=number_format(h($productDetail['price']))?>円</td>
-                <td><?=number_format(h($prodOfTheCart['num']) * h($productDetail['price']))?>円</td>
+                <td><?=number_format(h($item['num']) * h($productDetail['price']))?>円</td>
             </tr>
-            <?php
-                $totalPrice += $productDetail['price'] * $prodOfTheCart['num'];
-                $totalCount += $prodOfTheCart['num'];
-            ?>
         <?php endforeach;?>
-        <?php $shipping = ($totalPrice > 10000) ? 0 : 1000?>
         <tr>
             <td colspan="2">小計</td>
-            <td><?=$totalCount?></td>
+            <td><?=$cart[2]?></td>
             <td></td>
             <td></td>
-            <td><?=number_format($totalPrice)?>円</td>
+            <td><?=number_format($cart[1])?>円</td>
         </tr>
         <tr>
             <td colspan="5">消費税</td>
-            <td><?=number_format(floor($totalPrice * TAX))?>円</td>
+            <td><?=number_format(floor($cart[1] * TAX))?>円</td>
         </tr>
         <tr>
             <td colspan="5">送料（税込み）</td>
-            <td><?=number_format($shipping)?>円</td>
+            <td><?=number_format($cart[3])?>円</td>
         </tr>
         <tr>
             <td colspan="5">総合計</td>
-            <td><?=number_format(floor($totalPrice * (1 + TAX) + $shipping))?>円</td>
+            <td><?=number_format(floor($tcart[1] * (1 + TAX) + $cart[3]))?>円</td>
         </tr>
     </table>
     <p class="contents-title">送付先情報</p>
     <table class="table table-left">
         <tr>
-            <th>郵便番号</th>
-            <td><?=$purchaseInfo['postal_code1'] . ' - ' . $purchaseInfo['postal_code2']?></td>
+            <th>
+                郵便番号
+            </th>
+            <td>
+                <?=$purchaseInfo['postal_code1'] . ' - ' . $purchaseInfo['postal_code2']?>
+            </td>
         </tr>
         <tr>
-            <th>住所</th>
-            <td><?=$purchaseInfo['pref'] . $purchaseInfo['city'] . $purchaseInfo['address'] . $purchaseInfo['other']?></td>
+            <th>
+                住所
+            </th>
+            <td>
+                <?=$purchaseInfo['pref'] . $purchaseInfo['city'] . $purchaseInfo['address'] . $purchaseInfo['other']?>
+            </td>
         </tr>
         <tr>
-            <th>電話番号</th>
-            <td><?=$purchaseInfo['tel1'] . ' - ' . $purchaseInfo['tel2'] . ' - ' . $purchaseInfo['tel3']?></td>
+            <th>
+                電話番号
+            </th>
+            <td>
+                <?=$purchaseInfo['tel1'] . ' - ' . $purchaseInfo['tel2'] . ' - ' . $purchaseInfo['tel3']?>
+            </td>
         </tr>
         <tr>
-            <th>お名前</th>
+            <th>
+                お名前
+            </th>
             <td>
                 <p><?=$purchaseInfo['name_kana']?></p>
                 <p><?=$purchaseInfo['name']?></p>
@@ -110,23 +174,41 @@ $purchaseInfo = $_SESSION['purchase_info'] + $user;
     <p class="contents-title">請求先情報</p>
     <table class="table table-left">
         <tr>
-            <th>郵便番号</th>
-            <td><?=h($user['postal_code1']) . ' - ' . h($user['postal_code2'])?></td>
+            <th>
+                郵便番号
+            </th>
+            <td>
+                <?=h($user['postal_code1']) . ' - ' . h($user['postal_code2'])?>
+            </td>
         </tr>
         <tr>
-            <th>住所</th>
-            <td><?=h($user['pref']) . h($user['city']) . h($user['address']) . h($user['other'])?></td>
+            <th>
+                住所
+            </th>
+            <td>
+                <?=h($user['pref']) . h($user['city']) . h($user['address']) . h($user['other'])?>
+            </td>
         </tr>
         <tr>
-            <th>電話番号</th>
-            <td><?=h($user['tel1']) . ' - ' . h($user['tel2']) . ' - ' . h($user['tel3'])?></td>
+            <th>
+                電話番号
+            </th>
+            <td>
+                <?=h($user['tel1']) . ' - ' . h($user['tel2']) . ' - ' . h($user['tel3'])?>
+            </td>
         </tr>
         <tr>
-            <th>メールアドレス</th>
-            <td><?=h($user['mail'])?></td>
+            <th>
+                メールアドレス
+            </th>
+            <td>
+                <?=h($user['mail'])?>
+            </td>
         </tr>
         <tr>
-            <th>お名前</th>
+            <th>
+                お名前
+            </th>
             <td>
                 <p><?=h($user['name_kana'])?></p>
                 <p><?=h($user['name'])?></p>
@@ -155,5 +237,6 @@ $purchaseInfo = $_SESSION['purchase_info'] + $user;
             </form>
         </li>
     </ul>
+    <?php endif;?>
 </main>
 <?php require_once('footer.html')?>

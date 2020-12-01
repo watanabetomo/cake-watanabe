@@ -35,10 +35,18 @@ if (isset($_POST['cancel'])) {
     <?php else :?>
         <table class="purchase-list" border="1">
             <tr>
-                <th>注文日</th>
-                <th>画像</th>
-                <th>商品詳細</th>
-                <th>キャンセル</th>
+                <th>
+                    注文日
+                </th>
+                <th>
+                    画像
+                </th>
+                <th>
+                    商品詳細
+                </th>
+                <th>
+                    キャンセル
+                </th>
             </tr>
             <?php foreach ($orders as $order) :?>
                 <?php
@@ -46,7 +54,9 @@ if (isset($_POST['cancel'])) {
                     $orderDetails = $orderDetailModel->getOrderDetail($order['id']);
                 ?>
                 <tr>
-                    <td><?=(new DateTime($order['created_at']))->format('Y年 m月 d日')?></td>
+                    <td>
+                        <?=(new DateTime($order['created_at']))->format('Y年 m月 d日')?>
+                    </td>
                     <td>
                         <?php
                         $productDetailModel = new ProductDetailModel();

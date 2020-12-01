@@ -359,7 +359,7 @@ try {
                                                         <input name="es_shop_id" value="1482" type="hidden">
                                                         <input name="es_stock_attr_flag" value="0" type="hidden">
                                                         <?php if ($detail['size'] != null and $detail['price'] != null) :?>
-                                                            <input name="es_submit" value="<?=h($detail['size'])?>cm ￥<?=number_format(h($detail['price']))?>" type="submit">
+                                                            <input name="add_to_cart" value="<?=h($detail['size'])?>cm ￥<?=number_format(h($detail['price']))?>" type="submit">
                                                         <?php endif;?>
                                                     </form>
                                                 </li>
