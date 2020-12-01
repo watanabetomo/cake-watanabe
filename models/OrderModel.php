@@ -126,7 +126,7 @@ class OrderModel extends Model
     public function pagination($offset)
     {
         $this->connect();
-        $stmt = $this->dbh->query('SELECT * FROM `order` LIMIT ' . ($offset - 1) * 5 . ', 5');
+        $stmt = $this->dbh->query('SELECT * FROM `order` WHERE status != 3 ORDER BY created_at DESC LIMIT ' . ($offset - 1) * 5 . ', 5');
         return $stmt->fetchAll();
     }
 
@@ -138,20 +138,20 @@ class OrderModel extends Model
     public function countPage()
     {
         $this->connect();
-        return $this->dbh->query('SELECT COUNT(*) FROM `order`')->fetch(PDO::FETCH_COLUMN);
+        return $this->dbh->query('SELECT COUNT(*) FROM `order` WHERE status != 3')->fetch(PDO::FETCH_COLUMN);
     }
 
     /**
      * ステータスをキャンセルに変更する
      *
      * @param int $id
-     * @return void
+     * @return String error
      */
     public function cancel($id)
     {
         $sql =
             'UPDATE '
-                . 'order '
+                . '`order` '
             . 'SET '
                 . 'status = 3 '
             . 'WHERE '
@@ -159,5 +159,15 @@ class OrderModel extends Model
         ;
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
+        try {
+            $orderDetailModel = new OrderDetailModel();
+            $orderDetails = $orderDetailModel->getOrderDetail($id);
+            $stockModel = new StockModel();
+            foreach ($orderDetails as $orderDetail) {
+                $stockModel->fluctuate($orderDetail['num'], $orderDetail['product_detail_id'], 0, $this->dbh);
+            }
+        } catch (PDOException $e) {
+            return new PDOException;
+        }
     }
 }

@@ -18,19 +18,14 @@ try {
     $orders = $orderModel->pagination($page);
     $pageNum = $orderModel->countPage();
 } catch (PDOException $e) {
-    $error = 'データベースに接続できませんでした。';
+    $error = 'データベースに接続できませんでした。<br>カスタマーサポートにお問い合わせください。';
 }
 
 if (isset($_POST['cancel'])) {
-    $orderDetails = $orderDetailModel->getOrderDetail($_POST['id']);
-    $orderModel->cancel($_POST['id']);
     try {
-        $stockModel = new StockModel();
-        foreach ($orderDetails as $orderDetail) {
-            $stockModel->fluctuate($orderDetail['num'], $orderDetail['product_detail_id'], 0, $stockModel->dbh);
-        }
+        $orderModel->cancel($_POST['id']);
     } catch (PDOException $e) {
-        $error = 'データベースに接続できませんでした。';
+        $error = '注文情報のキャンセルに失敗しました。<br>カスタマーサポートにお問い合わせください。';
     }
 }
 ?>
