@@ -43,7 +43,7 @@ if (isset($_POST['address_search'])) {
     }
     if (!isset($error)) {
         $postal_code = $_POST['postal_code1'] . $_POST['postal_code2'];
-        $json = json_decode(file_get_contents('https://zip-cloud.appspot.com/api/search?zipcode=${postal_code}'), true);
+        $json = json_decode(file_get_contents("https://zip-cloud.appspot.com/api/search?zipcode=${postal_code}"), true);
         if (!empty($json['results'])) {
             $hitAddress = $json['results'][0];
             $hitAddress['pref'] = $hitAddress['address1'];
@@ -111,20 +111,21 @@ $checkedPayment = isset($_POST['payment']) ? $_POST['payment'] : '1';
     </table>
     <form action="purchase_conf.php#address" method="post">
         <input type="hidden" name="token" value="<?=getToken()?>">
+        <input type="hidden" name="action" value="fix">
         <input type="hidden" name="sub_price" value="<?=number_format($cart['total_price'])?>">
         <input type="hidden" name="tax_price" value="<?=number_format($cart['total_price'] * TAX)?>">
         <input type="hidden" name="shipping" value="<?=number_format($cart['shipping'])?>">
         <input type="hidden" name="total_price" value="<?=number_format(floor($cart['total_price'] * (1 + TAX) + $cart['shipping']))?>">
         <p class="contents-title" id="address">送付先情報<span class="sub-message">※登録住所以外へ送る場合は変更してください</span></p>
-        <p class="toggle-radio"><input type="radio" name="sendFor" id="sendFor1" value="1"<?=(isset($_GET['action']) and $_GET['action'] == 'fix') ? ' checked' : ''?>>変更する <input type="radio" name="sendFor" id="sendFor2" value="2"<?=!isset($_GET['action']) ? ' checked' : ''?>>変更しない</p>
-        <table class="table send-for table-left"<?=!(isset($_GET['action']) and $_GET['action'] == 'fix') ? ' style="display: none;"' : ''?>>
+        <p class="toggle-radio"><input type="radio" name="sendFor" id="sendFor1" value="1"<?=(isset($_POST['action']) and $_POST['action'] == 'fix') ? ' checked' : ''?>>変更する <input type="radio" name="sendFor" id="sendFor2" value="2"<?=!(isset($_POST['action']) and $_POST['action'] == 'fix') ? ' checked' : ''?>>変更しない</p>
+        <table class="table send-for table-left"<?=!(isset($_POST['action']) and $_POST['action'] == 'fix') ? ' style="display: none;"' : ''?>>
             <tr>
                 <th>
                     郵便番号
                 </th>
                 <td>
                     <input type="text" id="postal_code1" name="postal_code1" value="<?=h($address['postal_code1'])?>"> - <input type="text" id="postal_code2" name="postal_code2" value="<?=h($address['postal_code2'])?>">
-                    <input type="submit" name="address_search" formaction="purchase_edit.php?action=fix#address" formmethod="POST" value="住所検索">
+                    <input type="submit" name="address_search" formaction="purchase_edit.php?#address" formmethod="POST" value="住所検索">
                     <span class="error"><?=isset($error['postal_code1']) ? $error['postal_code1'] : ''?><?=isset($error['postal_code2']) ? $error['postal_code2'] : ''?><?=isset($addressSearchError) ? $addressSearchError : ''?></span>
                 </td>
             </tr>

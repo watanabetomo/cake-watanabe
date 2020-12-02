@@ -66,7 +66,9 @@ if (isset($_POST['submit'])) {
         }
     }
     if (isset($error)) {
-        $_GET['action'] = 'fix';
+        $_POST['action'] = 'fix';
+        require_once('purchase_edit.php');
+        exit;
     }
 }
 
@@ -91,9 +93,6 @@ $purchaseInfo = $_POST + $user;
 <?php require_once('header.html')?>
 <main>
     <p class="error"><?=isset($databaseError) ? $dataBaseError : ''?></p>
-    <?php if (isset($error)) :?>
-        <?php require_once('purchase_edit.php')?>
-    <?php else :?>
     <p class="contents-title">確認</p>
     <table class="table table-bordered table-center">
         <tr>
@@ -120,14 +119,14 @@ $purchaseInfo = $_POST + $user;
         <?php endforeach;?>
         <tr>
             <td colspan="2">小計</td>
-            <td><?=h($cart['totalCount'])?></td>
+            <td><?=h($cart['total_count'])?></td>
             <td></td>
             <td></td>
-            <td><?=number_format(h($cart['totalPrice']))?>円</td>
+            <td><?=number_format(h($cart['total_price']))?>円</td>
         </tr>
         <tr>
             <td colspan="5">消費税</td>
-            <td><?=number_format(floor(h($cart['totalPrice']) * TAX))?>円</td>
+            <td><?=number_format(floor(h($cart['total_price']) * TAX))?>円</td>
         </tr>
         <tr>
             <td colspan="5">送料（税込み）</td>
@@ -135,7 +134,7 @@ $purchaseInfo = $_POST + $user;
         </tr>
         <tr>
             <td colspan="5">総合計</td>
-            <td><?=number_format(floor(h($cart['totalPrice']) * (1 + TAX) + h($cart['shipping'])))?>円</td>
+            <td><?=number_format(floor(h($cart['total_price']) * (1 + TAX) + h($cart['shipping'])))?>円</td>
         </tr>
     </table>
     <p class="contents-title">送付先情報</p>
@@ -235,7 +234,7 @@ $purchaseInfo = $_POST + $user;
             </form>
         </li>
         <li>
-            <form action="purchase_edit.php?action=fix#address" method="post">
+            <form action="purchase_edit.php?#address" method="post">
                 <?php foreach ($purchaseInfo as $key => $value) :?>
                     <input type="hidden" name="<?=$key?>" value="<?=$value?>">
                 <?php endforeach;?>
@@ -243,6 +242,5 @@ $purchaseInfo = $_POST + $user;
             </form>
         </li>
     </ul>
-    <?php endif;?>
 </main>
 <?php require_once('footer.html')?>
