@@ -12,8 +12,8 @@ if (isset($_POST['login'])) {
                 session_regenerate_id(true);
                 $_SESSION['user']['authenticated'] = password_hash($_POST['id'] . $_POST['pass'], PASSWORD_DEFAULT);
                 $userModel->updateLoginDate($user['id']);
-                $_SESSION['user']['userName'] = $user['name'];
-                $_SESSION['user']['userId'] = $user['id'];
+                $_SESSION['user']['user_name'] = $user['name'];
+                $_SESSION['user']['user_id'] = $user['id'];
                 header('Location: cart.php');
                 exit;
             }

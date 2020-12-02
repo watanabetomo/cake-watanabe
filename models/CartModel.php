@@ -36,7 +36,7 @@ class CartModel extends Model
                 . ')'
             ;
             $stmt = $this->dbh->prepare($sql);
-            $stmt->execute([$_SESSION['user']['userId'], $detailId]);
+            $stmt->execute([$_SESSION['user']['user_id'], $detailId]);
         } else {
             $this->addNum($detailId);
         }
@@ -171,10 +171,10 @@ class CartModel extends Model
             $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
             $this->dbh->beginTransaction();
             $userModel = new UserModel();
-            $user = $userModel->fetchById($_SESSION['user']['userId']);
+            $user = $userModel->fetchById($_SESSION['user']['user_id']);
             $orderModel = new OrderModel();
             $orderModel->commitOrder(
-                $_SESSION['user']['userId'],
+                $_SESSION['user']['user_id'],
                 $purchaseInfo['name'],
                 $purchaseInfo['name_kana'],
                 $user['mail'],
@@ -216,10 +216,10 @@ class CartModel extends Model
             }
             $this->deleteFromCart();
             $mailBody =
-                $_SESSION['user']['userName'] . "様\n\n"
+                $_SESSION['user']['user_name'] . "様\n\n"
                 . "お世話になっております。\n"
                 . "洋菓子店カサミンゴーカスタマーサポートです。\n\n"
-                . $_SESSION['user']['userName'] . "様が購入手続きをされました商品について\n"
+                . $_SESSION['user']['user_name'] . "様が購入手続きをされました商品について\n"
                 . "お間違えのないようメールをお送りいたしました。\n"
                 . "今一度ご購入商品等にお間違えなどないよう、ご確認いただけましたら幸いでございます。\n\n"
                 . "--------------------------------------\n\n"
@@ -274,14 +274,14 @@ class CartModel extends Model
                 . '〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜';
             mb_language('japanese');
             mb_internal_encoding('UTF-8');
-            // if (!mb_send_mail(
-            //     $user['mail'],
-            //     '【洋菓子店カサミンゴー】ご購入商品確認メール',
-            //     $mailBody,
-            //     'From:' . mb_encode_mimeheader('洋菓子店カサミンゴー')
-            // )) {
-            //     throw new Exception;
-            // }
+            if (!mb_send_mail(
+                $user['mail'],
+                '【洋菓子店カサミンゴー】ご購入商品確認メール',
+                $mailBody,
+                'From:' . mb_encode_mimeheader('洋菓子店カサミンゴー')
+            )) {
+                throw new Exception;
+            }
             $this->dbh->commit();
         } catch (Exception $e) {
             $this->dbh->rollBack();
