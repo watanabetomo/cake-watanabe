@@ -12,16 +12,23 @@ try {
     $cartModel = new CartModel();
     if (isset($_POST['add_to_cart'])) {
         $productDetail = $productDetailModel->fetchById($_POST['detail_id']);
+        if (empty($productDetail)) {
+            header('Location: error.php');
+            exit;
+        }
         $cartModel->addToCart($_POST['detail_id']);
     } elseif (isset($_POST['delete'])) {
         $cartModel->delete($_POST['id']);
     } elseif (isset($_POST['change'])) {
-        if ($_POST['num'] > 0) {
-            $cartModel->changeNum($_POST['num'], $_POST['id']);
-        }elseif ($_POST['num'] == 0) {
-            $cartModel->delete($_POST['id']);
+        if (preg_match('/^[0-9]*$/', $_POST['num'])) {
+            if ($_POST['num'] > 0) {
+                $cartModel->changeNum($_POST['num'], $_POST['id']);
+            }elseif ($_POST['num'] == 0) {
+                $cartModel->delete($_POST['id']);
+            }
         } else {
-            $numError = '商品点数は0以上の数値を入力してください';
+            header('Location: error.php');
+            exit;
         }
     } elseif (isset($_POST['clear'])) {
         $cartModel->deleteFromCart();
