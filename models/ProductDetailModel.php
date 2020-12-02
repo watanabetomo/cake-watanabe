@@ -47,6 +47,34 @@ class ProductDetailModel extends Model
     }
 
     /**
+     * 在庫がある商品のみ取得
+     *
+     * @param int $id
+     * @return array sizeとpriceの配列
+     */
+    public function getDetailStock($id)
+    {
+        $sql =
+            'SELECT '
+                . '* '
+            . 'FROM '
+                . 'product_detail '
+            . 'JOIN '
+                . 'stock '
+            . 'ON '
+                . 'product_detail.id = stock.product_detail_id '
+            . 'WHERE '
+                . 'product_detail.product_id = ? '
+                . 'AND stock.actual_num > 0 '
+            . 'ORDER BY '
+                . 'product_detail.size ASC'
+        ;
+        $stmt = $this->dbh->prepare($sql);
+        $stmt->execute([$id]);
+        return $stmt->fetchAll();
+    }
+
+    /**
      * 商品詳細の登録
      *
      * @param int $id

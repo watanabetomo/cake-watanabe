@@ -149,7 +149,7 @@ try {
             </ul>
             <div class="postage">
                 <?php if (isset($_SESSION['user']['authenticated'])) :?>
-                    <p>ようこそ<?=$_SESSION['user']['userName']?>さん</p>
+                    <p>ようこそ<?=$_SESSION['user']['user_name']?>さん</p>
                 <?php endif;?>
                 <a href="http://casamingo.gift/souryou.htm"><strong>送料１０００円</strong>
                     １００００円以上お買い上げのお客様は<strong>送料無料</strong></a>
@@ -339,32 +339,36 @@ try {
                                 <p><span>通常1～4日以内に発送。</span></p>
                                 <ul class="accordion">
                                     <li>
-                                        <p>ご注文</p>
-                                        <ul>
-                                            <?php
+                                        <?php
                                             try {
                                                 $productDetailModel = new ProductDetailModel();
-                                                $productDetails = $productDetailModel->fetchByProductId($products[$j]['id']);
+                                                $productDetails = $productDetailModel->getDetailStock($products[$j]['id']);
                                             } catch (PDOException $e) {
                                                 $error = 'データベースとの接続に失敗しました';
                                             }
-                                            ?>
-                                            <?php foreach ($productDetails as $detail) :?>
-                                                <li>
-                                                    <form method="post" action="cart.php">
-                                                        <input type="hidden" name="detail_id" value="<?=$detail['id']?>">
-                                                        <input name="es_item_qty" value="1" type="hidden">
-                                                        <input name="es_charset" value="sjis" type="hidden">
-                                                        <input name="es_item_id" value="<?=$detail['product_id']?>" type="hidden">
-                                                        <input name="es_shop_id" value="1482" type="hidden">
-                                                        <input name="es_stock_attr_flag" value="0" type="hidden">
-                                                        <?php if ($detail['size'] != null and $detail['price'] != null) :?>
-                                                            <input name="add_to_cart" value="<?=h($detail['size'])?>cm ￥<?=number_format(h($detail['price']))?>" type="submit">
-                                                        <?php endif;?>
-                                                    </form>
-                                                </li>
-                                            <?php endforeach;?>
-                                        </ul>
+                                        ?>
+                                        <?php if (empty($productDetails)) :?>
+                                            <p>ただいま在庫がありません</p>
+                                        <?php else :?>
+                                            <p class="order">ご注文</p>
+                                            <ul>
+                                                <?php foreach ($productDetails as $detail) :?>
+                                                    <li>
+                                                        <form method="post" action="cart.php">
+                                                            <input type="hidden" name="detail_id" value="<?=$detail['id']?>">
+                                                            <input name="es_item_qty" value="1" type="hidden">
+                                                            <input name="es_charset" value="sjis" type="hidden">
+                                                            <input name="es_item_id" value="<?=$detail['product_id']?>" type="hidden">
+                                                            <input name="es_shop_id" value="1482" type="hidden">
+                                                            <input name="es_stock_attr_flag" value="0" type="hidden">
+                                                            <?php if ($detail['size'] != null and $detail['price'] != null) :?>
+                                                                <input name="add_to_cart" value="<?=h($detail['size'])?>cm ￥<?=number_format(h($detail['price']))?>" type="submit">
+                                                            <?php endif;?>
+                                                        </form>
+                                                    </li>
+                                                <?php endforeach;?>
+                                            </ul>
+                                        <?php endif;?>
                                     </li>
                                 </ul><!--/.accordion-->
                                 <div class="qa">
