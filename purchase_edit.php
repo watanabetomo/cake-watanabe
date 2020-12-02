@@ -44,14 +44,13 @@ if (isset($_POST['address_search'])) {
     if (!isset($error)) {
         $postal_code = $_POST['postal_code1'] . $_POST['postal_code2'];
         $json = json_decode(file_get_contents("https://zip-cloud.appspot.com/api/search?zipcode=${postal_code}"), true);
-        if (!empty($json['results'])) {
+        if (!empty($json['results'][0])) {
             $hitAddress = $json['results'][0];
             $hitAddress['pref'] = $hitAddress['address1'];
             $hitAddress['city'] = $hitAddress['address2'] . $hitAddress['address3'];
             $hitAddress['address'] = '';
             $hitAddress['other'] = '';
-        }
-        if (!isset($hitAddress)) {
+        } else {
             $addressSearchError = '一致する住所がありません。';
         }
     }

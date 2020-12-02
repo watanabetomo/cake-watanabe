@@ -118,7 +118,7 @@ try {
                             <td>
                                 <form action="cart.php" method="post">
                                     <input type="hidden" name="id" value="<?=$item['id']?>">
-                                    <input type="number" name="num" value="<?=h($item['num'])?>" style="width: 70px; margin: 10px 10px;">
+                                    <input type="number" name="num" min="0" value="<?=h($item['num'])?>" style="width: 70px; margin: 10px 10px;">
                                     <p><input type="submit" name="change" value="変更"></p>
                                 </form>
                             </td>

@@ -149,7 +149,7 @@ try {
             </ul>
             <div class="postage">
                 <?php if (isset($_SESSION['user']['authenticated'])) :?>
-                    <p>ようこそ<?=$_SESSION['user']['userName']?>さん</p>
+                    <p>ようこそ<?=$_SESSION['user']['user_name']?>さん</p>
                 <?php endif;?>
                 <a href="http://casamingo.gift/souryou.htm"><strong>送料１０００円</strong>
                     １００００円以上お買い上げのお客様は<strong>送料無料</strong></a>

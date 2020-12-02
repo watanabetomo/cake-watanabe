@@ -15,8 +15,8 @@ if ((
 }
 
 try {
-    $cartModel = new CartModel();
-    $cartModel->completePurchase($_POST);
+    $orderModel = new OrderModel();
+    $orderModel->completePurchase($_POST);
 } catch (Exception $e) {
     $error = '商品の購入に失敗しました。<br>カスタマーサポートにお問い合わせください。';
 }
