@@ -5,7 +5,8 @@ try {
     $productCategoryModel = new ProductCategoryModel();
     $productCategories = $productCategoryModel->fetchAllName();
 } catch (PDOException $e) {
-    $error = 'データベースとの接続に失敗しました';
+    header('Location: error.php?error=database');
+    exit;
 }
 
 ?>
@@ -329,7 +330,8 @@ try {
                                 $productModel = new ProductModel();
                                 $products = $productModel->fetchByCategoryId($category['id']);
                             } catch (PDOException $e) {
-                                $error = 'データベースとの接続に失敗しました';
+                                header('Location: error.php?error=database');
+                                exit;
                             }
                         ?>
                         <?php for ($j = 0; $j < count($products); $j++) :?>
@@ -346,7 +348,8 @@ try {
                                                 $productDetailModel = new ProductDetailModel();
                                                 $productDetails = $productDetailModel->fetchByProductId($products[$j]['id']);
                                             } catch (PDOException $e) {
-                                                $error = 'データベースとの接続に失敗しました';
+                                                header('Location: error.php?error=database');
+                                                exit;
                                             }
                                             ?>
                                             <?php foreach ($productDetails as $detail) :?>
