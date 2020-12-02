@@ -31,6 +31,8 @@ try {
     exit;
 }
 
+$hitAddress = [];
+
 if (isset($_POST['address_search'])) {
     if ($_POST['postal_code1'] == '') {
         $error['postal_code1'] = '郵便番号上3桁が入力されていません。';
@@ -45,7 +47,6 @@ if (isset($_POST['address_search'])) {
     if (!isset($error)) {
         $postal_code = $_POST['postal_code1'] . $_POST['postal_code2'];
         $json = json_decode(file_get_contents("https://zip-cloud.appspot.com/api/search?zipcode=${postal_code}"), true);
-        $hitAddress = [];
         if (!empty($json['results'][0])) {
             $hitAddress = $json['results'][0];
             $hitAddress['pref'] = $hitAddress['address1'];
