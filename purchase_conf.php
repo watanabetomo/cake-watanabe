@@ -10,7 +10,7 @@ if (
     (isset($_POST['token']) ? $_POST['token'] : '') != getToken()
     and !isset($_POST['submit'])
 ) {
-    header('Location: cart.php');
+    header('Location: error.php?error=param');
     exit;
 }
 
@@ -83,7 +83,8 @@ try {
     $user = $userModel->fetchById($_SESSION['user']['user_id']);
     $user['pref'] = $prefectures[$user['pref']];
 } catch (Exception $e) {
-    $databaseError = '商品情報の取得に失敗しました。<br>カスタマーサポートにお問い合わせください。';
+    header('Location: error.php?error=database');
+    exit;
 }
 
 $purchaseInfo = $_POST + $user;

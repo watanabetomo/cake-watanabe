@@ -12,7 +12,7 @@ if (
     and !isset($_POST['submit'])
     and !isset($_POST['address_search'])
 ) {
-    header('Location: cart.php');
+    header('Location: error.php?error=param');
     exit;
 }
 
@@ -27,7 +27,8 @@ try {
     $user = $userModel->fetchById($_SESSION['user']['user_id']);
     $user['pref'] = $prefectures[$user['pref']];
 } catch (Exception $e) {
-    $error['database'] = '商品情報の取得に失敗しました。<br>カスタマーサポートにお問い合わせください。';
+    header('Location: error.php?error=database');
+    exit;
 }
 
 if (isset($_POST['address_search'])) {
@@ -44,6 +45,7 @@ if (isset($_POST['address_search'])) {
     if (!isset($error)) {
         $postal_code = $_POST['postal_code1'] . $_POST['postal_code2'];
         $json = json_decode(file_get_contents("https://zip-cloud.appspot.com/api/search?zipcode=${postal_code}"), true);
+        $hitAddress = [];
         if (!empty($json['results'][0])) {
             $hitAddress = $json['results'][0];
             $hitAddress['pref'] = $hitAddress['address1'];
@@ -56,7 +58,7 @@ if (isset($_POST['address_search'])) {
     }
 }
 
-$address = (isset($hitAddress) ? $hitAddress : []) + $_POST + $user;
+$address = $hitAddress + $_POST + $user;
 $checkedPayment = isset($_POST['payment']) ? $_POST['payment'] : '1';
 
 ?>
@@ -64,7 +66,6 @@ $checkedPayment = isset($_POST['payment']) ? $_POST['payment'] : '1';
 <?php require_once('header.html')?>
 <main>
     <p class="contents-title">確認</p>
-    <p class="error"><?=isset($error['database']) ? $error['database'] : ''?></p>
     <table class="table table-bordered table-center">
         <tr>
             <th>商品画像</th>

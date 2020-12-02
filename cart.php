@@ -11,9 +11,9 @@ try {
     $productDetailModel = new ProductDetailModel();
     $cartModel = new CartModel();
     if (isset($_POST['add_to_cart'])) {
-        $productDetail = $productDetailModel->fetchById($_POST['detail_id']);
+        $productDetail = $productDetailModel->fetchById($detailId);
         if (empty($productDetail)) {
-            header('Location: error.php');
+            header('Location: error.php?error=param');
             exit;
         }
         $cartModel->addToCart($_POST['detail_id']);
@@ -27,7 +27,7 @@ try {
                 $cartModel->delete($_POST['id']);
             }
         } else {
-            header('Location: error.php');
+            header('Location: error.php?error=param');
             exit;
         }
     } elseif (isset($_POST['clear'])) {
@@ -35,13 +35,13 @@ try {
     }
     $cart = $cartModel->fetchAll();
 } catch (Exception $e) {
-    $databaseError = '商品情報の取得に失敗しました。<br>カスタマーサポートにお問い合わせください。';
+    header('Location: error.php?error=database');
+    exit;
 }
 
 ?>
 <?php require_once('header.html')?>
 <main>
-    <p class="error"><?=isset($databaseError) ? $databaseError : ''?></p>
     <div class="wrapper">
         <div class="box1">
             <div class="card">

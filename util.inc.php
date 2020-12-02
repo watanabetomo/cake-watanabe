@@ -48,3 +48,17 @@ function getToken()
 {
     return hash('sha256', uniqid());
 }
+
+/**
+ * エラー画面のメッセージを出力
+ *
+ * @return String
+ */
+function geterrorMessage()
+{
+    $errorMessages = array(
+        'param' => 'パラメータが不正です。',
+        'database' => 'データベースに接続できませんでした。<br>カスタマーサポートにお問い合わせください。'
+    );
+    return $errorMessages[$_GET['error']];
+}

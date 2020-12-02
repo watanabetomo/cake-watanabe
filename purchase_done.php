@@ -10,7 +10,7 @@ if ((
     isset($_SESSION['purchase_info']['token']) ? $_SESSION['purchase_info']['token'] : '') != getToken()
     and !isset($_POST['send'])
 ) {
-    header('Location: cart.php');
+    header('Location: error.php?error=param');
     exit;
 }
 
@@ -18,7 +18,8 @@ try {
     $orderModel = new OrderModel();
     $orderModel->completePurchase($_POST);
 } catch (Exception $e) {
-    $error = '商品の購入に失敗しました。<br>カスタマーサポートにお問い合わせください。';
+    header('Location: error.php?error=database');
+    exit;
 }
 
 ?>
