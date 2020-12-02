@@ -78,7 +78,7 @@ try {
     $cartModel = new CartModel();
     $cart = $cartModel->fetchAll();
     $userModel = new UserModel();
-    $user = $userModel->fetchById($_SESSION['user']['userId']);
+    $user = $userModel->fetchById($_SESSION['user']['user_id']);
     $user['pref'] = $prefectures[$user['pref']];
 } catch (Exception $e) {
     $databaseError = '商品情報の取得に失敗しました。<br>カスタマーサポートにお問い合わせください。';

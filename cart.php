@@ -47,11 +47,11 @@ try {
                         <table class="table table-right">
                             <tr>
                                 <th>小計</th>
-                                <td><?=!empty($cart['cart']) ? number_format(h($cart['totalPrice'])) . '円' : ''?></td>
+                                <td><?=!empty($cart['cart']) ? number_format(h($cart['total_price'])) . '円' : ''?></td>
                             </tr>
                             <tr>
                                 <th>商品点数</th>
-                                <td><?=!empty($cart['cart']) ? h($cart['totalCount']) . '点' : ''?></td>
+                                <td><?=!empty($cart['cart']) ? h($cart['total_count']) . '点' : ''?></td>
                             </tr>
                             <tr>
                                 <th>送料</th>

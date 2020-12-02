@@ -13,7 +13,7 @@ class OrderdetailModel extends Model
      * @param PDO $dbh
      * @return void
      */
-    public function registOrderDetail($orderId, $detailId, $name, $size, $price, $num, $dbh)
+    public function registerOrderDetail($orderId, $detailId, $name, $size, $price, $num, $dbh)
     {
         $sql =
             'INSERT '
@@ -38,7 +38,7 @@ class OrderdetailModel extends Model
         $stmt = $dbh->prepare($sql);
         $stmt->execute([$orderId, $detailId, $name, $size, $price, $num]);
     }
-    
+
     /**
      * 注文詳細の取得
      *

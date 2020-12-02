@@ -36,7 +36,7 @@ class CartModel extends Model
                 . ')'
             ;
             $stmt = $this->dbh->prepare($sql);
-            $stmt->execute([$_SESSION['user']['userId'], $detailId]);
+            $stmt->execute([$_SESSION['user']['user_id'], $detailId]);
         } else {
             $this->addNum($detailId);
         }
@@ -53,7 +53,8 @@ class CartModel extends Model
             'SELECT '
                 . '* '
             . 'FROM '
-                . 'cart';
+                . 'cart'
+        ;
         $stmt = $this->dbh->query($sql);
         $cart = $stmt->fetchAll();
         $totalPrice = 0;
@@ -66,8 +67,8 @@ class CartModel extends Model
         }
         return [
             'cart' => $cart,
-            'totalPrice' => $totalPrice,
-            'totalCount' => $totalCount,
+            'total_price' => $totalPrice,
+            'total_count' => $totalCount,
             'shipping' => ($totalPrice > 10000) ? 0 : 1000
         ];
     }
@@ -86,7 +87,7 @@ class CartModel extends Model
                 . 'cart '
             . 'WHERE '
                 . 'id = ?'
-            ;
+        ;
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
     }
@@ -171,10 +172,10 @@ class CartModel extends Model
             $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
             $this->dbh->beginTransaction();
             $userModel = new UserModel();
-            $user = $userModel->fetchById($_SESSION['user']['userId']);
+            $user = $userModel->fetchById($_SESSION['user']['user_id']);
             $orderModel = new OrderModel();
             $orderModel->commitOrder(
-                $_SESSION['user']['userId'],
+                $_SESSION['user']['user_id'],
                 $purchaseInfo['name'],
                 $purchaseInfo['name_kana'],
                 $user['mail'],
@@ -190,7 +191,7 @@ class CartModel extends Model
                 $purchaseInfo['payment'],
                 $purchaseInfo['sub_price'],
                 $purchaseInfo['shipping'],
-                TAX * 100,
+                $purchaseInfo['tax_price'],
                 $purchaseInfo['total_price'],
                 $this->dbh
             );
@@ -201,7 +202,7 @@ class CartModel extends Model
             foreach ($cart['cart'] as $item) {
                 $productDetail = $productDetailModel->fetchById($item['product_detail_id']);
                 $product = $productModel->fetchSingleProduct($productDetail['product_id']);
-                $oederDetailModel->registOrderDetail(
+                $oederDetailModel->registerOrderDetail(
                     $id,
                     $item['product_detail_id'],
                     $product['name'],
@@ -213,14 +214,15 @@ class CartModel extends Model
             }
             $this->deleteFromCart();
             $mailBody =
-                $_SESSION['user']['userName'] . "様\n\n"
+                $_SESSION['user']['user_name'] . "様\n\n"
                 . "お世話になっております。\n"
                 . "洋菓子店カサミンゴーカスタマーサポートです。\n\n"
-                . $_SESSION['user']['userName'] . "様が購入手続きをされました商品について\n"
+                . $_SESSION['user']['user_name'] . "様が購入手続きをされました商品について\n"
                 . "お間違えのないようメールをお送りいたしました。\n"
                 . "今一度ご購入商品等にお間違えなどないよう、ご確認いただけましたら幸いでございます。\n\n"
                 . "--------------------------------------\n\n"
-                . "【購入情報】\n\n";
+                . "【購入情報】\n\n"
+            ;
             foreach ($cart['cart'] as $item) {
                 $productDetail = $productDetailModel->fetchById($item['product_detail_id']);
                 $product = $productModel->fetchSingleProduct($productDetail['product_id']);
@@ -229,7 +231,8 @@ class CartModel extends Model
                     . $productDetail['size'] . "cm\n"
                     . $productDetail['price'] . "円\n"
                     . $item['num'] . "点\n\n"
-                    . "-----------------------\n\n";
+                    . "-----------------------\n\n"
+                ;
             }
             $mPaymentModel = new MPaymentModel();
             $payment = $mPaymentModel->fetchByid($purchaseInfo['payment']);
@@ -268,7 +271,8 @@ class CartModel extends Model
                 . "TEL：000-0000-0000\n"
                 . "住所：福島県郡山市中ノ目3-149-12\n"
                 . "mail：t.watanabe@ebacorp.jp\n"
-                . '〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜';
+                . '〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜'
+            ;
             mb_language('japanese');
             mb_internal_encoding('UTF-8');
             if (!mb_send_mail(

@@ -24,7 +24,7 @@ try {
     $cartModel = new CartModel();
     $cart = $cartModel->fetchAll();
     $userModel = new UserModel();
-    $user = $userModel->fetchById($_SESSION['user']['userId']);
+    $user = $userModel->fetchById($_SESSION['user']['user_id']);
     $user['pref'] = $prefectures[$user['pref']];
 } catch (Exception $e) {
     $error['database'] = '商品情報の取得に失敗しました。<br>カスタマーサポートにお問い合わせください。';
@@ -43,9 +43,9 @@ if (isset($_POST['address_search'])) {
     }
     if (!isset($error)) {
         $postal_code = $_POST['postal_code1'] . $_POST['postal_code2'];
-        $json = json_decode(file_get_contents("https://zip-cloud.appspot.com/api/search?zipcode=${postal_code}"), true);
+        $json = json_decode(file_get_contents('https://zip-cloud.appspot.com/api/search?zipcode=${postal_code}'), true);
         if (!empty($json['results'])) {
-            $hitAddress = $json["results"][0];
+            $hitAddress = $json['results'][0];
             $hitAddress['pref'] = $hitAddress['address1'];
             $hitAddress['city'] = $hitAddress['address2'] . $hitAddress['address3'];
             $hitAddress['address'] = '';
@@ -91,14 +91,14 @@ $checkedPayment = isset($_POST['payment']) ? $_POST['payment'] : '1';
         <?php endforeach;?>
         <tr>
             <td colspan="2">小計</td>
-            <td><?=h($cart['totalCount'])?></td>
+            <td><?=h($cart['total_count'])?></td>
             <td></td>
             <td></td>
-            <td><?=number_format(h($cart['totalPrice']))?>円</td>
+            <td><?=number_format(h($cart['total_price']))?>円</td>
         </tr>
         <tr>
             <td colspan="5">消費税</td>
-            <td><?=number_format(floor(h($cart['totalPrice']) * TAX))?>円</td>
+            <td><?=number_format(floor(h($cart['total_price']) * TAX))?>円</td>
         </tr>
         <tr>
             <td colspan="5">送料（税込み）</td>
@@ -106,15 +106,15 @@ $checkedPayment = isset($_POST['payment']) ? $_POST['payment'] : '1';
         </tr>
         <tr>
             <td colspan="5">総合計</td>
-            <td><?=number_format(floor(h($cart['totalPrice']) * (1 + TAX) + h($cart['shipping'])))?>円</td>
+            <td><?=number_format(floor(h($cart['total_price']) * (1 + TAX) + h($cart['shipping'])))?>円</td>
         </tr>
     </table>
     <form action="purchase_conf.php#address" method="post">
         <input type="hidden" name="token" value="<?=getToken()?>">
-        <input type="hidden" name="sub_price" value="<?=number_format($cart['totalPrice'])?>">
-        <input type="hidden" name="tax_price" value="<?=number_format($cart['totalPrice'] * TAX)?>">
+        <input type="hidden" name="sub_price" value="<?=number_format($cart['total_price'])?>">
+        <input type="hidden" name="tax_price" value="<?=number_format($cart['total_price'] * TAX)?>">
         <input type="hidden" name="shipping" value="<?=number_format($cart['shipping'])?>">
-        <input type="hidden" name="total_price" value="<?=number_format(floor($cart['totalPrice'] * (1 + TAX) + $cart['shipping']))?>">
+        <input type="hidden" name="total_price" value="<?=number_format(floor($cart['total_price'] * (1 + TAX) + $cart['shipping']))?>">
         <p class="contents-title" id="address">送付先情報<span class="sub-message">※登録住所以外へ送る場合は変更してください</span></p>
         <p class="toggle-radio"><input type="radio" name="sendFor" id="sendFor1" value="1"<?=(isset($_GET['action']) and $_GET['action'] == 'fix') ? ' checked' : ''?>>変更する <input type="radio" name="sendFor" id="sendFor2" value="2"<?=!isset($_GET['action']) ? ' checked' : ''?>>変更しない</p>
         <table class="table send-for table-left"<?=!(isset($_GET['action']) and $_GET['action'] == 'fix') ? ' style="display: none;"' : ''?>>
