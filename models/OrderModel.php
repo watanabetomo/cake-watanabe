@@ -174,13 +174,13 @@ class OrderModel extends Model
             $id = $this->dbh->lastInsertId();
             $productDetailModel = new ProductDetailModel();
             $productModel = new ProductModel();
-            $oederDetailModel = new OrderDetailModel();
+            $orderDetailModel = new OrderDetailModel();
             $cartModel = new CartModel();
             $cart = $cartModel->fetchAll();
             foreach ($cart['cart'] as $item) {
                 $productDetail = $productDetailModel->fetchById($item['product_detail_id']);
                 $product = $productModel->fetchSingleProduct($productDetail['product_id']);
-                $oederDetailModel->registerOrderDetail(
+                $orderDetailModel->registerOrderDetail(
                     $id,
                     $item['product_detail_id'],
                     $product['name'],

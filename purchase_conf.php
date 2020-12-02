@@ -229,17 +229,40 @@ $purchaseInfo = $_POST + $user;
     <ul class="form">
         <li>
             <form action="purchase_done.php" method="post">
-                <?php foreach ($purchaseInfo as $key => $value) :?>
-                    <input type="hidden" name="<?=$key?>" value="<?=$value?>">
-                <?php endforeach;?>
+                <input type="hidden" name="token" value="<?=$purchaseInfo['token']?>">
+                <input type="hidden" name="postal_code1" value="<?=$purchaseInfo['postal_code1']?>">
+                <input type="hidden" name="postal_code2" value="<?=$purchaseInfo['postal_code2']?>">
+                <input type="hidden" name="pref" value="<?=$purchaseInfo['pref']?>">
+                <input type="hidden" name="city" value="<?=$purchaseInfo['city']?>">
+                <input type="hidden" name="address" value="<?=$purchaseInfo['address']?>">
+                <input type="hidden" name="other" value="<?=$purchaseInfo['other']?>">
+                <input type="hidden" name="name_kana" value="<?=$purchaseInfo['name_kana']?>">
+                <input type="hidden" name="name" value="<?=$purchaseInfo['name']?>">
+                <input type="hidden" name="payment" value="<?=$purchaseInfo['payment']?>">
+                <input type="hidden" name="sub_price" value="<?=$purchaseInfo['sub_price']?>">
+                <input type="hidden" name="shipping" value="<?=$purchaseInfo['shipping']?>">
+                <input type="hidden" name="total_price" value="<?=$purchaseInfo['total_price']?>">
+                <input type="hidden" name="tax_price" value="<?=$purchaseInfo['tax_price']?>">
                 <p><input type="submit" name="send" class="btn btn-success" value="購入する"></p>
             </form>
         </li>
         <li>
             <form action="purchase_edit.php?#address" method="post">
-                <?php foreach ($purchaseInfo as $key => $value) :?>
-                    <input type="hidden" name="<?=$key?>" value="<?=$value?>">
-                <?php endforeach;?>
+                <input type="hidden" name="token" value="<?=$purchaseInfo['token']?>">
+                <input type="hidden" name="postal_code1" value="<?=$purchaseInfo['postal_code1']?>">
+                <input type="hidden" name="postal_code2" value="<?=$purchaseInfo['postal_code2']?>">
+                <input type="hidden" name="pref" value="<?=$purchaseInfo['pref']?>">
+                <input type="hidden" name="city" value="<?=$purchaseInfo['city']?>">
+                <input type="hidden" name="address" value="<?=$purchaseInfo['address']?>">
+                <input type="hidden" name="other" value="<?=$purchaseInfo['other']?>">
+                <input type="hidden" name="name_kana" value="<?=$purchaseInfo['name_kana']?>">
+                <input type="hidden" name="name" value="<?=$purchaseInfo['name']?>">
+                <input type="hidden" name="payment" value="<?=$purchaseInfo['payment']?>">
+                <input type="hidden" name="sub_price" value="<?=$purchaseInfo['sub_price']?>">
+                <input type="hidden" name="shipping" value="<?=$purchaseInfo['shipping']?>">
+                <input type="hidden" name="total_price" value="<?=$purchaseInfo['total_price']?>">
+                <input type="hidden" name="tax_price" value="<?=$purchaseInfo['tax_price']?>">
+                <input type="hidden" name="action" value="fix">
                 <p><input type="submit" name="fix" class="btn btn-danger" value="修正する"></p>
             </form>
         </li>
