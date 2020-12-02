@@ -61,11 +61,11 @@ if (isset($_POST['submit'])) {
         } elseif (!preg_match('/^[ぁ-んァ-ヶー一-龠]{1,15}$/u', $_POST['name'])) {
             $error['name'] = '名前は15文字以内の全角文字で入力してください。';
         }
-    }
-    if (isset($error)) {
-        $_POST['action'] = 'fix';
-        require_once('purchase_edit.php');
-        exit;
+        if (isset($error)) {
+            $_POST['action'] = 'fix';
+            require_once('purchase_edit.php');
+            exit;
+        }
     }
 }
 
@@ -89,6 +89,9 @@ try {
 }
 
 $purchaseInfo = $_POST + $user;
+if ($_POST['sendFor'] == 2) {
+    $purchaseInfo = $user + $_POST;
+}
 
 ?>
 

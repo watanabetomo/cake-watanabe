@@ -148,6 +148,7 @@ class OrderModel extends Model
         try {
             $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
             $this->dbh->beginTransaction();
+
             $userModel = new UserModel();
             $user = $userModel->fetchById($_SESSION['user']['user_id']);
             $this->commitOrder(
@@ -171,6 +172,7 @@ class OrderModel extends Model
                 $purchaseInfo['total_price'],
                 $this->dbh
             );
+
             $id = $this->dbh->lastInsertId();
             $productDetailModel = new ProductDetailModel();
             $productModel = new ProductModel();
@@ -190,7 +192,9 @@ class OrderModel extends Model
                     $this->dbh
                 );
             }
+
             $cartModel->deleteFromCart();
+            
             $mailBody =
                 h($_SESSION['user']['user_name']) . "様\n\n"
                 . "お世話になっております。\n"
