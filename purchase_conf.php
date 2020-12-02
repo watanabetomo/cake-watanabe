@@ -25,8 +25,8 @@ if (isset($_POST['submit'])) {
         }
         if ($_POST['city'] == '') {
             $error['city'] = '市区町村が入力されていません。';
-        } elseif (!preg_match('/^[ぁ-んァ-ヶ一-龠]{1,15}$/u', $_POST['city'])) {
-            $error['city'] = '市区町村は15文字以内の日本語で入力してください。';
+        } elseif (!preg_match('/^[ぁ-んァ-ヶー一-龠]{1,15}$/u', $_POST['city'])) {
+            $error['city'] = '市区町村は15文字以内の全角文字で入力してください。';
         }
         if ($_POST['address'] == '') {
             $error['address'] = '番地が入力されていません。';
@@ -58,8 +58,8 @@ if (isset($_POST['submit'])) {
         }
         if ($_POST['name'] == '') {
             $error['name'] = '名前が入力されていません。';
-        } elseif (!preg_match('/^[A-Za-zぁ-んァ-ヶ一-龠]{1,15}$/u', $_POST['name'])) {
-            $error['name'] = '名前は15文字以内で入力してください。';
+        } elseif (!preg_match('/^[ぁ-んァ-ヶー一-龠]{1,15}$/u', $_POST['name'])) {
+            $error['name'] = '名前は15文字以内の全角文字で入力してください。';
         }
     }
     if (isset($error)) {
@@ -236,6 +236,9 @@ $purchaseInfo = $_POST + $user;
                 <input type="hidden" name="city" value="<?=$purchaseInfo['city']?>">
                 <input type="hidden" name="address" value="<?=$purchaseInfo['address']?>">
                 <input type="hidden" name="other" value="<?=$purchaseInfo['other']?>">
+                <input type="hidden" name="tel1" value="<?=$purchaseInfo['tel1']?>">
+                <input type="hidden" name="tel2" value="<?=$purchaseInfo['tel2']?>">
+                <input type="hidden" name="tel3" value="<?=$purchaseInfo['tel3']?>">
                 <input type="hidden" name="name_kana" value="<?=$purchaseInfo['name_kana']?>">
                 <input type="hidden" name="name" value="<?=$purchaseInfo['name']?>">
                 <input type="hidden" name="payment" value="<?=$purchaseInfo['payment']?>">
@@ -255,6 +258,9 @@ $purchaseInfo = $_POST + $user;
                 <input type="hidden" name="city" value="<?=$purchaseInfo['city']?>">
                 <input type="hidden" name="address" value="<?=$purchaseInfo['address']?>">
                 <input type="hidden" name="other" value="<?=$purchaseInfo['other']?>">
+                <input type="hidden" name="tel1" value="<?=$purchaseInfo['tel1']?>">
+                <input type="hidden" name="tel2" value="<?=$purchaseInfo['tel2']?>">
+                <input type="hidden" name="tel3" value="<?=$purchaseInfo['tel3']?>">
                 <input type="hidden" name="name_kana" value="<?=$purchaseInfo['name_kana']?>">
                 <input type="hidden" name="name" value="<?=$purchaseInfo['name']?>">
                 <input type="hidden" name="payment" value="<?=$purchaseInfo['payment']?>">

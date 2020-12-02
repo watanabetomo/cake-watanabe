@@ -6,7 +6,7 @@ if (!isset($_SESSION['user']['authenticated'])) {
     exit;
 }
 
-if ((isset($_POST['token']) ? $_SPOST['token'] : '') != $_SESSION['token']) {
+if ((isset($_POST['token']) ? $_POST['token'] : '') != $_SESSION['token']) {
     header('Location: error.php?error=param');
     exit;
 }
