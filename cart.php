@@ -11,7 +11,7 @@ try {
     $productDetailModel = new ProductDetailModel();
     $cartModel = new CartModel();
     if (isset($_POST['add_to_cart'])) {
-        $productDetail = $productDetailModel->fetchById($detailId);
+        $productDetail = $productDetailModel->fetchById($_POST['detail_id']);
         if (empty($productDetail)) {
             header('Location: error.php?error=param');
             exit;
