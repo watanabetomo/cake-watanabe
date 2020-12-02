@@ -17,12 +17,16 @@ if (
 }
 
 try {
-    $productDetailModel = new ProductDetailmodel();
     $productModel = new ProductModel();
-    $paymentModel = new MPaymentModel();
-    $payments = $paymentModel->fetchAll();
+
+    $productDetailModel = new ProductDetailmodel();
+
     $cartModel = new CartModel();
     $cart = $cartModel->fetchAll();
+    
+    $paymentModel = new MPaymentModel();
+    $payments = $paymentModel->fetchAll();
+
     $userModel = new UserModel();
     $user = $userModel->fetchById($_SESSION['user']['user_id']);
     $user['pref'] = $prefectures[$user['pref']];
@@ -46,7 +50,7 @@ if (isset($_POST['address_search'])) {
     }
     if (!isset($error)) {
         $postal_code = $_POST['postal_code1'] . $_POST['postal_code2'];
-        $json = json_decode(file_get_contents("https://zip-cloud.appspot.com/api/search?zipcode=${postal_code}"), true);
+        $json = json_decode(file_get_contents('https://zip-cloud.appspot.com/api/search?zipcode=' . $postal_code), true);
         if (!empty($json['results'][0])) {
             $hitAddress = $json['results'][0];
             $hitAddress['pref'] = $hitAddress['address1'];
@@ -127,7 +131,7 @@ $checkedPayment = isset($_POST['payment']) ? $_POST['payment'] : '1';
                 <td>
                     <input type="text" id="postal_code1" name="postal_code1" value="<?=h($address['postal_code1'])?>"> - <input type="text" id="postal_code2" name="postal_code2" value="<?=h($address['postal_code2'])?>">
                     <input type="submit" name="address_search" formaction="purchase_edit.php?#address" formmethod="POST" value="住所検索">
-                    <span class="error"><?=isset($error['postal_code1']) ? $error['postal_code1'] : ''?><?=isset($error['postal_code2']) ? $error['postal_code2'] : ''?><?=isset($addressSearchError) ? $addressSearchError : ''?></span>
+                    <span class="error"><?=isset($error['postal_code1']) ? '<br>' . $error['postal_code1'] : ''?><?=isset($error['postal_code2']) ? '<br>' . $error['postal_code2'] : ''?><?=isset($addressSearchError) ? '<br>' . $addressSearchError : ''?></span>
                 </td>
             </tr>
             <tr>
@@ -154,7 +158,7 @@ $checkedPayment = isset($_POST['payment']) ? $_POST['payment'] : '1';
                 <td>
                     <p>
                         <input type="text" name="tel1" value="<?=h($address['tel1'])?>"> - <input type="text" name="tel2" value="<?=h($address['tel2'])?>"> - <input type="text" name="tel3" value="<?=h($address['tel3'])?>">
-                        <span class="error"><?=isset($error['tel1']) ? $error['tel1'] : ''?><?=isset($error['tel2']) ? $error['tel2'] : ''?><?=isset($error['tel3']) ? $error['tel3'] : ''?></span>
+                        <span class="error"><?=isset($error['tel1']) ? '<br>' . $error['tel1'] : ''?><?=isset($error['tel2']) ? '<br>' . $error['tel2'] : ''?><?=isset($error['tel3']) ? '<br>' . $error['tel3'] : ''?></span>
                     </p>
                 </td>
             </tr>
@@ -219,13 +223,9 @@ $checkedPayment = isset($_POST['payment']) ? $_POST['payment'] : '1';
                     支払方法
                 </th>
                 <td>
-                    <?php if (!empty($payments)) :?>
-                        <?php foreach ($payments as $payment) :?>
-                            <input type="radio" name="payment" class="radio" value="<?=h($payment['id'])?>"<?=($payment['id'] == $checkedPayment) ? ' checked' : ''?>><?=$payment['name']?>
-                        <?php endforeach;?>
-                    <?php else:?>
-                        <p>支払方法がありません</p>
-                    <?php endif;?>
+                    <?php foreach ($payments as $payment) :?>
+                        <input type="radio" name="payment" class="radio" value="<?=h($payment['id'])?>"<?=($payment['id'] == $checkedPayment) ? ' checked' : ''?>><?=$payment['name']?>
+                    <?php endforeach;?>
                 </td>
             </tr>
         </table>

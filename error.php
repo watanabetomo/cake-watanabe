@@ -3,7 +3,7 @@ require_once('autoload.php');
 
 if (
     !isset($_GET['error'])
-    or ($_GET['error'] != 'param' and $_GET['error'] != 'datebase')
+    or !($_GET['error'] == 'param' or $_GET['error'] == 'database')
 ) {
     header('Location: error.php?error=param');
     exit;

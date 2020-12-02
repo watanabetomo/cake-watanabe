@@ -46,7 +46,8 @@ function getPage()
  */
 function getToken()
 {
-    return hash('sha256', uniqid());
+    $_SESSION['token'] = hash('sha256', uniqid());
+    return $_SESSION['token'];
 }
 
 /**

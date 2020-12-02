@@ -6,10 +6,7 @@ if (!isset($_SESSION['user']['authenticated'])) {
     exit;
 }
 
-if ((
-    isset($_SESSION['purchase_info']['token']) ? $_SESSION['purchase_info']['token'] : '') != getToken()
-    and !isset($_POST['send'])
-) {
+if ((isset($_POST['token']) ? $_SPOST['token'] : '') != $_SESSION['token']) {
     header('Location: error.php?error=param');
     exit;
 }

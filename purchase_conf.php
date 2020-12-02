@@ -6,10 +6,7 @@ if (!isset($_SESSION['user']['authenticated'])) {
     exit;
 }
 
-if (
-    (isset($_POST['token']) ? $_POST['token'] : '') != getToken()
-    and !isset($_POST['submit'])
-) {
+if ((isset($_POST['token']) ? $_POST['token'] : '') != $_SESSION['token']) {
     header('Location: error.php?error=param');
     exit;
 }
@@ -19,50 +16,50 @@ if (isset($_POST['submit'])) {
         if ($_POST['postal_code1'] == '') {
             $error['postal_code1'] = '郵便番号上3桁が入力されていません。';
         } elseif (!preg_match('/^[0-9]{3}$/', $_POST['postal_code1'])) {
-            $error['postal_code1'] = '郵便番号上3桁が間違っています。';
+            $error['postal_code1'] = '郵便番号上3桁は3桁の数字を入力してください。';
         }
         if ($_POST['postal_code2'] == '') {
             $error['postal_code2'] = '郵便番号下4桁が入力されていません。';
         } elseif (!preg_match('/^[0-9]{4}$/', $_POST['postal_code2'])) {
-            $error['postal_code2'] = '郵便番号下4桁が間違っています。';
+            $error['postal_code2'] = '郵便番号下4桁は4桁の数字を入力してください。';
         }
         if ($_POST['city'] == '') {
             $error['city'] = '市区町村が入力されていません。';
-        } elseif (!preg_match('/^[0-9A-Za-zぁ-んァ-ヶー一-龠]{1,15}$/u', $_POST['city'])) {
-            $error['city'] = '市区町村が間違っています。';
+        } elseif (!preg_match('/^[ぁ-んァ-ヶ一-龠]{1,15}$/u', $_POST['city'])) {
+            $error['city'] = '市区町村は15文字以内の日本語で入力してください。';
         }
         if ($_POST['address'] == '') {
             $error['address'] = '番地が入力されていません。';
         } elseif (!preg_match('/^[0-9A-Za-zぁ-んァ-ヶー一-龠\-]{1,100}$/u', $_POST['address'])) {
-            $error['address'] = '番地が間違っています。';
+            $error['address'] = '番地は100文字以内で入力してください。';
         }
         if (!preg_match('/^[0-9A-Za-zぁ-んァ-ヶー一-龠\-]{0,100}$/u', $_POST['other'])) {
-            $error['other'] = '建物名等が間違っています。';
+            $error['other'] = '建物名等は100文字以内で入力してください。';
         }
         if ($_POST['tel1'] == '') {
             $error['tel1'] = '市外局番が入力されていません。';
         } elseif (!preg_match('/^[0-9]{1,5}$/', $_POST['tel1'])) {
-            $error['tel1'] = '市外局番が間違っています。';
+            $error['tel1'] = '市外局番は1から5桁の数字を入力してください。';
         }
         if ($_POST['tel2'] == '') {
             $error['tel2'] = '電話番号（入力欄2）が入力されていません。';
         } elseif (!preg_match('/^[0-9]{1,5}$/', $_POST['tel2'])) {
-            $error['tel2'] = '電話番号（入力欄2）が間違っています。';
+            $error['tel2'] = '電話番号（入力欄2）は1から5桁の数字を入力してください。';
         }
         if ($_POST['tel3'] == '') {
             $error['tel3'] = '電話番号（入力欄3）が入力されていません。';
         } elseif (!preg_match('/^[0-9]{1,5}$/', $_POST['tel3'])) {
-            $error['tel3'] = '電話番号（入力欄3）が間違っています。';
+            $error['tel3'] = '電話番号（入力欄3）は1から5桁の数字を入力してください。';
         }
         if ($_POST['name_kana'] == '') {
             $error['name_kana'] = 'フリガナが入力されていません。';
-        } elseif (!preg_match('/^[A-Za-zぁ-んァ-ヶー一-龠]{1,20}$/u', $_POST['name_kana'])) {
-            $error['name_kana'] = 'フリガナが間違っています。';
+        } elseif (!preg_match('/^[ァ-ヶ]{1,20}$/u', $_POST['name_kana'])) {
+            $error['name_kana'] = 'フリガナは20文字以内の全角カタカナで入力してください。';
         }
         if ($_POST['name'] == '') {
             $error['name'] = '名前が入力されていません。';
-        } elseif (!preg_match('/^[A-Za-zぁ-んァ-ヶー一-龠]{1,15}$/u', $_POST['name'])) {
-            $error['name'] = '名前が間違っています。';
+        } elseif (!preg_match('/^[A-Za-zぁ-んァ-ヶ一-龠]{1,15}$/u', $_POST['name'])) {
+            $error['name'] = '名前は15文字以内で入力してください。';
         }
     }
     if (isset($error)) {
@@ -73,12 +70,16 @@ if (isset($_POST['submit'])) {
 }
 
 try {
-    $paymentModel = new MPaymentModel();
-    $payment = $paymentModel->fetchById($_POST['payment']);
-    $productDetailModel = new ProductDetailmodel();
     $productModel = new ProductModel();
+
+    $productDetailModel = new ProductDetailmodel();
+
     $cartModel = new CartModel();
     $cart = $cartModel->fetchAll();
+
+    $paymentModel = new MPaymentModel();
+    $payment = $paymentModel->fetchById($_POST['payment']);
+
     $userModel = new UserModel();
     $user = $userModel->fetchById($_SESSION['user']['user_id']);
     $user['pref'] = $prefectures[$user['pref']];

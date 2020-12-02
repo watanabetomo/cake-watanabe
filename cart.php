@@ -9,6 +9,7 @@ if (!isset($_SESSION['user']['authenticated'])) {
 try {
     $productModel = new ProductModel();
     $productDetailModel = new ProductDetailModel();
+
     $cartModel = new CartModel();
     if (isset($_POST['add_to_cart'])) {
         $productDetail = $productDetailModel->fetchById($_POST['detail_id']);
@@ -20,15 +21,14 @@ try {
     } elseif (isset($_POST['delete'])) {
         $cartModel->delete($_POST['id']);
     } elseif (isset($_POST['change'])) {
-        if (preg_match('/^[0-9]*$/', $_POST['num'])) {
-            if ($_POST['num'] > 0) {
-                $cartModel->changeNum($_POST['num'], $_POST['id']);
-            }elseif ($_POST['num'] == 0) {
-                $cartModel->delete($_POST['id']);
-            }
-        } else {
+        if (!preg_match('/^[0-9]*$/', $_POST['num'])) {
             header('Location: error.php?error=param');
             exit;
+        }
+        if ($_POST['num'] > 0) {
+            $cartModel->changeNum($_POST['num'], $_POST['id']);
+        }elseif ($_POST['num'] == 0) {
+            $cartModel->delete($_POST['id']);
         }
     } elseif (isset($_POST['clear'])) {
         $cartModel->deleteFromCart();
