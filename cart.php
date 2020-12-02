@@ -132,6 +132,7 @@ try {
                 </form>
             <?php else:?>
                 <p class="empty-message">現在、カートの中身は空です。</p>
+                <p class="submit-button"><a href="index.php" class="btn btn-primary">買い物を続ける</a></p>
             <?php endif;?>
         </div>
     </div>
