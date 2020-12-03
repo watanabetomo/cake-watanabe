@@ -161,7 +161,7 @@ class OrderModel extends Model
                 $purchaseInfo['tel3'],
                 $purchaseInfo['postal_code1'],
                 $purchaseInfo['postal_code2'],
-                array_search($purchaseInfo['pref'], $prefectures),
+                $purchaseInfo['pref'],
                 $purchaseInfo['city'],
                 $purchaseInfo['address'],
                 $purchaseInfo['other'],

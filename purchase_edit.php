@@ -63,6 +63,7 @@ if (isset($_POST['address_search'])) {
     }
 }
 
+$_POST['pref'] = $prefectures[$_POST['pref']];
 $address = $hitAddress + $_POST + $user;
 $checkedPayment = isset($_POST['payment']) ? $_POST['payment'] : '1';
 
@@ -142,7 +143,7 @@ $checkedPayment = isset($_POST['payment']) ? $_POST['payment'] : '1';
                     <p>
                         <select name="pref">
                             <?php foreach ($prefectures as $prefecture) :?>
-                                <option<?=$address['pref'] == $prefecture ? ' selected' : ''?>><?=$prefecture?></option>
+                                <option value="<?=$prefecture['id']?>"<?=$address['pref'] == $prefecture ? ' selected' : ''?>><?=$prefecture?></option>
                             <?php endforeach;?>
                         </select>
                     </p>
