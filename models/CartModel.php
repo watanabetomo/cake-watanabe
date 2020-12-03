@@ -36,7 +36,7 @@ class CartModel extends Model
                 . ')'
             ;
             $stmt = $this->dbh->prepare($sql);
-            $stmt->execute([$_SESSION['user']['userId'], $detailId]);
+            $stmt->execute([$_SESSION['user']['user_id'], $detailId]);
         } else {
             $this->addNum($detailId);
         }
@@ -53,7 +53,8 @@ class CartModel extends Model
             'SELECT '
                 . '* '
             . 'FROM '
-                . 'cart';
+                . 'cart'
+        ;
         $stmt = $this->dbh->query($sql);
         $cart = $stmt->fetchAll();
         $totalPrice = 0;
@@ -66,8 +67,8 @@ class CartModel extends Model
         }
         return [
             'cart' => $cart,
-            'totalPrice' => $totalPrice,
-            'totalCount' => $totalCount,
+            'total_price' => $totalPrice,
+            'total_count' => $totalCount,
             'shipping' => ($totalPrice > 10000) ? 0 : 1000
         ];
     }
@@ -86,7 +87,7 @@ class CartModel extends Model
                 . 'cart '
             . 'WHERE '
                 . 'id = ?'
-            ;
+        ;
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
     }
@@ -282,14 +283,14 @@ class CartModel extends Model
                 . '〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜';
             mb_language('uni');
             mb_internal_encoding('UTF-8');
-            // if (!mb_send_mail(
-            //     $user['mail'],
-            //     '【洋菓子店カサミンゴー】ご購入商品確認メール',
-            //     $mailBody,
-            //     'From:' . mb_encode_mimeheader('洋菓子店カサミンゴー')
-            // )) {
-            //     throw new Exception;
-            // }
+            if (!mb_send_mail(
+                $user['mail'],
+                '【洋菓子店カサミンゴー】ご購入商品確認メール',
+                $mailBody,
+                'From:' . mb_encode_mimeheader('洋菓子店カサミンゴー')
+            )) {
+                throw new Exception;
+            }
             $this->dbh->commit();
         } catch (Exception $e) {
             $this->dbh->rollBack();
