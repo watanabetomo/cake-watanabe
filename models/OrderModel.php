@@ -204,7 +204,8 @@ class OrderModel extends Model
                 $purchaseInfo['shipping'],
                 $purchaseInfo['tax_price'],
                 $purchaseInfo['total_price'],
-                $this->dbh
+                $this->dbh,
+                2
             );
 
             $id = $this->dbh->lastInsertId();
