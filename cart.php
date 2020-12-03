@@ -17,7 +17,7 @@ try {
             header('Location: error.php?error=param');
             exit;
         }
-        $cartModel->addToCart($_POST['detail_id']);
+        $stockError = $cartModel->addToCart($_POST['detail_id']);
     } elseif (isset($_POST['delete'])) {
         $cartModel->delete($_POST['id']);
     } elseif (isset($_POST['change'])) {
@@ -26,7 +26,7 @@ try {
             exit;
         }
         if ($_POST['num'] > 0) {
-            $cartModel->changeNum($_POST['num'], $_POST['id']);
+            $stockError = $cartModel->changeNum($_POST['num'], $_POST['id']);
         }elseif ($_POST['num'] == 0) {
             $cartModel->delete($_POST['id']);
         }
@@ -71,7 +71,7 @@ try {
         </div>
         <div class="box2">
             <p class="contents-title">カート</p>
-            <p class="error"><?=isset($numError) ? $numError : ''?></p>
+            <p class="error"><?=(isset($stockError) and $stockError != '') ? $stockError : ''?></p>
             <?php if (!empty($cart['cart'])) :?>
                 <table class="table-bordered table-center cart">
                     <tr>
