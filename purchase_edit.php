@@ -23,7 +23,7 @@ try {
 
     $cartModel = new CartModel();
     $cart = $cartModel->fetchAll();
-    
+
     $paymentModel = new MPaymentModel();
     $payments = $paymentModel->fetchAll();
 
