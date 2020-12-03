@@ -22,7 +22,6 @@ class OrderModel extends Model
      * @param int $shipping_price
      * @param int $tax
      * @param int $total_price
-     * @param PDO $dbh
      * @return void
      */
     public function commitOrder(
@@ -43,8 +42,7 @@ class OrderModel extends Model
         $sub_price,
         $shipping_price,
         $tax,
-        $total_price,
-        $dbh
+        $total_price
     ) {
         $sql =
             'INSERT '
@@ -90,7 +88,7 @@ class OrderModel extends Model
                 . '?'
             . ')'
         ;
-        $stmt = $dbh->prepare($sql);
+        $stmt = $this->dbh->prepare($sql);
         $stmt->execute([
             $user_id,
             $name,
@@ -170,7 +168,6 @@ class OrderModel extends Model
                 $purchaseInfo['shipping'],
                 $purchaseInfo['tax_price'],
                 $purchaseInfo['total_price'],
-                $this->dbh
             );
 
             $id = $this->dbh->lastInsertId();
@@ -193,7 +190,7 @@ class OrderModel extends Model
                 );
             }
 
-            $cartModel->deleteFromCart();
+            $cartModel->deleteFromCart($this->dbh);
 
             $mailBody =
                 h($_SESSION['user']['user_name']) . '様' . "\n\n"
@@ -265,8 +262,8 @@ class OrderModel extends Model
             )) {
                 throw new Exception;
             }
-            $this->dbh->commit();
             unset($_SESSION['token']);
+            $this->dbh->commit();
         } catch (Exception $e) {
             $this->dbh->rollBack();
             throw new Exception($e);

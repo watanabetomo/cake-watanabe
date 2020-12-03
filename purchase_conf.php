@@ -85,7 +85,6 @@ try {
 
     $userModel = new UserModel();
     $user = $userModel->fetchById($_SESSION['user']['user_id']);
-    $user['pref'] = $prefectures[$user['pref']];
 } catch (Exception $e) {
     header('Location: error.php?error=database');
     exit;
@@ -195,7 +194,7 @@ if ($_POST['sendFor'] == 2) {
                 住所
             </th>
             <td>
-                <?=h($user['pref']) . h($user['city']) . h($user['address']) . h($user['other'])?>
+                <?=$prefectures[h($user['pref'])] . h($user['city']) . h($user['address']) . h($user['other'])?>
             </td>
         </tr>
         <tr>

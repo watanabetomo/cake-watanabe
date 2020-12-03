@@ -31,7 +31,7 @@ try {
             $cartModel->delete($_POST['id']);
         }
     } elseif (isset($_POST['clear'])) {
-        $cartModel->deleteFromCart();
+        $cartModel->clearCart();
     }
     $cart = $cartModel->fetchAll();
 } catch (Exception $e) {
