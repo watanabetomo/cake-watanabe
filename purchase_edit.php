@@ -41,12 +41,12 @@ if (isset($_POST['address_search'])) {
     if ($_POST['postal_code1'] == '') {
         $error['postal_code1'] = '郵便番号上3桁が入力されていません。';
     } elseif (!preg_match('/^[0-9]{3}$/', $_POST['postal_code1'])) {
-        $error['postal_code1'] = '郵便番号上3桁が間違っています。';
+        $error['postal_code1'] = '郵便番号上3桁は3桁の半角数字を入力してください。';
     }
     if ($_POST['postal_code2'] == '') {
         $error['postal_code2'] = '郵便番号下4桁が入力されていません。';
     } elseif (!preg_match('/^[0-9]{4}$/', $_POST['postal_code2'])) {
-        $error['postal_code2'] = '郵便番号下4桁が間違っています。';
+        $error['postal_code2'] = '郵便番号下4桁は4桁の半角数字を入力してください。';
     }
     if (!isset($error)) {
         $postal_code = $_POST['postal_code1'] . $_POST['postal_code2'];
@@ -115,7 +115,7 @@ $checkedPayment = isset($_POST['payment']) ? $_POST['payment'] : '1';
         </tr>
     </table>
     <form action="purchase_conf.php#address" method="post">
-        <input type="hidden" name="t oken" value="<?=getToken()?>">
+        <input type="hidden" name="token" value="<?=getToken()?>">
         <input type="hidden" name="action" value="fix">
         <input type="hidden" name="sub_price" value="<?=number_format($cart['total_price'])?>">
         <input type="hidden" name="tax_price" value="<?=number_format($cart['total_price'] * TAX)?>">
