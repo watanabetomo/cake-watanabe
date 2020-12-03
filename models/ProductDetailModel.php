@@ -59,7 +59,8 @@ class ProductDetailModel extends Model
                 . 'product_detail.id AS id, '
                 . 'product_detail.product_id, '
                 . 'product_detail.size, '
-                . 'product_detail.price '
+                . 'product_detail.price, '
+                . 'stock.actual_num '
             . 'FROM '
                 . 'product_detail '
             . 'LEFT OUTER JOIN '
@@ -68,7 +69,6 @@ class ProductDetailModel extends Model
                 . 'product_detail.id = stock.product_detail_id '
             . 'WHERE '
                 . 'product_detail.product_id = ? '
-                . 'AND stock.actual_num > 0 '
             . 'ORDER BY '
                 . 'product_detail.size ASC'
         ;

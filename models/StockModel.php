@@ -61,4 +61,14 @@ class StockModel extends Model
         return $this->getNum($id) >= $num;
     }
 
+    /**
+     * 在庫があるかどうか
+     *
+     * @param int $detailId
+     * @return boolean
+     */
+    public function isStock($detailId)
+    {
+        return $this->getNum($detailId) > 0;
+    }
 }

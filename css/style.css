@@ -892,7 +892,7 @@ div#modal02 div:target .modal_window {
 	font-size: 0.8em;
 }
 
-.accordion input:hover{
+.accordion .hover:hover{
 	color: #FFFFFF;
 	background-color: #FF0055;
 }

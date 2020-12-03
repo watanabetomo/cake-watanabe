@@ -38,7 +38,7 @@ $pageNum = $orderModel->countPage();
     <?php getPage()?>
     <p class="error"><?=isset($error) ? $error : ''?></p>
     <?php if (empty($orders)) :?>
-        <p class="done-message">注文情報はありません。</p>
+        <p class="message">注文情報はありません。</p>
     <?php else :?>
         <table class="purchase-list" border="1">
             <tr>

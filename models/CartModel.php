@@ -9,6 +9,11 @@ class CartModel extends Model
      */
     public function addToCart($detailId)
     {
+        $stockModel = new StockModel();
+        if (!$stockModel->isStock($detailId)) {
+            header('Location: error.php?error=param');
+            exit;
+        }
         $sql =
             'SELECT '
                 . '* '
