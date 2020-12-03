@@ -157,11 +157,26 @@ class CartModel extends Model
     }
 
     /**
+     * カートの中を全削除（completePurchase用）
+     *
+     * @return void
+     */
+    public function deleteFromCart($dbh)
+    {
+        $sql =
+            'DELETE '
+            . 'FROM '
+                . 'cart'
+        ;
+        $dbh->query($sql);
+    }
+
+    /**
      * カートの中を全削除
      *
      * @return void
      */
-    public function deleteFromCart()
+    public function clearCart()
     {
         $sql =
             'DELETE '

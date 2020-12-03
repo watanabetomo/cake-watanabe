@@ -22,7 +22,6 @@ class OrderModel extends Model
      * @param int $shipping_price
      * @param int $tax
      * @param int $total_price
-     * @param PDO $dbh
      * @return void
      */
     public function commitOrder(
@@ -93,7 +92,7 @@ class OrderModel extends Model
                 . '?'
             . ')'
         ;
-        $stmt = $dbh->prepare($sql);
+        $stmt = $this->dbh->prepare($sql);
         $stmt->execute([
             $user_id,
             $name,
@@ -230,7 +229,7 @@ class OrderModel extends Model
                 );
             }
 
-            $cartModel->deleteFromCart();
+            $cartModel->deleteFromCart($this->dbh);
 
             $mailBody =
                 h($_SESSION['user']['user_name']) . '様' . "\n\n"
@@ -304,6 +303,7 @@ class OrderModel extends Model
             // }
             $this->dbh->commit();
             unset($_SESSION['token']);
+            $this->dbh->commit();
         } catch (Exception $e) {
             $this->dbh->rollBack();
             throw new Exception($e);
