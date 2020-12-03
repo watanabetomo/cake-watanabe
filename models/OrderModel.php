@@ -262,8 +262,8 @@ class OrderModel extends Model
             )) {
                 throw new Exception;
             }
-            unset($_SESSION['token']);
             $this->dbh->commit();
+            unset($_SESSION['token']);
         } catch (Exception $e) {
             $this->dbh->rollBack();
             throw new Exception($e);
