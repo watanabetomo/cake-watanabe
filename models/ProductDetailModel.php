@@ -66,12 +66,12 @@ class ProductDetailModel extends Model
                 . 'product_id, '
                 . 'size, '
                 . 'price, '
-                . 'turn, '
+                . 'turn'
             . ') VALUES ('
                 . '?, '
                 . '?, '
                 . '?, '
-                . '?, '
+                . '?'
             . ')'
         ;
         $stmt = $dbh->prepare($sql);
