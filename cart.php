@@ -26,7 +26,7 @@ try {
             exit;
         }
         if ($_POST['num'] > 0) {
-            $stockError = $cartModel->changeNum($_POST['num'], $_POST['id']);
+            $cartModel->changeNum($_POST['num'], $_POST['id']);
         }elseif ($_POST['num'] == 0) {
             $cartModel->delete($_POST['id']);
         }
@@ -39,6 +39,9 @@ try {
     exit;
 }
 
+echo '<pre>';
+print_r($_POST);
+echo '</pre>';
 ?>
 <?php require_once('header.html')?>
 <main>

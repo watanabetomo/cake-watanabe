@@ -195,7 +195,7 @@ class OrderModel extends Model
                 $purchaseInfo['tel3'],
                 $purchaseInfo['postal_code1'],
                 $purchaseInfo['postal_code2'],
-                array_search($purchaseInfo['pref'], $prefectures),
+                $purchaseInfo['pref'],
                 $purchaseInfo['city'],
                 $purchaseInfo['address'],
                 $purchaseInfo['other'],
@@ -292,14 +292,14 @@ class OrderModel extends Model
             ;
             mb_language('japanese');
             mb_internal_encoding('UTF-8');
-            if (!mb_send_mail(
-                $user['mail'],
-                '【洋菓子店カサミンゴー】ご購入商品確認メール',
-                $mailBody,
-                'From:' . mb_encode_mimeheader('洋菓子店カサミンゴー')
-            )) {
-                throw new Exception;
-            }
+            // if (!mb_send_mail(
+            //     $user['mail'],
+            //     '【洋菓子店カサミンゴー】ご購入商品確認メール',
+            //     $mailBody,
+            //     'From:' . mb_encode_mimeheader('洋菓子店カサミンゴー')
+            // )) {
+            //     throw new Exception;
+            // }
             $this->dbh->commit();
             unset($_SESSION['token']);
         } catch (Exception $e) {
