@@ -115,7 +115,7 @@ $checkedPayment = isset($_POST['payment']) ? $_POST['payment'] : '1';
         </tr>
     </table>
     <form action="purchase_conf.php#address" method="post">
-        <input type="hidden" name="token" value="<?=getToken()?>">
+        <input type="hidden" name="t oken" value="<?=getToken()?>">
         <input type="hidden" name="action" value="fix">
         <input type="hidden" name="sub_price" value="<?=number_format($cart['total_price'])?>">
         <input type="hidden" name="tax_price" value="<?=number_format($cart['total_price'] * TAX)?>">

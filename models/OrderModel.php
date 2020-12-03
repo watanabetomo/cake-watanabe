@@ -161,7 +161,7 @@ class OrderModel extends Model
                 $purchaseInfo['tel3'],
                 $purchaseInfo['postal_code1'],
                 $purchaseInfo['postal_code2'],
-                $purchaseInfo['pref'],
+                array_search($purchaseInfo['pref'], $prefectures),
                 $purchaseInfo['city'],
                 $purchaseInfo['address'],
                 $purchaseInfo['other'],
@@ -194,37 +194,37 @@ class OrderModel extends Model
             }
 
             $cartModel->deleteFromCart();
-            
+
             $mailBody =
-                h($_SESSION['user']['user_name']) . "様\n\n"
-                . "お世話になっております。\n"
-                . "洋菓子店カサミンゴーカスタマーサポートです。\n\n"
-                . h($_SESSION['user']['user_name']) . "様が購入手続きをされました商品について\n"
-                . "お間違えのないようメールをお送りいたしました。\n"
-                . "今一度ご購入商品等にお間違えなどないよう、ご確認いただけましたら幸いでございます。\n\n"
-                . "--------------------------------------\n\n"
-                . "【購入情報】\n\n"
+                h($_SESSION['user']['user_name']) . '様' . "\n\n"
+                . 'お世話になっております。' . "\n"
+                . '洋菓子店カサミンゴーカスタマーサポートです。' . "\n\n"
+                . h($_SESSION['user']['user_name']) . '様が購入手続きをされました商品について' . "\n"
+                . 'お間違えのないようメールをお送りいたしました。' . "\n"
+                . '今一度ご購入商品等にお間違えなどないよう、ご確認いただけましたら幸いでございます。' . "\n\n"
+                . '--------------------------------------' . "\n\n"
+                . '【購入情報】' . "\n\n"
             ;
             foreach ($cart['cart'] as $item) {
                 $productDetail = $productDetailModel->fetchById($item['product_detail_id']);
                 $product = $productModel->fetchSingleProduct($productDetail['product_id']);
                 $mailBody .=
                     h($product['name']) . "\n"
-                    . h($productDetail['size']) . "cm\n"
-                    . h($productDetail['price']) . "円\n"
-                    . h($item['num']) . "点\n\n"
-                    . "-----------------------\n\n"
+                    . h($productDetail['size']) . 'cm' . "\n"
+                    . h($productDetail['price']) . '円' . "\n"
+                    . h($item['num']) . '点' . "\n\n"
+                    . '-----------------------' . "\n\n"
                 ;
             }
             $mPaymentModel = new MPaymentModel();
             $payment = $mPaymentModel->fetchByid($purchaseInfo['payment']);
             $mailBody .=
-                '小計： ' . h($purchaseInfo['sub_price']) . "円\n"
-                . '消費税： ' . h($purchaseInfo['tax_price']) . "円\n"
-                . '送料： ' . h($purchaseInfo['shipping']) . "円\n"
-                . '合計： ' . h($purchaseInfo['total_price']) . "円\n\n"
-                . "--------------------------------------\n\n"
-                . "【送付先情報】\n\n"
+                '小計： ' . h($purchaseInfo['sub_price']) . '円' . "\n"
+                . '消費税： ' . h($purchaseInfo['tax_price']) . '円' . "\n"
+                . '送料： ' . h($purchaseInfo['shipping']) . '円' . "\n"
+                . '合計： ' . h($purchaseInfo['total_price']) . '円' . "\n\n"
+                . '--------------------------------------' . "\n\n"
+                . '【送付先情報】' . "\n\n"
                 . 'お名前： ' . h($purchaseInfo['name']) . "\n"
                 . 'フリガナ： ' . h($purchaseInfo['name_kana']) . "\n"
                 . '電話番号： ' . h($purchaseInfo['tel1']) . ' - ' . h($purchaseInfo['tel2']) . ' - ' . h($purchaseInfo['tel3']) . "\n"
@@ -233,8 +233,8 @@ class OrderModel extends Model
                 . '市区町村： ' . h($purchaseInfo['city']) . "\n"
                 . '番地： ' . h($purchaseInfo['address']) . "\n"
                 . 'マンション名等： ' . h($purchaseInfo['other']) . "\n\n"
-                . "--------------------------------------\n\n"
-                . "【請求先情報】\n\n"
+                . '--------------------------------------' . "\n\n"
+                . '【請求先情報】' . "\n\n"
                 . 'お名前： ' . h($user['name']) . "\n"
                 . 'フリガナ： ' . h($user['name_kana']) . "\n"
                 . '電話番号： ' . h($user['tel1']) . ' - ' . h($user['tel2']) . ' - ' . h($user['tel3']) . "\n"
@@ -244,15 +244,15 @@ class OrderModel extends Model
                 . '番地： ' . h($user['address']) . "\n"
                 . 'マンション名等： ' . h($user['other']) . "\n"
                 . 'お支払方法： ' . h($payment['name']) . "\n\n"
-                . "--------------------------------------\n\n"
-                . "商品ご到着まで。今しばらくお待ちください。\n\n"
-                . "※このメールは自動送信メールです。\n"
-                . "※返信をされてもご回答しかねますのでご了承ください。\n\n"
-                . "〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜\n"
-                . "洋菓子店カサミンゴー\n"
-                . "TEL：000-0000-0000\n"
-                . "住所：福島県郡山市中ノ目3-149-12\n"
-                . "mail：t.watanabe@ebacorp.jp\n"
+                . '--------------------------------------' . "\n\n"
+                . '商品ご到着まで。今しばらくお待ちください。' . "\n\n"
+                . '※このメールは自動送信メールです。' . "\n"
+                . '※返信をされてもご回答しかねますのでご了承ください。' . "\n\n"
+                . '〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜' . "\n"
+                . '洋菓子店カサミンゴー' . "\n"
+                . 'TEL：000-0000-0000' . "\n"
+                . '住所：福島県郡山市中ノ目3-149-12' . "\n"
+                . 'mail：t.watanabe@ebacorp.jp' . "\n"
                 . '〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜〜'
             ;
             mb_language('japanese');

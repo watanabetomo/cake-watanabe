@@ -6,8 +6,11 @@ if (!isset($_SESSION['user']['authenticated'])) {
     exit;
 }
 
-if ((isset($_POST['token']) ? $_POST['token'] : '') != $_SESSION['token']) {
-    header('Location: error.php?error=param');
+if (
+    !isset($_POST['token'])
+    or $_POST['token'] != $_SESSION['token']
+) {
+    header('Location: error.php?error=csrf');
     exit;
 }
 
@@ -16,12 +19,12 @@ if (isset($_POST['submit'])) {
         if ($_POST['postal_code1'] == '') {
             $error['postal_code1'] = '郵便番号上3桁が入力されていません。';
         } elseif (!preg_match('/^[0-9]{3}$/', $_POST['postal_code1'])) {
-            $error['postal_code1'] = '郵便番号上3桁は3桁の数字を入力してください。';
+            $error['postal_code1'] = '郵便番号上3桁は3桁の半角数字を入力してください。';
         }
         if ($_POST['postal_code2'] == '') {
             $error['postal_code2'] = '郵便番号下4桁が入力されていません。';
         } elseif (!preg_match('/^[0-9]{4}$/', $_POST['postal_code2'])) {
-            $error['postal_code2'] = '郵便番号下4桁は4桁の数字を入力してください。';
+            $error['postal_code2'] = '郵便番号下4桁は4桁の半角数字を入力してください。';
         }
         if ($_POST['city'] == '') {
             $error['city'] = '市区町村が入力されていません。';
@@ -39,17 +42,17 @@ if (isset($_POST['submit'])) {
         if ($_POST['tel1'] == '') {
             $error['tel1'] = '市外局番が入力されていません。';
         } elseif (!preg_match('/^[0-9]{1,5}$/', $_POST['tel1'])) {
-            $error['tel1'] = '市外局番は1から5桁の数字を入力してください。';
+            $error['tel1'] = '市外局番は1から5桁の半角数字を入力してください。';
         }
         if ($_POST['tel2'] == '') {
             $error['tel2'] = '電話番号（入力欄2）が入力されていません。';
         } elseif (!preg_match('/^[0-9]{1,5}$/', $_POST['tel2'])) {
-            $error['tel2'] = '電話番号（入力欄2）は1から5桁の数字を入力してください。';
+            $error['tel2'] = '電話番号（入力欄2）は1から5桁の半角数字を入力してください。';
         }
         if ($_POST['tel3'] == '') {
             $error['tel3'] = '電話番号（入力欄3）が入力されていません。';
         } elseif (!preg_match('/^[0-9]{1,5}$/', $_POST['tel3'])) {
-            $error['tel3'] = '電話番号（入力欄3）は1から5桁の数字を入力してください。';
+            $error['tel3'] = '電話番号（入力欄3）は1から5桁の半角数字を入力してください。';
         }
         if ($_POST['name_kana'] == '') {
             $error['name_kana'] = 'フリガナが入力されていません。';
@@ -97,7 +100,6 @@ if ($_POST['sendFor'] == 2) {
 
 <?php require_once('header.html')?>
 <main>
-    <p class="error"><?=isset($databaseError) ? $dataBaseError : ''?></p>
     <p class="contents-title">確認</p>
     <table class="table table-bordered table-center">
         <tr>
@@ -254,7 +256,6 @@ if ($_POST['sendFor'] == 2) {
         </li>
         <li>
             <form action="purchase_edit.php?#address" method="post">
-                <input type="hidden" name="token" value="<?=$purchaseInfo['token']?>">
                 <input type="hidden" name="postal_code1" value="<?=$purchaseInfo['postal_code1']?>">
                 <input type="hidden" name="postal_code2" value="<?=$purchaseInfo['postal_code2']?>">
                 <input type="hidden" name="pref" value="<?=$purchaseInfo['pref']?>">
