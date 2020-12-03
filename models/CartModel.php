@@ -96,10 +96,14 @@ class CartModel extends Model
      *
      * @param int $num
      * @param int $id
-     * @return void
+     * @return String
      */
     public function changeNum($num, $id)
     {
+        $stockModel = new StockModel();
+        if (!($stockModel->checkStock($id, $num))) {
+            return '在庫数を超えて商品をカートに入れることはできません。(在庫数：' . $stockModel->getNum($id) . '個)';
+        }
         $sql =
             'UPDATE '
                 . 'cart '
@@ -116,7 +120,7 @@ class CartModel extends Model
      * numに1を加算する
      *
      * @param int $id
-     * @return void
+     * @return String
      */
     public function addNum($id)
     {
@@ -130,17 +134,21 @@ class CartModel extends Model
         ;
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
-        $num = $stmt->fetch();
+        $num = $stmt->fetch(PDO::FETCH_COLUMN);
+        $stockModel = new StockModel();
+        if (!($stockModel->checkStock($id, $num + 1))) {
+            return '在庫数を超えて商品をカートに入れることはできません。(在庫数：' . $stockModel->getNum($id) . '個)';
+        }
         $sql =
-            'UPDATE '
-                . 'cart '
-            . 'SET '
-                . 'num = ? '
-            . 'WHERE '
-                . 'product_detail_id = ?'
+        'UPDATE '
+            . 'cart '
+        . 'SET '
+            . 'num = ? '
+        . 'WHERE '
+            . 'product_detail_id = ?'
         ;
         $stmt = $this->dbh->prepare($sql);
-        $stmt->execute([$num['num'] + 1, $id]);
+        $stmt->execute([$num + 1, $id]);
     }
 
     /**
