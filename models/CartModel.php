@@ -20,26 +20,25 @@ class CartModel extends Model
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$detailId]);
         $cart = $stmt->fetch();
-        if (empty($cart)) {
-            $sql =
-                'INSERT '
-                . 'INTO '
-                    . 'cart '
-                . '('
-                    . 'user_id, '
-                    . 'product_detail_id, '
-                    . 'num'
-                . ') VALUES ('
-                    . '?, '
-                    . '?, '
-                    . '1'
-                . ')'
-            ;
-            $stmt = $this->dbh->prepare($sql);
-            $stmt->execute([$_SESSION['user']['user_id'], $detailId]);
-        } else {
-            $this->addNum($detailId);
+        if (!empty($cart)) {
+            return $this->addNum($detailId);
         }
+        $sql =
+            'INSERT '
+            . 'INTO '
+                . 'cart '
+            . '('
+                . 'user_id, '
+                . 'product_detail_id, '
+                . 'num'
+            . ') VALUES ('
+                . '?, '
+                . '?, '
+                . '1'
+            . ')'
+        ;
+        $stmt = $this->dbh->prepare($sql);
+        $stmt->execute([$_SESSION['user']['user_id'], $detailId]);
     }
 
     /**
@@ -99,11 +98,11 @@ class CartModel extends Model
      * @param int $id
      * @return String
      */
-    public function changeNum($num, $id)
+    public function changeNum($num, $id, $detailId)
     {
         $stockModel = new StockModel();
-        if (!($stockModel->checkStock($id, $num))) {
-            return '在庫数を超えて商品をカートに入れることはできません。(在庫数：' . $stockModel->getNum($id) . '個)';
+        if (!($stockModel->checkStock($detailId, $num))) {
+            return '在庫数を超えて商品をカートに入れることはできません。(在庫数：' . $stockModel->getNum($detailId) . '個)';
         }
         $sql =
             'UPDATE '

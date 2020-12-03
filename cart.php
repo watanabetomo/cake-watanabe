@@ -26,7 +26,7 @@ try {
             exit;
         }
         if ($_POST['num'] > 0) {
-            $cartModel->changeNum($_POST['num'], $_POST['id']);
+            $stockError = $cartModel->changeNum($_POST['num'], $_POST['id'], $_POST['detail_id']);
         }elseif ($_POST['num'] == 0) {
             $cartModel->delete($_POST['id']);
         }
@@ -39,9 +39,6 @@ try {
     exit;
 }
 
-echo '<pre>';
-print_r($_POST);
-echo '</pre>';
 ?>
 <?php require_once('header.html')?>
 <main>
@@ -121,6 +118,7 @@ echo '</pre>';
                             <td>
                                 <form action="cart.php" method="post">
                                     <input type="hidden" name="id" value="<?=$item['id']?>">
+                                    <input type="hidden" name="detail_id" value="<?=$item['product_detail_id']?>">
                                     <input type="number" name="num" min="0" value="<?=h($item['num'])?>" style="width: 70px; margin: 10px 10px;">
                                     <p><input type="submit" name="change" value="変更"></p>
                                 </form>
