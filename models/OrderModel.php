@@ -164,7 +164,7 @@ class OrderModel extends Model
             $orderDetails = $orderDetailModel->getOrderDetail($id);
             $stockModel = new StockModel();
             foreach ($orderDetails as $orderDetail) {
-                $stockModel->fluctuate($orderDetail['num'], $orderDetail['product_detail_id'], 0, $this->dbh);
+                $stockModel->fluctuate($orderDetail['num'], $orderDetail['product_detail_id'], 1, $this->dbh);
             }
         } catch (PDOException $e) {
             return new PDOException;
@@ -212,9 +212,11 @@ class OrderModel extends Model
             $productDetailModel = new ProductDetailModel();
             $productModel = new ProductModel();
             $orderDetailModel = new OrderDetailModel();
+            $stockModel = new StockModel();
             $cartModel = new CartModel();
             $cart = $cartModel->fetchAll();
             foreach ($cart['cart'] as $item) {
+                $stockModel->fluctuate($item['num'], $item['product_detail_id'], 0, $this->dbh);
                 $productDetail = $productDetailModel->fetchById($item['product_detail_id']);
                 $product = $productModel->fetchSingleProduct($productDetail['product_id']);
                 $orderDetailModel->registerOrderDetail(

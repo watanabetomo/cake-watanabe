@@ -56,10 +56,13 @@ class ProductDetailModel extends Model
     {
         $sql =
             'SELECT '
-                . '* '
+                . 'product_detail.id AS id, '
+                . 'product_detail.product_id, '
+                . 'product_detail.size, '
+                . 'product_detail.price '
             . 'FROM '
                 . 'product_detail '
-            . 'JOIN '
+            . 'LEFT OUTER JOIN '
                 . 'stock '
             . 'ON '
                 . 'product_detail.id = stock.product_detail_id '

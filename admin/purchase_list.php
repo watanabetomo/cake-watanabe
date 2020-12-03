@@ -15,8 +15,6 @@ if (isset($_GET['page'])) {
 try {
     $orderDetailModel = new OrderDetailModel();
     $orderModel = new OrderModel();
-    $orders = $orderModel->paginate($page);
-    $pageNum = $orderModel->countPage();
 } catch (PDOException $e) {
     $error = 'データベースに接続できませんでした。<br>カスタマーサポートにお問い合わせください。';
 }
@@ -29,7 +27,7 @@ if (isset($_POST['cancel'])) {
     }
 }
 
-$orders = $orderModel->pagination($page);
+$orders = $orderModel->paginate($page);
 $pageNum = $orderModel->countPage();
 
 ?>
