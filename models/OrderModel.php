@@ -142,7 +142,6 @@ class OrderModel extends Model
      */
     public function completePurchase($purchaseInfo)
     {
-        global $prefectures;
         try {
             $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
             $this->dbh->beginTransaction();
@@ -191,7 +190,6 @@ class OrderModel extends Model
             }
 
             $cartModel->deleteFromCart($this->dbh);
-            $this->dbh->commit();
 
             $mailBody =
                 h($_SESSION['user']['user_name']) . '様' . "\n\n"
@@ -227,7 +225,7 @@ class OrderModel extends Model
                 . 'フリガナ： ' . h($purchaseInfo['name_kana']) . "\n"
                 . '電話番号： ' . h($purchaseInfo['tel1']) . ' - ' . h($purchaseInfo['tel2']) . ' - ' . h($purchaseInfo['tel3']) . "\n"
                 . '郵便番号： ' . h($purchaseInfo['postal_code1']) . ' - ' . h($purchaseInfo['postal_code2']) . "\n"
-                . '都道府県： ' . $prefectures[h($purchaseInfo['pref'])] . "\n"
+                . '都道府県： ' . PREFECTURES[h($purchaseInfo['pref'])] . "\n"
                 . '市区町村： ' . h($purchaseInfo['city']) . "\n"
                 . '番地： ' . h($purchaseInfo['address']) . "\n"
                 . 'マンション名等： ' . h($purchaseInfo['other']) . "\n\n"
@@ -237,7 +235,7 @@ class OrderModel extends Model
                 . 'フリガナ： ' . h($user['name_kana']) . "\n"
                 . '電話番号： ' . h($user['tel1']) . ' - ' . h($user['tel2']) . ' - ' . h($user['tel3']) . "\n"
                 . '郵便番号： ' . h($user['postal_code1']) . ' - ' . h($user['postal_code2']) . "\n"
-                . '都道府県： ' . $prefectures[$user['pref']] . "\n"
+                . '都道府県： ' . PREFECTURES[$user['pref']] . "\n"
                 . '市区町村： ' . h($user['city']) . "\n"
                 . '番地： ' . h($user['address']) . "\n"
                 . 'マンション名等： ' . h($user['other']) . "\n"
@@ -275,6 +273,7 @@ class OrderModel extends Model
             )) {
                 throw new Exception;
             }
+            $this->dbh->commit();
         } catch (Exception $e) {
             $this->dbh->rollBack();
             throw new Exception($e);

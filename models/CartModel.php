@@ -102,7 +102,7 @@ class CartModel extends Model
     public function changeNum($num, $id)
     {
         $sql =
-            'UPD ATE '
+            'UPDATE '
                 . 'cart '
             . 'SET '
                 . 'num = ? '

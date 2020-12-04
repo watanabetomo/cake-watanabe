@@ -3,7 +3,7 @@ require_once('autoload.php');
 
 if (
     !isset($_GET['error'])
-    or !isset($errorMessages[$_GET['error']])
+    or !isset(ERROR_MESSAGES[$_GET['error']])
 ) {
     header('Location: error.php?error=param');
     exit;

@@ -52,7 +52,7 @@ if (isset($_POST['address_search'])) {
         $json = json_decode(file_get_contents('https://zip-cloud.appspot.com/api/search?zipcode=' . $postal_code), true);
         if (!empty($json['results'][0])) {
             $hitAddress = $json['results'][0];
-            $hitAddress['pref'] = $hitAddress['prefcode'] - 1;
+            $hitAddress['pref'] = $hitAddress['prefcode'];
             $hitAddress['city'] = $hitAddress['address2'] . $hitAddress['address3'];
             $hitAddress['address'] = '';
             $hitAddress['other'] = '';
@@ -140,8 +140,8 @@ $checkedPayment = isset($_POST['payment']) ? $_POST['payment'] : '1';
                 <td>
                     <p>
                         <select name="pref">
-                            <?php foreach ($prefectures as $key => $value) :?>
-                                <option value="<?=$key?>"<?=$prefectures[$address['pref']] == $value ? ' selected' : ''?>><?=$value?></option>
+                            <?php foreach (PREFECTURES as $key => $value) :?>
+                                <option value="<?=$key?>"<?=PREFECTURES[$address['pref']] == $value ? ' selected' : ''?>><?=$value?></option>
                             <?php endforeach;?>
                         </select>
                     </p>
@@ -186,7 +186,7 @@ $checkedPayment = isset($_POST['payment']) ? $_POST['payment'] : '1';
                     住所
                 </th>
                 <td>
-                    <?=$prefectures[h($user['pref'])] . h($user['city']) . h($user['address']) . h($user['other'])?>
+                    <?=PREFECTURES[h($user['pref'])] . h($user['city']) . h($user['address']) . h($user['other'])?>
                 </td>
             </tr>
             <tr>
