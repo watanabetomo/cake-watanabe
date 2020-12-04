@@ -226,7 +226,7 @@ class OrderModel extends Model
                 . 'フリガナ： ' . h($purchaseInfo['name_kana']) . "\n"
                 . '電話番号： ' . h($purchaseInfo['tel1']) . ' - ' . h($purchaseInfo['tel2']) . ' - ' . h($purchaseInfo['tel3']) . "\n"
                 . '郵便番号： ' . h($purchaseInfo['postal_code1']) . ' - ' . h($purchaseInfo['postal_code2']) . "\n"
-                . '都道府県： ' . h($purchaseInfo['pref']) . "\n"
+                . '都道府県： ' . $prefectures[h($purchaseInfo['pref'])] . "\n"
                 . '市区町村： ' . h($purchaseInfo['city']) . "\n"
                 . '番地： ' . h($purchaseInfo['address']) . "\n"
                 . 'マンション名等： ' . h($purchaseInfo['other']) . "\n\n"
