@@ -149,7 +149,7 @@ class OrderModel extends Model
     public function cancel($id)
     {
         $sql =
-            'UPD ATE '
+            'UPDATE '
                 . '`order` '
             . 'SET '
                 . 'status = 3 '
