@@ -14,10 +14,11 @@ if (
     exit;
 }
 
+unset($_SESSION['token']);
+
 try {
     $orderModel = new OrderModel();
     $orderModel->completePurchase($_POST);
-    unset($_SESSION['token']);
 } catch (Exception $e) {
     header('Location: error.php?error=database');
     exit;
