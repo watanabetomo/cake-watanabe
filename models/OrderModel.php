@@ -191,6 +191,7 @@ class OrderModel extends Model
             }
 
             $cartModel->deleteFromCart($this->dbh);
+            $this->dbh->commit();
 
             $mailBody =
                 h($_SESSION['user']['user_name']) . '様' . "\n\n"
@@ -240,8 +241,20 @@ class OrderModel extends Model
                 . '市区町村： ' . h($user['city']) . "\n"
                 . '番地： ' . h($user['address']) . "\n"
                 . 'マンション名等： ' . h($user['other']) . "\n"
-                . 'お支払方法： ' . h($payment['name']) . "\n\n"
-                . '--------------------------------------' . "\n\n"
+                . 'お支払方法： ' . h($payment['name']) . "\n"
+            ;
+            if ($payment['name'] == '銀行振込') {
+                $mailBody .=
+                    'お振込先：' . "\n"
+                    . '銀行名　〇〇〇銀行' . "\n"
+                    . '支店名　〇〇〇支店' . "\n"
+                    . '預金種別　普通' . "\n"
+                    . '口座番号　〇〇〇〇〇〇〇' . "\n"
+                    . '口座名義人　ああああ'. "\n"
+                ;
+            };
+            $mailBody .=
+                "\n" . '--------------------------------------' . "\n"
                 . '商品ご到着まで。今しばらくお待ちください。' . "\n\n"
                 . '※このメールは自動送信メールです。' . "\n"
                 . '※返信をされてもご回答しかねますのでご了承ください。' . "\n\n"
@@ -262,8 +275,6 @@ class OrderModel extends Model
             )) {
                 throw new Exception;
             }
-            $this->dbh->commit();
-            unset($_SESSION['token']);
         } catch (Exception $e) {
             $this->dbh->rollBack();
             throw new Exception($e);
