@@ -11,11 +11,7 @@ try {
 
     $orderModel = new OrderModel();
     if (isset($_POST['cancel'])) {
-        try {
-            $orderModel->cancel($_POST['id']);
-        } catch (PDOException $e) {
-            $error = '注文情報のキャンセルに失敗しました。<br>カスタマーサポートにお問い合わせください。';
-        }
+        $orderModel->cancel($_POST['id']);
     }
 
     if (isset($_GET['page'])) {
@@ -50,7 +46,6 @@ try {
                         <p class="sorted">注文日時</p>
                         <button type="submit" name="order" class="icon" value="DESC">▼</button>
                     </form>
-
                 </th>
                 <th>
                     画像
