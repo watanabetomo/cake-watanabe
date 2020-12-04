@@ -6,12 +6,6 @@ if (!isset($_SESSION['admin']['authenticated'])) {
     exit;
 }
 
-if (isset($_GET['page'])) {
-    $page = $_GET['page'];
-} else {
-    $page = 1;
-}
-
 try {
     $orderDetailModel = new OrderDetailModel();
     $orderModel = new OrderModel();
@@ -27,6 +21,11 @@ if (isset($_POST['cancel'])) {
     }
 }
 
+if (isset($_GET['page'])) {
+    $page = $_GET['page'];
+} else {
+    $page = 1;
+}
 $orders = $orderModel->paginate($page);
 $pageNum = $orderModel->countPage();
 
@@ -112,6 +111,6 @@ $pageNum = $orderModel->countPage();
                 <a href="?page=<?=$page + 1?>">次のページへ</a>
             <?php endif;?>
         </p>
-    <?php endif?>
+    <?php endif;?>
 </main>
 <?php require_once('admin_footer.html')?>
