@@ -14,6 +14,8 @@ if (
     exit;
 }
 
+unset($_SESSION['token']);
+
 try {
     $orderModel = new OrderModel();
     $orderModel->completePurchase($_POST);

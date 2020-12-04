@@ -177,7 +177,6 @@ class OrderModel extends Model
      */
     public function completePurchase($purchaseInfo)
     {
-        global $prefectures;
         try {
             $this->dbh->exec('SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED');
             $this->dbh->beginTransaction();
@@ -265,7 +264,7 @@ class OrderModel extends Model
                 . 'フリガナ： ' . h($purchaseInfo['name_kana']) . "\n"
                 . '電話番号： ' . h($purchaseInfo['tel1']) . ' - ' . h($purchaseInfo['tel2']) . ' - ' . h($purchaseInfo['tel3']) . "\n"
                 . '郵便番号： ' . h($purchaseInfo['postal_code1']) . ' - ' . h($purchaseInfo['postal_code2']) . "\n"
-                . '都道府県： ' . h($purchaseInfo['pref']) . "\n"
+                . '都道府県： ' . PREFECTURES[h($purchaseInfo['pref'])] . "\n"
                 . '市区町村： ' . h($purchaseInfo['city']) . "\n"
                 . '番地： ' . h($purchaseInfo['address']) . "\n"
                 . 'マンション名等： ' . h($purchaseInfo['other']) . "\n\n"
@@ -275,12 +274,24 @@ class OrderModel extends Model
                 . 'フリガナ： ' . h($user['name_kana']) . "\n"
                 . '電話番号： ' . h($user['tel1']) . ' - ' . h($user['tel2']) . ' - ' . h($user['tel3']) . "\n"
                 . '郵便番号： ' . h($user['postal_code1']) . ' - ' . h($user['postal_code2']) . "\n"
-                . '都道府県： ' . $prefectures[$user['pref']] . "\n"
+                . '都道府県： ' . PREFECTURES[$user['pref']] . "\n"
                 . '市区町村： ' . h($user['city']) . "\n"
                 . '番地： ' . h($user['address']) . "\n"
                 . 'マンション名等： ' . h($user['other']) . "\n"
-                . 'お支払方法： ' . h($payment['name']) . "\n\n"
-                . '--------------------------------------' . "\n\n"
+                . 'お支払方法： ' . h($payment['name']) . "\n"
+            ;
+            if ($payment['name'] == '銀行振込') {
+                $mailBody .=
+                    'お振込先：' . "\n"
+                    . '銀行名　〇〇〇銀行' . "\n"
+                    . '支店名　〇〇〇支店' . "\n"
+                    . '預金種別　普通' . "\n"
+                    . '口座番号　〇〇〇〇〇〇〇' . "\n"
+                    . '口座名義人　ああああ'. "\n"
+                ;
+            };
+            $mailBody .=
+                "\n" . '--------------------------------------' . "\n"
                 . '商品ご到着まで。今しばらくお待ちください。' . "\n\n"
                 . '※このメールは自動送信メールです。' . "\n"
                 . '※返信をされてもご回答しかねますのでご了承ください。' . "\n\n"
@@ -293,14 +304,14 @@ class OrderModel extends Model
             ;
             mb_language('japanese');
             mb_internal_encoding('UTF-8');
-            // if (!mb_send_mail(
-            //     $user['mail'],
-            //     '【洋菓子店カサミンゴー】ご購入商品確認メール',
-            //     $mailBody,
-            //     'From:' . mb_encode_mimeheader('洋菓子店カサミンゴー')
-            // )) {
-            //     throw new Exception;
-            // }
+            if (!mb_send_mail(
+                $user['mail'],
+                '【洋菓子店カサミンゴー】ご購入商品確認メール',
+                $mailBody,
+                'From:' . mb_encode_mimeheader('洋菓子店カサミンゴー')
+            )) {
+                throw new Exception;
+            }
             $this->dbh->commit();
             unset($_SESSION['token']);
         } catch (Exception $e) {

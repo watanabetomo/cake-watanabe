@@ -1,15 +1,9 @@
 <?php
 require_once('autoload.php');
 
-$flg = false;
-foreach (array_keys($errorMessages) as $error) {
-    if ($_GET['error'] == $error) {
-        $flg = true;
-    }
-}
 if (
     !isset($_GET['error'])
-    or !$flg
+    or !isset(ERROR_MESSAGES[$_GET['error']])
 ) {
     header('Location: error.php?error=param');
     exit;

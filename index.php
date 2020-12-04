@@ -133,18 +133,15 @@ try {
                             amazon</a></span>
                 </li>
                 <li class="menu__single">
-                    <span><a href="cart.php">
-                            CART</a></span>
+                    <span><a href="cart.php">CART</a></span>
                 </li>
                 <?php if (!isset($_SESSION['user']['authenticated'])) :?>
                     <li class="menu__single">
-                        <span><a href="login.php">
-                                LOGIN</a></span>
+                        <span><a href="login.php">LOGIN</a></span>
                     </li>
                 <?php else :?>
                     <li class="menu__single">
-                        <span><a href="logout.php">
-                                LOGOUT</a></span>
+                        <span><a href="logout.php">LOGOUT</a></span>
                     </li>
                 <?php endif;?>
             </ul>
@@ -152,8 +149,7 @@ try {
                 <?php if (isset($_SESSION['user']['authenticated'])) :?>
                     <p>ようこそ<?=$_SESSION['user']['user_name']?>さん</p>
                 <?php endif;?>
-                <a href="http://casamingo.gift/souryou.htm"><strong>送料１０００円</strong>
-                    １００００円以上お買い上げのお客様は<strong>送料無料</strong></a>
+                <a href="http://casamingo.gift/souryou.htm"><strong>送料１０００円</strong>１００００円以上お買い上げのお客様は<strong>送料無料</strong></a>
             </div>
         </header>
         <div id="main">

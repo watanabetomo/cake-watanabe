@@ -158,7 +158,7 @@ if ($_POST['sendFor'] == 2) {
                 住所
             </th>
             <td>
-                <?=$prefectures[h($purchaseInfo['pref'])] . h($purchaseInfo['city']) . h($purchaseInfo['address']) . h($purchaseInfo['other'])?>
+                <?=PREFECTURES[h($purchaseInfo['pref'])] . h($purchaseInfo['city']) . h($purchaseInfo['address']) . h($purchaseInfo['other'])?>
             </td>
         </tr>
         <tr>
@@ -194,7 +194,7 @@ if ($_POST['sendFor'] == 2) {
                 住所
             </th>
             <td>
-                <?=$prefectures[h($user['pref'])] . h($user['city']) . h($user['address']) . h($user['other'])?>
+                <?=PREFECTURES[h($user['pref'])] . h($user['city']) . h($user['address']) . h($user['other'])?>
             </td>
         </tr>
         <tr>
