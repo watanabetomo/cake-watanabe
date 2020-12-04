@@ -125,7 +125,7 @@ class OrderModel extends Model
     public function paginate($offset)
     {
         $this->connect();
-        $stmt = $this->dbh->query('SELECT * FROM `order` WHERE status != 3 ORDER BY created_at DESC LIMIT ' . ($offset - 1) * 5 . ', 5');
+        $stmt = $this->dbh->query('SELECT * FROM `order` WHERE status != 3 ORDER BY created_at'. (isset($_GET['order']) ? ' ' . $_GET['order'] : ' DESC') . ' LIMIT ' . ($offset - 1) * 5 . ', 5');
         return $stmt->fetchAll();
     }
 
