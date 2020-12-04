@@ -129,22 +129,18 @@ try {
                     <span><a href="">MAIL</a></span>
                 </li>
                 <li class="menu__single">
-                    <span><a href="http://www.amazon.co.jp/gp/redirect.html?ie=UTF8&amp;location=http%3A%2F%2Fwww.amazon.co.jp%2Fb%3Fie%3DUTF8%26me%3DA1LTMHN3LQOUNT%26qid%3D1224330145&amp;tag=suumr202-22&amp;linkCode=ur2&amp;camp=247&amp;creative=7399">
-                            amazon</a></span>
+                    <span><a href="">amazon</a></span>
                 </li>
                 <li class="menu__single">
-                    <span><a href="cart.php">
-                            CART</a></span>
+                    <span><a href="cart.php">CART</a></span>
                 </li>
                 <?php if (!isset($_SESSION['user']['authenticated'])) :?>
                     <li class="menu__single">
-                        <span><a href="login.php">
-                                LOGIN</a></span>
+                        <span><a href="login.php">LOGIN</a></span>
                     </li>
                 <?php else :?>
                     <li class="menu__single">
-                        <span><a href="logout.php">
-                                LOGOUT</a></span>
+                        <span><a href="logout.php">LOGOUT</a></span>
                     </li>
                 <?php endif;?>
             </ul>
@@ -152,8 +148,7 @@ try {
                 <?php if (isset($_SESSION['user']['authenticated'])) :?>
                     <p>ようこそ<?=$_SESSION['user']['user_name']?>さん</p>
                 <?php endif;?>
-                <a href="http://casamingo.gift/souryou.htm"><strong>送料１０００円</strong>
-                    １００００円以上お買い上げのお客様は<strong>送料無料</strong></a>
+                <a href="http://casamingo.gift/souryou.htm"><strong>送料１０００円</strong>１００００円以上お買い上げのお客様は<strong>送料無料</strong></a>
             </div>
         </header>
         <div id="main">
