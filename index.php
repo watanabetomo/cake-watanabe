@@ -135,15 +135,9 @@ try {
                 <li class="menu__single">
                     <span><a href="cart.php">CART</a></span>
                 </li>
-                <?php if (!isset($_SESSION['user']['authenticated'])) :?>
-                    <li class="menu__single">
-                        <span><a href="login.php">LOGIN</a></span>
-                    </li>
-                <?php else :?>
-                    <li class="menu__single">
-                        <span><a href="logout.php">LOGOUT</a></span>
-                    </li>
-                <?php endif;?>
+                <li class="menu__single">
+                    <span><a href="<?=!isset($_SESSION['user']['authenticated']) ? 'login' : 'logout';?>.php"><?=!isset($_SESSION['user']['authenticated']) ? 'LOGIN' : 'LOGOUT';?></a></span>
+                </li>
             </ul>
             <div class="postage">
                 <?php if (isset($_SESSION['user']['authenticated'])) :?>
