@@ -9,34 +9,39 @@ if (!isset($_SESSION['user']['authenticated'])) {
 try {
     $productModel = new ProductModel();
     $productDetailModel = new ProductDetailModel();
+
     $cartModel = new CartModel();
     if (isset($_POST['add_to_cart'])) {
         $productDetail = $productDetailModel->fetchById($_POST['detail_id']);
-        $cartModel->addToCart($_POST['detail_id']);
+        if (empty($productDetail) or $productDetail['size'] == null or $productDetail['price'] == null) {
+            header('Location: error.php?error=param');
+            exit;
+        }
+        $stockError = $cartModel->addToCart($_POST['detail_id']);
     } elseif (isset($_POST['delete'])) {
         $cartModel->delete($_POST['id']);
     } elseif (isset($_POST['change'])) {
-        if (preg_match('/^[0-9]*$/', $_POST['num'])) {
-            if ($_POST['num'] > 0) {
-                $cartModel->changeNum($_POST['num'], $_POST['id']);
-            } elseif ($_POST['num'] == 0) {
-                $cartModel->delete($_POST['id']);
-            }
-        }else {
-            $numError = '商品点数は0以上の数値を入力してください';
+        if (!preg_match('/^[0-9]*$/', $_POST['num'])) {
+            header('Location: error.php?error=param');
+            exit;
+        }
+        if ($_POST['num'] > 0) {
+            $stockError = $cartModel->changeNum($_POST['num'], $_POST['id'], $_POST['detail_id']);
+        }elseif ($_POST['num'] == 0) {
+            $cartModel->delete($_POST['id']);
         }
     } elseif (isset($_POST['clear'])) {
-        $cartModel->deleteFromCart();
+        $cartModel->clearCart();
     }
     $cart = $cartModel->fetchAll();
 } catch (Exception $e) {
-    $databaseError = '商品情報の取得に失敗しました。<br>カスタマーサポートにお問い合わせください。';
+    header('Location: error.php?error=database');
+    exit;
 }
 
 ?>
 <?php require_once('header.html')?>
 <main>
-    <p class="error"><?=isset($databaseError) ? $databaseError : ''?></p>
     <div class="wrapper">
         <div class="box1">
             <div class="card">
@@ -49,11 +54,11 @@ try {
                         <table class="table table-right">
                             <tr>
                                 <th>小計</th>
-                                <td><?=!empty($cart['cart']) ? number_format(h($cart['totalPrice'])) . '円' : ''?></td>
+                                <td><?=!empty($cart['cart']) ? number_format(h($cart['total_price'])) . '円' : ''?></td>
                             </tr>
                             <tr>
                                 <th>商品点数</th>
-                                <td><?=!empty($cart['cart']) ? h($cart['totalCount']) . '点' : ''?></td>
+                                <td><?=!empty($cart['cart']) ? h($cart['total_count']) . '点' : ''?></td>
                             </tr>
                             <tr>
                                 <th>送料</th>
@@ -66,7 +71,7 @@ try {
         </div>
         <div class="box2">
             <p class="contents-title">カート</p>
-            <p class="error"><?=isset($numError) ? $numError : ''?></p>
+            <p class="error"><?=(isset($stockError) and $stockError != '') ? $stockError : ''?></p>
             <?php if (!empty($cart['cart'])) :?>
                 <table class="table-bordered table-center cart">
                     <tr>
@@ -113,7 +118,8 @@ try {
                             <td>
                                 <form action="cart.php" method="post">
                                     <input type="hidden" name="id" value="<?=$item['id']?>">
-                                    <input type="number" name="num" value="<?=h($item['num'])?>" style="width: 70px; margin: 10px 10px;">
+                                    <input type="hidden" name="detail_id" value="<?=$item['product_detail_id']?>">
+                                    <input type="number" name="num" min="0" value="<?=h($item['num'])?>" style="width: 70px; margin: 10px 10px;">
                                     <p><input type="submit" name="change" value="変更"></p>
                                 </form>
                             </td>

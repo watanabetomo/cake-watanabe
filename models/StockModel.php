@@ -49,4 +49,26 @@ class StockModel extends Model
         return $stmt->fetch(PDO::FETCH_COLUMN);
     }
 
+    /**
+     * 在庫と個数を比較
+     *
+     * @param int $id
+     * @param int $num
+     * @return boolean
+     */
+    public function checkStock($id, $num)
+    {
+        return $this->getNum($id) >= $num;
+    }
+
+    /**
+     * 在庫があるかどうか
+     *
+     * @param int $detailId
+     * @return boolean
+     */
+    public function isStock($detailId)
+    {
+        return $this->getNum($detailId) > 0;
+    }
 }

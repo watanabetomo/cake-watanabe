@@ -892,7 +892,7 @@ div#modal02 div:target .modal_window {
 	font-size: 0.8em;
 }
 
-.accordion input:hover{
+.accordion .hover:hover{
 	color: #FFFFFF;
 	background-color: #FF0055;
 }
@@ -911,7 +911,7 @@ div#modal02 div:target .modal_window {
 	font-size: 0.8em;
 }
 
-.accordion p:after {
+.accordion .order:after {
 	content: '';
 	display: inline-block;
 	width: 6px;
@@ -924,7 +924,7 @@ div#modal02 div:target .modal_window {
 	transform: rotate(45deg);
 }
 
-.accordion p:hover{
+.accordion .order:hover{
 	opacity: 0.4;
 	filter: alpha(opacity=40);
 	-moz-opacity: 0.4;

@@ -7,10 +7,10 @@ if (!isset($_SESSION['user']['authenticated'])) {
 }
 
 if (
-    (isset($_POST['token']) ? $_POST['token'] : '') != getToken()
-    and !isset($_POST['submit'])
+    !isset($_POST['token'])
+    or $_POST['token'] != $_SESSION['token']
 ) {
-    header('Location: cart.php');
+    header('Location: error.php?error=csrf');
     exit;
 }
 
@@ -19,81 +19,86 @@ if (isset($_POST['submit'])) {
         if ($_POST['postal_code1'] == '') {
             $error['postal_code1'] = '郵便番号上3桁が入力されていません。';
         } elseif (!preg_match('/^[0-9]{3}$/', $_POST['postal_code1'])) {
-            $error['postal_code1'] = '郵便番号上3桁が間違っています。';
+            $error['postal_code1'] = '郵便番号上3桁は3桁の半角数字を入力してください。';
         }
         if ($_POST['postal_code2'] == '') {
             $error['postal_code2'] = '郵便番号下4桁が入力されていません。';
         } elseif (!preg_match('/^[0-9]{4}$/', $_POST['postal_code2'])) {
-            $error['postal_code2'] = '郵便番号下4桁が間違っています。';
+            $error['postal_code2'] = '郵便番号下4桁は4桁の半角数字を入力してください。';
         }
         if ($_POST['city'] == '') {
             $error['city'] = '市区町村が入力されていません。';
-        } elseif (!preg_match('/^[0-9A-Za-zぁ-んァ-ヶー一-龠]{1,15}$/u', $_POST['city'])) {
-            $error['city'] = '市区町村が間違っています。';
+        } elseif (!preg_match('/^[ぁ-んァ-ヶー一-龠]{1,15}$/u', $_POST['city'])) {
+            $error['city'] = '市区町村は15文字以内の全角文字で入力してください。';
         }
         if ($_POST['address'] == '') {
             $error['address'] = '番地が入力されていません。';
         } elseif (!preg_match('/^[0-9A-Za-zぁ-んァ-ヶー一-龠\-]{1,100}$/u', $_POST['address'])) {
-            $error['address'] = '番地が間違っています。';
+            $error['address'] = '番地は100文字以内で入力してください。';
         }
         if (!preg_match('/^[0-9A-Za-zぁ-んァ-ヶー一-龠\-]{0,100}$/u', $_POST['other'])) {
-            $error['other'] = '建物名等が間違っています。';
+            $error['other'] = '建物名等は100文字以内で入力してください。';
         }
         if ($_POST['tel1'] == '') {
             $error['tel1'] = '市外局番が入力されていません。';
         } elseif (!preg_match('/^[0-9]{1,5}$/', $_POST['tel1'])) {
-            $error['tel1'] = '市外局番が間違っています。';
+            $error['tel1'] = '市外局番は1から5桁の半角数字を入力してください。';
         }
         if ($_POST['tel2'] == '') {
             $error['tel2'] = '電話番号（入力欄2）が入力されていません。';
         } elseif (!preg_match('/^[0-9]{1,5}$/', $_POST['tel2'])) {
-            $error['tel2'] = '電話番号（入力欄2）が間違っています。';
+            $error['tel2'] = '電話番号（入力欄2）は1から5桁の半角数字を入力してください。';
         }
         if ($_POST['tel3'] == '') {
             $error['tel3'] = '電話番号（入力欄3）が入力されていません。';
         } elseif (!preg_match('/^[0-9]{1,5}$/', $_POST['tel3'])) {
-            $error['tel3'] = '電話番号（入力欄3）が間違っています。';
+            $error['tel3'] = '電話番号（入力欄3）は1から5桁の半角数字を入力してください。';
         }
         if ($_POST['name_kana'] == '') {
             $error['name_kana'] = 'フリガナが入力されていません。';
-        } elseif (!preg_match('/^[A-Za-zぁ-んァ-ヶー一-龠]{1,20}$/u', $_POST['name_kana'])) {
-            $error['name_kana'] = 'フリガナが間違っています。';
+        } elseif (!preg_match('/^[ァ-ヶ]{1,20}$/u', $_POST['name_kana'])) {
+            $error['name_kana'] = 'フリガナは20文字以内の全角カタカナで入力してください。';
         }
         if ($_POST['name'] == '') {
             $error['name'] = '名前が入力されていません。';
-        } elseif (!preg_match('/^[A-Za-zぁ-んァ-ヶー一-龠]{1,15}$/u', $_POST['name'])) {
-            $error['name'] = '名前が間違っています。';
+        } elseif (!preg_match('/^[ぁ-んァ-ヶー一-龠]{1,15}$/u', $_POST['name'])) {
+            $error['name'] = '名前は15文字以内の全角文字で入力してください。';
         }
-    }
-    if (isset($error)) {
-        $_GET['action'] = 'fix';
+        if (isset($error)) {
+            $_POST['action'] = 'fix';
+            require_once('purchase_edit.php');
+            exit;
+        }
     }
 }
 
 try {
-    $paymentModel = new MPaymentModel();
-    $payment = $paymentModel->fetchById($_POST['payment']);
-    $productDetailModel = new ProductDetailmodel();
     $productModel = new ProductModel();
+
+    $productDetailModel = new ProductDetailmodel();
+
     $cartModel = new CartModel();
     $cart = $cartModel->fetchAll();
+
+    $paymentModel = new MPaymentModel();
+    $payment = $paymentModel->fetchById($_POST['payment']);
+
     $userModel = new UserModel();
     $user = $userModel->fetchById($_SESSION['user']['user_id']);
-    $user['pref'] = $prefectures[$user['pref']];
 } catch (Exception $e) {
-    $databaseError = '商品情報の取得に失敗しました。<br>カスタマーサポートにお問い合わせください。';
+    header('Location: error.php?error=database');
+    exit;
 }
 
 $purchaseInfo = $_POST + $user;
+if ($_POST['sendFor'] == 2) {
+    $purchaseInfo = $user + $_POST;
+}
 
 ?>
 
 <?php require_once('header.html')?>
 <main>
-    <p class="error"><?=isset($databaseError) ? $dataBaseError : ''?></p>
-    <?php if (isset($error)) :?>
-        <?php require_once('purchase_edit.php')?>
-    <?php else :?>
     <p class="contents-title">確認</p>
     <table class="table table-bordered table-center">
         <tr>
@@ -120,14 +125,14 @@ $purchaseInfo = $_POST + $user;
         <?php endforeach;?>
         <tr>
             <td colspan="2">小計</td>
-            <td><?=h($cart['totalCount'])?></td>
+            <td><?=h($cart['total_count'])?></td>
             <td></td>
             <td></td>
-            <td><?=number_format(h($cart['totalPrice']))?>円</td>
+            <td><?=number_format(h($cart['total_price']))?>円</td>
         </tr>
         <tr>
             <td colspan="5">消費税</td>
-            <td><?=number_format(floor(h($cart['totalPrice']) * TAX))?>円</td>
+            <td><?=number_format(floor(h($cart['total_price']) * TAX))?>円</td>
         </tr>
         <tr>
             <td colspan="5">送料（税込み）</td>
@@ -135,7 +140,7 @@ $purchaseInfo = $_POST + $user;
         </tr>
         <tr>
             <td colspan="5">総合計</td>
-            <td><?=number_format(floor(h($cart['totalPrice']) * (1 + TAX) + h($cart['shipping'])))?>円</td>
+            <td><?=number_format(floor(h($cart['total_price']) * (1 + TAX) + h($cart['shipping'])))?>円</td>
         </tr>
     </table>
     <p class="contents-title">送付先情報</p>
@@ -153,7 +158,7 @@ $purchaseInfo = $_POST + $user;
                 住所
             </th>
             <td>
-                <?=h($purchaseInfo['pref']) . h($purchaseInfo['city']) . h($purchaseInfo['address']) . h($purchaseInfo['other'])?>
+                <?=PREFECTURES[h($purchaseInfo['pref'])] . h($purchaseInfo['city']) . h($purchaseInfo['address']) . h($purchaseInfo['other'])?>
             </td>
         </tr>
         <tr>
@@ -189,7 +194,7 @@ $purchaseInfo = $_POST + $user;
                 住所
             </th>
             <td>
-                <?=h($user['pref']) . h($user['city']) . h($user['address']) . h($user['other'])?>
+                <?=PREFECTURES[h($user['pref'])] . h($user['city']) . h($user['address']) . h($user['other'])?>
             </td>
         </tr>
         <tr>
@@ -228,21 +233,48 @@ $purchaseInfo = $_POST + $user;
     <ul class="form">
         <li>
             <form action="purchase_done.php" method="post">
-                <?php foreach ($purchaseInfo as $key => $value) :?>
-                    <input type="hidden" name="<?=$key?>" value="<?=$value?>">
-                <?php endforeach;?>
+                <input type="hidden" name="token" value="<?=$purchaseInfo['token']?>">
+                <input type="hidden" name="postal_code1" value="<?=$purchaseInfo['postal_code1']?>">
+                <input type="hidden" name="postal_code2" value="<?=$purchaseInfo['postal_code2']?>">
+                <input type="hidden" name="pref" value="<?=$purchaseInfo['pref']?>">
+                <input type="hidden" name="city" value="<?=$purchaseInfo['city']?>">
+                <input type="hidden" name="address" value="<?=$purchaseInfo['address']?>">
+                <input type="hidden" name="other" value="<?=$purchaseInfo['other']?>">
+                <input type="hidden" name="tel1" value="<?=$purchaseInfo['tel1']?>">
+                <input type="hidden" name="tel2" value="<?=$purchaseInfo['tel2']?>">
+                <input type="hidden" name="tel3" value="<?=$purchaseInfo['tel3']?>">
+                <input type="hidden" name="name_kana" value="<?=$purchaseInfo['name_kana']?>">
+                <input type="hidden" name="name" value="<?=$purchaseInfo['name']?>">
+                <input type="hidden" name="payment" value="<?=$purchaseInfo['payment']?>">
+                <input type="hidden" name="sub_price" value="<?=$purchaseInfo['sub_price']?>">
+                <input type="hidden" name="shipping" value="<?=$purchaseInfo['shipping']?>">
+                <input type="hidden" name="total_price" value="<?=$purchaseInfo['total_price']?>">
+                <input type="hidden" name="tax_price" value="<?=$purchaseInfo['tax_price']?>">
                 <p><input type="submit" name="send" class="btn btn-success" value="購入する"></p>
             </form>
         </li>
         <li>
-            <form action="purchase_edit.php?action=fix#address" method="post">
-                <?php foreach ($purchaseInfo as $key => $value) :?>
-                    <input type="hidden" name="<?=$key?>" value="<?=$value?>">
-                <?php endforeach;?>
+            <form action="purchase_edit.php?#address" method="post">
+                <input type="hidden" name="postal_code1" value="<?=$purchaseInfo['postal_code1']?>">
+                <input type="hidden" name="postal_code2" value="<?=$purchaseInfo['postal_code2']?>">
+                <input type="hidden" name="pref" value="<?=$purchaseInfo['pref']?>">
+                <input type="hidden" name="city" value="<?=$purchaseInfo['city']?>">
+                <input type="hidden" name="address" value="<?=$purchaseInfo['address']?>">
+                <input type="hidden" name="other" value="<?=$purchaseInfo['other']?>">
+                <input type="hidden" name="tel1" value="<?=$purchaseInfo['tel1']?>">
+                <input type="hidden" name="tel2" value="<?=$purchaseInfo['tel2']?>">
+                <input type="hidden" name="tel3" value="<?=$purchaseInfo['tel3']?>">
+                <input type="hidden" name="name_kana" value="<?=$purchaseInfo['name_kana']?>">
+                <input type="hidden" name="name" value="<?=$purchaseInfo['name']?>">
+                <input type="hidden" name="payment" value="<?=$purchaseInfo['payment']?>">
+                <input type="hidden" name="sub_price" value="<?=$purchaseInfo['sub_price']?>">
+                <input type="hidden" name="shipping" value="<?=$purchaseInfo['shipping']?>">
+                <input type="hidden" name="total_price" value="<?=$purchaseInfo['total_price']?>">
+                <input type="hidden" name="tax_price" value="<?=$purchaseInfo['tax_price']?>">
+                <input type="hidden" name="action" value="fix">
                 <p><input type="submit" name="fix" class="btn btn-danger" value="修正する"></p>
             </form>
         </li>
     </ul>
-    <?php endif;?>
 </main>
 <?php require_once('footer.html')?>

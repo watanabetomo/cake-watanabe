@@ -92,7 +92,7 @@ try {
         <?php endforeach;?>
     </table>
     <?php if (empty($productList)) :?>
-        <p class="empty">商品情報がありません</p>
+        <p class="message">商品情報がありません</p>
     <?php endif;?>
 </main>
 <?php require_once('admin_footer.html')?>
