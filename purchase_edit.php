@@ -117,7 +117,7 @@ $checkedPayment = isset($_POST['payment']) ? $_POST['payment'] : '1';
         <input type="hidden" name="token" value="<?=getToken()?>">
         <input type="hidden" name="action" value="fix">
         <input type="hidden" name="sub_price" value="<?=number_format($cart['total_price'])?>">
-        <input type="hidden" name="tax_price" value="<?=number_format($cart['total_price'] * TAX)?>">
+        <input type="hidden" name="tax_price" value="<?=number_format(floor($cart['total_price'] * TAX))?>">
         <input type="hidden" name="shipping" value="<?=number_format($cart['shipping'])?>">
         <input type="hidden" name="total_price" value="<?=number_format(floor($cart['total_price'] * (1 + TAX) + $cart['shipping']))?>">
         <p class="contents-title" id="address">送付先情報<span class="sub-message">※登録住所以外へ送る場合は変更してください</span></p>
