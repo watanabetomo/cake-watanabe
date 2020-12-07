@@ -71,4 +71,30 @@ class StockModel extends Model
     {
         return $this->getNum($detailId) > 0;
     }
+
+    /**
+     * 新規登録
+     *
+     * @param int $detailId
+     * @param int $num
+     * @param PDO $dbh
+     * @return void
+     */
+    public function register($detailId, $num, $dbh)
+    {
+        $sql =
+            'INSERT '
+            . 'INTO '
+                . 'stock '
+            . '('
+                . 'product_detail_id, '
+                . 'actual_num'
+            . ') VALUES ('
+                . '?, '
+                . '?'
+            . ')'
+        ;
+        $stmt = $dbh->prepare($sql);
+        return $stmt->execute([$detailId, $num]);
+    }
 }

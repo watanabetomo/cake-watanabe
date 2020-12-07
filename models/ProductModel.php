@@ -177,6 +177,7 @@ class ProductModel extends Model
             ]);
             $id = $this->getMaxId();
             $productDetailModel = new ProductDetailModel();
+            $stockModel = new StockModel();
             for ($i = 0; $i < 5; $i++) {
                 $productDetailModel->register(
                     $id,
@@ -185,6 +186,13 @@ class ProductModel extends Model
                     $i + 1,
                     $this->dbh
                 );
+                if ($details[$i]['stock'] != null) {
+                    $stockModel->register(
+                        $this->getMaxId(),
+                        $details[$i]['stock'],
+                        $this->dbh
+                    );
+                }
             }
             $this->dbh->commit();
         } catch (PDOException $e) {

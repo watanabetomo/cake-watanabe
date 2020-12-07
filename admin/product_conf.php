@@ -40,31 +40,37 @@ if (isset($_POST['category_id'])) {
         <?php endif; ?>
         <tr>
             <th>商品名</th>
-            <td colspan="3"><?=h($_POST['name'])?></td>
+            <td colspan="<?=$_GET['action'] == 'new' ? '4' : '3'?>"><?=h($_POST['name'])?></td>
         </tr>
         <tr>
             <th>商品カテゴリー</th>
-            <td colspan="3"><?=h($category['name'])?></td>
+            <td colspan="<?=$_GET['action'] == 'new' ? '4' : '3'?>"><?=h($category['name'])?></td>
         </tr>
         <tr>
             <th>配送情報</th>
-            <td colspan="3"><?=h($_POST['delivery_info'])?></td>
+            <td colspan="<?=$_GET['action'] == 'new' ? '4' : '3'?>"><?=h($_POST['delivery_info'])?></td>
         </tr>
         <tr>
             <th>表示順(商品)</th>
-            <td colspan="3"><?=h($_POST['turn'])?></td>
+            <td colspan="<?=$_GET['action'] == 'new' ? '4' : '3'?>"><?=h($_POST['turn'])?></td>
         </tr>
         <tr>
             <th rowspan="6">商品詳細</th>
             <th>表示順(商品詳細)</th>
             <th>サイズ(cm)</th>
             <th>価格(円)</th>
+            <?php if ($_GET['action'] == 'new') :?>
+                <th>在庫数</th>
+            <?php endif;?>
         </tr>
         <?php for ($i = 0; $i < 5; $i++) :?>
             <tr>
                 <td><?=$i?></td>
                 <td><?=h($_POST['details'][$i]['size'])?></td>
                 <td><?=h($_POST['details'][$i]['price'])?></td>
+                <?php if ($_GET['action'] == 'new') :?>
+                    <td><?=h($_POST['details'][$i]['stock'])?></td>
+                <?php endif;?>
             </tr>
         <?php endfor;?>
     </table>
@@ -76,6 +82,7 @@ if (isset($_POST['category_id'])) {
         <?php for ($i = 0; $i < 5; $i++) :?>
             <input type="hidden" name="details[<?=$i?>][size]" value="<?=$_POST['details'][$i]['size']?>">
             <input type="hidden" name="details[<?=$i?>][price]" value="<?=$_POST['details'][$i]['price']?>">
+            <input type="hidden" name="details[<?=$i?>][stock]" value="<?=$_POST['details'][$i]['stock']?>">
         <?php endfor;?>
         <p class="submit-button register-btn"><input type="submit" name="register" class="btn" value="<?=($_GET['action'] == 'edit' ? '更新' : '登録')?>完了する"></p>
     </form>
@@ -87,6 +94,7 @@ if (isset($_POST['category_id'])) {
         <?php for ($i = 0; $i < 5; $i++) :?>
             <input type="hidden" name="details[<?=$i?>][size]" value="<?=$_POST['details'][$i]['size']?>">
             <input type="hidden" name="details[<?=$i?>][price]" value="<?=$_POST['details'][$i]['price']?>">
+            <input type="hidden" name="details[<?=$i?>][stock]" value="<?=$_POST['details'][$i]['stock']?>">
         <?php endfor;?>
         <p class="submit-button"><input type="submit" name="fix" class="btn" value="修正する"></p>
     </form>

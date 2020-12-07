@@ -57,7 +57,7 @@ try {
                 <th>
                     商品名
                 </th>
-                <td colspan="3">
+                <td colspan="<?=$_GET['action'] == 'new' ? '4' : '3'?>">
                     <input type="text" name="name" value="<?=isset($productData['name']) ? h($productData['name']) : ''?>">
                 </td>
             </tr>
@@ -65,7 +65,7 @@ try {
                 <th>
                     商品カテゴリー
                 </th>
-                <td colspan="3">
+                <td colspan="<?=$_GET['action'] == 'new' ? '4' : '3'?>">
                     <select name="category_id">
                         <?php foreach ($productCategories as $category) :?>
                             <option value="<?=$category['id']?>"<?=(isset($productData['product_category_id']) and $productData['product_category_id'] == $category['id']) ? ' selected' : ''?>><?=$category['name']?></option>
@@ -77,7 +77,7 @@ try {
                 <th>
                     配送情報
                 </th>
-                <td colspan="3">
+                <td colspan="<?=$_GET['action'] == 'new' ? '4' : '3'?>">
                     <input type="text" name="delivery_info" value="<?=isset($productData['delivery_info']) ? h($productData['delivery_info']) : ''?>">
                 </td>
             </tr>
@@ -85,7 +85,7 @@ try {
                 <th>
                     表示順(商品)
                 </th>
-                <td colspan="3">
+                <td colspan="<?=$_GET['action'] == 'new' ? '4' : '3'?>">
                     <input type="number" name="turn" value="<?=isset($productData['turn']) ? h($productData['turn']) : ''?>">
                 </td>
             </tr>
@@ -102,6 +102,11 @@ try {
                 <th>
                     価格(円)
                 </th>
+                <?php if ($_GET['action'] == 'new') :?>
+                    <th>
+                        在庫数
+                    </th>
+                <?php endif;?>
             </tr>
             <?php for ($i = 0; $i < 5; $i++) :?>
                 <tr>
@@ -109,11 +114,16 @@ try {
                         <?=$i?>
                     </td>
                     <td>
-                        <input type="number" name="details[<?=$i?>][size]" value="<?=isset($productData['details'][$i]['size']) ? h($productData['details'][$i]['size']) : ''?>">
+                        <input type="number" min="0" name="details[<?=$i?>][size]" value="<?=isset($productData['details'][$i]['size']) ? h($productData['details'][$i]['size']) : ''?>">
                     </td>
                     <td>
-                        <input type="number" name="details[<?=$i?>][price]" value="<?=isset($productData['details'][$i]['price']) ? h($productData['details'][$i]['price']) : ''?>">
+                        <input type="number" min="0" name="details[<?=$i?>][price]" value="<?=isset($productData['details'][$i]['price']) ? h($productData['details'][$i]['price']) : ''?>">
                     </td>
+                    <?php if ($_GET['action'] == 'new') :?>
+                        <td>
+                            <input type="number" min="0" name="details[<?=$i?>][stock]" value="<?=isset($productData['details'][$i]['stock']) ? h($productData['details'][$i]['stock']) : ''?>">
+                        </td>
+                    <?php endif;?>
                 </tr>
             <?php endfor?>
         </table>
