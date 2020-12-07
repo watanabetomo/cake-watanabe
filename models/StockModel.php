@@ -80,7 +80,7 @@ class StockModel extends Model
      * @param PDO $dbh
      * @return void
      */
-    public function register($detailId, $num, $dbh)
+    public function registerNum($detailId, $num, $maxNum, $dbh)
     {
         $sql =
             'INSERT '
@@ -91,10 +91,35 @@ class StockModel extends Model
                 . 'actual_num'
             . ') VALUES ('
                 . '?, '
+                . '?, '
                 . '?'
             . ')'
         ;
         $stmt = $dbh->prepare($sql);
-        return $stmt->execute([$detailId, $num]);
+        return $stmt->execute([$detailId, $num, $maxNum]);
     }
+
+    /**
+     * 購入上限個数の更新
+     *
+     * @param int $detailId
+     * @param int $num
+     * @param PDO $dbh
+     * @return void
+     */
+    public function changeMaxNum($detailId, $num, $dbh)
+    {
+        $sql =
+            'UPDATE '
+                . 'stock '
+            . 'SET '
+                . 'max_num = ? '
+            . 'WHERE '
+                . 'product_detail_id = ?'
+        ;
+        $stmt = $dbh->prepare($sql);
+        $stmt->execute([$num, $detailId]);
+    }
+
+
 }

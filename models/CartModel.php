@@ -107,7 +107,8 @@ class CartModel extends Model
     {
         $stockModel = new StockModel();
         if (!($stockModel->checkStock($detailId, $num))) {
-            return '在庫数を超えて商品をカートに入れることはできません。(在庫数：' . $stockModel->getNum($detailId) . '個)';
+            $message = '在庫数を超えて商品をカートに入れることはできません。';
+            $num = $stockModel->getNum($detailId);
         }
         $sql =
             'UPDATE '
@@ -119,6 +120,9 @@ class CartModel extends Model
         ;
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$num, $id]);
+        if (isset($message)) {
+            return $message;
+        }
     }
 
     /**
@@ -142,7 +146,7 @@ class CartModel extends Model
         $num = $stmt->fetch(PDO::FETCH_COLUMN);
         $stockModel = new StockModel();
         if (!($stockModel->checkStock($id, $num + 1))) {
-            return '在庫数を超えて商品をカートに入れることはできません。(在庫数：' . $stockModel->getNum($id) . '個)';
+            return '在庫数を超えて商品をカートに入れることはできません。';
         }
         $sql =
         'UPDATE '
