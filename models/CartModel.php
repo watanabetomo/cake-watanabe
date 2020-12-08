@@ -11,7 +11,7 @@ class CartModel extends Model
     {
         $stockModel = new StockModel();
         if (!$stockModel->isStock($detailId)) {
-            return '在庫数より多くは購入できません。（在庫数：' . $stockModel->getNum($detailId) . '個）';
+            return '在庫がなくなりました';
         }
         $sql =
             'SELECT '
