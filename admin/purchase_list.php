@@ -26,7 +26,6 @@ try {
     $error = 'データベースに接続できませんでした。<br>カスタマーサポートにお問い合わせください。';
 }
 
-
 ?>
 
 <?php require_once('admin_header.html')?>
