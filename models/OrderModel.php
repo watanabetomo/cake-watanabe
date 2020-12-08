@@ -43,7 +43,6 @@ class OrderModel extends Model
         $shipping_price,
         $tax,
         $total_price,
-        $dbh,
         $status
     ) {
         $sql =
