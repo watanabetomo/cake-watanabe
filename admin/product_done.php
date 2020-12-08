@@ -24,7 +24,6 @@ try {
     }
 } catch (Exception $e) {
     $error = '商品情報の取得及び' . ($_GET['action'] == 'edit' ? '更新' : '登録') . 'に失敗しました。<br>システム管理者にお問い合わせください。';
-    $error = $e->getMessage();
 }
 
 ?>

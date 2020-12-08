@@ -195,7 +195,7 @@ class ProductModel extends Model
                     $this->dbh
                 );
                 if ($details[$i]['stock'] != null) {
-                    $stockModel->register(
+                    $stockModel->registerNum(
                         $this->getMaxId(),
                         $details[$i]['stock'],
                         $details[$i]['max_num'],

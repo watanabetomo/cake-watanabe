@@ -79,7 +79,7 @@ class StockModel extends Model
      */
     public function checkStock($detailId, $num)
     {
-        if ($this->getNum($detailId) < $this->getMaxNum($detailId)) {
+        if ($this->getNum($detailId) < $this->getMaxNum($detailId) or $this->getMaxNum($detailId) == null) {
             if ($this->getNum($detailId) < $num) {
                 return [
                     'message' => '在庫数より多くは購入できません。（在庫数：' . $this->getNum($detailId) . '個）',
@@ -125,7 +125,7 @@ class StockModel extends Model
                 . 'stock '
             . '('
                 . 'product_detail_id, '
-                . 'actual_num '
+                . 'actual_num, '
                 . 'max_num'
             . ') VALUES ('
                 . '?, '
