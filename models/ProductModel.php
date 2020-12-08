@@ -333,10 +333,6 @@ class ProductModel extends Model
         }
         $productDetailModel = new ProductDetailModel();
         $product['details'] = $productDetailModel->getDetails($id);
-        if (empty($product['details'])) {
-            header('Location: product_list.php');
-            exit;
-        }
         return $product;
     }
 }

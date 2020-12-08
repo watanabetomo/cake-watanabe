@@ -16,7 +16,7 @@ class ProductDetailModel extends Model
                 . 'stock.max_num '
             . 'FROM '
                 . 'product_detail '
-            . 'JOIN '
+            . 'LEFT OUTER JOIN '
                 . 'stock '
             . 'ON '
                 . 'product_detail.id = stock.product_detail_id '

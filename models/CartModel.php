@@ -11,8 +11,7 @@ class CartModel extends Model
     {
         $stockModel = new StockModel();
         if (!$stockModel->isStock($detailId)) {
-            header('Location: error.php?error=param');
-            exit;
+            return '在庫数より多くは購入できません。（在庫数：' . $stockModel->getNum($detailId) . '個）';
         }
         $sql =
             'SELECT '
