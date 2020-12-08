@@ -146,12 +146,12 @@ class CartModel extends Model
             return $result['message'];
         }
         $sql =
-        'UPDATE '
-            . 'cart '
-        . 'SET '
-            . 'num = ? '
-        . 'WHERE '
-            . 'product_detail_id = ?'
+            'UPDATE '
+                . 'cart '
+            . 'SET '
+                . 'num = ? '
+            . 'WHERE '
+                . 'product_detail_id = ?'
         ;
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$num + 1, $id]);
