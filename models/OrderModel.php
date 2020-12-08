@@ -132,7 +132,8 @@ class OrderModel extends Model
                 . 'status != 3 '
             . 'ORDER BY '
                 . 'created_at'. (isset($_GET['order']) ? ' ' . $_GET['order'] : ' DESC') . ' '
-            . 'LIMIT ' . ($offset - 1) * 5 . ', 5'
+            . 'LIMIT '
+                . ($offset - 1) * 5 . ', 5'
         ;
         $stmt = $this->dbh->query($sql);
         return $stmt->fetchAll();
@@ -301,7 +302,7 @@ class OrderModel extends Model
                     . '口座番号　〇〇〇〇〇〇〇' . "\n"
                     . '口座名義人　ああああ'. "\n"
                 ;
-            };
+            }
             $mailBody .=
                 "\n" . '--------------------------------------' . "\n"
                 . '商品ご到着まで。今しばらくお待ちください。' . "\n\n"
