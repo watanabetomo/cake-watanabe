@@ -75,7 +75,7 @@ class StockModel extends Model
      *
      * @param int $id
      * @param int $num
-     * @return boolean
+     * @return array
      */
     public function checkStock($detailId, $num)
     {
