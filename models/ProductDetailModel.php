@@ -29,35 +29,12 @@ class ProductDetailModel extends Model
     }
 
     /**
-     * product_idでsizeとpriceを取ってくる（サイズ順）
-     *
-     * @param int $id
-     * @return array sizeとpriceの配列(サイズ順)
-     */
-    public function fetchByProductId($id)
-    {
-        $sql =
-            'SELECT '
-                . '* '
-            . 'FROM '
-                . 'product_detail '
-            . 'WHERE '
-                . 'product_id = ? '
-            . 'ORDER BY '
-                . 'size ASC'
-        ;
-        $stmt = $this->dbh->prepare($sql);
-        $stmt->execute([$id]);
-        return $stmt->fetchAll();
-    }
-
-    /**
      * 在庫がある商品のみ取得
      *
      * @param int $id
      * @return array sizeとpriceの配列
      */
-    public function getDetailStock($id)
+    public function fetchByProductId($id)
     {
         $sql =
             'SELECT '

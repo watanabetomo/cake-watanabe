@@ -50,7 +50,7 @@ class StockModel extends Model
     }
 
     /**
-     * 在庫数を取得
+     * 購入上限を取得
      *
      * @param int $id
      * @return int num
@@ -79,19 +79,21 @@ class StockModel extends Model
      */
     public function checkStock($detailId, $num)
     {
-        if ($this->getNum($detailId) < $this->getMaxNum($detailId) or $this->getMaxNum($detailId) == null) {
-            if ($this->getNum($detailId) < $num) {
+        $actualNum = $this->getNum($detailId);
+        $maxNum = $this->getMaxNum($detailId);
+        if ($actualNum < $maxNum or $maxNum == null) {
+            if ($actualNum < $num) {
                 return [
-                    'message' => '在庫数より多くは購入できません。（在庫数：' . $this->getNum($detailId) . '個）',
-                    'num' => $this->getNum($detailId)
+                    'message' => '在庫数より多くは購入できません。（在庫数：' . $actualNum . '個）',
+                    'num' => $actualNum
                 ];
             }
             return ['num' => $num];
         } else {
-            if ($this->getMaxNum($detailId) < $num) {
+            if ($maxNum < $num) {
                 return [
-                    'message' => '購入上限より多くは購入できません。（一回につき' . $this->getMaxNum($detailId) . '個まで）',
-                    'num' => $this->getMaxNum($detailId)
+                    'message' => '購入上限より多くは購入できません。（一回につき' . $maxNum . '個まで）',
+                    'num' => $maxNum
                 ];
             }
             return ['num' => $num];

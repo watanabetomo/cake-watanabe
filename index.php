@@ -334,7 +334,7 @@ try {
                                         <?php
                                             try {
                                                 $productDetailModel = new ProductDetailModel();
-                                                $productDetails = $productDetailModel->getDetailStock($products[$j]['id']);
+                                                $productDetails = $productDetailModel->fetchByProductId($products[$j]['id']);
                                             } catch (PDOException $e) {
                                                 header('Location: error.php?error=database');
                                                 exit;
