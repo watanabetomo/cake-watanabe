@@ -123,8 +123,18 @@ class OrderModel extends Model
      */
     public function paginate($offset)
     {
-        $this->connect();
-        $stmt = $this->dbh->query('SELECT * FROM `order` WHERE status != 3 ORDER BY created_at'. (isset($_GET['order']) ? ' ' . $_GET['order'] : ' DESC') . ' LIMIT ' . ($offset - 1) * 5 . ', 5');
+        $sql =
+            'SELECT '
+                . '* '
+            . 'FROM '
+                . '`order` '
+            . 'WHERE '
+                . 'status != 3 '
+            . 'ORDER BY '
+                . 'created_at'. (isset($_GET['order']) ? ' ' . $_GET['order'] : ' DESC') . ' '
+            . 'LIMIT ' . ($offset - 1) * 5 . ', 5'
+        ;
+        $stmt = $this->dbh->query($sql);
         return $stmt->fetchAll();
     }
 
@@ -135,8 +145,15 @@ class OrderModel extends Model
      */
     public function countPage()
     {
-        $this->connect();
-        return $this->dbh->query('SELECT COUNT(*) FROM `order` WHERE status != 3')->fetch(PDO::FETCH_COLUMN);
+        $sql =
+            'SELECT '
+                . 'COUNT(*) '
+            . 'FROM '
+                . '`order` '
+            . 'WHERE '
+                . 'status != 3'
+        ;
+        return $this->dbh->query($sql)->fetch(PDO::FETCH_COLUMN);
     }
 
     /**
@@ -157,15 +174,11 @@ class OrderModel extends Model
         ;
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
-        try {
-            $orderDetailModel = new OrderDetailModel();
-            $orderDetails = $orderDetailModel->getOrderDetail($id);
-            $stockModel = new StockModel();
-            foreach ($orderDetails as $orderDetail) {
-                $stockModel->fluctuate($orderDetail['num'], $orderDetail['product_detail_id'], 1, $this->dbh);
-            }
-        } catch (PDOException $e) {
-            return new PDOException;
+        $orderDetailModel = new OrderDetailModel();
+        $orderDetails = $orderDetailModel->getOrderDetail($id);
+        $stockModel = new StockModel();
+        foreach ($orderDetails as $orderDetail) {
+            $stockModel->fluctuate($orderDetail['num'], $orderDetail['product_detail_id'], 1, $this->dbh);
         }
     }
 
