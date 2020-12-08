@@ -11,10 +11,15 @@ class ProductDetailModel extends Model
     {
         $sql =
             'SELECT '
-                . 'size, '
-                . 'price '
+                . 'product_detail.size, '
+                . 'product_detail.price, '
+                . 'stock.max_num '
             . 'FROM '
                 . 'product_detail '
+            . 'JOIN '
+                . 'stock '
+            . 'ON '
+                . 'product_detail.id = stock.product_detail_id '
             . 'WHERE '
                 . 'product_id = ?'
         ;
@@ -154,5 +159,21 @@ class ProductDetailModel extends Model
         $stmt = $this->dbh->prepare($sql);
         $stmt->execute([$id]);
         return $stmt->fetch();
+    }
+
+    public function getId($id, $turn)
+    {
+        $sql =
+            'SELECT '
+                . 'id '
+            . 'FROM '
+                . 'product_detail '
+            . 'WHERE '
+                . 'product_id = ? '
+                . 'AND turn = ?'
+        ;
+        $stmt = $this->dbh->prepare($sql);
+        $stmt->execute([$id, $turn]);
+        return $stmt->fetch(PDO::FETCH_COLUMN);
     }
 }

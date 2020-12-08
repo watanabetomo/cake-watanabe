@@ -88,7 +88,8 @@ class StockModel extends Model
                 . 'stock '
             . '('
                 . 'product_detail_id, '
-                . 'actual_num'
+                . 'actual_num '
+                . 'max_num'
             . ') VALUES ('
                 . '?, '
                 . '?, '
@@ -120,6 +121,4 @@ class StockModel extends Model
         $stmt = $dbh->prepare($sql);
         $stmt->execute([$num, $detailId]);
     }
-
-
 }

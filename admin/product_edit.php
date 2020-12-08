@@ -48,7 +48,7 @@ try {
                     <th>
                         ID
                     </th>
-                    <td colspan="3">
+                    <td colspan="4">
                         <?=$_GET['id']?>
                     </td>
                 </tr>
@@ -57,7 +57,7 @@ try {
                 <th>
                     商品名
                 </th>
-                <td colspan="<?=$_GET['action'] == 'new' ? '4' : '3'?>">
+                <td colspan="<?=$_GET['action'] == 'new' ? '5' : '4'?>">
                     <input type="text" name="name" value="<?=isset($productData['name']) ? h($productData['name']) : ''?>">
                 </td>
             </tr>
@@ -65,7 +65,7 @@ try {
                 <th>
                     商品カテゴリー
                 </th>
-                <td colspan="<?=$_GET['action'] == 'new' ? '4' : '3'?>">
+                <td colspan="<?=$_GET['action'] == 'new' ? '5' : '4'?>">
                     <select name="category_id">
                         <?php foreach ($productCategories as $category) :?>
                             <option value="<?=$category['id']?>"<?=(isset($productData['product_category_id']) and $productData['product_category_id'] == $category['id']) ? ' selected' : ''?>><?=$category['name']?></option>
@@ -77,7 +77,7 @@ try {
                 <th>
                     配送情報
                 </th>
-                <td colspan="<?=$_GET['action'] == 'new' ? '4' : '3'?>">
+                <td colspan="<?=$_GET['action'] == 'new' ? '5' : '4'?>">
                     <input type="text" name="delivery_info" value="<?=isset($productData['delivery_info']) ? h($productData['delivery_info']) : ''?>">
                 </td>
             </tr>
@@ -85,7 +85,7 @@ try {
                 <th>
                     表示順(商品)
                 </th>
-                <td colspan="<?=$_GET['action'] == 'new' ? '4' : '3'?>">
+                <td colspan="<?=$_GET['action'] == 'new' ? '5' : '4'?>">
                     <input type="number" name="turn" value="<?=isset($productData['turn']) ? h($productData['turn']) : ''?>">
                 </td>
             </tr>
@@ -107,6 +107,9 @@ try {
                         在庫数
                     </th>
                 <?php endif;?>
+                <th>
+                    購入上限個数
+                </th>
             </tr>
             <?php for ($i = 0; $i < 5; $i++) :?>
                 <tr>
@@ -114,16 +117,19 @@ try {
                         <?=$i?>
                     </td>
                     <td>
-                        <input type="number" min="0" name="details[<?=$i?>][size]" value="<?=isset($productData['details'][$i]['size']) ? h($productData['details'][$i]['size']) : ''?>">
+                        <input type="number" min="1" max="65535" name="details[<?=$i?>][size]" value="<?=isset($productData['details'][$i]['size']) ? h($productData['details'][$i]['size']) : ''?>">
                     </td>
                     <td>
-                        <input type="number" min="0" name="details[<?=$i?>][price]" value="<?=isset($productData['details'][$i]['price']) ? h($productData['details'][$i]['price']) : ''?>">
+                        <input type="number" min="0" max="4294967295" name="details[<?=$i?>][price]" value="<?=isset($productData['details'][$i]['price']) ? h($productData['details'][$i]['price']) : ''?>">
                     </td>
                     <?php if ($_GET['action'] == 'new') :?>
                         <td>
-                            <input type="number" min="0" name="details[<?=$i?>][stock]" value="<?=isset($productData['details'][$i]['stock']) ? h($productData['details'][$i]['stock']) : ''?>">
+                            <input type="number" min="0" max="65535" name="details[<?=$i?>][stock]" value="<?=isset($productData['details'][$i]['stock']) ? h($productData['details'][$i]['stock']) : ''?>">
                         </td>
                     <?php endif;?>
+                    <td>
+                        <input type="number" min="1" max="65535" name="details[<?=$i?>][max_num]" value="<?=isset($productData['details'][$i]['max_num']) ? h($productData['details'][$i]['max_num']) : ''?>">
+                    </td>
                 </tr>
             <?php endfor?>
         </table>
