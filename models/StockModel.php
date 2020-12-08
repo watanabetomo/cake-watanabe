@@ -50,15 +50,52 @@ class StockModel extends Model
     }
 
     /**
+     * 在庫数を取得
+     *
+     * @param int $id
+     * @return int num
+     */
+    public function getMaxNum($id)
+    {
+        $sql =
+            'SELECT '
+                . 'max_num '
+            . 'FROM '
+                . 'stock '
+            . 'WHERE '
+                . 'product_detail_id = ?'
+        ;
+        $stmt = $this->dbh->prepare($sql);
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_COLUMN);
+    }
+
+    /**
      * 在庫と個数を比較
      *
      * @param int $id
      * @param int $num
      * @return boolean
      */
-    public function checkStock($id, $num)
+    public function checkStock($detailId, $num)
     {
-        return $this->getNum($id) >= $num;
+        if ($this->getNum($detailId) < $this->getMaxNum($detailId)) {
+            if ($this->getNum($detailId) < $num) {
+                return [
+                    'message' => '在庫数より多くは購入できません。（在庫数：' . $this->getNum($detailId) . '個）',
+                    'num' => $this->getNum($detailId)
+                ];
+            }
+            return ['num' => $num];
+        } else {
+            if ($this->getMaxNum($detailId) < $num) {
+                return [
+                    'message' => '購入上限より多くは購入できません。（一回につき' . $this->getMaxNum($detailId) . '個まで）',
+                    'num' => $this->getMaxNum($detailId)
+                ];
+            }
+            return ['num' => $num];
+        }
     }
 
     /**

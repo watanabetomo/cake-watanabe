@@ -106,10 +106,7 @@ class CartModel extends Model
     public function changeNum($num, $id, $detailId)
     {
         $stockModel = new StockModel();
-        if (!($stockModel->checkStock($detailId, $num))) {
-            $message = '在庫数を超えて商品をカートに入れることはできません。';
-            $num = $stockModel->getNum($detailId);
-        }
+        $result = $stockModel->checkStock($detailId, $num);
         $sql =
             'UPDATE '
                 . 'cart '
@@ -119,9 +116,9 @@ class CartModel extends Model
                 . 'id = ?'
         ;
         $stmt = $this->dbh->prepare($sql);
-        $stmt->execute([$num, $id]);
-        if (isset($message)) {
-            return $message;
+        $stmt->execute([$result['num'], $id]);
+        if (isset($result['message'])) {
+            return $result['message'];
         }
     }
 
@@ -145,8 +142,9 @@ class CartModel extends Model
         $stmt->execute([$id]);
         $num = $stmt->fetch(PDO::FETCH_COLUMN);
         $stockModel = new StockModel();
-        if (!($stockModel->checkStock($id, $num + 1))) {
-            return '在庫数を超えて商品をカートに入れることはできません。';
+        $result = $stockModel->checkStock($id, $num + 1);
+        if (isset($result['message'])) {
+            return $result['message'];
         }
         $sql =
         'UPDATE '
